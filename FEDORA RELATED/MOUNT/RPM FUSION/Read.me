@@ -1,0 +1,11 @@
+Summary of what the script does:
+
+Checks if RPMFusion is already installed by searching for the rpmfusion command.
+Searches for RPMFusion repository files in the /etc/yum.repos.d/ directory.
+Adds additional potential locations for the rpmfusion command (/usr/bin/rpmfusion, /usr/local/bin/rpmfusion, /opt/rpmfusion/bin/rpmfusion) and updates the PATH accordingly.
+Displays the RPMFusion repositories found in the /etc/yum.repos.d/ directory, along with their status (enabled or disabled) and whether they are duplicates.
+Asks if you want to enable RPMFusion and perform a clean and update operation.
+If confirmed, installs the RPMFusion repositories if they are not already installed, enables them, and performs a clean and update operation using dnf.
+Provides appropriate messages to indicate the success or cancellation of the enabling and update process.
+
+Note: The script requires sudo privileges to install and enable RPMFusion repositories, as well as to perform the clean and update operation using dnf.
