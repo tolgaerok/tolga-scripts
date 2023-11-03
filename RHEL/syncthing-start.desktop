@@ -1,0 +1,19 @@
+[Desktop Entry]
+Categories=Network;FileTransfer;P2P
+Comment[en_AU]=Starts the main syncthing process in the background.
+Comment=Starts the main syncthing process in the background.
+Exec=/usr/bin/syncthing serve --no-browser --logfile=default
+GenericName[en_AU]=File synchronization
+GenericName=File synchronization
+Icon=syncthing
+Keywords=synchronization;daemon;
+MimeType=
+Name[en_AU]=Start Syncthing
+Name=Start Syncthing
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=

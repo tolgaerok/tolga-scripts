@@ -1,0 +1,8 @@
+$ ps aux | grep rsync
+root       27308  2.4  0.0 236228  5280 ?        D    21:29   0:04 rsync -avz --exclude=.* *.iso /home/tolga//Downloads/ /mnt/smb-rsync//Downloads/
+tolga      27589  0.0  0.0 222020  2304 pts/2    S+   21:32   0:00 grep --color=auto rsync
+[tolga@F37 ~]$ sudo kill -9 27308
+[sudo] password for tolga:
+sudo kill -15 27308
+sudo kill -SIGKILL 27308
+

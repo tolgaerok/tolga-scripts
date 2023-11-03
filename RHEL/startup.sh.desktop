@@ -1,0 +1,20 @@
+[Desktop Entry]
+Comment[en_AU]=
+Comment=
+Exec=/home/tolga/Music/startup.sh '&&' exit
+Hidden=false
+NoDisplay=false
+GenericName[en_AU]=
+GenericName=
+Icon=dialog-scripts
+MimeType=
+Name[en_AU]=startup.sh
+Name=startup.sh
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-KDE-AutostartScript=true
+X-KDE-SubstituteUID=false
+X-KDE-Username=
