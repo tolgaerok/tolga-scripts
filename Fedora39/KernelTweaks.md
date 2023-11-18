@@ -1,9 +1,10 @@
+Open in editor:
 ```bash
 sudo nano /etc/sysctl.conf
 ```
 
 
-
+Copy or use only to suit your use case:
 ```bash
 # sysctl settings are defined through files in
 # /usr/lib/sysctl.d/, /run/sysctl.d/, and /etc/sysctl.d/.
@@ -17,7 +18,7 @@ sudo nano /etc/sysctl.conf
 # For more information, see sysctl.conf(5) and sysctl.d(5).
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# Old Nixos Tweaks, to suit  ( 28GB system )
+#   Old Nixos Tweaks, to suit  ( 28GB system )
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 kernel.sysrq = 1                         # Enable SysRQ for rebooting the machine properly if it freezes. [Source](https://oglo.dev/tutorials/sysrq/index.html)
 net.core.netdev_max_backlog = 300000     # Help prevent packet loss during high traffic periods.
@@ -36,7 +37,7 @@ vm.swappiness = 10                       # Adjust how aggressively the kernel sw
 vm.vfs_cache_pressure = 50               # Adjust vfs_cache_pressure (0-1000) to manage memory used for caching filesystem objects. Adjusted for 28GB RAM.
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# Nobara Tweaks
+#   Nobara Tweaks
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 fs.aio-max-nr = 1000000                  # defines the maximum number of asynchronous I/O requests that can be in progress at a given time.     1048576
 fs.inotify.max_user_watches = 65536      # sets the maximum number of file system watches, enhancing file system monitoring capabilities.       Default: 8192  TWEAKED: 524288
@@ -52,7 +53,7 @@ vm.dirty_ratio = 80                    # Set the ratio of dirty memory at which 
 # vm.dirty_time = 0                      # Disable dirty time accounting.   NOT AVAILABLE IN FEDORA STABLE KERNEL
 vm.dirty_writeback_centisecs = 300     # Set the interval between two consecutive background writeback passes (500 centiseconds).
 ```
-
+Reload setting's without reboot
 ```bash
 sudo sysctl -p
 
