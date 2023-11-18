@@ -55,8 +55,8 @@ configure_pacman() {
     # Backup the mirrorlist
     cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 
-    # Use reflector to generate a new mirrorlist
-    reflector --verbose --country 'United States' -l 200 -p http --sort rate --save /etc/pacman.d/mirrorlist
+   # Use reflector to generate a new mirrorlist for Australia
+   reflector --verbose --country 'Australia' -l 200 -p http --sort rate --save /etc/pacman.d/mirrorlist
 
     # Update the system again to apply changes
     pacman -Syu --noconfirm
