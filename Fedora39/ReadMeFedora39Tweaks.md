@@ -1,8 +1,3 @@
-```bash
-sudo nano /etc/sysctl.conf
-```
-
-```bash
 # sysctl settings are defined through files in
 # /usr/lib/sysctl.d/, /run/sysctl.d/, and /etc/sysctl.d/.
 #
@@ -14,6 +9,7 @@ sudo nano /etc/sysctl.conf
 #
 # For more information, see sysctl.conf(5) and sysctl.d(5).
 
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Old Nixos Tweaks, to suit  ( 28GB system )
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 kernel.sysrq = 1                         # Enable SysRQ for rebooting the machine properly if it freezes. [Source](https://oglo.dev/tutorials/sysrq/index.html)
@@ -37,8 +33,12 @@ fs.aio-max-nr = 1000000                  # defines the maximum number of asynchr
 fs.inotify.max_user_watches = 65536      # sets the maximum number of file system watches, enhancing file system monitoring capabilities.       Default: 8192  TWEAKED: 524288
 kernel.panic = 5                         # Reboot after 5 seconds on kernel panic                                                               Default: 0
 kernel.pid_max = 131072                  # allows a large number of processes and threads to be managed                                         Default: 32768 TWEAKED: 4194304
-```
 
-```bash
-sudo sysctl -p
-```
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#   SSD tweaks: Adjust settings for an SSD to optimize performance.
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+vm.dirty_background_ratio = 40         # Set the ratio of dirty memory at which background writeback starts (5%). Adjusted for SSD.
+vm.dirty_expire_centisecs = 3000       # Set the time at which dirty data is old enough to be eligible for writeout (6000 centiseconds). Adjusted for SSD.
+vm.dirty_ratio = 80                    # Set the ratio of dirty memory at which a process is forced to write out dirty data (10%). Adjusted for SSD.
+vm.dirty_time = 0                      # Disable dirty time accounting.
+vm.dirty_writeback_centisecs = 300     # Set the interval between two consecutive background writeback passes (500 centiseconds).
