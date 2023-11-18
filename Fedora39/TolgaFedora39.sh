@@ -65,6 +65,10 @@ skip_if_unavailable=True
 fastestmirror=1
 max_parallel_downloads=10
 deltarpm=true
+metadata_timer_sync=0
+metadata_expire=6h
+metadata_expire_filter=repo:base:2h
+metadata_expire_filter=repo:updates:12h
 EOL
 
         # Inform the user that the update is complete
