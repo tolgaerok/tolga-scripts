@@ -292,6 +292,21 @@ disable_gnome_software_startup() {
     display_message "Gnome Software disabled from Startup Apps successfully."
 }
 
+# Function to check if mitigations=off is present in GRUB configuration
+check_mitigations_grub() {
+    display_message "Checking if mitigations=off is present in GRUB configuration..."
+    
+    # Read the GRUB configuration
+    grub_config=$(grep "GRUB_CMDLINE_LINUX=" /etc/default/grub)
+    
+    # Check if mitigations=off is present
+    if echo "$grub_config" | grep -q "mitigations=off"; then
+        display_message "Mitigations are currently disabled in GRUB configuration...Success!"
+    else
+        display_message "Warning: Mitigations are not currently disabled in GRUB configuration."
+    fi
+}
+
 # Main script execution, kingtolga style LOL
 configure_pacman
 install_yay
@@ -308,3 +323,4 @@ disable_mitigations
 enable_modern_standby
 enable_nvidia_modeset
 disable_gnome_software_startup
+check_mitigations_grub
