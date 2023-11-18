@@ -2,7 +2,9 @@
 # Tolga Erok
 # My personal Fedora 39 KDE tweaker
 # 18/11/2023
-# Run from remote location:   curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/FEDORA%20RELATED/Fedora39/MyFedora39.sh | sudo bash
+
+# Run from remote location:   
+# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgaFedora39.sh)"
 
 #  ¯\_(ツ)_/¯
 #    █████▒▓█████ ▓█████▄  ▒█████   ██▀███   ▄▄▄
@@ -355,6 +357,21 @@ use_flatpak_themes() {
     display_message "Themes applied to Flatpaks successfully."
 }
 
+# Function to check if mitigations=off is present in GRUB configuration
+check_mitigations_grub() {
+    display_message "Checking if mitigations=off is present in GRUB configuration..."
+    
+    # Read the GRUB configuration
+    grub_config=$(cat /etc/default/grub)
+    
+    # Check if mitigations=off is present
+    if echo "$grub_config" | grep -q "mitigations=off"; then
+        display_message "Mitigations are currently disabled in GRUB configuration...Success!"
+    else
+        display_message "Warning: Mitigations are not currently disabled in GRUB configuration."
+    fi
+}
+
 # Main script execution, kingtolga style LOL
 configure_dnf
 install_rpmfusion
@@ -374,3 +391,5 @@ enable_nvidia_modeset
 disable_network_manager_wait_online
 disable_gnome_software_startup
 use_flatpak_themes
+# Call the function to check mitigations in GRUB
+check_mitigations_grub
