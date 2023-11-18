@@ -2,7 +2,8 @@
 # Tolga Erok
 # My personal Fedora 39 KDE tweaker
 # 18/11/2023
-#
+# Run from remote location:   curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/FEDORA%20RELATED/Fedora39/MyFedora39.sh | sudo bash
+
 #  ¯\_(ツ)_/¯
 #    █████▒▓█████ ▓█████▄  ▒█████   ██▀███   ▄▄▄
 #  ▓██   ▒ ▓█   ▀ ▒██▀ ██▌▒██▒  ██▒▓██ ▒ ██▒▒████▄
