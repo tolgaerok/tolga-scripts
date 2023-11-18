@@ -14,7 +14,7 @@ sudo nano /etc/sysctl.conf
 #
 # For more information, see sysctl.conf(5) and sysctl.d(5).
 
-# Old Nixos Tweaks
+# Old Nixos Tweaks, to suit  ( 28GB system )
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 kernel.sysrq = 1                         # Enable SysRQ for rebooting the machine properly if it freezes. [Source](https://oglo.dev/tutorials/sysrq/index.html)
 net.core.netdev_max_backlog = 300000     # Help prevent packet loss during high traffic periods.
