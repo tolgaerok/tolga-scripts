@@ -143,7 +143,13 @@ install_gpu_drivers() {
         # Disable Secure Boot, old fedora hacks of mine
         sudo dnf update
         sudo systemctl disable --now fwupd-refresh.timer
-        sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda
+        sudo dnf repolist | grep 'rpmfusion-nonfree-updates'
+        sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+        sudo dnf install -y https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+        sudo dnf config-manager --set-enabled rpmfusion-free rpmfusion-free-updates rpmfusion-nonfree rpmfusion-nonfree-updates
+        sudo dnf install -y fedora-workstation-repositories
+        sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs
+        sudo dnf install -y vdpauinfo libva-vdpau-driver libva-utils vulkan
 
         check_error "Failed to install NVIDIA drivers."
         display_message "NVIDIA drivers installed successfully."
