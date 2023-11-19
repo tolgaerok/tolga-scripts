@@ -412,25 +412,23 @@ cleanup_fedora() {
 }
 
 # Main script execution, kingtolga style LOL
+# --------------------------------------------------------------------------------------
 configure_dnf
 install_rpmfusion
 update_system
 install_firmware
-# install_nvidia_drivers
-install_gpu_drivers   # Updated
-# optimize_battery
+install_gpu_drivers                                   # Updated
+# optimize_battery                                    # Casuing issues, disabled
 install_multimedia_codecs
 install_hw_video_acceleration_intel
 install_hw_video_acceleration_amd
 update_flatpak
 set_utc_time
 disable_mitigations
-# enable_modern_standby
+# enable_modern_standby                               # Casuing issues, disabled
 enable_nvidia_modeset
 disable_network_manager_wait_online
 disable_gnome_software_startup
 use_flatpak_themes
-# Call the function to check mitigations in GRUB
 check_mitigations_grub
-# Call the cleanup_fedora function
 cleanup_fedora
