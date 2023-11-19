@@ -494,3 +494,4 @@ check_mitigations_grub
 install_apps
 customize_kde_nordic
 cleanup_fedora
+configure_dnf
