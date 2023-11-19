@@ -387,6 +387,30 @@ check_mitigations_grub() {
     fi
 }
 
+cleanup_fedora() {
+    # Clean package cache
+    sudo dnf clean all
+
+    # Remove unnecessary dependencies
+    sudo dnf autoremove -y
+
+    # Remove orphaned packages
+    sudo dnf repoquery --installonly --latest-limit=-1 -q > /tmp/pkgs-to-keep
+    sudo dnf list installed | awk '{print $1}' > /tmp/all-installed-pkgs
+    comm -23 /tmp/all-installed-pkgs /tmp/pkgs-to-keep > /tmp/orphaned-pkgs
+
+    if [ -s /tmp/orphaned-pkgs ]; then
+        sudo dnf remove $(cat /tmp/orphaned-pkgs) -y
+    else
+        echo "No orphaned packages found."
+    fi
+
+    # Clean up temporary files
+    sudo rm -rf /tmp/pkgs-to-keep /tmp/all-installed-pkgs /tmp/orphaned-pkgs
+
+    echo "Cleanup complete."
+}
+
 # Main script execution, kingtolga style LOL
 configure_dnf
 install_rpmfusion
@@ -408,3 +432,5 @@ disable_gnome_software_startup
 use_flatpak_themes
 # Call the function to check mitigations in GRUB
 check_mitigations_grub
+# Call the cleanup_fedora function
+cleanup_fedora
