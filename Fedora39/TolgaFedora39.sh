@@ -383,14 +383,14 @@ update_system
 install_firmware
 # install_nvidia_drivers
 install_gpu_drivers   # Updated
-optimize_battery
+# optimize_battery
 install_multimedia_codecs
 install_hw_video_acceleration_intel
 install_hw_video_acceleration_amd
 update_flatpak
 set_utc_time
 disable_mitigations
-enable_modern_standby
+# enable_modern_standby
 enable_nvidia_modeset
 disable_network_manager_wait_online
 disable_gnome_software_startup
