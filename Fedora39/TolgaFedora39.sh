@@ -279,6 +279,10 @@ update_flatpak() {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak update
 
+    display_message "Executing Tolga's Flatpak's..."
+    # Execute the Flatpak Apps installation script from the given URL
+    sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/FlatPakApps.sh)"
+
     display_message "Flatpak updated successfully."
 
     # Call the cleanup function
