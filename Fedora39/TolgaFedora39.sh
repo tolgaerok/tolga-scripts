@@ -28,7 +28,7 @@ fi
 # Function to display messages
 display_message() {
     clear
-    echo ""
+    echo -e "                  Tolga's online fedora updater\n"
     echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
     echo "$1" 
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
