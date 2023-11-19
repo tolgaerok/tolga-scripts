@@ -387,9 +387,63 @@ check_mitigations_grub() {
     fi
 }
 
-cleanup_fedora() {
+install_apps() {
+    display_message "Installing afew personal apps..."
 
-# Clean package cache
+    # Install Kate
+    sudo dnf install -y kate git
+
+    # Check for errors during installation
+    if [ $? -eq 0 ]; then
+        display_message  "Apps installed successfully."
+    else
+        display_message  "Error: Unable to install Apps."
+    fi
+}
+
+customize_kde_nordic() {
+    display_message "Install Nordic Theme..."
+
+    # Install the Kvantum theme engine
+    sudo dnf install -y kvantum
+
+    # Download and install Nordic KDE theme
+    git clone https://github.com/EliverLara/Nordic.git /tmp/Nordic
+    cd /tmp/Nordic/KDE
+    ./install.sh
+
+    # Set the Nordic theme for Plasma style
+    kwriteconfig5 --file ~/.config/kdeglobals --group General --key widgetStyle "kvantum"
+
+    # Set the Nordic theme for Window decorations
+    kwriteconfig5 --file ~/.config/kwinrc --group org.kde.kdecoration2 --key theme "nordic"
+
+    # Set sub-pixel rendering to RGB
+    kwriteconfig5 --file ~/.config/kdeglobals --group General --key UseOpenGL "True"
+
+    # Force font DPI to 98
+    kwriteconfig5 --file ~/.config/kdeglobals --group General --key forceFontDPI "98"
+
+    # Set the Icons to Nordic-bluish
+    kwriteconfig5 --file ~/.config/kdeglobals --group General --key iconTheme "Nordic-bluish"
+
+    # Set the splash screen to none
+    kwriteconfig5 --file ~/.config/ksplashrc --group KSplash --key Theme "none"
+
+    # Clean up temporary files
+    display_message "Clean up tmp files.."
+    rm -rf /tmp/Nordic
+
+    # Check for errors during customization
+    if [ $? -eq 0 ]; then
+        display_message  "KDE customization completed successfully."
+    else
+        display_message  "Error: Unable to customize KDE."
+    fi
+}
+
+cleanup_fedora() {
+    # Clean package cache
     display_message " Time to clean up system..."
     sudo dnf clean all
 
@@ -433,4 +487,6 @@ disable_network_manager_wait_online
 disable_gnome_software_startup
 use_flatpak_themes
 check_mitigations_grub
+install_apps
+customize_kde_nordic
 cleanup_fedora
