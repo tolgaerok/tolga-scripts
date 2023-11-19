@@ -374,7 +374,8 @@ check_mitigations_grub() {
     
     # Check if mitigations=off is present
     if echo "$grub_config" | grep -q "mitigations=off"; then
-        display_message "Mitigations are currently disabled in GRUB configuration...Success!"
+        display_message "Mitigations are currently disabled in GRUB configuration: ==>  ( Success! )"
+        sleep 1
     else
         display_message "Warning: Mitigations are not currently disabled in GRUB configuration."
     fi
