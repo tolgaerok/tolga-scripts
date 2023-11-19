@@ -30,7 +30,7 @@ display_message() {
     clear
     echo -e "\n                  Tolga's online fedora updater\n"
     echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
-    echo -e " ===>    $1" 
+    echo -e "|      ===>    $1" 
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
     echo ""
     sleep 1
