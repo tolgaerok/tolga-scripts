@@ -388,27 +388,29 @@ check_mitigations_grub() {
 }
 
 cleanup_fedora() {
-    # Clean package cache
+
+# Clean package cache
+    display_message " Time to clean up system..."
     sudo dnf clean all
 
     # Remove unnecessary dependencies
     sudo dnf autoremove -y
 
-    # Remove orphaned packages
-    sudo dnf repoquery --installonly --latest-limit=-1 -q > /tmp/pkgs-to-keep
-    sudo dnf list installed | awk '{print $1}' > /tmp/all-installed-pkgs
-    comm -23 /tmp/all-installed-pkgs /tmp/pkgs-to-keep > /tmp/orphaned-pkgs
+    # Sort the lists of installed packages and packages to keep
+    display_message "Sorting out list of installed packages and packages to keep..."
+    comm -23 <(sudo dnf repoquery --installonly --latest-limit=-1 -q | sort) <(sudo dnf list installed | awk '{print $1}' | sort) > /tmp/orphaned-pkgs
 
     if [ -s /tmp/orphaned-pkgs ]; then
-        sudo dnf remove $(cat /tmp/orphaned-pkgs) -y
+        sudo dnf remove $(cat /tmp/orphaned-pkgs) -y --skip-broken
     else
-        echo "No orphaned packages found."
+        display_message "No orphaned packages found."
     fi
 
     # Clean up temporary files
-    sudo rm -rf /tmp/pkgs-to-keep /tmp/all-installed-pkgs /tmp/orphaned-pkgs
+    display_message "Clean up temporary files ..."
+    sudo rm -rf /tmp/orphaned-pkgs
 
-    echo "Cleanup complete."
+    display_message "Cleanup complete, ENJOY!"
 }
 
 # Main script execution, kingtolga style LOL
