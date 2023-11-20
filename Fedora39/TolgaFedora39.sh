@@ -142,14 +142,25 @@ install_gpu_drivers() {
 
         # Disable Secure Boot, old fedora hacks of mine
         sudo dnf update
+        sudo dnf remove xorg-x11-drv-nvidia\*
+        sudo dnf install -y akmod-nvidia
+        echo "blacklist nouveau" | sudo tee -a /etc/modprobe.d/blacklist.conf
+        sudo dracut -f
         sudo systemctl disable --now fwupd-refresh.timer
         sudo dnf repolist | grep 'rpmfusion-nonfree-updates'
         sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
         sudo dnf install -y https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
         sudo dnf config-manager --set-enabled rpmfusion-free rpmfusion-free-updates rpmfusion-nonfree rpmfusion-nonfree-updates
         sudo dnf install -y fedora-workstation-repositories
-        sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs
-        sudo dnf install -y vdpauinfo libva-vdpau-driver libva-utils vulkan
+        sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs
+        sudo dnf install -y vdpauinfo libva-vdpau-driver libva-utils vulkan akmods
+        sudo dnf install -y nvidia-settings nvidia-persistenced
+        sudo akmods --force
+        sudo dracut --force
+        sudo dnf install xrandr
+        sudo systemctl start nvidia-powerd.service
+        sudo systemctl status nvidia-powerd.service
+
 
         check_error "Failed to install NVIDIA drivers."
         display_message "NVIDIA drivers installed successfully."
@@ -415,8 +426,29 @@ customize_kde_nordic() {
 
     # Download and install Nordic KDE theme
     git clone https://github.com/EliverLara/Nordic.git /tmp/Nordic
-    cd /tmp/Nordic/KDE
-    ./install.sh
+
+    # Check if the Nordic directory exists
+    if [ ! -d "/tmp/Nordic" ]; then
+        display_message "Error: Nordic directory not found."
+        return 1
+    fi
+
+    # Navigate to the Nordic directory
+    cd /tmp/Nordic || { display_message "Error: Unable to change to the Nordic directory."; return 1; }
+
+    # Look for the installation scripts and execute the first one found
+    for script in install.sh setup.sh; do
+        if [ -f "$script" ]; then
+            ./$script
+            break
+        fi
+    done
+
+    # Check if the installation was successful before proceeding with configuration
+    if [ $? -ne 0 ]; then
+        display_message "Error: Installation script failed. Unable to customize KDE."
+        return 1
+    fi
 
     # Set the Nordic theme for Plasma style
     kwriteconfig5 --file "$HOME/.config/kdedefaults/kdeglobals" --group General --key widgetStyle "kvantum"
@@ -436,17 +468,11 @@ customize_kde_nordic() {
     # Set the splash screen to none
     # kwriteconfig5 --file "$HOME/.config/kdedefaults/ksplashrc" --group KSplash --key Theme "none"
 
-
     # Clean up temporary files
     display_message "Clean up tmp files.."
     rm -rf /tmp/Nordic
 
-    # Check for errors during customization
-    if [ $? -eq 0 ]; then
-        display_message  "KDE customization completed successfully."
-    else
-        display_message  "Error: Unable to customize KDE."
-    fi
+    display_message "KDE customization completed successfully."
 }
 
 cleanup_fedora() {
@@ -483,8 +509,8 @@ install_firmware
 install_gpu_drivers                                   # Updated
 # optimize_battery                                    # Casuing issues, disabled
 install_multimedia_codecs
-install_hw_video_acceleration_intel
-install_hw_video_acceleration_amd
+# install_hw_video_acceleration_intel
+# install_hw_video_acceleration_amd
 update_flatpak
 set_utc_time
 disable_mitigations
