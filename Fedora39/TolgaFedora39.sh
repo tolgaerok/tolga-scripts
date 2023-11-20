@@ -495,8 +495,11 @@ cleanup_fedora() {
     fi
 
     # Clean up temporary files
-    display_message "Clean up temporary files ..."
+display_message "Clean up temporary files ..."
     sudo rm -rf /tmp/orphaned-pkgs
+    
+    display_message "Trimming all mount points on SSD"
+    sudo fstrim -av
 
     display_message "Cleanup complete, ENJOY!"
 }
