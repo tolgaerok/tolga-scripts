@@ -142,7 +142,7 @@ install_gpu_drivers() {
 
         # Disable Secure Boot, old fedora hacks of mine
         sudo dnf update
-        sudo dnf remove xorg-x11-drv-nvidia\*
+        # sudo dnf remove xorg-x11-drv-nvidia\*
         sudo dnf install -y akmod-nvidia
         echo "blacklist nouveau" | sudo tee -a /etc/modprobe.d/blacklist.conf
         sudo dracut -f
@@ -158,8 +158,8 @@ install_gpu_drivers() {
         sudo akmods --force
         sudo dracut --force
         sudo dnf install xrandr
-        sudo systemctl start nvidia-powerd.service
-        sudo systemctl status nvidia-powerd.service
+        # sudo systemctl start nvidia-powerd.service
+        # sudo systemctl status nvidia-powerd.service
 
 
         check_error "Failed to install NVIDIA drivers."
