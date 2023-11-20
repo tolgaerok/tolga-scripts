@@ -34,6 +34,22 @@ sudo nano /etc/fstab
 UUID=3e3acc31-4e94-4f85-b9b7-89cc0ab53958 /                       f2fs    defaults,noatime,discard        0 0
 UUID=a52f7c44-b8a7-4515-bb01-568aee26d7b2 /boot                   xfs     defaults        0 0
 UUID=b8fc56cf-1720-4367-add1-2ed1b7c88409 /home                   f2fs    defaults,noatime,discard        0 0
+
+#--------------------------| btrfs |---------------------------------------#
+
+UUID=5992d417-423a-4ff9-bf05-93a0a2963e49 /                       btrfs   subvol=root,compress=zstd:1 0 0
+
+or 
+
+UUID=5992d417-423a-4ff9-bf05-93a0a2963e49 / btrfs subvol=root,compress=zstd:1,data=ordered,discard,noatime,nodiratime 0 0
+
+UUID=f85c1f1b-adc9-4a4c-a5bd-41892ed3b6d7 /boot                   ext4    defaults        1 2
+UUID=44FF-C70A                            /boot/efi               vfat    umask=0077,shortname=winnt 0 2
+UUID=5992d417-423a-4ff9-bf05-93a0a2963e49 /home                   btrfs   subvol=home,compress=zstd:1 0 0
+
+or
+
+UUID=5992d417-423a-4ff9-bf05-93a0a2963e49 /home btrfs subvol=home,compress=zstd:1,data=ordered,discard,noatime,nodiratime 0 0
 ```
 
 ```bash
@@ -44,3 +60,6 @@ This command will attempt to mount all filesystems specified in /etc/fstab that 
 
 Please note that some changes to the /etc/fstab file may still require a reboot to take effect, especially if they involve system-critical filesystems. 
 If you've made changes related to the root filesystem or other essential components, a reboot is recommended for those changes to be fully applied.
+
+
+
