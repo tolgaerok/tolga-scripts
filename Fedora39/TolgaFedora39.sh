@@ -408,7 +408,8 @@ install_apps() {
     display_message "Installing afew personal apps..."
 
     # Install Kate
-    sudo dnf install -y kate git
+    sudo dnf install -y kate git digikam rygel
+
 
     # Check for errors during installation
     if [ $? -eq 0 ]; then
