@@ -417,22 +417,23 @@ customize_kde_nordic() {
     ./install.sh
 
     # Set the Nordic theme for Plasma style
-    kwriteconfig5 --file ~/.config/kdeglobals --group General --key widgetStyle "kvantum"
+    kwriteconfig5 --file "$HOME/.config/kdedefaults/kdeglobals" --group General --key widgetStyle "kvantum"
 
     # Set the Nordic theme for Window decorations
-    kwriteconfig5 --file ~/.config/kwinrc --group org.kde.kdecoration2 --key theme "nordic"
+    kwriteconfig5 --file "$HOME/.config/kdedefaults/kwinrc" --group org.kde.kdecoration2 --key theme "nordic"
 
     # Set sub-pixel rendering to RGB
-    kwriteconfig5 --file ~/.config/kdeglobals --group General --key UseOpenGL "True"
+    kwriteconfig5 --file "$HOME/.config/kdedefaults/kdeglobals" --group General --key UseOpenGL "True"
 
     # Force font DPI to 98
-    kwriteconfig5 --file ~/.config/kdeglobals --group General --key forceFontDPI "98"
+    kwriteconfig5 --file "$HOME/.config/kdedefaults/kdeglobals" --group General --key forceFontDPI "98"
 
     # Set the Icons to Nordic-bluish
-    kwriteconfig5 --file ~/.config/kdeglobals --group General --key iconTheme "Nordic-bluish"
+    kwriteconfig5 --file "$HOME/.config/kdedefaults/kdeglobals" --group General --key iconTheme "Nordic-bluish"
 
     # Set the splash screen to none
-    kwriteconfig5 --file ~/.config/ksplashrc --group KSplash --key Theme "none"
+    # kwriteconfig5 --file "$HOME/.config/kdedefaults/ksplashrc" --group KSplash --key Theme "none"
+
 
     # Clean up temporary files
     display_message "Clean up tmp files.."
