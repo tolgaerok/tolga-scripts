@@ -157,7 +157,7 @@ install_gpu_drivers() {
         sudo dnf install -y nvidia-settings nvidia-persistenced
         sudo akmods --force
         sudo dracut --force
-        sudo dnf install xrandr
+        # sudo dnf install xrandr
         # sudo systemctl start nvidia-powerd.service
         # sudo systemctl status nvidia-powerd.service
 
