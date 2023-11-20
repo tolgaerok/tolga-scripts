@@ -369,8 +369,10 @@ use_flatpak_themes() {
     display_message "Using themes in Flatpaks..."
 
     # Override themes for Flatpaks
-    sudo flatpak override --filesystem=$HOME/.themes
-    sudo flatpak override --env=GTK_THEME=my-theme
+    sudo flatpak override --filesystem="$HOME/.themes"
+    
+    # Select your theme from inside of ./themes
+    sudo flatpak override --env=GTK_THEME=Nordic
 
     display_message "Themes applied to Flatpaks successfully."
 }
