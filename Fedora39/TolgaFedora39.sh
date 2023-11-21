@@ -160,6 +160,15 @@ install_gpu_drivers() {
         # sudo dnf install xrandr
         # sudo systemctl start nvidia-powerd.service
         # sudo systemctl status nvidia-powerd.service
+        driver_version=$(modinfo -F version nvidia 2>/dev/null)
+        if [ -n "$driver_version" ]; then
+            echo -e "\e[33mNVIDIA driver version: $driver_version\e[0m"
+        else
+            echo -e "\e[33mNVIDIA driver not found.\e[0m"
+        fi
+
+        sleep 2
+        clear
 
 
         check_error "Failed to install NVIDIA drivers."
