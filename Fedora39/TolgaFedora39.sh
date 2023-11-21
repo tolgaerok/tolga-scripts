@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Tolga Erok
 # My personal Fedora 39 KDE tweaker
 # 18/11/2023

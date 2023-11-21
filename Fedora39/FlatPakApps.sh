@@ -1,9 +1,10 @@
 #!/bin/bash
+
 # Tolga Erok
 # 19/11/23
 
 # Check if Flatpak is installed
-if ! command -v flatpak &> /dev/null; then
+if ! command -v flatpak &>/dev/null; then
     echo "Flatpak is not installed. Please install Flatpak and run the script again."
     exit 1
 fi
