@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Tolga Erok
+# Tolga Erok.
 # My personal Fedora 39 KDE tweaker
 # 18/11/2023
 
-# Run from remote location:
+# Run from remote location:::.
 # sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgaFedora39.sh)"
 
 #  ¯\_(ツ)_/¯
