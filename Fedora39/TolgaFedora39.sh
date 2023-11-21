@@ -3,7 +3,7 @@
 # My personal Fedora 39 KDE tweaker
 # 18/11/2023
 
-# Run from remote location:   
+# Run from remote location:
 # sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgaFedora39.sh)"
 
 #  ¯\_(ツ)_/¯
@@ -17,7 +17,7 @@
 #   ░ ░       ░    ░ ░  ░ ░ ░ ░ ▒    ░░   ░   ░   ▒
 #   ░  ░      ░    ░ ░     ░              ░  ░   ░
 
-clear 
+clear
 
 # Check if the script is run as root
 if [ "$EUID" -ne 0 ]; then
@@ -30,7 +30,7 @@ display_message() {
     clear
     echo -e "\n                  Tolga's online fedora updater\n"
     echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
-    echo -e "|      ===>    $1" 
+    echo -e "|      ===>    $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
     echo ""
     sleep 1
@@ -137,7 +137,7 @@ install_gpu_drivers() {
     display_message "Checking GPU and installing drivers..."
 
     # Check for NVIDIA GPU
-    if lspci | grep -i nvidia &> /dev/null; then
+    if lspci | grep -i nvidia &>/dev/null; then
         display_message "NVIDIA GPU detected. Installing NVIDIA drivers..."
 
         # Disable Secure Boot, old fedora hacks of mine
@@ -160,7 +160,9 @@ install_gpu_drivers() {
         # sudo dnf install xrandr
         # sudo systemctl start nvidia-powerd.service
         # sudo systemctl status nvidia-powerd.service
+
         driver_version=$(modinfo -F version nvidia 2>/dev/null)
+
         if [ -n "$driver_version" ]; then
             echo -e "\e[33mNVIDIA driver version: $driver_version\e[0m"
         else
@@ -168,15 +170,13 @@ install_gpu_drivers() {
         fi
 
         sleep 2
-        clear
-
 
         check_error "Failed to install NVIDIA drivers."
         display_message "NVIDIA drivers installed successfully."
     fi
 
     # Check for AMD GPU
-    if lspci | grep -i amd &> /dev/null; then
+    if lspci | grep -i amd &>/dev/null; then
         display_message "AMD GPU detected. Installing AMD drivers..."
 
         sudo dnf install -y mesa-dri-drivers
@@ -390,7 +390,7 @@ use_flatpak_themes() {
 
     # Override themes for Flatpaks
     sudo flatpak override --filesystem="$HOME/.themes"
-    
+
     # Select your theme from inside of ./themes
     sudo flatpak override --env=GTK_THEME=Nordic
 
@@ -400,10 +400,10 @@ use_flatpak_themes() {
 # Function to check if mitigations=off is present in GRUB configuration
 check_mitigations_grub() {
     display_message "Checking if mitigations=off is present in GRUB configuration..."
-    
+
     # Read the GRUB configuration
     grub_config=$(cat /etc/default/grub)
-    
+
     # Check if mitigations=off is present
     if echo "$grub_config" | grep -q "mitigations=off"; then
         display_message "Mitigations are currently disabled in GRUB configuration: ==>  ( Success! )"
@@ -419,12 +419,11 @@ install_apps() {
     # Install Kate
     sudo dnf install -y kate git digikam rygel
 
-
     # Check for errors during installation
     if [ $? -eq 0 ]; then
-        display_message  "Apps installed successfully."
+        display_message "Apps installed successfully."
     else
-        display_message  "Error: Unable to install Apps."
+        display_message "Error: Unable to install Apps."
     fi
 }
 
@@ -444,7 +443,10 @@ customize_kde_nordic() {
     fi
 
     # Navigate to the Nordic directory
-    cd /tmp/Nordic || { display_message "Error: Unable to change to the Nordic directory."; return 1; }
+    cd /tmp/Nordic || {
+        display_message "Error: Unable to change to the Nordic directory."
+        return 1
+    }
 
     # Look for the installation scripts and execute the first one found
     for script in install.sh setup.sh; do
@@ -495,7 +497,7 @@ cleanup_fedora() {
 
     # Sort the lists of installed packages and packages to keep
     display_message "Sorting out list of installed packages and packages to keep..."
-    comm -23 <(sudo dnf repoquery --installonly --latest-limit=-1 -q | sort) <(sudo dnf list installed | awk '{print $1}' | sort) > /tmp/orphaned-pkgs
+    comm -23 <(sudo dnf repoquery --installonly --latest-limit=-1 -q | sort) <(sudo dnf list installed | awk '{print $1}' | sort) >/tmp/orphaned-pkgs
 
     if [ -s /tmp/orphaned-pkgs ]; then
         sudo dnf remove $(cat /tmp/orphaned-pkgs) -y --skip-broken
@@ -504,9 +506,9 @@ cleanup_fedora() {
     fi
 
     # Clean up temporary files
-display_message "Clean up temporary files ..."
+    display_message "Clean up temporary files ..."
     sudo rm -rf /tmp/orphaned-pkgs
-    
+
     display_message "Trimming all mount points on SSD"
     sudo fstrim -av
 
@@ -519,11 +521,11 @@ configure_dnf
 install_rpmfusion
 update_system
 install_firmware
-install_gpu_drivers                                   # Updated
+install_gpu_drivers # Updated
 # optimize_battery                                    # Casuing issues, disabled
 install_multimedia_codecs
-# install_hw_video_acceleration_intel
-# install_hw_video_acceleration_amd
+# install_hw_video_acceleration_intel                 # Casuing issues, disabled
+# install_hw_video_acceleration_amd                   # Casuing issues, disabled
 update_flatpak
 set_utc_time
 disable_mitigations
