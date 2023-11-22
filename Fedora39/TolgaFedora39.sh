@@ -99,7 +99,7 @@ install_rpmfusion() {
 
 # Function to update the system
 update_system() {
-    display_message "Updating the system..."
+    display_message "Updating the system...."
 
     sudo dnf update -y
     sudo dnf makecache -y
