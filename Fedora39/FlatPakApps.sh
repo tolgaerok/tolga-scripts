@@ -20,6 +20,7 @@ flatpak_apps=(
     "com.anydesk.Anydesk"
     "me.kozec.syncthingtk"
     "com.github.zocker_160.SyncThingy"
+    "com.microsoft.EdgeDev"
 )
 
 # Install applications
