@@ -101,8 +101,9 @@ install_rpmfusion() {
 update_system() {
     display_message "Updating the system..."
 
-    sudo dnf -y update
-    sudo dnf -y upgrade --refresh
+    sudo dnf update -y
+    sudo dnf makecache -y
+    sudo dnf upgrade -y --refresh
 
     check_error
 
