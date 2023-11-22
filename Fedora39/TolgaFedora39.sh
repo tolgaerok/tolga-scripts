@@ -514,6 +514,10 @@ cleanup_fedora() {
     display_message "Trimming all mount points on SSD"
     sudo fstrim -av
 
+    echo -e "\e[1;32m[✔]\e[0m Restarting kernel tweaks...\n"
+    sleep 1
+    sudo sysctl --system
+
     display_message "Cleanup complete, ENJOY!"
 }
 
