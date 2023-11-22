@@ -78,6 +78,7 @@ EOL
 
         # Inform the user that the update is complete
         display_message "DNF configuration updated for faster updates."
+        sudo dnf update && sudo dnf makecache
     else
         # Inform the user that the configuration file doesn't exist
         display_message "Error: DNF configuration file not found at $DNF_CONF_PATH."
@@ -141,7 +142,6 @@ install_gpu_drivers() {
     if lspci | grep -i nvidia &>/dev/null; then
         display_message "NVIDIA GPU detected. Installing NVIDIA drivers..."
 
-        # Disable Secure Boot, old fedora hacks of mine
         sudo dnf update
         # sudo dnf remove xorg-x11-drv-nvidia\*
         sudo dnf install -y akmod-nvidia
