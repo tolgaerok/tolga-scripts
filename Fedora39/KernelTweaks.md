@@ -1,9 +1,16 @@
+In this section:
+* Tweaked values
+* Default values
+* Summary
+
+## Lets get started
+
 Open in editor:
 ```bash
 sudo nano /etc/sysctl.conf
 ```
 
-# Tweaked values to suit nixOS or Fedora
+## Tweaked values to suit nixOS or Fedora
 Copy or use only to suit your use case. Default fedora 39 values below these values
 ```bash
 # sysctl settings are defined through files in
@@ -59,7 +66,7 @@ sudo sysctl -p
 
 ```
 
-# Default values in fedora 39
+## Default values in fedora 39
 ```bash
 kernel.sysrq = 16
 net.core.netdev_max_backlog = 1000
@@ -85,3 +92,67 @@ vm.dirty_expire_centisecs = 3000
 vm.dirty_ratio = 20
 vm.dirty_writeback_centisecs = 500
 ```
+## Summary based on personal observation on my HP G1 800 i7-4770 28GB
+Let's compare the default values with the tweaked values, considering the adjustments for my 28GB system:
+
+1. **kernel.sysrq:**
+   - Default: 16
+   - Tweaked: 1
+   - Decision: The tweak (1) is generally safer as it enables fewer SysRQ functions.
+
+2. **net.core.netdev_max_backlog:**
+   - Default: 1000
+   - Tweaked: 300000
+   - Decision: The tweak (300000) is more suitable for preventing packet loss during high traffic periods.
+
+3. **net.core.rmem_default, net.core.rmem_max, net.core.wmem_default, net.core.wmem_max:**
+   - Decision: The tweaks (524288, 33554432) are more suitable for a system with 28GB of RAM, improving network performance.
+
+4. **net.ipv4.ipfrag_high_threshold:**
+   - Default: [Not specified]
+   - Tweaked: 6291456
+   - Decision: The tweak (6291456) is adjusted for SSD and may help reduce fragmentation.
+
+5. **net.ipv4.tcp_keepalive_intvl, net.ipv4.tcp_keepalive_probes, net.ipv4.tcp_keepalive_time:**
+   - Decision: The tweaks are more aggressive (30, 5, 300) and may be suitable for detecting dead connections faster.
+
+6. **vm.dirty_background_bytes, vm.dirty_bytes:**
+   - Decision: The tweaks (474217728, 742653184) are more appropriate for a system with 28GB of RAM, providing a buffer before initiating writebacks.
+
+7. **vm.min_free_kbytes:**
+   - Default: 65536
+   - Tweaked: 65536
+   - Decision: No significant change. The tweak is relatively minor.
+
+8. **vm.swappiness:**
+   - Decision: The tweak (10) is more suitable for a system with 28GB of RAM, prioritizing keeping data in RAM.
+
+9. **vm.vfs_cache_pressure:**
+   - Decision: The tweak (50) is more suitable for a system with 28GB of RAM, managing memory used for caching filesystem objects.
+
+10. **fs.aio-max-nr:**
+    - Decision: The tweak (1000000) is significantly lower than the default (1048576). Depending on your application's use of asynchronous I/O, you may want to reconsider this tweak.
+
+11. **fs.inotify.max_user_watches:**
+    - Decision: The tweak (524288) is more suitable for enhancing file system monitoring capabilities.
+
+12. **kernel.panic:**
+    - Default: 0
+    - Tweaked: 5
+    - Decision: The tweak (5) enables the system to reboot after 5 seconds on a kernel panic. Depending on your preference for system behavior on kernel panics, you may choose to keep the default or use the tweak.
+
+13. **kernel.pid_max:**
+    - Default: 32768
+    - Tweaked: 4194304
+    - Decision: The tweak allows a larger number of processes and threads, which may be beneficial for a system with 28GB of RAM.
+
+14. **SSD tweaks (vm.dirty_background_ratio, vm.dirty_expire_centisecs, vm.dirty_ratio, vm.dirty_writeback_centisecs):**
+    - Decision: The SSD tweaks are adjusted for better performance on an SSD and are generally suitable.
+
+In summary, for my 28GB system, the tweaked values seem more appropriate in most cases, especially regarding network settings, dirty memory settings, and adjustments for SSD. However, you may want to reconsider the fs.aio-max-nr tweak depending on your application's requirements. 
+
+Always monitor your system's performance after making changes and adjust as needed.
+
+
+Enjoy
+Tolga Erok
