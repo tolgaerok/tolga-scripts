@@ -3,7 +3,7 @@ Open in editor:
 sudo nano /etc/sysctl.conf
 ```
 
-
+# Tweaked values to suit nixOS or Fedora
 Copy or use only to suit your use case. Default fedora 39 values below these values
 ```bash
 # sysctl settings are defined through files in
