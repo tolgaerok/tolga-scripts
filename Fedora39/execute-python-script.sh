@@ -1,7 +1,7 @@
 #!/bin/bash
 # tolga erok
 
-
+# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/execute-python-script.sh)"
 
 # List of required Python packages
 required_packages=("package1" "package2" "package3")
