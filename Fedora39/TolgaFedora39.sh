@@ -184,7 +184,7 @@ install_gpu_drivers() {
         # sudo systemctl start nvidia-powerd.service
         # sudo systemctl status nvidia-powerd.service
 
-         display_message "Enabling nvidia-modeset..."
+        display_message "Enabling nvidia-modeset..."
 
         # Enable nvidia-modeset
         sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"
@@ -265,15 +265,6 @@ install_multimedia_codecs() {
     sudo dnf group upgrade --with-optional Multimedia
 
     display_message "Multimedia codecs installed successfully."
-}
-
-# Function to install H/W Video Acceleration for Intel chipset
-install_hw_video_acceleration_intel() {
-    display_message "Installing H/W Video Acceleration for Intel chipset..."
-
-    sudo dnf install -y intel-media-driver
-
-    display_message "H/W Video Acceleration for Intel chipset installed successfully."
 }
 
 # Function to install H/W Video Acceleration for AMD or Intel chipset
