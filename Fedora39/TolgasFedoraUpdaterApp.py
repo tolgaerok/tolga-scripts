@@ -2,6 +2,11 @@
 # 23/11/2023
 # My 1st python script (fedora 39 updater)
 # Beta v1
+# to run: 
+# python3 - <<EOF
+# $(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgasFedoraUpdaterApp.py)
+# EOF
+
 
 import tkinter as tk
 from tkinter import ttk
