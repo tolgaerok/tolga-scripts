@@ -163,12 +163,20 @@ install_gpu_drivers() {
         # sudo systemctl start nvidia-powerd.service
         # sudo systemctl status nvidia-powerd.service
 
+         display_message "Enabling nvidia-modeset..."
+
+        # Enable nvidia-modeset
+        sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"
+
+        display_message "nvidia-modeset enabled successfully."
+
         driver_version=$(modinfo -F version nvidia 2>/dev/null)
 
         if [ -n "$driver_version" ]; then
-            echo -e "\e[33mNVIDIA driver version: $driver_version\e[0m"
+            display_message "NVIDIA driver version: $driver_version"
+            sleep 1
         else
-            echo -e "\e[33mNVIDIA driver not found.\e[0m"
+            display_message "NVIDIA driver not found."
         fi
 
         sleep 2
@@ -521,6 +529,13 @@ cleanup_fedora() {
     display_message "Cleanup complete, ENJOY!"
 }
 
+fix_chrome() {   
+    display_message "Applying chrome HW accelerations issue for now"
+    sudo sudo dnf downgrade mesa-libGL
+    # sudo rm -rf ./config/google-chrome
+    display_message "https://bugzilla.redhat.com/show_bug.cgi?id=2193335"
+}
+
 # Main script execution, kingtolga style LOL
 # --------------------------------------------------------------------------------------
 configure_dnf
@@ -536,7 +551,7 @@ update_flatpak
 set_utc_time
 disable_mitigations
 # enable_modern_standby                               # Casuing issues, disabled
-enable_nvidia_modeset
+# enable_nvidia_modeset                               # moved into nvidia install
 disable_network_manager_wait_online
 disable_gnome_software_startup
 use_flatpak_themes
@@ -545,3 +560,4 @@ install_apps
 customize_kde_nordic
 cleanup_fedora
 configure_dnf
+fix_chrome
