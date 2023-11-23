@@ -557,7 +557,7 @@ disable_gnome_software_startup
 use_flatpak_themes
 check_mitigations_grub
 install_apps
-customize_kde_nordic
+# customize_kde_nordic                                # To Do and fix
 cleanup_fedora
 configure_dnf
 fix_chrome
