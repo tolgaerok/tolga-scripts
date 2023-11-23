@@ -148,25 +148,36 @@ install_gpu_drivers() {
         display_message "NVIDIA GPU detected. Installing NVIDIA drivers..."
 
         sudo dnf update
-        echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
         
-        sudo dnf install -y akmod-nvidia
-        echo "blacklist nouveau" | sudo tee -a /etc/modprobe.d/blacklist.conf
-        sudo dnf remove -y xorg-x11-drv-nouveau
+        # Install some dependencies
+        sudo dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig
 
-        sudo dracut -f
+        echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
+        echo "blacklist nouveau" | sudo tee -a /etc/modprobe.d/blacklist.conf
+
+        # remove mouveau
+        sudo dnf remove -y xorg-x11-drv-nouveau
+        
+        # Backup old initramfs nouveau image #
+        sudo mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img
+ 
+        # Create new initramfs image #
+        sudo dracut /boot/initramfs-$(uname -r).img $(uname -r)
+
+        sudo dnf install -y akmod-nvidia       
         sudo systemctl disable --now fwupd-refresh.timer
         sudo dnf repolist | grep 'rpmfusion-nonfree-updates'
         sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
         sudo dnf install -y https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
         sudo dnf config-manager --set-enabled rpmfusion-free rpmfusion-free-updates rpmfusion-nonfree rpmfusion-nonfree-updates
-        sudo dnf install -y fedora-workstation-repositories kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig
+        sudo dnf install -y fedora-workstation-repositories 
         sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs
         sudo dnf install -y vdpauinfo libva-vdpau-driver libva-utils vulkan akmods
         sudo dnf install -y nvidia-settings nvidia-persistenced
         sudo akmods --force
-        sudo dracut --force
-
+        
+         # sudo dracut -f
+        # sudo dracut --force
         # sudo dnf remove xorg-x11-drv-nvidia\*
         # sudo dnf install xrandr
         # sudo systemctl start nvidia-powerd.service
