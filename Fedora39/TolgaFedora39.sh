@@ -536,12 +536,29 @@ cleanup_fedora() {
 
 fix_chrome() {   
     display_message "Applying chrome HW accelerations issue for now"
-    sudo sudo dnf downgrade mesa-libGL
-    # sudo rm -rf ./config/google-chrome
-    display_message "https://bugzilla.redhat.com/show_bug.cgi?id=2193335"
+    # Prompt user for reboot or continue
+    read -p "Do you want to down grade mesa dlibs now? (y/n): " choice
+    case "$choice" in
+    y | Y)
+        # Apply fix
+        display_message "Applied"        
+        sudo sudo dnf downgrade mesa-libGL
+        # sudo rm -rf ./config/google-chrome
+        sleep 2
+        display_message "Bug @ https://bugzilla.redhat.com/show_bug.cgi?id=2193335"
+        ;;
+    n | N)
+        display_message "Fix skipped. Continuing with the script."
+        ;;
+    *)
+        display_message "Invalid choice. Continuing with the script."
+        ;;
+    esac
+        
     echo "If problems persist, copy and pate the following into chrome address bar and disable HW acceleration"
     echo ""
     echo "chrome://settings/?search=hardware+acceleration"
+    sleep 3
 }
 
 # Main script execution, kingtolga style LOL
