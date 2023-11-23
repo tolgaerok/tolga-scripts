@@ -534,6 +534,9 @@ fix_chrome() {
     sudo sudo dnf downgrade mesa-libGL
     # sudo rm -rf ./config/google-chrome
     display_message "https://bugzilla.redhat.com/show_bug.cgi?id=2193335"
+    echo "If problems persist, copy and pate the following into chrome address bar and disable HW acceleration"
+    echo ""
+    echo "chrome://settings/?search=hardware+acceleration"
 }
 
 # Main script execution, kingtolga style LOL
