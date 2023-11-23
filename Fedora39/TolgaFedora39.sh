@@ -567,19 +567,19 @@ configure_dnf
 install_rpmfusion
 update_system
 install_firmware
-install_gpu_drivers # Updated
+install_gpu_drivers                                   # Updated
 # optimize_battery                                    # Casuing issues, disabled
 install_multimedia_codecs
 # install_hw_video_acceleration_intel                 # Casuing issues, disabled
 # install_hw_video_acceleration_amd                   # Casuing issues, disabled
 update_flatpak
-set_utc_time
-disable_mitigations
+set_utc_time                                          # for dual boot systems
+disable_mitigations                                   # speed up system
 # enable_modern_standby                               # Casuing issues, disabled
 # enable_nvidia_modeset                               # moved into nvidia install
 disable_network_manager_wait_online
 disable_gnome_software_startup
-use_flatpak_themes
+# use_flatpak_themes                                  # needs revisiting
 check_mitigations_grub
 install_apps
 # customize_kde_nordic                                # To Do and fix
