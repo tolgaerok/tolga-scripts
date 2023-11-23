@@ -101,7 +101,11 @@ install_rpmfusion() {
 update_system() {
     display_message "Updating the system...."
 
-    sudo dnf update -y
+    sudo dnf update -y  
+
+    # Install necessary dependencies if not already installed
+    display_message "Checking for extra dependencies..."
+    sudo dnf install -y rpmconf 
     sudo dnf makecache -y
     sudo dnf upgrade -y --refresh
 
@@ -307,7 +311,8 @@ update_flatpak() {
     display_message "Updating Flatpak..."
 
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    flatpak update
+    # flatpak update
+    flatpak update --refresh
 
     display_message "Executing Tolga's Flatpak's..."
     # Execute the Flatpak Apps installation script from the given URL
