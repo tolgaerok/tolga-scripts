@@ -4,7 +4,7 @@ sudo nano /etc/sysctl.conf
 ```
 
 
-Copy or use only to suit your use case:
+Copy or use only to suit your use case. Default fedora 39 values below these values
 ```bash
 # sysctl settings are defined through files in
 # /usr/lib/sysctl.d/, /run/sysctl.d/, and /etc/sysctl.d/.
@@ -57,4 +57,31 @@ Reload setting's without reboot
 ```bash
 sudo sysctl -p
 
+```
+
+# Default values in fedora 39
+```bash
+kernel.sysrq = 16
+net.core.netdev_max_backlog = 1000
+net.core.rmem_default = 212992
+net.core.rmem_max = 212992
+net.core.wmem_default = 212992
+net.core.wmem_max = 212992
+net.ipv4.ipfrag_high_threshold = 
+net.ipv4.tcp_keepalive_intvl = 75
+net.ipv4.tcp_keepalive_probes = 9
+net.ipv4.tcp_keepalive_time = 7200
+vm.dirty_background_bytes = 0
+vm.dirty_bytes = 0
+vm.min_free_kbytes = 67584
+vm.swappiness = 60
+vm.vfs_cache_pressure = 100
+fs.aio-max-nr = 65536
+fs.inotify.max_user_watches = 524288
+kernel.panic = 0
+kernel.pid_max = 4194304
+vm.dirty_background_ratio = 10
+vm.dirty_expire_centisecs = 3000
+vm.dirty_ratio = 20
+vm.dirty_writeback_centisecs = 500
 ```
