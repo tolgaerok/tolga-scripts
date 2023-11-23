@@ -78,6 +78,7 @@ EOL
 
         # Inform the user that the update is complete
         display_message "DNF configuration updated for faster updates."
+        sudo dnf install -y fedora-workstation-repositories 
         sudo dnf update && sudo dnf makecache
     else
         # Inform the user that the configuration file doesn't exist
@@ -170,7 +171,7 @@ install_gpu_drivers() {
         sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
         sudo dnf install -y https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
         sudo dnf config-manager --set-enabled rpmfusion-free rpmfusion-free-updates rpmfusion-nonfree rpmfusion-nonfree-updates
-        sudo dnf install -y fedora-workstation-repositories 
+        
         sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs
         sudo dnf install -y vdpauinfo libva-vdpau-driver libva-utils vulkan akmods
         sudo dnf install -y nvidia-settings nvidia-persistenced
