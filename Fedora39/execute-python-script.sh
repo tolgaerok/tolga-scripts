@@ -22,6 +22,4 @@ install_python_packages() {
 install_python_packages
 
 # Execute the Python code
-python3 - <<EOF
-$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgasFedoraUpdaterApp.py)
-EOF
+curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgasFedoraUpdaterApp.py | python3 -
