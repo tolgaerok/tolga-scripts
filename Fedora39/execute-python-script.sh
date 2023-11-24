@@ -6,12 +6,12 @@
 # List of required Python packages.
 required_packages=("python3" "python3-pip" "python3-setuptools" "python3-devel")
 
-# Function to check and install Python packages for Fedora
-install_python_packages() {
-    for package in "${required_packages[@]}"; do
-        if ! python3 -c "import $package" 2>/dev/null; then
+# Function to check and install essential packages for Fedora
+install_essentials() {
+    for package in "${essential_packages[@]}"; do
+        if ! rpm -q "$package" &>/dev/null; then
             echo "Installing $package..."
-            sudo dnf install -y "python3-$package"
+            sudo dnf install -y "$package"
         else
             echo "$package is already installed."
         fi
