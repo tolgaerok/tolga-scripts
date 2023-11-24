@@ -593,7 +593,7 @@ update_flatpak
 set_utc_time                                          # for dual boot systems
 disable_mitigations                                   # speed up system
 # enable_modern_standby                               # Casuing issues, disabled
-enable_nvidia_modeset                               # moved into nvidia install
+# enable_nvidia_modeset                               # moved into nvidia install
 disable_network_manager_wait_online
 disable_gnome_software_startup
 # use_flatpak_themes                                  # needs revisiting
@@ -602,5 +602,5 @@ install_apps
 # customize_kde_nordic                                # To Do and fix
 cleanup_fedora
 configure_dnf
-fix_chrome
+# fix_chrome
 display_XDG_session
