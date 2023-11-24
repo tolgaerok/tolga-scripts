@@ -19,7 +19,7 @@ install_essentials() {
 }
 
 # Check and install Python packages
-install_python_packages
+install_essentials
 
 # Execute the Python code
 curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgasFedoraUpdaterApp.py | python3 -
