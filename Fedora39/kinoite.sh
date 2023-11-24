@@ -14,7 +14,8 @@
 #  ░ ░▒ ▒░ ▒ ░░ ░░   ░ ▒░  ░ ▒ ▒░  ▒ ░    ░     ░ ░  ░   
 #  ░ ░░ ░  ▒ ░   ░   ░ ░ ░ ░ ░ ▒   ▒ ░  ░         ░      
 #  ░  ░    ░           ░     ░ ░   ░              ░  ░   
-#                                                        
+
+#  https://patorjk.com/software/taag/#p=testall&c=bash&f=Graffiti&t=Kinoite%2039                                                       
 
 # Update
 sudo dnf update
