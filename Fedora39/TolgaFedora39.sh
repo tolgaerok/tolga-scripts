@@ -567,6 +567,7 @@ fix_chrome() {
     echo ""
     echo "chrome://settings/?search=hardware+acceleration"
     sleep 3
+    sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/execute-python-script.sh)"
 }
 
 # Main script execution, kingtolga style LOL
