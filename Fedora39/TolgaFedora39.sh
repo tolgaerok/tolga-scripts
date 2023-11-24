@@ -152,9 +152,11 @@ install_gpu_drivers() {
         
         # Install some dependencies
         sudo dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig
-
-        echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
-        echo "blacklist nouveau" | sudo tee -a /etc/modprobe.d/blacklist.conf
+        
+        # inntf
+        # echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
+        
+        sudo sed -i '/GRUB_CMDLINE_LINUX/ s/"$/ rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
 
         # remove mouveau
         sudo dnf remove -y xorg-x11-drv-nouveau
@@ -585,7 +587,7 @@ update_flatpak
 set_utc_time                                          # for dual boot systems
 disable_mitigations                                   # speed up system
 # enable_modern_standby                               # Casuing issues, disabled
-# enable_nvidia_modeset                               # moved into nvidia install
+enable_nvidia_modeset                               # moved into nvidia install
 disable_network_manager_wait_online
 disable_gnome_software_startup
 # use_flatpak_themes                                  # needs revisiting
