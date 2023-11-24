@@ -572,6 +572,12 @@ fix_chrome() {
     sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/execute-python-script.sh)"
 }
 
+display_XDG_session() {
+    session=$XDG_SESSION_TYPE
+
+    display_message "Current XDG session is [ $session ]"
+}
+
 # Main script execution, kingtolga style LOL
 # --------------------------------------------------------------------------------------
 configure_dnf
@@ -597,3 +603,4 @@ install_apps
 cleanup_fedora
 configure_dnf
 fix_chrome
+display_XDG_session
