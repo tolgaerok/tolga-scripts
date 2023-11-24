@@ -78,7 +78,7 @@ EOL
 
         # Inform the user that the update is complete
         display_message "DNF configuration updated for faster updates."
-        sudo dnf install -y fedora-workstation-repositories 
+        sudo dnf install -y fedora-workstation-repositories
         sudo dnf update && sudo dnf makecache
     else
         # Inform the user that the configuration file doesn't exist
@@ -93,6 +93,8 @@ install_rpmfusion() {
     sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
         https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
+    sudo dnf groupupdate core
+
     check_error
 
     display_message "RPM Fusion installed successfully."
@@ -102,11 +104,20 @@ install_rpmfusion() {
 update_system() {
     display_message "Updating the system...."
 
-    sudo dnf update -y  
+    sudo dnf update -y
 
     # Install necessary dependencies if not already installed
     display_message "Checking for extra dependencies..."
-    sudo dnf install -y rpmconf 
+    sudo dnf install -y rpmconf
+
+    # Install DNF plugins core (if not already installed)
+    sudo dnf install -y dnf-plugins-core
+
+    # Install required dependencies
+    sudo dnf install -y epel-release
+    sudo dnf install -y dnf-plugins-core
+
+    # Update the package manager
     sudo dnf makecache -y
     sudo dnf upgrade -y --refresh
 
@@ -149,37 +160,37 @@ install_gpu_drivers() {
         display_message "NVIDIA GPU detected. Installing NVIDIA drivers..."
 
         sudo dnf update
-        
+
         # Install some dependencies
         sudo dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig
-        
+
         # inntf
         # echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
-        
+
         sudo sed -i '/GRUB_CMDLINE_LINUX/ s/"$/ rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
 
         # remove mouveau
         sudo dnf remove -y xorg-x11-drv-nouveau
-        
+
         # Backup old initramfs nouveau image #
         sudo mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img
- 
+
         # Create new initramfs image #
         sudo dracut /boot/initramfs-$(uname -r).img $(uname -r)
 
-        sudo dnf install -y akmod-nvidia       
+        sudo dnf install -y akmod-nvidia
         sudo systemctl disable --now fwupd-refresh.timer
         sudo dnf repolist | grep 'rpmfusion-nonfree-updates'
         sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
         sudo dnf install -y https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
         sudo dnf config-manager --set-enabled rpmfusion-free rpmfusion-free-updates rpmfusion-nonfree rpmfusion-nonfree-updates
-        
+
         sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs
         sudo dnf install -y vdpauinfo libva-vdpau-driver libva-utils vulkan akmods
         sudo dnf install -y nvidia-settings nvidia-persistenced
         sudo akmods --force
-        
-         # sudo dracut -f
+
+        # sudo dracut -f
         # sudo dracut --force
         # sudo dnf remove xorg-x11-drv-nvidia\*
         # sudo dnf install xrandr
@@ -266,6 +277,10 @@ install_multimedia_codecs() {
     sudo dnf install -y lame\* --exclude=lame-devel
     sudo dnf group upgrade --with-optional Multimedia
 
+    # Enable support for Cisco OpenH264 codec
+    sudo dnf config-manager --set-enabled fedora-cisco-openh264 -y
+    sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264 -y
+
     display_message "Multimedia codecs installed successfully."
 }
 
@@ -295,6 +310,9 @@ install_hw_video_acceleration_amd_or_intel() {
             display_message "Intel chipset detected. Installing Intel video acceleration..."
 
             sudo dnf install -y intel-media-driver
+
+            # Install video acceleration packages
+            sudo dnf install libva libva-utils xorg-x11-drv-intel intel-media-va-driver-non-free libva-drm2 libva-x11-2 -y
 
             display_message "H/W Video Acceleration for Intel chipset installed successfully."
         else
@@ -442,7 +460,140 @@ install_apps() {
     display_message "Installing afew personal apps..."
 
     # Install Kate
-    sudo dnf install -y kate git digikam rygel
+    sudo dnf install -y kate git digikam rygel mpg123 rhythmbox python3 python3-pip libffi-devel openssl-devel kate neofetch
+    sudo dnf install -y PackageKit timeshift grub-customizer dconf-editor gedit gjs unzip p7zip p7zip-plugins unrar sxiv lsd duf
+    sudo dnf install -y ffmpeg-libs
+
+    # Install some fonts
+    display_message "Install some fonts"
+    sudo dnf install -y fontawesome-fonts powerline-fonts
+    sudo mkdir -p ~/.local/share/fonts
+    cd ~/.local/share/fonts && curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/DroidSansMono/DroidSansMNerdFont-Regular.otf
+    wget https://github.com/tolgaerok/fonts-tolga/raw/main/WPS-FONTS.zip
+    unzip WPS-FONTS.zip -d /usr/share/fonts
+
+    # Reloading Font
+    sudo fc-cache -vf
+
+    # Removing zip Files
+    rm ./WPS-FONTS.zip
+    sudo fc-cache -f -v
+
+    # Install google
+    display_message "Installing Google Chrome browser..."
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+    sudo dnf install -y ./google-chrome-stable_current_x86_64.rpm
+    rm -f google-chrome-stable_current_x86_64.rpm
+
+    # Install extra package
+    display_message "Extra rpm packages"
+    sudo dnf groupupdate -y sound-and-video
+    sudo dnf group upgrade -y --with-optional Multimedia
+    sudo dnf groupupdate -y sound-and-video --allowerasing --skip-broken
+    sudo dnf groupupdate multimedia sound-and-video
+
+    # Download teamviewer
+    download_url="https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm?utm_source=google&utm_medium=cpc&utm_campaign=au%7Cb%7Cpr%7C22%7Cjun%7Ctv-core-download-sn%7Cfree%7Ct0%7C0&utm_content=Download&utm_term=teamviewer+download"
+    download_location="/tmp/teamviewer.x86_64.rpm"
+
+    display_message "Downloading TeamViewer..."
+    wget -O "$download_location" "$download_url"
+
+    # Install TeamViewer
+    display_message "Installing TeamViewer..."
+    sudo dnf install "$download_location" -y
+
+    # Cleanup
+    display_message "Cleaning up /tmp.."
+    rm "$download_location"
+
+    display_message "TeamViewer installation completed."
+
+    # Download Visual Studio Code
+    download_url="https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm-x64"
+    download_location="/tmp/vscode.rpm"
+
+    display_message "Downloading Visual Studio Code..."
+    wget -O "$download_location" "$download_url"
+
+    # Install Visual Studio Code
+    display_message "Installing Visual Studio Code..."
+    sudo dnf install "$download_location" -y
+
+    # Cleanup
+    display_message "Cleaning up /tmp..."
+    rm "$download_location"
+
+    display_message "Install SAMBA and dependencies"
+
+    # Install Samba and its dependencies
+    sudo dnf install samba samba-client samba-common cifs-utils samba-usershares -y
+
+    # Enable and start SMB and NMB services
+    sudo systemctl enable smb.service nmb.service
+    sudo systemctl start smb.service nmb.service
+
+    # Restart SMB and NMB services (optional)
+    sudo systemctl restart smb.service nmb.service
+
+    # Configure the firewall
+    sudo firewall-cmd --add-service=samba --permanent
+    sudo firewall-cmd --add-service=samba
+    sudo firewall-cmd --runtime-to-permanent
+    sudo firewall-cmd --reload
+
+    # Set SELinux booleans
+    sudo setsebool -P samba_enable_home_dirs on
+    sudo setsebool -P samba_export_all_rw on
+    sudo setsebool -P smbd_anon_write 1
+
+    # Create samba user/group
+    read -r -p "Set-up samba user & group's
+" -t 2 -n 1 -s
+
+    # Prompt for the desired username for samba
+    read -p $'\n'"Enter the USERNAME to add to Samba: " sambausername
+
+    # Prompt for the desired name for samba
+    read -p $'\n'"Enter the GROUP name to add username to Samba: " sambagroup
+
+    sudo groupadd $sambagroup
+    sudo useradd -m $sambausername
+    sudo smbpasswd -a $sambausername
+    sudo usermod -aG $sambagroup $sambausername
+
+    read -r -p "
+Continuing..." -t 1 -n 1 -s
+
+    # Configure custom samba folder
+    read -r -p "Create and configure custom samba folder located at /home/fedora39
+" -t 2 -n 1 -s
+
+    sudo mkdir /home/fedora39
+    sudo chgrp samba /home/fedora39
+    sudo chmod 770 /home/fedora39
+
+    # Create the sambashares group if it doesn't exist
+    sudo groupadd -r sambashares
+
+    # Create the usershares directory and set permissions
+    sudo mkdir -p /var/lib/samba/usershares
+    sudo chown $username:sambashares /var/lib/samba/usershares
+    sudo chmod 1770 /var/lib/samba/usershares
+
+    # Restore SELinux context for the usershares directory
+    sudo restorecon -R /var/lib/samba/usershares
+
+    # Add the user to the sambashares group
+    sudo gpasswd sambashares -a $username
+
+    # Add the user to the sambashares group (alternative method)
+    sudo usermod -aG sambashares $username
+
+    # Restart SMB and NMB services (optional)
+    sudo systemctl restart smb.service nmb.service
+
+    display_message "Installation completed."
 
     # Check for errors during installation
     if [ $? -eq 0 ]; then
@@ -544,14 +695,14 @@ cleanup_fedora() {
     display_message "Cleanup complete, ENJOY!"
 }
 
-fix_chrome() {   
+fix_chrome() {
     display_message "Applying chrome HW accelerations issue for now"
     # Prompt user for reboot or continue
     read -p "Do you want to down grade mesa dlibs now? (y/n): " choice
     case "$choice" in
     y | Y)
         # Apply fix
-        display_message "Applied"        
+        display_message "Applied"
         sudo sudo dnf downgrade mesa-libGL
         # sudo rm -rf ./config/google-chrome
         sleep 2
@@ -564,7 +715,7 @@ fix_chrome() {
         display_message "Invalid choice. Continuing with the script."
         ;;
     esac
-        
+
     echo "If problems persist, copy and pate the following into chrome address bar and disable HW acceleration"
     echo ""
     echo "chrome://settings/?search=hardware+acceleration"
@@ -584,14 +735,14 @@ configure_dnf
 install_rpmfusion
 update_system
 install_firmware
-install_gpu_drivers                                   # Updated
+install_gpu_drivers # Updated
 # optimize_battery                                    # Casuing issues, disabled
 install_multimedia_codecs
 # install_hw_video_acceleration_intel                 # Casuing issues, disabled
 # install_hw_video_acceleration_amd                   # Casuing issues, disabled
 update_flatpak
-set_utc_time                                          # for dual boot systems
-disable_mitigations                                   # speed up system
+set_utc_time        # for dual boot systems
+disable_mitigations # speed up system
 # enable_modern_standby                               # Casuing issues, disabled
 # enable_nvidia_modeset                               # moved into nvidia install
 disable_network_manager_wait_online
