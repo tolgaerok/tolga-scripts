@@ -15,7 +15,14 @@
 #  ░ ░░ ░  ▒ ░   ░   ░ ░ ░ ░ ░ ▒   ▒ ░  ░         ░      
 #  ░  ░    ░           ░     ░ ░   ░              ░  ░   
 
-#  https://patorjk.com/software/taag/#p=testall&c=bash&f=Graffiti&t=Kinoite%2039                                                       
+#  https://patorjk.com/software/taag/#p=testall&c=bash&f=Graffiti&t=Kinoite%2039    
+
+ARG BASE_REPO=quay.io/aleskandrox/fedora
+ARG BASE_TAG=kinoite-rawhide
+FROM ${BASE_REPO}:${BASE_TAG}
+
+ARG TOOLBOX_IMAGE=quay.io/aleskandrox/fedora:toolbox
+ENTRYPOINT ["/bin/bash"]
 
 # Update
 sudo dnf update
@@ -116,3 +123,5 @@ rpm-ostree install code.
 # Then in $HOME/.config/Code/User/settings.json, include:
 
 # "telemetry.telemetryLevel": "off"
+
+sudo dnf clean all
