@@ -1,18 +1,6 @@
- 
-# Tolga Erok
-# 23/11/2023
-# My 1st python script (fedora 39 updater)
-# Beta v1
-# to run:
-# python3 - <<EOF
-# $(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgasFedoraUpdaterApp.py)
-# EOF
-
-
 import tkinter as tk
 from tkinter import ttk
 import subprocess
-import os
 
 class TolgasFedoraUpdaterApp:
     def __init__(self, root):
@@ -42,8 +30,14 @@ class TolgasFedoraUpdaterApp:
         self.output_text.pack(pady=10)
 
     def update_system(self):
-        result = subprocess.run(['sudo', 'dnf', 'update', '-y'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        self.display_result(result.stdout + result.stderr)
+        commands = [
+            ('sudo dnf install -y rpmconf', 'Installing rpmconf...'),
+            ('sudo dnf makecache -y', 'Making cache...'),
+            ('sudo dnf upgrade -y --refresh', 'Upgrading...'),
+        ]
+        for command, operation in commands:
+            result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
+            self.display_result(f"{operation}\n{result.stdout}{result.stderr}")
 
     def configure_dnf(self):
         result = subprocess.run(['sudo', 'cp', '/etc/dnf/dnf.conf', '/etc/dnf/dnf.conf.bak'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
