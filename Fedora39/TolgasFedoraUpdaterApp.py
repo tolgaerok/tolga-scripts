@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter.scrolledtext import ScrolledText
 import subprocess
-import pexpect
 
 class TolgasFedoraUpdaterApp:
     def __init__(self, root):
@@ -28,7 +26,7 @@ class TolgasFedoraUpdaterApp:
         self.btn_configure_dnf.pack(pady=10)
 
         # Terminal-like output
-        self.output_text = ScrolledText(root, height=10, width=80, wrap="word")
+        self.output_text = tk.Text(root, height=10, width=80, wrap="word", state=tk.DISABLED)
         self.output_text.pack(pady=10)
 
     def update_system(self):
@@ -38,27 +36,22 @@ class TolgasFedoraUpdaterApp:
         self.execute_command(['sudo', 'cp', '/etc/dnf/dnf.conf', '/etc/dnf/dnf.conf.bak'])
 
     def execute_command(self, command):
-        self.output_text.config(state="normal")
+        self.output_text.config(state=tk.NORMAL)
         self.output_text.delete(1.0, tk.END)
 
-        process = pexpect.spawn(' '.join(command), timeout=None)
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, universal_newlines=True)
 
-        def update_output():
-            try:
-                while True:
-                    line = process.readline()
-                    if not line:
-                        break
-                    self.output_text.insert(tk.END, line)
-                    self.output_text.see(tk.END)
-            except pexpect.EOF:
-                pass
-
-        update_output()
+        while True:
+            line = process.stdout.readline()
+            if not line:
+                break
+            self.output_text.insert(tk.END, line)
+            self.output_text.see(tk.END)
+            self.root.update_idletasks()
 
         process.wait()
 
-        self.output_text.config(state="disabled")
+        self.output_text.config(state=tk.DISABLED)
 
 if __name__ == "__main__":
     root = tk.Tk()
