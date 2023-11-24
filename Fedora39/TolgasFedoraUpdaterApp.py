@@ -1,6 +1,18 @@
+ 
+# Tolga Erok
+# 23/11/2023
+# My 1st python script (fedora 39 updater)
+# Beta v1
+# to run:
+# python3 - <<EOF
+# $(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgasFedoraUpdaterApp.py)
+# EOF
+
+
 import tkinter as tk
 from tkinter import ttk
 import subprocess
+import os
 
 class TolgasFedoraUpdaterApp:
     def __init__(self, root):
@@ -25,17 +37,23 @@ class TolgasFedoraUpdaterApp:
         self.btn_configure_dnf = tk.Button(self.tab2, text="Configure DNF", command=self.configure_dnf)
         self.btn_configure_dnf.pack(pady=10)
 
+        # Terminal-like output
+        self.output_text = tk.Text(root, height=10, width=80, state="disabled", wrap="word")
+        self.output_text.pack(pady=10)
+
     def update_system(self):
-        self.execute_command(['sudo', 'dnf', 'update', '-y'])
+        result = subprocess.run(['sudo', 'dnf', 'update', '-y'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        self.display_result(result.stdout + result.stderr)
 
     def configure_dnf(self):
-        self.execute_command(['sudo', 'cp', '/etc/dnf/dnf.conf', '/etc/dnf/dnf.conf.bak'])
+        result = subprocess.run(['sudo', 'cp', '/etc/dnf/dnf.conf', '/etc/dnf/dnf.conf.bak'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        self.display_result(result.stdout + result.stderr)
 
-    def execute_command(self, command):
-        try:
-            subprocess.run(['/usr/bin/konsole', '--hold', '--separate', '--noclose', '-e', 'bash', '-c', ' '.join(command)])
-        except FileNotFoundError:
-            print("Konsole command not found. Please ensure it is installed on your system.")
+    def display_result(self, message):
+        self.output_text.config(state="normal")
+        self.output_text.delete(1.0, tk.END)
+        self.output_text.insert(tk.END, message)
+        self.output_text.config(state="disabled")
 
 if __name__ == "__main__":
     root = tk.Tk()
