@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Tolga Erok.
 # My personal Fedora 39 KDE tweaker
