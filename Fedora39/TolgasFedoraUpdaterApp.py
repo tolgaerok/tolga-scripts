@@ -32,9 +32,6 @@ class TolgasFedoraUpdaterApp:
         self.execute_command(['sudo', 'cp', '/etc/dnf/dnf.conf', '/etc/dnf/dnf.conf.bak'])
 
     def execute_command(self, command):
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-
-        # Open a new terminal window with the command
         subprocess.run(['x-terminal-emulator', '-e', 'bash', '-c', ' '.join(command)])
 
 if __name__ == "__main__":
