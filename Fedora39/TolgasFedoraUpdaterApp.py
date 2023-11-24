@@ -33,15 +33,9 @@ class TolgasFedoraUpdaterApp:
 
     def execute_command(self, command):
         try:
-            # Attempt to use x-terminal-emulator on Linux
-            subprocess.run(['x-terminal-emulator', '-e', 'bash', '-c', ' '.join(command)])
+            subprocess.run(['konsole', '--hold', '--separate', '--noclose', '-e', 'bash', '-c', ' '.join(command)])
         except FileNotFoundError:
-            try:
-                # Use konsole as a fallback on KDE
-                subprocess.run(['konsole', '--hold', '--separate', '--noclose', '-e', 'bash', '-c', ' '.join(command)])
-            except FileNotFoundError:
-                # Provide a message if no suitable terminal is found
-                print("No suitable terminal emulator found.")
+            print("Konsole command not found. Please ensure it is installed on your system.")
 
 if __name__ == "__main__":
     root = tk.Tk()
