@@ -1,17 +1,6 @@
-# Tolga Erok
-# 23/11/2023
-# My 1st python script (fedora 39 updater)
-# Beta v1
-# to run: 
-# python3 - <<EOF
-# $(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgasFedoraUpdaterApp.py)
-# EOF
-
-
 import tkinter as tk
 from tkinter import ttk
 import subprocess
-import os
 
 class TolgasFedoraUpdaterApp:
     def __init__(self, root):
@@ -37,7 +26,7 @@ class TolgasFedoraUpdaterApp:
         self.btn_configure_dnf.pack(pady=10)
 
         # Terminal-like output
-        self.output_text = tk.Text(root, height=10, width=80, state="disabled", wrap="word")
+        self.output_text = tk.Text(root, height=10, width=80, wrap="word")
         self.output_text.pack(pady=10)
 
     def update_system(self):
