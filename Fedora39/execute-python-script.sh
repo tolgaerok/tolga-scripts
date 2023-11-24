@@ -4,7 +4,7 @@
 # sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/execute-python-script.sh)"
 
 # List of required Python packages
-required_packages=("package1" "package2" "package3")
+required_packages=("python3" "python3-pip" "python3-setuptools" "python3-devel")
 
 # Function to check and install Python packages for Fedora
 install_python_packages() {
