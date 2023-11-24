@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 import subprocess
-import threading
 
 class TolgasFedoraUpdaterApp:
     def __init__(self, root):
@@ -43,19 +42,15 @@ class TolgasFedoraUpdaterApp:
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, universal_newlines=True)
 
         def update_output():
-            while True:
-                line = process.stdout.readline()
-                if not line:
-                    break
+            line = process.stdout.readline()
+            if line:
                 self.output_text.insert(tk.END, line)
                 self.output_text.see(tk.END)
-                self.root.update_idletasks()
+                self.root.after(100, update_output)  # Schedule the next update in 100 milliseconds
 
-        thread = threading.Thread(target=update_output)
-        thread.start()
+        update_output()
 
         process.wait()
-        thread.join()
 
         self.output_text.config(state="disabled")
 
