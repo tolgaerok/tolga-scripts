@@ -40,8 +40,8 @@ class TolgasFedoraUpdaterApp:
         self.output_text.config(state="normal")
         self.output_text.delete(1.0, tk.END)
 
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1, universal_newlines=True)
-        
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, universal_newlines=True)
+
         def update_output():
             while True:
                 line = process.stdout.readline()
