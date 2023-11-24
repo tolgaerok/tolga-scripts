@@ -33,7 +33,7 @@ class TolgasFedoraUpdaterApp:
 
     def execute_command(self, command):
         try:
-            subprocess.run(['konsole', '--hold', '--separate', '--noclose', '-e', 'bash', '-c', ' '.join(command)])
+            subprocess.run(['/usr/bin/konsole', '--hold', '--separate', '--noclose', '-e', 'bash', '-c', ' '.join(command)])
         except FileNotFoundError:
             print("Konsole command not found. Please ensure it is installed on your system.")
 
