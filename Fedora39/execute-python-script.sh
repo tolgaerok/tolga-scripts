@@ -1,8 +1,6 @@
 #!/bin/bash
 # tolga erok
 
-# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/execute-python-script.sh)"
-
 # List of required Python packages for Fedora
 essential_packages=("python3" "python3-pip" "python3-setuptools" "python3-devel")
 
@@ -23,4 +21,3 @@ install_essentials
 
 # Execute the Python code
 curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgasFedoraUpdaterApp.py | python3 -
-
