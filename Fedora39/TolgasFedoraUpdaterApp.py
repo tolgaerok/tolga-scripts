@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import subprocess
+import threading
 
 class TolgasFedoraUpdaterApp:
     def __init__(self, root):
@@ -30,17 +31,32 @@ class TolgasFedoraUpdaterApp:
         self.output_text.pack(pady=10)
 
     def update_system(self):
-        result = subprocess.run(['sudo', 'dnf', 'update', '-y'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        self.display_result(result.stdout + result.stderr)
+        self.execute_command(['sudo', 'dnf', 'update', '-y'])
 
     def configure_dnf(self):
-        result = subprocess.run(['sudo', 'cp', '/etc/dnf/dnf.conf', '/etc/dnf/dnf.conf.bak'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        self.display_result(result.stdout + result.stderr)
+        self.execute_command(['sudo', 'cp', '/etc/dnf/dnf.conf', '/etc/dnf/dnf.conf.bak'])
 
-    def display_result(self, message):
+    def execute_command(self, command):
         self.output_text.config(state="normal")
         self.output_text.delete(1.0, tk.END)
-        self.output_text.insert(tk.END, message)
+
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1, universal_newlines=True)
+        
+        def update_output():
+            while True:
+                line = process.stdout.readline()
+                if not line:
+                    break
+                self.output_text.insert(tk.END, line)
+                self.output_text.see(tk.END)
+                self.root.update_idletasks()
+
+        thread = threading.Thread(target=update_output)
+        thread.start()
+
+        process.wait()
+        thread.join()
+
         self.output_text.config(state="disabled")
 
 if __name__ == "__main__":
