@@ -1,3 +1,24 @@
+#!/bin/bash
+
+# Tolga Erok.
+# My personal Fedora 39 KDE updater
+# 23/11/2023
+
+# Run from remote location:::.
+# curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgasFedoraUpdaterApp.py | python3 -
+
+#  ¯\_(ツ)_/¯
+#    █████▒▓█████ ▓█████▄  ▒█████   ██▀███   ▄▄▄
+#  ▓██   ▒ ▓█   ▀ ▒██▀ ██▌▒██▒  ██▒▓██ ▒ ██▒▒████▄
+#  ▒████ ░ ▒███   ░██   █▌▒██░  ██▒▓██ ░▄█ ▒▒██  ▀█▄
+#  ░▓█▒  ░ ▒▓█  ▄ ░▓█▄   ▌▒██   ██░▒██▀▀█▄  ░██▄▄▄▄██
+#  ░▒█░    ░▒████▒░▒████▓ ░ ████▓▒░░██▓ ▒██▒ ▓█   ▓██▒
+#   ▒ ░    ░░ ▒░ ░ ▒▒▓  ▒ ░ ▒░▒░▒░ ░ ▒▓ ░▒▓░ ▒▒   ▓▒█░
+#   ░       ░ ░  ░ ░ ▒  ▒   ░ ▒ ▒░   ░▒ ░ ▒░  ▒   ▒▒ ░
+#   ░ ░       ░    ░ ░  ░ ░ ░ ░ ▒    ░░   ░   ░   ▒
+#   ░  ░      ░    ░ ░     ░              ░  ░   ░
+
+
 import tkinter as tk
 from tkinter import ttk
 import subprocess

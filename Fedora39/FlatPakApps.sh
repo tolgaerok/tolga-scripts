@@ -1,7 +1,22 @@
 #!/bin/bash
 
-# Tolga Erok
-# 19/11/23
+# Tolga Erok.
+# My personal Fedora 39 flatpaks
+# 23/11/2023
+
+# Run from remote location:::.
+# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/FlatPakApps.sh)"
+
+#  ¯\_(ツ)_/¯
+#    █████▒▓█████ ▓█████▄  ▒█████   ██▀███   ▄▄▄
+#  ▓██   ▒ ▓█   ▀ ▒██▀ ██▌▒██▒  ██▒▓██ ▒ ██▒▒████▄
+#  ▒████ ░ ▒███   ░██   █▌▒██░  ██▒▓██ ░▄█ ▒▒██  ▀█▄
+#  ░▓█▒  ░ ▒▓█  ▄ ░▓█▄   ▌▒██   ██░▒██▀▀█▄  ░██▄▄▄▄██
+#  ░▒█░    ░▒████▒░▒████▓ ░ ████▓▒░░██▓ ▒██▒ ▓█   ▓██▒
+#   ▒ ░    ░░ ▒░ ░ ▒▒▓  ▒ ░ ▒░▒░▒░ ░ ▒▓ ░▒▓░ ▒▒   ▓▒█░
+#   ░       ░ ░  ░ ░ ▒  ▒   ░ ▒ ▒░   ░▒ ░ ▒░  ▒   ▒▒ ░
+#   ░ ░       ░    ░ ░  ░ ░ ░ ░ ▒    ░░   ░   ░   ▒
+#   ░  ░      ░    ░ ░     ░              ░  ░   ░
 
 # Check if Flatpak is installed
 if ! command -v flatpak &>/dev/null; then
