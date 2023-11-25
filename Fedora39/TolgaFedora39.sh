@@ -747,6 +747,18 @@ display_XDG_session() {
     display_message "Current XDG session is [ $session ]"
     echo "Current XDG session is [ $session ]"
 
+    # Check if GRUB_TIMEOUT_STYLE is present
+    if ! grep -q '^GRUB_TIMEOUT_STYLE=menu' /etc/default/grub; then
+    # Add GRUB_TIMEOUT_STYLE=menu if not present
+    echo 'GRUB_TIMEOUT_STYLE=menu' | sudo tee -a /etc/default/grub > /dev/null
+    fi
+
+    # check uefi or bios
+    sudo test -d /sys/firmware/efi && echo "You have: UEFI enabled system" || echo "You have: BIOS/Legacy enabled system"
+    [ -d /sys/firmware/efi ] && echo "UEFI" || echo "BIOS/Legacy"
+    sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+    sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+
 }
 
 # Main script execution, kingtolga style LOL
