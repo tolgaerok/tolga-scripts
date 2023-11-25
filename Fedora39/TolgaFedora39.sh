@@ -707,7 +707,8 @@ cleanup_fedora() {
 
     echo -e "\e[1;32m[✔]\e[0m Restarting kernel tweaks...\n"
     sleep 1
-    sudo sysctl --system
+    sudo sysctl -p
+
 
     display_message "Cleanup complete, ENJOY!"
 }
