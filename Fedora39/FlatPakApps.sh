@@ -52,4 +52,10 @@ flatpak uninstall --delete-data
 sudo rm -rfv /var/tmp/flatpak-cache-*
 sleep 1
 
+# Display all platpaks installed on system
+flatpak --columns=app,name,size,installation list
+echo -e "\e[1;32m[✔]\e[0m List of flatpaks on system...\n"
+
+
 echo "Installation completed. You can now run the installed applications."
+sleep 10
