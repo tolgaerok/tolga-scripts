@@ -84,6 +84,19 @@ EOL
         # Inform the user that the configuration file doesn't exist
         display_message "Error: DNF configuration file not found at $DNF_CONF_PATH."
     fi
+
+    # Get the new hostname from the user
+    read -p "Enter the new hostname: " new_hostname
+
+    # Change the system hostname
+    sudo hostnamectl set-hostname "$new_hostname"
+
+    # Update /etc/hosts file
+    sudo sed -i "s/127.0.0.1.*localhost/127.0.0.1 $new_hostname localhost/" /etc/hosts
+
+    # Display the new hostname
+    echo "Hostname changed to: $new_hostname"
+    sleep 2
 }
 
 # Function to install RPM Fusion
@@ -114,7 +127,7 @@ update_system() {
     sudo dnf install -y dnf-plugins-core
 
     # Install required dependencies
-    sudo dnf install -y epel-release
+    # sudo dnf install -y epel-release
     sudo dnf install -y dnf-plugins-core
 
     # Update the package manager
@@ -138,10 +151,10 @@ install_firmware() {
 
     # Check for errors during firmware updates
     if [ $? -ne 0 ]; then
-        display_message "Error occurred during firmware updates. Continuing with the script after a 10-second countdown."
+        display_message "Error occurred during firmware updates.."
 
         # Countdown for 10 seconds on error
-        for i in {10..1}; do
+        for i in {4..1}; do
             echo -ne "Continuing in $i seconds... \r"
             sleep 1
         done
@@ -312,7 +325,7 @@ install_hw_video_acceleration_amd_or_intel() {
             sudo dnf install -y intel-media-driver
 
             # Install video acceleration packages
-            sudo dnf install libva libva-utils xorg-x11-drv-intel intel-media-va-driver-non-free libva-drm2 libva-x11-2 -y
+            sudo dnf install libva libva-utils xorg-x11-drv-intel -y
 
             display_message "H/W Video Acceleration for Intel chipset installed successfully."
         else
@@ -462,7 +475,11 @@ install_apps() {
     # Install Kate
     sudo dnf install -y kate git digikam rygel mpg123 rhythmbox python3 python3-pip libffi-devel openssl-devel kate neofetch
     sudo dnf install -y PackageKit timeshift grub-customizer dconf-editor gedit gjs unzip p7zip p7zip-plugins unrar sxiv lsd duf
-    sudo dnf install -y ffmpeg-libs
+    sudo dnf install -y ffmpeg-libs earlyoom
+
+    # Start earlyloom services
+    sudo systemctl start earlyoom
+    sudo systemctl enable earlyoom
 
     # Install some fonts
     display_message "Install some fonts"
@@ -727,6 +744,8 @@ display_XDG_session() {
     session=$XDG_SESSION_TYPE
 
     display_message "Current XDG session is [ $session ]"
+    echo "Current XDG session is [ $session ]"
+
 }
 
 # Main script execution, kingtolga style LOL
