@@ -49,7 +49,11 @@ sleep 1
 echo -e "\e[1;32m[✔]\e[0m Removing Old Flatpak Cruft...\n"
 flatpak uninstall --unused
 flatpak uninstall --delete-data
+
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 sudo rm -rfv /var/tmp/flatpak-cache-*
+
+
 sleep 1
 
 # Display all platpaks installed on system
