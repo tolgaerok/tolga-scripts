@@ -54,7 +54,7 @@ export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 # Check if the directory exists before attempting to remove it
 if [ -d "/var/tmp/flatpak-cache-*" ]; then
     echo -e "\e[1;32m[✔]\e[0m Removing Old Flatpak Cruft...\n"
-    rm -rfv /var/tmp/flatpak-cache-*
+    sudo rm -rfv /var/tmp/flatpak-cache-*
 else
     echo -e "\e[1;32m[✔]\e[0m No old Flatpak cruft found.\n"
 fi
