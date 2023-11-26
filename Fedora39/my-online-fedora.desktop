@@ -1,0 +1,18 @@
+[Desktop Entry]
+Comment[en_AU]=
+Comment=
+Exec=konsole --noclose -e /bin/bash -c '/home/tolga/.config/MY-TOOLS/assets/scripts/my-online-fedora/f39.sh; exec bash'
+GenericName[en_AU]=
+GenericName=
+Icon=/home/tolga/.config/MY-TOOLS/images/tolga-profile-5.png
+MimeType=
+Name[en_AU]=My Online Fedora
+Name=My Online Fedora
+Path=
+StartupNotify=true
+Terminal=true
+TerminalOptions=
+Type=Application
+Version=1.0
+X-KDE-SubstituteUID=false
+X-KDE-Username=
