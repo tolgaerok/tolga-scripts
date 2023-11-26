@@ -38,7 +38,7 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-# Function to display messages
+# Function to display messages 
 display_message() {
     clear
     echo -e "\n                  Tolga's online fedora updater\n"
