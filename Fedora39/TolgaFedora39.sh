@@ -20,6 +20,19 @@
 
 clear
 
+# Assign a color variable based on the RANDOM number
+case $COLOR_NUM in
+    0) COLOR=$RED;;
+    1) COLOR=$GREEN;;
+    2) COLOR=$YELLOW;;
+    3) COLOR=$BLUE;;
+    4) COLOR=$CYAN;;
+    5) COLOR=$ORANGE;;
+    *) COLOR=$WHITE;;
+
+esac
+
+
 # Check if the script is run as root
 if [ "$EUID" -ne 0 ]; then
     echo "Please run this script as root or using sudo."
@@ -799,7 +812,16 @@ display_main_menu() {
 
 # Function to handle user input
 handle_user_input() {
-    read -p "Enter your choice (0-21): " choice
+
+    echo -e "${YELLOW}┌──($USER㉿$HOST)-[$(pwd)]${NC}"
+
+    choice=""
+    echo -n -e "${YELLOW}└─\$>>${NC} "
+    read choice
+
+    echo ""
+   # clear
+   # read -p "Enter your choice (0-21): " choice
     case "$choice" in
     1) configure_dnf ;;
     2) install_rpmfusion ;;
