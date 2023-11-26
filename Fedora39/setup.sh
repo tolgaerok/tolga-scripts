@@ -6,6 +6,7 @@
 # Check if the effective user ID (EUID) is equal to 0 (root) or if the script is run with sudo
 if [ "$EUID" -eq 0 ] || [ "$(id -u)" -eq 0 ]; then
     clear
+    echo ""
     echo "Please do not run this script as root or using sudo."
     echo ""
     exit 1
