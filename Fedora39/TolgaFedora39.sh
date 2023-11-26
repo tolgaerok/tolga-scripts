@@ -29,6 +29,8 @@ CYAN='\e[1;36m'
 WHITE='\e[1;37m'
 ORANGE='\e[1;93m'
 NC='\e[0m'
+    YELLOW='\e[1;33m'
+NC='\e[0m'
 
 
 # Check if the script is run as root
@@ -811,13 +813,19 @@ display_main_menu() {
 # Function to handle user input
 handle_user_input() {
 
-    echo -e "${YELLOW}┌──($USER㉿$HOST)-[$(pwd)]${NC}"
 
-    choice=""
-    echo -n -e "${YELLOW}└─\$>>${NC} "
-    read choice
 
-    echo ""
+# Get the hostname and username
+hostname=$(hostname)
+username=$(whoami)
+
+echo -e "${YELLOW}┌──($username㉿$hostname)-[$(pwd)]${NC}"
+
+choice=""
+echo -n -e "${YELLOW}└─\$>>${NC} "
+read choice
+
+echo ""
    # clear
    # read -p "Enter your choice (0-21): " choice
     case "$choice" in
