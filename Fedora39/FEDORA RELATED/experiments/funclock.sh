@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-# Created By: Jake@Linux
-# Created On: Tue 19 Jul 2022 12:38:28 PM CDT
-# Project: fuzzy clock
+# tolga erok
+# 1/6/23
 
 box() {
     title=" $1 "
