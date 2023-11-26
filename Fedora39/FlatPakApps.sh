@@ -43,7 +43,7 @@ for app in "${flatpak_apps[@]}"; do
     flatpak install flathub "$app"
 done
 echo -e "\e[1;32m[✔]\e[0m Checking updates for installed flatpak programs...\n"
-sudo flatpak update -y
+flatpak update -y
 sleep 1
 
 echo -e "\e[1;32m[✔]\e[0m Removing Old Flatpak Cruft...\n"
@@ -51,7 +51,13 @@ flatpak uninstall --unused
 flatpak uninstall --delete-data
 
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-sudo rm -rfv /var/tmp/flatpak-cache-*
+# Check if the directory exists before attempting to remove it
+if [ -d "/var/tmp/flatpak-cache-*" ]; then
+    echo -e "\e[1;32m[✔]\e[0m Removing Old Flatpak Cruft...\n"
+    rm -rfv /var/tmp/flatpak-cache-*
+else
+    echo -e "\e[1;32m[✔]\e[0m No old Flatpak cruft found.\n"
+fi
 
 
 sleep 1
