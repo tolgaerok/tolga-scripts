@@ -1,10 +1,10 @@
 [Desktop Entry]
 Comment[en_AU]=
 Comment=
-Exec=konsole --noclose -e /bin/bash -c '/home/tolga/.config/MY-TOOLS/assets/scripts/my-online-fedora/f39.sh; exec bash'
+Exec=konsole --noclose -e /bin/bash -c '$HOME/.config/MY-TOOLS/assets/scripts/my-online-fedora/f39.sh; exec bash'
 GenericName[en_AU]=
 GenericName=
-Icon=/home/tolga/.config/MY-TOOLS/images/tolga-profile-5.png
+Icon=$HOME/.config/MY-TOOLS/images/tolga-profile-5.png
 MimeType=
 Name[en_AU]=My Online Fedora
 Name=My Online Fedora
