@@ -510,8 +510,10 @@ install_apps() {
     # Install Kate
     sudo dnf install -y kate git digikam rygel mpg123 rhythmbox python3 python3-pip libffi-devel openssl-devel kate neofetch
     sudo dnf install -y PackageKit timeshift grub-customizer dconf-editor gedit gjs unzip p7zip p7zip-plugins unrar sxiv lsd duf
-    sudo dnf install -y ffmpeg-libs earlyoom
-
+    sudo dnf install -y ffmpeg-libs earlyoom virt-manager pip libdvdcss gimp gimp-devel 
+    sudo dnf swap libavcodec-free libavcodec-freeworld
+    sudo dnf install ffmpeg libavcodec-freeworld --best --allowerasing
+    
     # Start earlyloom services
     sudo systemctl start earlyoom
     sudo systemctl enable earlyoom
