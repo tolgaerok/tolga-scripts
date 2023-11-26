@@ -684,7 +684,11 @@ fix_chrome() {
         # Apply fix
         display_message "Applied"
         sudo sudo dnf downgrade mesa-libGL
-        # sudo rm -rf ./config/google-chrome
+        sudo rm -rf ./config/google-chrome
+        sudo rm -rf ./cache/google-chrome
+        sudo chmod -R 770 ~/.cache/google-chrome
+        sudo chmod -R 770 ~/.config/google-chrome
+
         sleep 2
         display_message "Bug @ https://bugzilla.redhat.com/show_bug.cgi?id=2193335"
         ;;
