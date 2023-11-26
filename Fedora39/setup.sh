@@ -2,6 +2,23 @@
 # Tolga erok
 # my personal fedora39 setup file
 
+# Check if the effective user ID (EUID) is equal to 0 (root) or if the script is run with sudo
+if [ "$EUID" -eq 0 ] || [ "$(id -u)" -eq 0 ]; then
+    echo "Please do not run this script as root or using sudo."
+    exit 1
+fi
+
+# Function to display messages
+display_message() {
+    clear
+    echo -e "\n                  Tolga's online fedora updater\n"
+    echo -e "\e[34m|--------------------\e[33m Setup Complete \e[34m-------------------|"
+    echo -e "|      ===>    $1"
+    echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
+    echo ""
+    sleep 1
+}
+
 # Define URLs
 DESKTOP_FILE_URL="https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/my-online-fedora.desktop"
 MY_TOOLS_URL="https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/MY-TOOLS.zip"
@@ -29,4 +46,6 @@ chmod -R +xw "$HOME/.config/MY-TOOLS"
 # Clean up
 rm /tmp/MY-TOOLS.zip
 
-echo "Files copied and permissions set successfully."
+clear
+display_message "Files copied and permissions set successfully."
+display_message "Check new shortcut on your desktop"
