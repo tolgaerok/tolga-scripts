@@ -1,4 +1,4 @@
-show me : [Desktop Entry]
+[Desktop Entry]
 Comment[en_AU]=
 Comment=
 Exec=konsole --noclose -e /bin/bash -c '/home/tolga/.config/MY-TOOLS/assets/scripts/my-online-fedora/f39.sh; exec bash'
