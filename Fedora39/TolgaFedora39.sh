@@ -29,9 +29,8 @@ CYAN='\e[1;36m'
 WHITE='\e[1;37m'
 ORANGE='\e[1;93m'
 NC='\e[0m'
-    YELLOW='\e[1;33m'
+YELLOW='\e[1;33m'
 NC='\e[0m'
-
 
 # Check if the script is run as root
 if [ "$EUID" -ne 0 ]; then
@@ -523,10 +522,10 @@ install_apps() {
     # Install Kate
     sudo dnf install -y kate git digikam rygel mpg123 rhythmbox python3 python3-pip libffi-devel openssl-devel kate neofetch
     sudo dnf install -y PackageKit timeshift grub-customizer dconf-editor gedit gjs unzip p7zip p7zip-plugins unrar sxiv lsd duf
-    sudo dnf install -y ffmpeg-libs earlyoom virt-manager pip libdvdcss gimp gimp-devel 
+    sudo dnf install -y ffmpeg-libs earlyoom virt-manager pip libdvdcss gimp gimp-devel
     sudo dnf swap libavcodec-free libavcodec-freeworld
     sudo dnf install ffmpeg libavcodec-freeworld --best --allowerasing
-    
+
     # Start earlyloom services
     sudo systemctl start earlyoom
     sudo systemctl enable earlyoom
@@ -813,21 +812,18 @@ display_main_menu() {
 # Function to handle user input
 handle_user_input() {
 
+    # Get the hostname and username
+    hostname=$(hostname)
+    username=$(whoami)
 
+    echo -e "${YELLOW}┌──($username㉿$hostname)-[$(pwd)]${NC}"
 
-# Get the hostname and username
-hostname=$(hostname)
-username=$(whoami)
+    choice=""
+    echo -n -e "${YELLOW}└─\$>>${NC} "
+    read choice
 
-echo -e "${YELLOW}┌──($username㉿$hostname)-[$(pwd)]${NC}"
+    echo ""
 
-choice=""
-echo -n -e "${YELLOW}└─\$>>${NC} "
-read choice
-
-echo ""
-   # clear
-   # read -p "Enter your choice (0-21): " choice
     case "$choice" in
     1) configure_dnf ;;
     2) install_rpmfusion ;;
