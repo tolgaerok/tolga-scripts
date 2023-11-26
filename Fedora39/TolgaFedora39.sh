@@ -537,17 +537,18 @@ download_and_install_code_tv() {
 
         display_message "$3 installation completed."
     fi
+
 }
 
 install_apps() {
     display_message "Installing afew personal apps..."
 
     # Install Kate
-    sudo dnf install -y kate git digikam rygel mpg123 rhythmbox python3 python3-pip libffi-devel openssl-devel kate neofetch
     sudo dnf install -y PackageKit timeshift grub-customizer dconf-editor gedit gjs unzip p7zip p7zip-plugins unrar sxiv lsd duf
     sudo dnf install -y ffmpeg-libs earlyoom virt-manager pip libdvdcss gimp gimp-devel
-    sudo dnf swap libavcodec-free libavcodec-freeworld
+    sudo dnf install -y kate git digikam rygel mpg123 rhythmbox python3 python3-pip libffi-devel openssl-devel kate neofetch
     sudo dnf install ffmpeg libavcodec-freeworld --best --allowerasing
+    sudo dnf swap libavcodec-free libavcodec-freeworld
 
     # Start earlyloom services
     sudo systemctl start earlyoom
@@ -582,12 +583,12 @@ install_apps() {
     # Download and install TeamViewer
     teamviewer_url="https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm?utm_source=google&utm_medium=cpc&utm_campaign=au%7Cb%7Cpr%7C22%7Cjun%7Ctv-core-download-sn%7Cfree%7Ct0%7C0&utm_content=Download&utm_term=teamviewer+download"
     teamviewer_location="/tmp/teamviewer.x86_64.rpm"
-    download_and_install_code_tv "$teamviewer_url" "$teamviewer_location" "teamviewer"
+    download_and_install "$teamviewer_url" "$teamviewer_location" "teamviewer"
 
     # Download and install Visual Studio Code
     vscode_url="https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm-x64"
     vscode_location="/tmp/vscode.rpm"
-    download_and_install_code_tv "$vscode_url" "$vscode_location" "code"
+    download_and_install "$vscode_url" "$vscode_location" "code"
 
     # Install extra package
     display_message "Extra rpm packages"
