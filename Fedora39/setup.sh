@@ -49,6 +49,10 @@ MY_TOOLS_DEST="$HOME/.config/MY-TOOLS"
 # Download and copy desktop file
 curl -o "$DESKTOP_FILE_DEST" "$DESKTOP_FILE_URL"
 
+# Hardcode the full path to the icon in the desktop file
+ICON_PATH="/home/tolga/.config/MY-TOOLS/images/tolga-profile-5.png"
+sed -i "s|Icon=.*|Icon=$ICON_PATH|" "$DESKTOP_FILE_DEST"
+
 # Download MY-TOOLS folder
 wget -O /tmp/MY-TOOLS.zip "$MY_TOOLS_URL"
 
