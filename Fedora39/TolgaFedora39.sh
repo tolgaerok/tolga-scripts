@@ -87,6 +87,22 @@ EOL
 
 }
 
+# Install new dnf5
+dnf5() {
+    # Ask the user if they want to install dnf5
+    display_message "Beta: DNF5 for fedora 40/41 testing"
+    read -p "Do you want to install dnf5? (y/n): " install_dnf5
+    if [[ $install_dnf5 =~ ^[Yy]$ ]]; then
+        sudo dnf install dnf5 -y
+        sudo dnf5 update && sudo dnf5 makecache
+
+        echo "In order to use dnf, you need to use sudo dnf5 update"
+    else
+        echo "Aborted installation of dnf5. Returning to the main menu."
+    fi
+
+}
+
 # Change Hostname
 change_hotname() {
     current_hostname=$(hostname)
@@ -729,37 +745,37 @@ fix_grub() {
 
 # Function to display the main menu
 display_main_menu() {
-clear
-clear
-echo -e "\n                  Tolga's online Fedora updater\n"
-echo -e "\e[34m|--------------------\e[33m Main Menu \e[34m-------------------|\e[0m"
-echo -e "\e[33m1.\e[0m \e[32m Configure faster updates in DNF\e[0m"
-echo -e "\e[33m2.\e[0m \e[32m Install RPM Fusion repositories\e[0m"
-echo -e "\e[33m3.\e[0m \e[32m Update the system           (Create meta cache etc)\e[0m"
-echo -e "\e[33m4.\e[0m \e[32m Install firmware updates    (Not compatible with all systems)\e[0m"
-echo -e "\e[33m5.\e[0m \e[32m Install GPU drivers\e[0m"
-echo -e "\e[33m6.\e[0m \e[32m Optimize battery life\e[0m"
-echo -e "\e[33m7.\e[0m \e[32m Install multimedia codecs\e[0m"
-echo -e "\e[33m8.\e[0m \e[32m Install H/W Video Acceleration for AMD or Intel\e[0m"
-echo -e "\e[33m9.\e[0m \e[32m Update Flatpak\e[0m"
-echo -e "\e[33m10.\e[0m \e[32mSet UTC Time\e[0m"
-echo -e "\e[33m11.\e[0m \e[32mDisable mitigations\e[0m"
-echo -e "\e[33m12.\e[0m \e[32mEnable Modern Standby\e[0m"
-echo -e "\e[33m13.\e[0m \e[32mEnable nvidia-modeset\e[0m"
-echo -e "\e[33m14.\e[0m \e[32mDisable NetworkManager-wait-online.service\e[0m"
-echo -e "\e[33m15.\e[0m \e[32mDisable Gnome Software from Startup Apps\e[0m"
-echo -e "\e[33m16.\e[0m \e[32mChange hostname            (Change current localname/pc name)\e[0m"
-echo -e "\e[33m17.\e[0m \e[32mCheck mitigations=off in GRUB\e[0m"
-echo -e "\e[33m18.\e[0m \e[32mInstall additional apps\e[0m"
-echo -e "\e[33m19.\e[0m \e[32mCleanup Fedora\e[0m"
-echo -e "\e[33m20.\e[0m \e[32mFix Chrome HW accelerations issue (No guarantee)\e[0m"
-echo -e "\e[33m21.\e[0m \e[32mDisplay XDG session\e[0m"
-echo -e "\e[33m22.\e[0m \e[32mFix grub or rebuild grub    (Checks and enables menu output to grub menu)\e[0m"
-echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
-echo -e "\e[31m 0.\e[0m \e[32mExit\e[0m"
-echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
-echo ""
-
+    clear
+    clear
+    echo -e "\n                  Tolga's online Fedora updater\n"
+    echo -e "\e[34m|--------------------\e[33m Main Menu \e[34m-------------------|\e[0m"
+    echo -e "\e[33m1.\e[0m \e[32m Configure faster updates in DNF\e[0m"
+    echo -e "\e[33m2.\e[0m \e[32m Install RPM Fusion repositories\e[0m"
+    echo -e "\e[33m3.\e[0m \e[32m Update the system           (Create meta cache etc)\e[0m"
+    echo -e "\e[33m4.\e[0m \e[32m Install firmware updates    (Not compatible with all systems)\e[0m"
+    echo -e "\e[33m5.\e[0m \e[32m Install GPU drivers\e[0m"
+    echo -e "\e[33m6.\e[0m \e[32m Optimize battery life\e[0m"
+    echo -e "\e[33m7.\e[0m \e[32m Install multimedia codecs\e[0m"
+    echo -e "\e[33m8.\e[0m \e[32m Install H/W Video Acceleration for AMD or Intel\e[0m"
+    echo -e "\e[33m9.\e[0m \e[32m Update Flatpak\e[0m"
+    echo -e "\e[33m10.\e[0m \e[32mSet UTC Time\e[0m"
+    echo -e "\e[33m11.\e[0m \e[32mDisable mitigations\e[0m"
+    echo -e "\e[33m12.\e[0m \e[32mEnable Modern Standby\e[0m"
+    echo -e "\e[33m13.\e[0m \e[32mEnable nvidia-modeset\e[0m"
+    echo -e "\e[33m14.\e[0m \e[32mDisable NetworkManager-wait-online.service\e[0m"
+    echo -e "\e[33m15.\e[0m \e[32mDisable Gnome Software from Startup Apps\e[0m"
+    echo -e "\e[33m16.\e[0m \e[32mChange hostname            (Change current localname/pc name)\e[0m"
+    echo -e "\e[33m17.\e[0m \e[32mCheck mitigations=off in GRUB\e[0m"
+    echo -e "\e[33m18.\e[0m \e[32mInstall additional apps\e[0m"
+    echo -e "\e[33m19.\e[0m \e[32mCleanup Fedora\e[0m"
+    echo -e "\e[33m20.\e[0m \e[32mFix Chrome HW accelerations issue (No guarantee)\e[0m"
+    echo -e "\e[33m21.\e[0m \e[32mDisplay XDG session\e[0m"
+    echo -e "\e[33m22.\e[0m \e[32mFix grub or rebuild grub    (Checks and enables menu output to grub menu)\e[0m"
+    echo -e "\e[33m23.\e[0m \e[32mInstall new DNF5            (Testing for fedora 40/41)\e[0m"
+    echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
+    echo -e "\e[31m 0.\e[0m \e[32mExit\e[0m"
+    echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
+    echo ""
 
 }
 
@@ -789,6 +805,7 @@ handle_user_input() {
     20) fix_chrome ;;
     21) display_XDG_session ;;
     22) fix_grub ;;
+    23) dnf5 ;;
 
     0) exit ;;
     *)
