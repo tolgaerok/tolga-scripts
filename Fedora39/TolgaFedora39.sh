@@ -38,7 +38,7 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-# Function to display messages 
+# Function to display messages
 display_message() {
     clear
     echo -e "\n                  Tolga's online fedora updater\n"
@@ -516,6 +516,29 @@ check_mitigations_grub() {
     fi
 }
 
+download_and_install_code_tv() {
+    local download_url="$1"
+    local download_location="$2"
+
+    # Check if the application is already installed
+    if command -v "$3" &>/dev/null; then
+        display_message "$3 is already installed. Skipping installation."
+    else
+        # Download and install the application
+        display_message "Downloading $3..."
+        wget -O "$download_location" "$download_url"
+
+        display_message "Installing $3..."
+        sudo dnf install "$download_location" -y
+
+        # Cleanup
+        display_message "Cleaning up /tmp..."
+        rm "$download_location"
+
+        display_message "$3 installation completed."
+    fi
+}
+
 install_apps() {
     display_message "Installing afew personal apps..."
 
@@ -546,10 +569,25 @@ install_apps() {
     sudo fc-cache -f -v
 
     # Install google
-    display_message "Installing Google Chrome browser..."
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-    sudo dnf install -y ./google-chrome-stable_current_x86_64.rpm
-    rm -f google-chrome-stable_current_x86_64.rpm
+    if command -v google-chrome &>/dev/null; then
+        display_message "Google Chrome is already installed. Skipping installation."
+    else
+        # Install Google Chrome
+        display_message "Installing Google Chrome browser..."
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+        sudo dnf install -y ./google-chrome-stable_current_x86_64.rpm
+        rm -f google-chrome-stable_current_x86_64.rpm
+    fi
+
+    # Download and install TeamViewer
+    teamviewer_url="https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm?utm_source=google&utm_medium=cpc&utm_campaign=au%7Cb%7Cpr%7C22%7Cjun%7Ctv-core-download-sn%7Cfree%7Ct0%7C0&utm_content=Download&utm_term=teamviewer+download"
+    teamviewer_location="/tmp/teamviewer.x86_64.rpm"
+    download_and_install_code_tv "$teamviewer_url" "$teamviewer_location" "teamviewer"
+
+    # Download and install Visual Studio Code
+    vscode_url="https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm-x64"
+    vscode_location="/tmp/vscode.rpm"
+    download_and_install_code_tv "$vscode_url" "$vscode_location" "code"
 
     # Install extra package
     display_message "Extra rpm packages"
@@ -557,34 +595,6 @@ install_apps() {
     sudo dnf group upgrade -y --with-optional Multimedia
     sudo dnf groupupdate -y sound-and-video --allowerasing --skip-broken
     sudo dnf groupupdate multimedia sound-and-video
-
-    # Download teamviewer
-    download_url="https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm?utm_source=google&utm_medium=cpc&utm_campaign=au%7Cb%7Cpr%7C22%7Cjun%7Ctv-core-download-sn%7Cfree%7Ct0%7C0&utm_content=Download&utm_term=teamviewer+download"
-    download_location="/tmp/teamviewer.x86_64.rpm"
-
-    display_message "Downloading TeamViewer..."
-    wget -O "$download_location" "$download_url"
-
-    # Install TeamViewer
-    display_message "Installing TeamViewer..."
-    sudo dnf install "$download_location" -y
-
-    # Cleanup
-    display_message "Cleaning up /tmp.."
-    rm "$download_location"
-
-    display_message "TeamViewer installation completed."
-
-    # Download Visual Studio Code
-    download_url="https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm-x64"
-    download_location="/tmp/vscode.rpm"
-
-    display_message "Downloading Visual Studio Code..."
-    wget -O "$download_location" "$download_url"
-
-    # Install Visual Studio Code
-    display_message "Installing Visual Studio Code..."
-    sudo dnf install "$download_location" -y
 
     # Cleanup
     display_message "Cleaning up /tmp..."
