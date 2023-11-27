@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # Tolga Erok.
 # My personal Fedora 39 KDE tweaker
 # 18/11/2023
@@ -21,7 +20,6 @@
 
 clear
 
-
 # Assign a color variable based on the RANDOM number
 RED='\e[1;31m'
 GREEN='\e[1;32m'
@@ -30,10 +28,10 @@ BLUE='\e[1;34m'
 CYAN='\e[1;36m'
 WHITE='\e[1;37m'
 ORANGE='\e[1;93m'
-NC='\e[0m'  # Keep this line only once
+NC='\e[0m' # Keep this line only once
 
 # Function to fetch and execute a script from a remote URL
-function script_name() {
+function execute_remote_script() {
     script_name=$1
     script_url="https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/remote-assets/$script_name"
     bash -c "$(curl -fsSL $script_url)"
@@ -95,7 +93,8 @@ handle_user_input() {
     4) script_name "install_firmware.sh" ;;
     5) script_name "install_gpu_drivers.sh" ;;
     6) script_name "optimize_battery.sh" ;;
-    7) script_name = "multimedia.sh" ;;
+    7) execute_remote_script "multimedia.sh" ;;
+
     8) script_name "install_hw_video_acceleration_amd_or_intel.sh" ;;
     9) script_name "update_flatpak.sh" ;;
     10) script_name "set_utc_time.sh" ;;
