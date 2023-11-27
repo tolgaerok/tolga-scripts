@@ -105,3 +105,4 @@ EOL
 
 # Call the function to install multimedia codecs
 configure_dnf
+sleep 3
