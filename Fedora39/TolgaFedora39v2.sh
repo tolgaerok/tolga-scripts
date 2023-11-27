@@ -33,7 +33,7 @@ ORANGE='\e[1;93m'
 NC='\e[0m'  # Keep this line only once
 
 # Function to fetch and execute a script from a remote URL
-function execute_remote_script() {
+function script_name() {
     script_name=$1
     script_url="https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/remote-assets/$script_name"
     bash -c "$(curl -fsSL $script_url)"
@@ -89,29 +89,29 @@ handle_user_input() {
 
     echo ""
     case "$choice" in
-    1) execute_remote_script "configure_dnf.sh" ;;
-    2) execute_remote_script "install_rpmfusion.sh" ;;
-    3) execute_remote_script "update_system.sh" ;;
-    4) execute_remote_script "install_firmware.sh" ;;
-    5) execute_remote_script "install_gpu_drivers.sh" ;;
-    6) execute_remote_script "optimize_battery.sh" ;;
-    7) execute_remote_script "multimedia.sh" ;;
-    8) execute_remote_script "install_hw_video_acceleration_amd_or_intel.sh" ;;
-    9) execute_remote_script "update_flatpak.sh" ;;
-    10) execute_remote_script "set_utc_time.sh" ;;
-    11) execute_remote_script "disable_mitigations.sh" ;;
-    12) execute_remote_script "enable_modern_standby.sh" ;;
-    13) execute_remote_script "enable_nvidia_modeset.sh" ;;
-    14) execute_remote_script "disable_network_manager_wait_online.sh" ;;
-    15) execute_remote_script "disable_gnome_software_startup.sh" ;;
-    16) execute_remote_script "change_hotname.sh" ;;
-    17) execute_remote_script "check_mitigations_grub.sh" ;;
-    18) execute_remote_script "install_apps.sh" ;;
-    19) execute_remote_script "cleanup_fedora.sh" ;;
-    20) execute_remote_script "fix_chrome.sh" ;;
-    21) execute_remote_script "display_XDG_session.sh" ;;
-    22) execute_remote_script "fix_grub.sh" ;;
-    23) execute_remote_script "dnf5.sh" ;;
+    1) script_name "configure_dnf.sh" ;;
+    2) script_name "install_rpmfusion.sh" ;;
+    3) script_name "update_system.sh" ;;
+    4) script_name "install_firmware.sh" ;;
+    5) script_name "install_gpu_drivers.sh" ;;
+    6) script_name "optimize_battery.sh" ;;
+    7) script_name "multimedia.sh" ;;
+    8) script_name "install_hw_video_acceleration_amd_or_intel.sh" ;;
+    9) script_name "update_flatpak.sh" ;;
+    10) script_name "set_utc_time.sh" ;;
+    11) script_name "disable_mitigations.sh" ;;
+    12) script_name "enable_modern_standby.sh" ;;
+    13) script_name "enable_nvidia_modeset.sh" ;;
+    14) script_name "disable_network_manager_wait_online.sh" ;;
+    15) script_name "disable_gnome_software_startup.sh" ;;
+    16) script_name "change_hotname.sh" ;;
+    17) script_name "check_mitigations_grub.sh" ;;
+    18) script_name "install_apps.sh" ;;
+    19) script_name "cleanup_fedora.sh" ;;
+    20) script_name "fix_chrome.sh" ;;
+    21) script_name "display_XDG_session.sh" ;;
+    22) script_name "fix_grub.sh" ;;
+    23) script_name "dnf5.sh" ;;
 
     0) exit ;;
     *)
