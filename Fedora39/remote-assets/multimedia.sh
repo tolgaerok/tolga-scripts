@@ -79,6 +79,6 @@ install_multimedia_codecs() {
 }
 # Main loop for the menu
 while true; do
-    display_main_menu
-    handle_user_input
+    install_multimedia_codecs
+
 done
