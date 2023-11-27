@@ -20,7 +20,7 @@
 
 clear
 
-clear
+
 
 # Assign a color variable based on the RANDOM number
 RED='\e[1;31m'
@@ -77,7 +77,7 @@ install_multimedia_codecs() {
 
     display_message "Multimedia codecs installed successfully."
 }
-
+display_message "Error occurred. Exiting."
     install_multimedia_codecs
 
 
