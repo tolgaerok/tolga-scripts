@@ -95,7 +95,7 @@ handle_user_input() {
     4) script_name "install_firmware.sh" ;;
     5) script_name "install_gpu_drivers.sh" ;;
     6) script_name "optimize_battery.sh" ;;
-    7) script_name "multimedia.sh" ;;
+    7) script_name = "multimedia.sh" ;;
     8) script_name "install_hw_video_acceleration_amd_or_intel.sh" ;;
     9) script_name "update_flatpak.sh" ;;
     10) script_name "set_utc_time.sh" ;;
