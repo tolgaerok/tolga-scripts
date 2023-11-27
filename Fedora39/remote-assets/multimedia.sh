@@ -77,8 +77,7 @@ install_multimedia_codecs() {
 
     display_message "Multimedia codecs installed successfully."
 }
-# Main loop for the menu
-while true; do
+
     install_multimedia_codecs
 
-done
+
