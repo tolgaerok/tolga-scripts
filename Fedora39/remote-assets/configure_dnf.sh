@@ -91,13 +91,15 @@ EOL
         display_message "DNF configuration updated for faster updates."
         sudo dnf install -y fedora-workstation-repositories
         sudo dnf update && sudo dnf makecache
-        
+
     else
         # Inform the user that the configuration file doesn't exist
         check_error
         echo "Error: DNF configuration file not found at $DNF_CONF_PATH."
     fi
-
+    
+    sleep 3
+    display_message "DNF configuration complete..."
 }
 
 # Call the function to install multimedia codecs
