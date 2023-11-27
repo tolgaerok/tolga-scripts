@@ -1,6 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
 
 # Tolga Erok.
 # My personal Fedora 39 KDE tweaker
@@ -21,6 +20,17 @@
 #   ░  ░      ░    ░ ░     ░              ░  ░   ░
 
 clear
+
+
+# Assign a color variable based on the RANDOM number
+RED='\e[1;31m'
+GREEN='\e[1;32m'
+YELLOW='\e[1;33m'
+BLUE='\e[1;34m'
+CYAN='\e[1;36m'
+WHITE='\e[1;37m'
+ORANGE='\e[1;93m'
+NC='\e[0m'  # Keep this line only once
 
 # Function to fetch and execute a script from a remote URL
 function execute_remote_script() {
