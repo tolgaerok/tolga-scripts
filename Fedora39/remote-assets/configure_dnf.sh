@@ -51,31 +51,54 @@ display_message() {
 check_error() {
     if [ $? -ne 0 ]; then
         display_message "Error occurred. Exiting."
-        
+
         # Print the error details
         echo "Error details: $1"
         exit 1
     fi
 }
 
-# Function to install multimedia codecs, old fedora hacks to meet new standards (F39)
-install_multimedia_codecs() {
-    display_message "Installing multimedia codecs..."
+## Function to configure faster updates in DNF
+configure_dnf() {
+    # Define the path to the DNF configuration file
+    DNF_CONF_PATH="/etc/dnf/dnf.conf"
 
-    sudo dnf groupupdate 'core' 'multimedia' 'sound-and-video' --setopt='install_weak_deps=False' --exclude='PackageKit-gstreamer-plugin' --allowerasing && sync
-    sudo dnf swap 'ffmpeg-free' 'ffmpeg' --allowerasing
-    sudo dnf install -y gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-plugin-openh264 gstreamer1-libav --exclude=gstreamer1-plugins-bad-free-devel ffmpeg gstreamer-ffmpeg
-    sudo dnf install -y lame\* --exclude=lame-devel
-    sudo dnf group upgrade --with-optional Multimedia
+    display_message "Configuring faster updates in DNF..."
 
-    # Enable support for Cisco OpenH264 codec
-    sudo dnf config-manager --set-enabled fedora-cisco-openh264 -y
-    sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264 -y
+    # Check if the file exists before attempting to edit it
+    if [ -e "$DNF_CONF_PATH" ]; then
+        # Backup the original configuration file
+        sudo cp "$DNF_CONF_PATH" "$DNF_CONF_PATH.bak"
 
-    check_error
+        # Use sudo to edit the DNF configuration file with nano
+        sudo nano "$DNF_CONF_PATH" <<EOL
+[main]
+gpgcheck=1
+installonly_limit=3
+clean_requirements_on_remove=True
+best=False
+skip_if_unavailable=True
+fastestmirror=1
+max_parallel_downloads=10
+deltarpm=true
+metadata_timer_sync=0
+metadata_expire=6h
+metadata_expire_filter=repo:base:2h
+metadata_expire_filter=repo:updates:12h
+EOL
 
-    display_message "Multimedia codecs installed successfully."
+        # Inform the user that the update is complete
+        display_message "DNF configuration updated for faster updates."
+        sudo dnf install -y fedora-workstation-repositories
+        sudo dnf update && sudo dnf makecache
+        
+    else
+        # Inform the user that the configuration file doesn't exist
+        check_error
+        echo "Error: DNF configuration file not found at $DNF_CONF_PATH."
+    fi
+
 }
 
 # Call the function to install multimedia codecs
-install_multimedia_codecs
+configure_dnf
