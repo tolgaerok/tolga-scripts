@@ -20,6 +20,8 @@
 
 clear
 
+clear
+
 # Assign a color variable based on the RANDOM number
 RED='\e[1;31m'
 GREEN='\e[1;32m'
@@ -28,9 +30,7 @@ BLUE='\e[1;34m'
 CYAN='\e[1;36m'
 WHITE='\e[1;37m'
 ORANGE='\e[1;93m'
-NC='\e[0m'
-YELLOW='\e[1;33m'
-NC='\e[0m'
+NC='\e[0m' # Keep this line only once
 
 # Check if the script is run as root
 if [ "$EUID" -ne 0 ]; then
