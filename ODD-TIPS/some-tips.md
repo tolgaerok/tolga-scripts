@@ -8,7 +8,7 @@
 git config --global user.email "kingtolga@gmail.com"
 git config --global user.name "Tolga Erok"
 ```
-## Setting up zram Ubunut/Deb
+## Setting up zram Ubunut
 Step 1
 Note: run all the commands below in the terminal, copying them one line at a time and hitting enter. Make sure they are copied correctly.
 
@@ -54,3 +54,8 @@ You are done! Reboot and run
 cat /sys/module/zswap/parameters/enabled
 ```
 If zswap is working, you should see a Y printed.
+
+## Setup zram Debian
+```bash
+https://wiki.debian.org/ZRam
+```
