@@ -59,6 +59,11 @@ vm.dirty_expire_centisecs = 3000       # Set the time at which dirty data is old
 vm.dirty_ratio = 80                    # Set the ratio of dirty memory at which a process is forced to write out dirty data (10%). Adjusted for SSD.
 # vm.dirty_time = 0                      # Disable dirty time accounting.   NOT AVAILABLE IN FEDORA STABLE KERNEL
 vm.dirty_writeback_centisecs = 300     # Set the interval between two consecutive background writeback passes (500 centiseconds).
+
+net.core.default_qdisc = fq            # Fair Queueing (fq). This helps prevent one flow from monopolizing the network, promoting equitable distribution of resources.
+net.ipv4.tcp_congestion_control = bbr  # (Bottleneck Bandwidth and Round-Trip Propagation Time) congestion control algorithm for TCP connections. 
+                                       # BBR dynamically adjusts to changing network conditions, optimizing throughput and minimizing latency. 
+                                       # Setting this as the default congestion control algorithm enhances network performance.
 ```
 Reload setting's without reboot
 ```bash
