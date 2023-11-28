@@ -12,7 +12,11 @@ git config --global user.name "Tolga Erok"
 Step 1
 Note: run all the commands below in the terminal, copying them one line at a time and hitting enter. Make sure they are copied correctly.
 
-First check if you have a swap file by running free -h. If you do have a swap file, continue to the next step. Otherwise run the code below.
+First check if you have a swap file by running 
+```bash
+free -h
+```
+ If you do have a swap file, continue to the next step. Otherwise run the code below.
 ```bash
 sudo su 
 fallocate -l 4G /swapfile 
