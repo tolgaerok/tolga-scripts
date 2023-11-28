@@ -98,7 +98,7 @@ EOL
     fi
 
 }
-
+ 
 # Install new dnf5
 dnf5() {
     # Ask the user if they want to install dnf5
@@ -782,7 +782,7 @@ fix_grub() {
     sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 
     echo "GRUB updated successfully."
-}
+} 
 
 # Function to display the main menu
 display_main_menu() {
