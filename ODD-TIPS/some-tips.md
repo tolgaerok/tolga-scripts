@@ -1,4 +1,4 @@
-## NetworkManger show connections via cli
+## NetworkManger show connections via cli..
 ```bash
  nmcli connection show
 ```
