@@ -1,6 +1,6 @@
 #!/bin/bash
 # Tolga erok
-# my personal fedora39 setup file
+# my personal fedora39 setup file.
 
 
 # bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/setup.sh)"
