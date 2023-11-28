@@ -89,8 +89,8 @@ EOL
 
         # Inform the user that the update is complete
         display_message "DNF configuration updated for faster updates."
-        sudo dnf install -y fedora-workstation-repositories
-        sudo dnf update && sudo dnf makecache
+        sudo dnf5 install -y fedora-workstation-repositories
+        sudo dnf5 update && sudo dnf makecache
 
         sleep 3
         display_message "DNF configuration complete && makecache created ..."

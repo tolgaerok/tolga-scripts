@@ -110,7 +110,7 @@ handle_user_input() {
     21) execute_remote_script "display_XDG_session.sh" ;;
     22) execute_remote_script "fix_grub.sh" ;;
     23) execute_remote_script "dnf5.sh" ;;
-
+  
     0) exit ;;
     *)
         echo -e "Invalid choice. Please enter a number from 0 to 21."
