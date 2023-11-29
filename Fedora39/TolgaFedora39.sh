@@ -975,7 +975,7 @@ handle_user_input() {
         figlet Fedora_39
         end_time=$(date +%s)
         time_taken=$((end_time - start_time))
-        espeak -v en-us+m7 -s 165 "ThankYou! For! Using! My Configurations! Bye! "
+        # espeak -v en-us+m7 -s 165 "ThankYou! For! Using! My Configurations! Bye! "
         exit
         ;;
     *)
