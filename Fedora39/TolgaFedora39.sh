@@ -976,7 +976,7 @@ handle_user_input() {
         for_exit "figlet"
         duf
         neofetch
-        figlet Enjoy
+        figlet  Fedora_39
         exit
         ;;
     *)
