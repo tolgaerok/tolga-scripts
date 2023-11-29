@@ -557,9 +557,6 @@ for_exit() {
     fi
 }
 
-# Example usage:
-for_exit "some_package_name"
-
 # Function to download and install a package
 download_and_install() {
     url="$1"
