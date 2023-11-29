@@ -862,12 +862,12 @@ kde_crap() {
     done
 
     # Prompt the user to uninstall missing applications..
-    if [ ${#missing_apps[@]} -eq 0 ]; then
+    if [ ${#found_apps[@]} -eq 0 ]; then
         display_message "All specified applications are already 
      ==>   UN-INSTALLED   <=="
     else
         clear
-        display_message "The following applications are not installed: ${missing_apps[@]}"
+        display_message "The following applications are installed: ${found_apps[@]}"
         read -p "Do you want to uninstall them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
             display_message "Uninstalling KDE bloatware"
