@@ -807,7 +807,7 @@ remove_kde_crap() {
 
     else
         display_message "Bloatware found!: 
-        ${found_apps[@]}"
+           ${found_apps[@]}"
         echo ""
         read -p " Do you want to remove them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
