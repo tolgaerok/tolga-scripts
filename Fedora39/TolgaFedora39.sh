@@ -547,7 +547,7 @@ for_exit() {
     # Check if the package is already installed
     if command -v "$package_name" &>/dev/null; then
         # If the package is already installed, do nothing
-        :
+        display_message "Bye"
     else
         # Install the package
         sudo dnf install -y "$package_name"
