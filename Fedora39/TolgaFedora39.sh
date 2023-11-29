@@ -934,7 +934,7 @@ kde_crap() {
         if [ "$uninstall_choice" == "y" ]; then
             display_message "${RED}[✘]${NC} Uninstalling KDE bloatware"
             sudo dnf remove "${found_apps[@]}" -y
-            cleanup_fedora
+            sudo dnf autoremove -y
             display_message "${GREEN}[✔]${NC} Uninstallation completed."
             sleep 2
         else
