@@ -861,18 +861,13 @@ remove_kde_crap() {
         fi
     done
 
-    # Display message based on whether applications are found
-    if [ ${#found_apps[@]} -eq 0 ]; then
-        display_message "No KDE Bloatware found. Nothing to uninstall."
-        sleep 2
-        display_message "Good news..exiting"
-        sleep 1
-
+    # Prompt the user to uninstall missing applications
+    if [ ${#missing_apps[@]} -eq 0 ]; then
+        display_message "All specified applications are already installed."
     else
-        display_message "Bloatware found!: 
-           ${found_apps[@]}"
-        echo ""
-        read -p " Do you want to remove them? (y/n): " uninstall_choice
+        clear
+        display_message "The following applications are not installed: ${missing_apps[@]}"
+        read -p "Do you want to uninstall them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
             display_message "Uninstalling KDE bloatware"
             sudo dnf remove "${found_apps[@]}" -y
