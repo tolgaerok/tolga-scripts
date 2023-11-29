@@ -866,7 +866,7 @@ kde_crap() {
         clear
         display_message "The following applications are installed:"
         for app in "${found_apps[@]}"; do
-            display_message "  - $app"
+            echo "  - $app"
         done
 
         read -p "Do you want to uninstall them? (y/n): " uninstall_choice
