@@ -867,7 +867,7 @@ kde_crap() {
         fi
     done
 
-    # Prompt the user to uninstall found applications..
+    # Prompt the user to uninstall found applications...
     if [ ${#found_apps[@]} -gt 0 ]; then
         clear
         display_message "${RED}[✘]${NC} The following applications are installed:"
