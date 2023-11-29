@@ -40,7 +40,7 @@ fi
 
 # Function to display messages
 display_message() {
-    clear
+    # clear
     echo -e "\n                  Tolga's online fedora updater\n"
     echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
     echo -e "| ===>  $1"
@@ -875,15 +875,13 @@ kde_crap() {
             display_message "Uninstallation completed."
             sleep 2
         else
-            echo "No applications were uninstalled."
+            display_message "No applications were uninstalled."
             sleep 2
         fi
     else
-        display_message "All specified applications are already 
-     ==>   UN-INSTALLED   <=="
+        display_message "All specified applications are already UN-INSTALLED"
         sleep 2
     fi
-
 }
 
 # Function to display the main menu
