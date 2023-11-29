@@ -963,8 +963,8 @@ handle_user_input() {
 
     0)
         # Before exiting, check if duf and neofetch are installed
-        install_package "duf"
-        install_package "neofetch"
+        for_exit "duf"
+        for_exit "neofetch"
         duf
         neofetch
         exit
