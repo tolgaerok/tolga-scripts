@@ -546,13 +546,15 @@ for_exit() {
 
     # Check if the package is already installed
     if command -v "$package_name" &>/dev/null; then
-        # echo "$package_name is already installed."
+        # If the package is already installed, do nothing
+        :
     else
         # Install the package
         sudo dnf install -y "$package_name"
         display_message "$package_name has been installed."
     fi
 }
+
 
 # Function to download and install a package
 download_and_install() {
