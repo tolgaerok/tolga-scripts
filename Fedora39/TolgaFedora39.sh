@@ -935,6 +935,7 @@ kde_crap() {
             display_message "${RED}[✘]${NC} Uninstalling KDE bloatware"
             sudo dnf remove "${found_apps[@]}" -y
             sudo dnf autoremove -y
+            sleep 1
             display_message "${GREEN}[✔]${NC} Uninstallation completed."
             sleep 2
         else
