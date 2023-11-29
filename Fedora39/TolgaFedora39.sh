@@ -547,13 +547,17 @@ for_exit() {
     # Check if the package is already installed
     if command -v "$package_name" &>/dev/null; then
         # If the package is already installed, do nothing
-        display_message "Bye"
+        echo "$package_name is already installed. Exiting."
     else
         # Install the package
         sudo dnf install -y "$package_name"
-        display_message "$package_name has been installed."
+        echo "$package_name has been installed."
     fi
 }
+
+# Example usage:
+for_exit "some_package_name"
+
 
 
 # Function to download and install a package
