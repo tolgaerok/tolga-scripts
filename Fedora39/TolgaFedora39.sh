@@ -850,7 +850,7 @@ fix_grub() {
 # Remove KDE Junk
 remove_kde_crap() {
 
-    # List of KDE applications to check
+    # List of KDE applications to check..
     apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail" "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler" "kaddressbook" "kcharselect" "konversation" "elisa-player" "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso" "kolourpaint" "krdc" "krfb")
 
     # Check if each application is installed
