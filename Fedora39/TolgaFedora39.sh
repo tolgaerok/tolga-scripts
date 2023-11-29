@@ -849,7 +849,6 @@ fix_grub() {
 
 # Remove KDE Junk
 kde_crap() {
-
     # List of KDE applications to check..
     apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail" "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler" "kaddressbook" "kcharselect" "konversation" "elisa-player" "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso" "kolourpaint" "krdc" "krfb")
 
@@ -864,25 +863,24 @@ kde_crap() {
     # Prompt the user to uninstall found applications..
     if [ ${#found_apps[@]} -gt 0 ]; then
         clear
-        display_message "The following applications are installed:"
+        echo "The following applications are installed:"
         for app in "${found_apps[@]}"; do
             echo "  - $app"
         done
 
         read -p "Do you want to uninstall them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
-            display_message "Uninstalling KDE bloatware"
+            echo "Uninstalling KDE bloatware"
             sudo dnf remove "${found_apps[@]}" -y
-            display_message "Uninstallation completed."
+            echo "Uninstallation completed."
             sleep 2
         else
             echo "No applications were uninstalled."
             sleep 2
         fi
     else
-        display_message "All specified applications are already 
-     ==>   UN-INSTALLED   <=="
-     sleep 2
+        echo "All specified applications are already UN-INSTALLED"
+        sleep 2
     fi
 }
 
