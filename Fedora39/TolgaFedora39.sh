@@ -540,6 +540,20 @@ download_and_install_code_tv() {
 
 }
 
+# Function to install a package
+for_exit() {
+    package_name="$1"
+
+    # Check if the package is already installed
+    if command -v "$package_name" &>/dev/null; then
+        # echo "$package_name is already installed."
+    else
+        # Install the package
+        sudo dnf install -y "$package_name"
+        display_message "$package_name has been installed."
+    fi
+}
+
 # Function to download and install a package
 download_and_install() {
     url="$1"
@@ -562,10 +576,11 @@ download_and_install() {
 install_apps() {
     display_message "Installing afew personal apps..."
 
-    # Install Kate
-    sudo dnf install -y PackageKit timeshift grub-customizer dconf-editor gedit gjs unzip p7zip p7zip-plugins unrar sxiv lsd duf
-    sudo dnf install -y ffmpeg-libs earlyoom virt-manager pip libdvdcss gimp gimp-devel
-    sudo dnf install -y kate git digikam rygel mpg123 rhythmbox python3 python3-pip libffi-devel openssl-devel kate neofetch
+    # Install Apps
+    sudo dnf install -y dconf-editor duf earlyoom espeak ffmpeg-libs gedit git gimp gimp-devel grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch p7zip p7zip-plugins PackageKit pip rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip variety virt-manager wget
+    sudo dnf install -y digikam direnv python3 python3-pip rhythmbox sshpass
+    sudo dnf install -y lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins python3 python3-pip rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip variety virt-manager wget
+
     sudo dnf install ffmpeg libavcodec-freeworld --best --allowerasing
     sudo dnf swap libavcodec-free libavcodec-freeworld
 
@@ -946,7 +961,14 @@ handle_user_input() {
     23) dnf5 ;;
     24) remove_kde_crap ;;
 
-    0) exit ;;
+    0)
+        # Before exiting, check if duf and neofetch are installed
+        install_package "duf"
+        install_package "neofetch"
+        duf
+        neofetch
+        exit
+        ;;
     *)
         echo -e "Invalid choice. Please enter a number from 0 to 24."
         sleep 2
