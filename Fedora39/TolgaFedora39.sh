@@ -20,6 +20,12 @@
 
 clear
 
+# Check if the script is run as root
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run this script as root or using sudo."
+    exit 1
+fi
+
 # Assign a color variable based on the RANDOM number
 RED='\e[1;31m'
 GREEN='\e[1;32m'
@@ -31,12 +37,6 @@ ORANGE='\e[1;93m'
 NC='\e[0m'
 YELLOW='\e[1;33m'
 NC='\e[0m'
-
-# Check if the script is run as root
-if [ "$EUID" -ne 0 ]; then
-    echo "Please run this script as root or using sudo."
-    exit 1
-fi
 
 # Function to display messages
 display_message() {
@@ -745,34 +745,35 @@ Continuing..." -t 1 -n 1 -s
 
 cleanup_fedora() {
     # Clean package cache
-    display_message " Time to clean up system..."
+    display_message "${GREEN}[✔]${NC} Time to clean up system..."
     sudo dnf clean all
 
     # Remove unnecessary dependencies
     sudo dnf autoremove -y
 
     # Sort the lists of installed packages and packages to keep
-    display_message "Sorting out list of installed packages and packages to keep..."
+    display_message "${GREEN}[✔]${NC} Sorting out list of installed packages and packages to keep..."
     comm -23 <(sudo dnf repoquery --installonly --latest-limit=-1 -q | sort) <(sudo dnf list installed | awk '{print $1}' | sort) >/tmp/orphaned-pkgs
 
     if [ -s /tmp/orphaned-pkgs ]; then
         sudo dnf remove $(cat /tmp/orphaned-pkgs) -y --skip-broken
     else
-        display_message "No orphaned packages found."
+        display_message "${GREEN}[✔]${NC} Congratulations, no orphaned packages found."
     fi
 
     # Clean up temporary files
-    display_message "Clean up temporary files ..."
+    display_message "${GREEN}[✔]${NC} Clean up temporary files ..."
     sudo rm -rf /tmp/orphaned-pkgs
 
-    display_message "Trimming all mount points on SSD"
+    display_message "${GREEN}[✔]${NC} Trimming all mount points on SSD"
     sudo fstrim -av
 
     echo -e "\e[1;32m[✔]\e[0m Restarting kernel tweaks...\n"
     sleep 1
     sudo sysctl -p
 
-    display_message "Cleanup complete, ENJOY!"
+    display_message "${GREEN}[✔]${NC} Cleanup complete, ENJOY!"
+    sleep 2
 }
 
 fix_chrome() {
@@ -850,11 +851,11 @@ fix_grub() {
 # Remove KDE Junk
 kde_crap() {
 
-        # Color codes
+    # Color codes
     RED='\e[1;31m'
     GREEN='\e[1;32m'
     YELLOW='\e[1;33m'
-    NC='\e[0m'  # No Color
+    NC='\e[0m' # No Color
 
     # List of KDE applications to check..
     apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail" "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler" "kaddressbook" "kcharselect" "konversation" "elisa-player" "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso" "kolourpaint" "krdc" "krfb")
