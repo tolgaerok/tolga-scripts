@@ -98,7 +98,7 @@ EOL
     fi
 
 }
- 
+
 # Install new dnf5
 dnf5() {
     # Ask the user if they want to install dnf5
@@ -782,7 +782,41 @@ fix_grub() {
     sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 
     echo "GRUB updated successfully."
-} 
+}
+
+# Remove KDE Junk
+remove_kde_crap() {
+
+    # List of KDE applications to check
+    apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail" "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler" "kaddressbook" "kcharselect" "konversation" "elisa-player" "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso" "kolourpaint" "krdc" "krfb")
+
+    # Check if each application is installed
+    missing_apps=()
+    for app in "${apps[@]}"; do
+        if ! command -v "$app" &>/dev/null; then
+            missing_apps+=("$app")
+        fi
+    done
+
+    # Prompt the user to uninstall missing applications
+    if [ ${#missing_apps[@]} -eq 0 ]; then
+        display_message "All specified applications are already installed."
+    else
+        echo "The following applications are not installed: ${missing_apps[@]}"
+        read -p "Do you want to uninstall them? (y/n): " uninstall_choice
+        if [ "$uninstall_choice" == "y" ]; then
+            display_message "Uninstalling KDE bloatware"
+            sudo dnf remove "${missing_apps[@]}" -y
+
+            display_message "Uninstallation completed."
+            sleep 2
+        else
+            echo "No applications were uninstalled."
+            sleep 2
+        fi
+    fi
+
+}
 
 # Function to display the main menu
 display_main_menu() {
@@ -813,6 +847,8 @@ display_main_menu() {
     echo -e "\e[33m 21.\e[0m \e[32mDisplay XDG session\e[0m"
     echo -e "\e[33m 22.\e[0m \e[32mFix grub or rebuild grub          ( Checks and enables menu output to grub menu )\e[0m"
     echo -e "\e[33m 23.\e[0m \e[32mInstall new DNF5                  ( Testing for fedora 40/41 )\e[0m"
+    echo -e "\e[33m 23.\e[0m \e[32mRemove KDE bloatware              ( Why are these installed? )\e[0m"
+
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
     echo -e "\e[31m   (0) \e[0m \e[32mExit\e[0m"
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
@@ -859,6 +895,7 @@ handle_user_input() {
     21) display_XDG_session ;;
     22) fix_grub ;;
     23) dnf5 ;;
+    24) remove_kde_crap ;;
 
     0) exit ;;
     *)
