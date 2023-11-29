@@ -217,6 +217,7 @@ EOL
 
 }
 
+
 # Install new dnf5
 dnf5() {
     # Ask the user if they want to install dnf5
@@ -1751,136 +1752,41 @@ fix_grub() {
     sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 
     echo "GRUB updated successfully."
-    sleep 2
 }
 
 # Remove KDE Junk
-kde_crap() {
+remove_kde_crap() {
 
-    # Color codes
-    RED='\e[1;31m'
-    GREEN='\e[1;32m'
-    YELLOW='\e[1;33m'
-    NC='\e[0m' # No Color
-
-    # List of KDE applications to check..
-    apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail"
-        "kaddressbook" "kcharselect" "konversation" "elisa-player"
-        "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler"
-        "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso"
-        "kolourpaint" "krdc" "krfb" "kmail-account-wizard"
-        "pim-data-exporter" "pim-sieve-editor" "elisa*" "kdeconnectd")
-
-    display_message "Checking for KDE applications..."
+    # List of KDE applications to check
+    apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail" "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler" "kaddressbook" "kcharselect" "konversation" "elisa-player" "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso" "kolourpaint" "krdc" "krfb")
 
     # Check if each application is installed
-    found_apps=()
+    missing_apps=()
     for app in "${apps[@]}"; do
-        if command -v "$app" &>/dev/null; then
-            found_apps+=("$app")
+        if ! command -v "$app" &>/dev/null; then
+            missing_apps+=("$app")
         fi
     done
 
-    # Prompt the user to uninstall found applications
-    if [ ${#found_apps[@]} -gt 0 ]; then
+    # Prompt the user to uninstall missing applications
+    if [ ${#missing_apps[@]} -eq 0 ]; then
+        display_message "All specified applications are already installed."
+    else
         clear
-        display_message "[${RED}✘${NC}] The following KDE applications are installed:"
-        for app in "${found_apps[@]}"; do
-            echo -e "  ${RED}[✘]${NC}  ${YELLOW}==>${NC}  $app"
-        done
-
-        echo ""
+        display_message "The following applications are not installed: ${missing_apps[@]}"
         read -p "Do you want to uninstall them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
-            display_message "[${RED}✘${NC}] Uninstalling KDE applications..."
+            display_message "Uninstalling KDE bloatware"
+            sudo dnf remove "${missing_apps[@]}" -y
 
-            # Build a string of package names
-            packages_to_remove=$(
-                IFS=" "
-                echo "${found_apps[*]}"
-            )
-
-            sudo dnf remove $packages_to_remove
-
-            sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
-            dnf clean all
-
-            # Remove media players
-            sudo dnf remove -y \
-                dragon \
-                elisa-player \
-                kamoso
-
-            # Remove akonadi
-            # sudo dnf remove -y *akonadi*
-
-            # Remove games
-            sudo dnf remove -y \
-                kmahjongg \
-                kmines \
-                kpat
-
-            # Remove misc applications
-            sudo dnf remove -y \
-                dnfdragora \
-                konversation \
-                krdc \
-                krfb \
-                plasma-welcome
-
-            read -p "Do you want to perform autoremove? (y/n): " autoremove_choice
-            if [ "$autoremove_choice" == "y" ]; then
-                sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
-                sudo dnf autoremove
-                dnf clean all
-            fi
-            display_message "[${GREEN}✔${NC}]  Uninstallation completed."
+            display_message "Uninstallation completed."
+            sleep 2
         else
-            display_message "[${RED}✘${NC}] No applications were uninstalled."
+            echo "No applications were uninstalled."
+            sleep 2
         fi
-    else
-        sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
-        sudo dnf autoremove
-        dnf clean all
-        display_message "[${GREEN}✔${NC}]  Congratulations, no KDE applications detected."
-        sleep 1
     fi
-}
 
-# Function to start balance operation
-start_balance() {
-    display_message "[${GREEN}✔${NC}]  Balance operation started successfully."
-    echo -e "\n ${YELLOW}==>${NC} This will take a very LONG time..."
-    check_balance_status
-    sudo btrfs balance start --full-balance / &
-    check_balance_status
-    display_message "[${GREEN}✔${NC}]  Balance operation running in background."
-    gum spin --spinner dot --title "Stand-by..." -- sleep 2
-}
-
-# Function to check balance status
-check_balance_status() {
-    display_message "[${GREEN}✔${NC}]  Balance operation successfull"
-    sudo btrfs balance status /
-    gum spin --spinner dot --title "Stand-by..." -- sleep 2
-}
-
-# Function to start scrub operation
-start_scrub() {
-    display_message "[${GREEN}✔${NC}]  Scrub operation started successfully."
-    check_scrub_status
-    sudo btrfs scrub start /
-    check_scrub_status
-    display_message "[${GREEN}✔${NC}]  Scrub operation running in background."
-    gum spin --spinner dot --title "Stand-by..." -- sleep 4
-
-}
-
-# Function to check scrub status.
-check_scrub_status() {
-    display_message "[${GREEN}✔${NC}]  Scrub operation successfull"
-    sudo btrfs scrub status /
-    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 }
 
 # Function to display the main menu
@@ -2132,14 +2038,10 @@ display_main_menu() {
     echo -e "\e[33m 19.\e[0m \e[32mCleanup Fedora\e[0m"
     echo -e "\e[33m 20.\e[0m \e[32mFix Chrome HW accelerations issue                            ( No guarantee )\e[0m"
     echo -e "\e[33m 21.\e[0m \e[32mDisplay XDG session\e[0m"
-    echo -e "\e[33m 22.\e[0m \e[32mFix grub or rebuild grub                                     ( Checks and enables menu output to grub menu )\e[0m"
-    echo -e "\e[33m 23.\e[0m \e[32mInstall new DNF5                                             ( Testing for fedora 40/41 )\e[0m"
-    echo -e "\e[33m 24.\e[0m \e[32mRemove Useless KDE Apps                                      ( Why are these installed? )\e[0m"
-    echo -e "\e[33m 25.\e[0m \e[32mPerform BTRFS balance and scrub operation on / partition     ( !! WARNING, backup important data incase, 5 min operation )\e[0m"
-    echo -e "\e[33m 26.\e[0m \e[32mCreate extra hidden dir in HOME                                "
-    echo -e "\e[33m 27.\e[0m \e[32mModify systemd timeout settings to 10s                         "
-    echo -e "\e[33m 28.\e[0m \e[32mSet-up TCP && UDP firewall settings                          ( Mimic my NixOS firewall settings ) "
-    echo -e "\e[33m 29.\e[0m \e[32mSet-up ZRAM                                                  ( For systems with low RAM (<+ 8 GB) ) "
+    echo -e "\e[33m 22.\e[0m \e[32mFix grub or rebuild grub          ( Checks and enables menu output to grub menu )\e[0m"
+    echo -e "\e[33m 23.\e[0m \e[32mInstall new DNF5                  ( Testing for fedora 40/41 )\e[0m"
+    echo -e "\e[33m 24.\e[0m \e[32mRemove KDE bloatware              ( Why are these installed? )\e[0m"
+
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
     echo -e "\e[31m   (0) \e[0m \e[32mExit\e[0m"
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
@@ -2186,26 +2088,9 @@ handle_user_input() {
     21) display_XDG_session ;;
     22) fix_grub ;;
     23) dnf5 ;;
-    24) kde_crap ;;
-    25) btrfs_maint ;;
-    26) create-extra-dir ;;
-    27) speed-up-shutdown ;;
-    28) firewall ;;
-    29) zram ;;
-    0)
-        # Before exiting, check if duf and neofetch are installed
-        for_exit "duf"
-        for_exit "neofetch"
-        for_exit "figlet"
-        for_exit "espeak"
-        duf
-        neofetch
-        figlet Fedora_39
-        #end_time=$(date +%s)
-        #time_taken=$((end_time - start_time))
-        # # espeak -v en-us+m7 -s 165 "ThankYou! For! Using! My Configurations! Bye! "
-        exit
-        ;;
+    24) remove_kde_crap ;;
+
+    0) exit ;;
     *)
         echo -e "Invalid choice. Please enter a number from 0 to 26."
         gum spin --spinner dot --title "Stand-by..." -- sleep 1
