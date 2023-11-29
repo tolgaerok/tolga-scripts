@@ -62,15 +62,15 @@ check_error() {
 install_multimedia_codecs() {
     display_message "Installing multimedia codecs..."
 
-    sudo dnf groupupdate 'core' 'multimedia' 'sound-and-video' --setopt='install_weak_deps=False' --exclude='PackageKit-gstreamer-plugin' --allowerasing && sync
-    sudo dnf swap 'ffmpeg-free' 'ffmpeg' --allowerasing
-    sudo dnf install -y gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-plugin-openh264 gstreamer1-libav --exclude=gstreamer1-plugins-bad-free-devel ffmpeg gstreamer-ffmpeg
-    sudo dnf install -y lame\* --exclude=lame-devel
-    sudo dnf group upgrade --with-optional Multimedia
+    sudo dnf5 groupupdate 'core' 'multimedia' 'sound-and-video' --setopt='install_weak_deps=False' --exclude='PackageKit-gstreamer-plugin' --allowerasing && sync
+    sudo dnf5 swap 'ffmpeg-free' 'ffmpeg' --allowerasing
+    sudo dnf5 install -y gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-plugin-openh264 gstreamer1-libav --exclude=gstreamer1-plugins-bad-free-devel ffmpeg gstreamer-ffmpeg
+    sudo dnf5 install -y lame\* --exclude=lame-devel
+    sudo dnf5 group upgrade --with-optional Multimedia
 
     # Enable support for Cisco OpenH264 codec
-    sudo dnf config-manager --set-enabled fedora-cisco-openh264 -y
-    sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264 -y
+    sudo dnf5 config-manager --set-enabled fedora-cisco-openh264 -y
+    sudo dnf5 install gstreamer1-plugin-openh264 mozilla-openh264 -y
 
     check_error
 

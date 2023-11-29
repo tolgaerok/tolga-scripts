@@ -59,6 +59,11 @@ vm.dirty_expire_centisecs = 3000       # Set the time at which dirty data is old
 vm.dirty_ratio = 80                    # Set the ratio of dirty memory at which a process is forced to write out dirty data (10%). Adjusted for SSD.
 # vm.dirty_time = 0                      # Disable dirty time accounting.   NOT AVAILABLE IN FEDORA STABLE KERNEL
 vm.dirty_writeback_centisecs = 300     # Set the interval between two consecutive background writeback passes (500 centiseconds).
+
+net.core.default_qdisc = fq            # Fair Queueing (fq). This helps prevent one flow from monopolizing the network, promoting equitable distribution of resources.
+net.ipv4.tcp_congestion_control = bbr  # (Bottleneck Bandwidth and Round-Trip Propagation Time) congestion control algorithm for TCP connections. 
+                                       # BBR dynamically adjusts to changing network conditions, optimizing throughput and minimizing latency. 
+                                       # Setting this as the default congestion control algorithm enhances network performance.
 ```
 Reload setting's without reboot
 ```bash
@@ -156,3 +161,63 @@ Always monitor your system's performance after making changes and adjust as need
 
 Enjoy
 Tolga Erok
+
+## Default values in LinuxMint cinnamon
+```bash
+fs.aio-max-nr = 65536
+fs.inotify.max_user_watches = 28851
+kernel.panic = 0
+kernel.panic_on_io_nmi = 0
+kernel.panic_on_oops = 0
+kernel.panic_on_rcu_stall = 0
+kernel.panic_on_unrecovered_nmi = 0
+kernel.panic_on_warn = 0
+kernel.panic_print = 0
+kernel.pid_max = 4194304
+kernel.sysrq = 176
+net.core.netdev_max_backlog = 1000
+net.core.rmem_default = 212992
+net.core.rmem_max = 212992
+net.core.wmem_default = 212992
+net.core.wmem_max = 212992
+net.ipv4.tcp_keepalive_intvl = 75
+net.ipv4.tcp_keepalive_probes = 9
+net.ipv4.tcp_keepalive_time = 7200
+vm.dirty_background_bytes = 0
+vm.dirty_background_ratio = 10
+vm.dirty_bytes = 0
+vm.dirty_expire_centisecs = 3000
+vm.dirty_ratio = 20
+vm.dirty_writeback_centisecs = 500
+vm.min_free_kbytes = 67584
+vm.swappiness = 60
+vm.vfs_cache_pressure = 100
+```
+Here's a comparison between the Fedora parameters between fedora and the Ubuntu parameters:
+
+| Parameter                           | Fedora Value | Ubuntu Value   |
+|-------------------------------------|--------------|----------------|
+| fs.aio-max-nr                        | 65536        | 65536          |
+| fs.inotify.max_user_watches         | 524288       | 28851          |
+| kernel.panic                        | 0            | 0              |
+| kernel.pid_max                      | 4194304      | 4194304        |
+| kernel.sysrq                        | 16           | 176            |
+| net.core.netdev_max_backlog         | 1000         | 1000           |
+| net.core.rmem_default               | 212992       | 212992         |
+| net.core.rmem_max                   | 212992       | 212992         |
+| net.core.wmem_default               | 212992       | 212992         |
+| net.core.wmem_max                   | 212992       | 212992         |
+| net.ipv4.tcp_keepalive_intvl        | 75           | 75             |
+| net.ipv4.tcp_keepalive_probes       | 9            | 9              |
+| net.ipv4.tcp_keepalive_time         | 7200         | 7200           |
+| vm.dirty_background_bytes           | 0            | 0              |
+| vm.dirty_background_ratio           | 10           | 10             |
+| vm.dirty_bytes                      | 0            | 0              |
+| vm.dirty_expire_centisecs           | 3000         | 3000           |
+| vm.dirty_ratio                      | 20           | 20             |
+| vm.dirty_writeback_centisecs        | 500          | 500            |
+| vm.min_free_kbytes                  | 67584        | 67584          |
+| vm.swappiness                       | 60           | 60             |
+| vm.vfs_cache_pressure               | 100          | 100            |
+
+The values appear to be consistent between the two sets of parameters for the specified configuration options. I

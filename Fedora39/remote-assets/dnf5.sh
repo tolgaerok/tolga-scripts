@@ -2,10 +2,10 @@
 
 # Tolga Erok.
 # My personal Fedora 39 KDE tweaker
-# 18/11/2023
+# 18/11/2023 .
 
 # Run from remote location:::.
-# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/remote-assets/configure_dnf.sh)"
+# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/remote-assets/multimedia.sh)"
 
 #  ¯\_(ツ)_/¯
 #    █████▒▓█████ ▓█████▄  ▒█████   ██▀███   ▄▄▄
@@ -58,51 +58,26 @@ check_error() {
     fi
 }
 
-## Function to configure faster updates in DNF
-configure_dnf() {
-    # Define the path to the DNF configuration file
-    DNF_CONF_PATH="/etc/dnf/dnf.conf"
-
-    display_message "Configuring faster updates in DNF..."
-
-    # Check if the file exists before attempting to edit it
-    if [ -e "$DNF_CONF_PATH" ]; then
-        # Backup the original configuration file
-        sudo cp "$DNF_CONF_PATH" "$DNF_CONF_PATH.bak"
-
-        # Use sudo to edit the DNF configuration file with nano
-        sudo nano "$DNF_CONF_PATH" <<EOL
-[main]
-gpgcheck=1
-installonly_limit=3
-clean_requirements_on_remove=True
-best=False
-skip_if_unavailable=True
-fastestmirror=1
-max_parallel_downloads=10
-deltarpm=true
-metadata_timer_sync=0
-metadata_expire=6h
-metadata_expire_filter=repo:base:2h
-metadata_expire_filter=repo:updates:12h
-EOL
-
-        # Inform the user that the update is complete
-        display_message "DNF configuration updated for faster updates."
-        sudo dnf5 install -y fedora-workstation-repositories
-        sudo dnf5 update && sudo dnf makecache
-
+# Install new dnf5
+dnf5() {
+    # Ask the user if they want to install dnf5
+    display_message "Beta: DNF5 for fedora 40/41 testing"
+    read -p "Do you want to install dnf5? (y/n): " install_dnf5
+    if [[ $install_dnf5 =~ ^[Yy]$ ]]; then
+        sudo dnf install dnf5 -y
+        sleep 1
+        display_message "Updating system via DNF5.."
+        sudo dnf5 update && sudo dnf5 makecache
+        sleep 2
+        display_message "In order to use dnf, you need to use sudo dnf5 update"
         sleep 3
-        display_message "DNF configuration complete && makecache created ..."
 
     else
-        # Inform the user that the configuration file doesn't exist
         check_error
-        echo "Error: DNF configuration file not found at $DNF_CONF_PATH."
+        echo "Aborted installation of dnf5. Returning to the main menu."
     fi
 
 }
 
 # Call the function to install multimedia codecs
-configure_dnf
-sleep 3
+dnf5
