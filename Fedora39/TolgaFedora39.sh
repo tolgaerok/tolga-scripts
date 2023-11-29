@@ -548,7 +548,7 @@ download_and_install() {
 
     # Check if the package is already installed
     if sudo dnf list installed "$package_name" &>/dev/null; then
-        echo "$package_name is already installed. Skipping installation."
+        display_message "$package_name is already installed. Skipping installation."
         return
     fi
 
