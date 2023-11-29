@@ -18,6 +18,11 @@
 #   ░ ░       ░    ░ ░  ░ ░ ░ ░ ▒    ░░   ░   ░   ▒
 #   ░  ░      ░    ░ ░     ░              ░  ░   ░
 
+# -----------------------------------------------------------------------------------
+# Install some  agents
+# -----------------------------------------------------------------------------------
+start_time=$(date +%s)
+current_dir=$(pwd)
 clear
 
 # Assign a color variable based on the RANDOM number
@@ -92,6 +97,7 @@ EOL
         display_message "DNF configuration updated for faster updates."
         sudo dnf install -y fedora-workstation-repositories
         sudo dnf update && sudo dnf makecache
+        notify-send --icon=litedesktop --app-name="DONE" "$(whoami) DNF updated" " " -u normal
     else
         # Inform the user that the configuration file doesn't exist
         display_message "Error: DNF configuration file not found at $DNF_CONF_PATH."
@@ -107,6 +113,7 @@ dnf5() {
     if [[ $install_dnf5 =~ ^[Yy]$ ]]; then
         sudo dnf install dnf5 -y
         sudo dnf5 update && sudo dnf5 makecache
+        notify-send --icon=litedesktop --app-name="DONE" "$(whoami) DNF5 updated" " " -u normal
 
         echo "In order to use dnf, you need to use sudo dnf5 update"
     else
@@ -132,6 +139,7 @@ change_hotname() {
 
     # Display the new hostname
     echo "Hostname changed to: $new_hostname"
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) DNF updated" "New hostname:  $new_hostname " -u normal
     sleep 2
 }
 # Function to install RPM Fusion
@@ -146,6 +154,7 @@ install_rpmfusion() {
     check_error
 
     display_message "RPM Fusion installed successfully."
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) RPM fusion updated" "" -u normal
 }
 
 # Function to update the system
@@ -172,6 +181,7 @@ update_system() {
     check_error
 
     display_message "System updated successfully."
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) System updated" " " -u normal
 }
 
 # Function to install firmware updates with a countdown on error
@@ -277,6 +287,7 @@ install_gpu_drivers() {
 
         check_error "Failed to install NVIDIA drivers."
         display_message "NVIDIA drivers installed successfully."
+        notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Nvidia GPU updated" " " -u normal
     fi
 
     # Check for AMD GPU
@@ -287,6 +298,7 @@ install_gpu_drivers() {
 
         check_error "Failed to install AMD drivers."
         display_message "AMD drivers installed successfully."
+        sleep 2
     fi
 
     # Prompt user for reboot or continue
@@ -342,6 +354,8 @@ install_multimedia_codecs() {
     sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264 -y
 
     display_message "Multimedia codecs installed successfully."
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Codecs updated" "" -u normal
+    sleep 1
 }
 
 # Function to install H/W Video Acceleration for AMD or Intel chipset
@@ -357,6 +371,8 @@ install_hw_video_acceleration_amd_or_intel() {
         sudo dnf install -y openh264 gstreamer1-plugin-openh264 mozilla-openh264
 
         display_message "H/W Video Acceleration for AMD chipset installed successfully."
+        notify-send --icon=litedesktop --app-name="DONE" "$(whoami) AMD updated" " " -u normal
+
     else
         display_message "No AMD chipset found. Pausing for user confirmation..."
 
@@ -375,6 +391,7 @@ install_hw_video_acceleration_amd_or_intel() {
             sudo dnf install libva libva-utils xorg-x11-drv-intel -y
 
             display_message "H/W Video Acceleration for Intel chipset installed successfully."
+            notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Intel Chipsets updated" "" -u normal
         else
             display_message "No Intel chipset found. Skipping H/W Video Acceleration installation."
         fi
@@ -392,6 +409,8 @@ cleanup_flatpak_cruft() {
     flatpak uninstall --unused -y --delete-data
 
     display_message "Flatpak cleanup completed."
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Flatpak cruft cleaned" "" -u normal
+    sleep 1
 }
 
 # Function to update Flatpak
@@ -407,7 +426,7 @@ update_flatpak() {
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/FlatPakApps.sh)"
 
     display_message "Flatpak updated successfully."
-
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Flatpaks updated" "" -u normal
     # Call the cleanup function
     cleanup_flatpak_cruft
 }
@@ -419,6 +438,8 @@ set_utc_time() {
     sudo timedatectl set-local-rtc '0'
 
     display_message "UTC Time set successfully."
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) UTC for dual boot updated" "" -u normal
+    sleep 1
 }
 
 # Function to disable mitigations, old fedora hack and used on nixos also, thanks chris titus!
@@ -435,6 +456,7 @@ disable_mitigations() {
         # Disable mitigations
         sudo grubby --update-kernel=ALL --args="mitigations=off"
         display_message "Mitigations disabled successfully."
+        notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Mitigations added" "" -u normal
         ;;
     n | N)
         display_message "Mitigations not disabled. Exiting."
@@ -463,6 +485,7 @@ enable_nvidia_modeset() {
 
     # Enable nvidia-modeset
     sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Nvidia modset updated" "" -u normal
 
     display_message "nvidia-modeset enabled successfully."
 }
@@ -473,6 +496,7 @@ disable_network_manager_wait_online() {
 
     # Disable NetworkManager-wait-online.service
     sudo systemctl disable NetworkManager-wait-online.service
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Network wait online disabled" "" -u normal
 
     display_message "NetworkManager-wait-online.service disabled successfully."
 }
@@ -510,6 +534,7 @@ check_mitigations_grub() {
     # Check if mitigations=off is present
     if echo "$grub_config" | grep -q "mitigations=off"; then
         display_message "Mitigations are currently disabled in GRUB configuration: ==>  ( Success! )"
+        notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Mitigations in check" "" -u normal
         sleep 1
     else
         display_message "Warning: Mitigations are not currently disabled in GRUB configuration."
@@ -557,11 +582,6 @@ for_exit() {
     fi
 }
 
-# Example usage:
-for_exit "some_package_name"
-
-
-
 # Function to download and install a package
 download_and_install() {
     url="$1"
@@ -589,6 +609,7 @@ install_apps() {
     sudo dnf install -y digikam direnv python3 python3-pip rhythmbox sshpass
     sudo dnf install -y lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins python3 python3-pip rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip variety virt-manager wget
 
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Apps added" "" -u normal
     sudo dnf install ffmpeg libavcodec-freeworld --best --allowerasing
     sudo dnf swap libavcodec-free libavcodec-freeworld
 
@@ -596,6 +617,7 @@ install_apps() {
     display_message "Starting earlyloom services"
     sudo systemctl start earlyoom
     sudo systemctl enable earlyoom
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Earlyloom set" "" -u normal
 
     # Install some fonts
     display_message "Install some fonts"
@@ -613,25 +635,30 @@ install_apps() {
     sudo fc-cache -f -v
 
     sudo dnf install fontconfig-font-replacements -y --skip-broken && sudo dnf install fontconfig-enhanced-defaults -y --skip-broken
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Fonts set" "" -u normal
 
     # Install OpenRGB.
     display_message "Installing OpenRGB"
     sudo modprobe i2c-dev && sudo modprobe i2c-piix4 && sudo dnf install openrgb -y
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) openRGB updated" "" -u normal
 
     # Install Docker
     display_message "Installing Docker..this takes awhile"
     sudo dnf install docker -y
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Docker Added" "" -u normal
 
     # Install google
     display_message "Installing Google chrome"
     if command -v google-chrome &>/dev/null; then
         display_message "Google Chrome is already installed. Skipping installation."
+        notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Chrome install skipped" "" -u normal
     else
         # Install Google Chrome
         display_message "Installing Google Chrome browser..."
         wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
         sudo dnf install -y ./google-chrome-stable_current_x86_64.rpm
         rm -f google-chrome-stable_current_x86_64.rpm
+        notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Chrome installed" "" -u normal
     fi
 
     # Download and install TeamViewer
@@ -652,6 +679,7 @@ install_apps() {
     sudo dnf group upgrade -y --with-optional Multimedia
     sudo dnf groupupdate -y sound-and-video --allowerasing --skip-broken
     sudo dnf groupupdate multimedia sound-and-video
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Extra RPM Packages updated" "" -u normal
 
     # Cleanup
     display_message "Cleaning up /tmp..."
@@ -736,6 +764,7 @@ Continuing..." -t 1 -n 1 -s
     # Set up SSH Server on Host
     display_message "Setup SSH and start service.."
     sudo systemctl enable sshd && sudo systemctl start sshd
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) samba and SSH restarted" "" -u normal
 
     display_message "Installation completed."
     sleep 2
@@ -776,7 +805,7 @@ cleanup_fedora() {
     echo -e "\e[1;32m[✔]\e[0m Restarting kernel tweaks...\n"
     sleep 1
     sudo sysctl -p
-
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Sysytem cleaned" "" -u normal
     display_message "Cleanup complete, ENJOY!"
 }
 
@@ -848,7 +877,7 @@ fix_grub() {
     # Update GRUB configuration
     sudo grub2-mkconfig -o /boot/grub2/grub.cfg
     sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
-
+    notify-send --icon=litedesktop --app-name="DONE" "$(whoami) GRUB updated" "" -u normal
     echo "GRUB updated successfully."
 }
 
@@ -871,6 +900,7 @@ remove_kde_crap() {
         display_message "No KDE Bloatware found. Nothing to uninstall."
         sleep 2
         display_message "Good news..exiting"
+        notify-send --icon=litedesktop --app-name="DONE" "$(whoami) No bloatware to clean" "" -u normal
         sleep 1
 
     else
@@ -880,6 +910,7 @@ remove_kde_crap() {
         read -p " Do you want to remove them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
             display_message "Uninstalling KDE bloatware"
+            notify-send --icon=litedesktop --app-name="DONE" "$(whoami) Bloatware found, cleaning" "" -u normal
             sudo dnf remove "${found_apps[@]}" -y
             display_message "Uninstallation completed."
             sleep 2
@@ -974,9 +1005,15 @@ handle_user_input() {
         for_exit "duf"
         for_exit "neofetch"
         for_exit "figlet"
+        for_exit "espeak"
         duf
         neofetch
-        figlet  Fedora_39
+        figlet Fedora_39
+        end_time=$(date +%s)
+        time_taken=$((end_time - start_time))
+
+        notify-send --icon=ktimetracker --app-name="Post set-up" "Basic set-up Complete" "Time taken: $time_taken seconds" -u normal
+        espeak -v en-us+m7 -s 165 "ThankYou! For! Using! My Configurations! Bye! "
         exit
         ;;
     *)
