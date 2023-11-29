@@ -902,7 +902,7 @@ handle_user_input() {
 
     0) exit ;;
     *)
-        echo -e "Invalid choice. Please enter a number from 0 to 21."
+        echo -e "Invalid choice. Please enter a number from 0 to 24."
         sleep 2
         ;;
     esac
