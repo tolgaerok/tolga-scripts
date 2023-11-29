@@ -847,7 +847,7 @@ display_main_menu() {
     echo -e "\e[33m 21.\e[0m \e[32mDisplay XDG session\e[0m"
     echo -e "\e[33m 22.\e[0m \e[32mFix grub or rebuild grub          ( Checks and enables menu output to grub menu )\e[0m"
     echo -e "\e[33m 23.\e[0m \e[32mInstall new DNF5                  ( Testing for fedora 40/41 )\e[0m"
-    echo -e "\e[33m 23.\e[0m \e[32mRemove KDE bloatware              ( Why are these installed? )\e[0m"
+    echo -e "\e[33m 24.\e[0m \e[32mRemove KDE bloatware              ( Why are these installed? )\e[0m"
 
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
     echo -e "\e[31m   (0) \e[0m \e[32mExit\e[0m"
