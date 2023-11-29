@@ -40,7 +40,7 @@ fi
 
 # Function to display messages
 display_message() {
-    # clear
+    clear
     echo -e "\n                  Tolga's online fedora updater\n"
     echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
     echo -e "| ===>  $1"
@@ -855,7 +855,7 @@ kde_crap() {
     GREEN='\e[1;32m'
     YELLOW='\e[1;33m'
     NC='\e[0m'  # No Color
-    
+
     # List of KDE applications to check..
     apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail" "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler" "kaddressbook" "kcharselect" "konversation" "elisa-player" "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso" "kolourpaint" "krdc" "krfb")
 
