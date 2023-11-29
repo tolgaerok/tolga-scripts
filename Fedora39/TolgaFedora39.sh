@@ -802,7 +802,8 @@ remove_kde_crap() {
     if [ ${#missing_apps[@]} -eq 0 ]; then
         display_message "All specified applications are already installed."
     else
-        echo "The following applications are not installed: ${missing_apps[@]}"
+        clear
+        display_message "The following applications are not installed: ${missing_apps[@]}"
         read -p "Do you want to uninstall them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
             display_message "Uninstalling KDE bloatware"
