@@ -886,7 +886,7 @@ kde_crap() {
             sleep 2
         fi
     else
-        display_message "${GREEN}[✔]${NC} All specified applications are already UN-INSTALLED"
+        display_message "${GREEN}[✔]${NC} Congratulations, no KDE Bloat-Ware Detected"
         sleep 2
     fi
 }
