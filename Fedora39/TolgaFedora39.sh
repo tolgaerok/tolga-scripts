@@ -863,25 +863,27 @@ kde_crap() {
     # Prompt the user to uninstall found applications..
     if [ ${#found_apps[@]} -gt 0 ]; then
         clear
-        echo "The following applications are installed:"
+        display_message "The following applications are installed:"
         for app in "${found_apps[@]}"; do
-            echo "  - $app"
+            display_message "  - $app"
         done
 
         read -p "Do you want to uninstall them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
-            echo "Uninstalling KDE bloatware"
+            display_message "Uninstalling KDE bloatware"
             sudo dnf remove "${found_apps[@]}" -y
-            echo "Uninstallation completed."
+            display_message "Uninstallation completed."
             sleep 2
         else
             echo "No applications were uninstalled."
             sleep 2
         fi
     else
-        echo "All specified applications are already UN-INSTALLED"
+        display_message "All specified applications are already 
+     ==>   UN-INSTALLED   <=="
         sleep 2
     fi
+
 }
 
 # Function to display the main menu
