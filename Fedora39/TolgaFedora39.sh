@@ -802,7 +802,7 @@ remove_kde_crap() {
     if [ ${#found_apps[@]} -eq 0 ]; then
         display_message "No KDE applications found. Nothing to uninstall."
     else
-        echo "The following applications are installed: ${found_apps[@]}"
+        echo "T22222he following applications are installed: ${found_apps[@]}"
         read -p "Bloatware found! Do you want to remove them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
             display_message "Uninstalling KDE bloatware"
