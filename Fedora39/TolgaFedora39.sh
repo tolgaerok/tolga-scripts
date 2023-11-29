@@ -540,13 +540,14 @@ download_and_install_code_tv() {
 
 }
 
+# Function to download and install a package
 download_and_install() {
     url="$1"
     location="$2"
     package_name="$3"
 
     # Check if the package is already installed
-    if command -v "$package_name" &>/dev/null; then
+    if sudo dnf list installed "$package_name" &>/dev/null; then
         echo "$package_name is already installed. Skipping installation."
         return
     fi
