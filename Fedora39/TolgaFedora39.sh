@@ -540,6 +540,24 @@ download_and_install_code_tv() {
 
 }
 
+download_and_install() {
+    url="$1"
+    location="$2"
+    package_name="$3"
+
+    # Check if the package is already installed
+    if command -v "$package_name" &>/dev/null; then
+        echo "$package_name is already installed. Skipping installation."
+        return
+    fi
+
+    # Download the package
+    wget "$url" -O "$location"
+
+    # Install the package
+    sudo dnf install -y "$location"
+}
+
 install_apps() {
     display_message "Installing afew personal apps..."
 
@@ -551,6 +569,7 @@ install_apps() {
     sudo dnf swap libavcodec-free libavcodec-freeworld
 
     # Start earlyloom services
+    display_message "Starting earlyloom services"
     sudo systemctl start earlyoom
     sudo systemctl enable earlyoom
 
@@ -569,7 +588,18 @@ install_apps() {
     rm ./WPS-FONTS.zip
     sudo fc-cache -f -v
 
+    sudo dnf install fontconfig-font-replacements -y --skip-broken && sudo dnf install fontconfig-enhanced-defaults -y --skip-broken
+
+    # Install OpenRGB.
+    display_message "Installing OpenRGB"
+    sudo modprobe i2c-dev && sudo modprobe i2c-piix4 && sudo dnf install openrgb -y
+
+    # Install Docker
+    display_message "Installing Docker..this takes awhile"
+    sudo dnf install docker -y
+
     # Install google
+    display_message "Installing Google chrome"
     if command -v google-chrome &>/dev/null; then
         display_message "Google Chrome is already installed. Skipping installation."
     else
@@ -581,17 +611,19 @@ install_apps() {
     fi
 
     # Download and install TeamViewer
+    display_message "Download && install TeamViewer"
     teamviewer_url="https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm?utm_source=google&utm_medium=cpc&utm_campaign=au%7Cb%7Cpr%7C22%7Cjun%7Ctv-core-download-sn%7Cfree%7Ct0%7C0&utm_content=Download&utm_term=teamviewer+download"
     teamviewer_location="/tmp/teamviewer.x86_64.rpm"
     download_and_install "$teamviewer_url" "$teamviewer_location" "teamviewer"
 
     # Download and install Visual Studio Code
+    display_message "Download && install Vscode"
     vscode_url="https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm-x64"
     vscode_location="/tmp/vscode.rpm"
     download_and_install "$vscode_url" "$vscode_location" "code"
 
     # Install extra package
-    display_message "Extra rpm packages"
+    display_message "Installing Extra RPM packages"
     sudo dnf groupupdate -y sound-and-video
     sudo dnf group upgrade -y --with-optional Multimedia
     sudo dnf groupupdate -y sound-and-video --allowerasing --skip-broken
@@ -607,6 +639,7 @@ install_apps() {
     sudo dnf install samba samba-client samba-common cifs-utils samba-usershares -y
 
     # Enable and start SMB and NMB services
+    display_message "Starting SMB && NMB services"
     sudo systemctl enable smb.service nmb.service
     sudo systemctl start smb.service nmb.service
 
@@ -614,17 +647,20 @@ install_apps() {
     sudo systemctl restart smb.service nmb.service
 
     # Configure the firewall
+    display_message "Configure firewall"
     sudo firewall-cmd --add-service=samba --permanent
     sudo firewall-cmd --add-service=samba
     sudo firewall-cmd --runtime-to-permanent
     sudo firewall-cmd --reload
 
     # Set SELinux booleans
+    display_message "Setting SELINUX parameters"
     sudo setsebool -P samba_enable_home_dirs on
     sudo setsebool -P samba_export_all_rw on
     sudo setsebool -P smbd_anon_write 1
 
     # Create samba user/group
+    display_message "Create smb user and group"
     read -r -p "Set-up samba user & group's
 " -t 2 -n 1 -s
 
@@ -659,18 +695,26 @@ Continuing..." -t 1 -n 1 -s
     sudo chmod 1770 /var/lib/samba/usershares
 
     # Restore SELinux context for the usershares directory
+    display_message "Restore SELinux for usershares folder"
     sudo restorecon -R /var/lib/samba/usershares
 
     # Add the user to the sambashares group
+    display_message "Adding user to usershares"
     sudo gpasswd sambashares -a $username
 
     # Add the user to the sambashares group (alternative method)
     sudo usermod -aG sambashares $username
 
     # Restart SMB and NMB services (optional)
+    display_message "Restart SMB && NMB (samba) services"
     sudo systemctl restart smb.service nmb.service
 
+    # Set up SSH Server on Host
+    display_message "Setup SSH and start service.."
+    sudo systemctl enable sshd && sudo systemctl start sshd
+
     display_message "Installation completed."
+    sleep 2
 
     # Check for errors during installation
     if [ $? -eq 0 ]; then
