@@ -816,11 +816,6 @@ remove_kde_crap() {
     fi
 }
 
-# Function to display messages
-display_message() {
-    echo "INFO: $1"
-}
-
 # Function to display the main menu
 display_main_menu() {
     clear
