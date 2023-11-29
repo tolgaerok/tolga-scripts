@@ -861,9 +861,10 @@ kde_crap() {
         fi
     done
 
-    # Prompt the user to uninstall missing applications
+    # Prompt the user to uninstall missing applications..
     if [ ${#missing_apps[@]} -eq 0 ]; then
-        display_message "All specified applications are already installed."
+        display_message "All specified applications are already 
+     ==>   UN-INSTALLED   <=="
     else
         clear
         display_message "The following applications are not installed: ${missing_apps[@]}"
