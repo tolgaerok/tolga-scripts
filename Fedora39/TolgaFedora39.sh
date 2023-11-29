@@ -877,7 +877,8 @@ kde_crap() {
         fi
     else
         display_message "All specified applications are already 
-     ==>   UN-INSTALLED   <=="
+        ==>   UN-INSTALLED   <=="
+        sleep 2
     fi
 }
 
