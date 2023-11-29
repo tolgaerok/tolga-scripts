@@ -548,10 +548,12 @@ for_exit() {
     if command -v "$package_name" &>/dev/null; then
         # If the package is already installed, do nothing
         echo "$package_name is already installed. Exiting."
+        clear
     else
         # Install the package
         sudo dnf install -y "$package_name"
         echo "$package_name has been installed."
+        clear
     fi
 }
 
@@ -583,7 +585,7 @@ install_apps() {
     display_message "Installing afew personal apps..."
 
     # Install Apps
-    sudo dnf install -y dconf-editor duf earlyoom espeak ffmpeg-libs gedit git gimp gimp-devel grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch p7zip p7zip-plugins PackageKit pip rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip variety virt-manager wget
+    sudo dnf install -y dconf-editor duf earlyoom espeak ffmpeg-libs figlet gedit git gimp gimp-devel grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch p7zip p7zip-plugins PackageKit pip rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip variety virt-manager wget
     sudo dnf install -y digikam direnv python3 python3-pip rhythmbox sshpass
     sudo dnf install -y lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins python3 python3-pip rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip variety virt-manager wget
 
@@ -971,8 +973,10 @@ handle_user_input() {
         # Before exiting, check if duf and neofetch are installed
         for_exit "duf"
         for_exit "neofetch"
+        for_exit "figlet"
         duf
         neofetch
+        figlet Enjoy
         exit
         ;;
     *)
