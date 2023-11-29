@@ -791,24 +791,22 @@ remove_kde_crap() {
     apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail" "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler" "kaddressbook" "kcharselect" "konversation" "elisa-player" "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso" "kolourpaint" "krdc" "krfb")
 
     # Check if each application is installed
-    missing_apps=()
+    found_apps=()
     for app in "${apps[@]}"; do
-        if ! command -v "$app" &>/dev/null; then
-            missing_apps+=("$app")
+        if command -v "$app" &>/dev/null; then
+            found_apps+=("$app")
         fi
     done
 
-    # Prompt the user to uninstall missing applications
-    if [ ${#missing_apps[@]} -eq 0 ]; then
-        display_message "All specified applications are already installed."
+    # Display message based on whether applications are found
+    if [ ${#found_apps[@]} -eq 0 ]; then
+        display_message "No KDE applications found. Nothing to uninstall."
     else
-        clear
-        display_message "The following applications are not installed: ${missing_apps[@]}"
-        read -p "Do you want to uninstall them? (y/n): " uninstall_choice
+        echo "The following applications are installed: ${found_apps[@]}"
+        read -p "Bloatware found! Do you want to remove them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
             display_message "Uninstalling KDE bloatware"
-            sudo dnf remove "${missing_apps[@]}" -y
-
+            sudo dnf remove "${found_apps[@]}" -y
             display_message "Uninstallation completed."
             sleep 2
         else
@@ -816,7 +814,11 @@ remove_kde_crap() {
             sleep 2
         fi
     fi
+}
 
+# Function to display messages
+display_message() {
+    echo "INFO: $1"
 }
 
 # Function to display the main menu
