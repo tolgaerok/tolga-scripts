@@ -848,7 +848,7 @@ fix_grub() {
 }
 
 # Remove KDE Junk
-remove_kde_crap() {
+kde_crap() {
 
     # List of KDE applications to check..
     apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail" "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler" "kaddressbook" "kcharselect" "konversation" "elisa-player" "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso" "kolourpaint" "krdc" "krfb")
@@ -957,7 +957,7 @@ handle_user_input() {
     21) display_XDG_session ;;
     22) fix_grub ;;
     23) dnf5 ;;
-    24) remove_kde_crap ;;
+    24) kde_crap ;;
 
     0)
         # Before exiting, check if duf and neofetch are installed
@@ -968,8 +968,8 @@ handle_user_input() {
         duf
         neofetch
         figlet Fedora_39
-        end_time=$(date +%s)
-        time_taken=$((end_time - start_time))
+        #end_time=$(date +%s)
+        #time_taken=$((end_time - start_time))
         # # espeak -v en-us+m7 -s 165 "ThankYou! For! Using! My Configurations! Bye! "
         exit
         ;;
