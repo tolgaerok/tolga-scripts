@@ -936,7 +936,7 @@ kde_crap() {
         clear
         display_message "${RED}[✘]${NC} The following KDE applications are installed:"
         for app in "${found_apps[@]}"; do
-            echo -e "${RED}[✘]${NC}  - $app\n"
+            echo -e "${RED}[✘]${NC}  * $app\n"
         done
 
         read -p "Do you want to uninstall them? (y/n): " uninstall_choice
