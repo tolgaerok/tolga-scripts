@@ -931,26 +931,25 @@ kde_crap() {
     # Prompt the user to uninstall found applications...
     if [ ${#found_apps[@]} -gt 0 ]; then
         clear
-        display_message "${RED}[✘]${NC} The following applications are installed:"
+        display_message "${RED}[✘]${NC} The following KDE applications are installed:"
         for app in "${found_apps[@]}"; do
             echo -e "${RED}[✘]${NC}  - $app"
         done
 
         read -p "Do you want to uninstall them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
-            display_message "${RED}[✘]${NC} Uninstalling KDE bloatware"
-            sudo dnf remove "${found_apps[@]}" -y
-            sudo dnf autoremove -y
-            sleep 1
+            display_message "${RED}[✘]${NC} Uninstalling KDE applications..."
+            sudo dnf remove "${found_apps[@]}"
+            read -p "Do you want to perform autoremove? (y/n): " autoremove_choice
+            if [ "$autoremove_choice" == "y" ]; then
+                sudo dnf autoremove
+            fi
             display_message "${GREEN}[✔]${NC} Uninstallation completed."
-            sleep 2
         else
             display_message "${RED}[✘]${NC} No applications were uninstalled."
-            sleep 2
         fi
     else
-        display_message "${GREEN}[✔]${NC} Congratulations, no KDE Bloat-Ware Detected"
-        sleep 2
+        display_message "${GREEN}[✔]${NC} Congratulations, no KDE applications detected."
     fi
 }
 
