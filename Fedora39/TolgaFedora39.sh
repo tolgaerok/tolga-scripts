@@ -164,7 +164,7 @@ update_system() {
     sudo dnf install -y rpmconf
 
     # Install DNF plugins core (if not already installed)
-    sudo dnf install -y 8dnf-plugins-core
+    sudo dnf install -y dnf-plugins-core
 
     # Install required dependencies
     # sudo dnf install -y epel-release
