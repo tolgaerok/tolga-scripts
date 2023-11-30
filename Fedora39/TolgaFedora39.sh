@@ -972,6 +972,69 @@ kde_crap() {
     fi
 }
 
+# Function to start balance operation
+start_balance() {
+    if sudo btrfs balance start --full-balance / --limit 20G &>/dev/null; then
+        display_message "${GREEN}[✔]${NC} Balance operation started successfully."
+    else
+        display_message "${RED}[✘]${NC} Error: Failed to start balance operation."
+    fi
+}
+
+# Function to check balance status
+check_balance_status() {
+    sudo btrfs balance status /
+}
+
+# Function to start scrub operation
+start_scrub() {
+    if sudo btrfs scrub start / &>/dev/null; then
+        display_message "${GREEN}[✔]${NC} Scrub operation started successfully."
+    else
+        display_message "${RED}[✘]${NC} Error: Failed to start scrub operation."
+        sleep 3
+    fi
+}
+
+# Function to check scrub status
+check_scrub_status() {
+    sudo btrfs scrub status /
+}
+
+# Function to display the main menu
+btrfs_maint() {
+    # Loop to check balance and scrub status every 10 seconds
+    while true; do
+        # Clear the terminal for better readability
+        clear
+
+        # Start balance operation
+        start_balance
+
+        # Display balance status
+        echo -e "\n ${YELLOW}==>${NC} Checking balance status..."
+        check_balance_status
+
+        # Start scrub operation
+        start_scrub
+
+        # Display scrub status
+        echo -e "\n ${YELLOW}==>${NC} Checking scrub status..."
+        check_scrub_status
+
+        # Check if both operations have completed
+        if ! pgrep -f "sudo btrfs balance start" >/dev/null &&
+            ! pgrep -f "sudo btrfs scrub start" >/dev/null; then
+            display_message "${GREEN}[✔]${NC} Balance and scrub operations have completed."
+            sleep 3
+            break
+        fi
+
+        # Sleep for 10 seconds before checking again
+        sleep 10
+    done
+}
+
 # Template
 # display_message "${GREEN}[✔]${NC}
 # display_message "${RED}[✘]${NC}
@@ -1006,6 +1069,7 @@ display_main_menu() {
     echo -e "\e[33m 22.\e[0m \e[32mFix grub or rebuild grub          ( Checks and enables menu output to grub menu )\e[0m"
     echo -e "\e[33m 23.\e[0m \e[32mInstall new DNF5                  ( Testing for fedora 40/41 )\e[0m"
     echo -e "\e[33m 24.\e[0m \e[32mRemove KDE bloatware              ( Why are these installed? )\e[0m"
+    echo -e "\e[33m 25.\e[0m \e[32mPerform BTRFS balance and scrub operation on / partition    ( WARNING, backup important data incase )\e[0m"
 
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
     echo -e "\e[31m   (0) \e[0m \e[32mExit\e[0m"
@@ -1054,6 +1118,8 @@ handle_user_input() {
     22) fix_grub ;;
     23) dnf5 ;;
     24) kde_crap ;;
+    25) btrfs_maint ;;
+    #26) start_scrub ;;
 
     0)
         # Before exiting, check if duf and neofetch are installed
@@ -1070,7 +1136,7 @@ handle_user_input() {
         exit
         ;;
     *)
-        echo -e "Invalid choice. Please enter a number from 0 to 24."
+        echo -e "Invalid choice. Please enter a number from 0 to 26."
         sleep 2
         ;;
     esac
