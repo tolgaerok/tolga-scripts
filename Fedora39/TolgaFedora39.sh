@@ -952,7 +952,7 @@ kde_crap() {
             sudo dnf remove $packages_to_remove
             sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
             dnf clean all
-            
+
             read -p "Do you want to perform autoremove? (y/n): " autoremove_choice
             if [ "$autoremove_choice" == "y" ]; then
                 sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
@@ -968,6 +968,7 @@ kde_crap() {
         sudo dnf autoremove
         dnf clean all
         display_message "${GREEN}[✔]${NC} Congratulations, no KDE applications detected."
+        sleep 1
     fi
 }
 
