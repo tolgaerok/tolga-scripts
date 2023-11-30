@@ -914,11 +914,12 @@ kde_crap() {
 
     # List of KDE applications to check..
     apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail"
-        "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler"
-        "kaddressbook" "kcharselect" "konversation" "elisa-player"
-        "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso"
-        "kolourpaint" "krdc" "krfb" "kmail-account-wizard"
-        "pim-data-exporter" "pim-sieve-editor" "elisa")
+      "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler"
+      "kaddressbook" "kcharselect" "konversation" "elisa-player"
+      "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso"
+      "kolourpaint" "krdc" "krfb" "kmail-account-wizard"
+      "pim-data-exporter" "pim-sieve-editor" "elisa")
+
 
     # Check if each application is installed
     found_apps=()
