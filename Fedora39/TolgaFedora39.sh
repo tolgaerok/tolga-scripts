@@ -939,6 +939,7 @@ kde_crap() {
             echo -e "  ${RED}[✘]${NC}  ${YELLOW}==>${NC}  $app"
         done
 
+        echo ""
         read -p "Do you want to uninstall them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
             display_message "${RED}[✘]${NC} Uninstalling KDE applications..."
