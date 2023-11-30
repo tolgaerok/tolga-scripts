@@ -960,6 +960,8 @@ kde_crap() {
             display_message "${RED}[✘]${NC} No applications were uninstalled."
         fi
     else
+    sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*              
+                sudo dnf autoremove
         display_message "${GREEN}[✔]${NC} Congratulations, no KDE applications detected."
     fi
 }
