@@ -918,7 +918,7 @@ kde_crap() {
       "kaddressbook" "kcharselect" "konversation" "elisa-player"
       "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso"
       "kolourpaint" "krdc" "krfb" "kmail-account-wizard"
-      "pim-data-exporter" "pim-sieve-editor" "elisa")
+      "pim-data-exporter" "pim-sieve-editor" "elisa*")
 
 
     display_message "Checking for KDE applications..."
@@ -949,7 +949,7 @@ kde_crap() {
             
             sudo dnf remove $packages_to_remove
             sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter
-            
+
             read -p "Do you want to perform autoremove? (y/n): " autoremove_choice
             if [ "$autoremove_choice" == "y" ]; then                
                 sudo dnf autoremove
