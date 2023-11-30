@@ -974,11 +974,13 @@ kde_crap() {
 
 # Function to start balance operation
 start_balance() {
-    if sudo btrfs balance start --full-balance / --limit 20G &>/dev/null; then
-        display_message "${GREEN}[✔]${NC} Balance operation started successfully."
-    else
-        display_message "${RED}[✘]${NC} Error: Failed to start balance operation."
-    fi
+    display_message "${GREEN}[✔]${NC} Balance operation started successfully."
+    echo -e "\n ${YELLOW}==>${NC} This will take a very LONG time..."
+    check_balance_status
+    sudo btrfs balance start --full-balance / &
+    check_balance_status
+    display_message "${GREEN}[✔]${NC} Balance operation finished successfully."
+    sleep 3
 }
 
 # Function to check balance status
@@ -988,12 +990,13 @@ check_balance_status() {
 
 # Function to start scrub operation
 start_scrub() {
-    if sudo btrfs scrub start / &>/dev/null; then
-        display_message "${GREEN}[✔]${NC} Scrub operation started successfully."
-    else
-        display_message "${RED}[✘]${NC} Error: Failed to start scrub operation."
-        sleep 3
-    fi
+    display_message "${GREEN}[✔]${NC} Scrub operation started successfully."
+    check_scrub_status
+    sudo btrfs scrub start /
+    check_scrub_status
+    display_message "${GREEN}[✔]${NC} Scrub operation finished successfully."
+    sleep 3
+
 }
 
 # Function to check scrub status
@@ -1003,36 +1006,32 @@ check_scrub_status() {
 
 # Function to display the main menu
 btrfs_maint() {
-    # Loop to check balance and scrub status every 10 seconds
-    while true; do
-        # Clear the terminal for better readability
-        clear
 
-        # Start balance operation
-        start_balance
+    # Start balance operation
+    start_balance
 
-        # Display balance status
-        echo -e "\n ${YELLOW}==>${NC} Checking balance status..."
-        check_balance_status
+    # Display balance status
+    echo -e "\n ${YELLOW}==>${NC} Checking balance status..."
+    check_balance_status
 
-        # Start scrub operation
-        start_scrub
+    # Start scrub operation
+    start_scrub
 
-        # Display scrub status
-        echo -e "\n ${YELLOW}==>${NC} Checking scrub status..."
-        check_scrub_status
+    # Display scrub status
+    echo -e "\n ${YELLOW}==>${NC} Checking scrub status..."
+    check_scrub_status
 
-        # Check if both operations have completed
-        if ! pgrep -f "sudo btrfs balance start" >/dev/null &&
-            ! pgrep -f "sudo btrfs scrub start" >/dev/null; then
-            display_message "${GREEN}[✔]${NC} Balance and scrub operations have completed."
-            sleep 3
-            break
-        fi
+    # Check if both operations have completed
+    if ! pgrep -f "sudo btrfs balance start" >/dev/null &&
+        ! pgrep -f "sudo btrfs scrub start" >/dev/null; then
+        display_message "${GREEN}[✔]${NC} Balance and scrub operations have completed."
+        sleep 3
+        break
+    fi
 
-        # Sleep for 10 seconds before checking again
-        sleep 10
-    done
+    # Sleep for 10 seconds before checking again
+    sleep 2
+
 }
 
 # Template
