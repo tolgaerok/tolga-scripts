@@ -942,7 +942,11 @@ kde_crap() {
         read -p "Do you want to uninstall them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
             display_message "${RED}[✘]${NC} Uninstalling KDE applications..."
-            sudo dnf remove "${found_apps[@]}"
+            
+            # Build a string of package names
+            packages_to_remove=$(IFS=" "; echo "${found_apps[*]}")
+            
+            sudo dnf remove $packages_to_remove
             read -p "Do you want to perform autoremove? (y/n): " autoremove_choice
             if [ "$autoremove_choice" == "y" ]; then
                 sudo dnf autoremove
