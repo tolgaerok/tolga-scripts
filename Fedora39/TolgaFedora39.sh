@@ -979,8 +979,8 @@ start_balance() {
     check_balance_status
     sudo btrfs balance start --full-balance / &
     check_balance_status
-    display_message "${GREEN}[✔]${NC} Balance operation finished successfully."
-    sleep 3
+    display_message "${GREEN}[✔]${NC} Balance operation running in background."
+    sleep 6
 }
 
 # Function to check balance status
@@ -994,8 +994,8 @@ start_scrub() {
     check_scrub_status
     sudo btrfs scrub start /
     check_scrub_status
-    display_message "${GREEN}[✔]${NC} Scrub operation finished successfully."
-    sleep 3
+    display_message "${GREEN}[✔]${NC} Scrub operation running in background."
+    sleep 6
 
 }
 
@@ -1024,13 +1024,15 @@ btrfs_maint() {
     # Check if both operations have completed
     if ! pgrep -f "sudo btrfs balance start" >/dev/null &&
         ! pgrep -f "sudo btrfs scrub start" >/dev/null; then
-        display_message "${GREEN}[✔]${NC} Balance and scrub operations have completed."
-        sleep 3
+        display_message "${GREEN}[✔]${NC} Balance and scrub operations running in background."
+        sleep 5
         break
     fi
 
     # Sleep for 10 seconds before checking again
-    sleep 2
+    display_message "${GREEN}[✔]${NC} Balance and scrub operations running in background.
+    echo -e "\n ${YELLOW}==> ${NC} BTRFS balance and scrub will take a VERY LONG time ...\n"
+    sleep 10
 
 }
 
