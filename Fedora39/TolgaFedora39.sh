@@ -914,15 +914,14 @@ kde_crap() {
 
     # List of KDE applications to check..
     apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail"
-      "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler"
-      "kaddressbook" "kcharselect" "konversation" "elisa-player"
-      "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso"
-      "kolourpaint" "krdc" "krfb" "kmail-account-wizard"
-      "pim-data-exporter" "pim-sieve-editor" "elisa*")
-
+        "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler"
+        "kaddressbook" "kcharselect" "konversation" "elisa-player"
+        "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso"
+        "kolourpaint" "krdc" "krfb" "kmail-account-wizard"
+        "pim-data-exporter" "pim-sieve-editor" "elisa*")
 
     display_message "Checking for KDE applications..."
-    
+
     # Check if each application is installed
     found_apps=()
     for app in "${apps[@]}"; do
@@ -931,7 +930,7 @@ kde_crap() {
         fi
     done
 
-    # Prompt the user to uninstall found applications...
+    # Prompt the user to uninstall found applications
     if [ ${#found_apps[@]} -gt 0 ]; then
         clear
         display_message "${RED}[✘]${NC} The following KDE applications are installed:"
@@ -943,16 +942,19 @@ kde_crap() {
         read -p "Do you want to uninstall them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
             display_message "${RED}[✘]${NC} Uninstalling KDE applications..."
-            
+
             # Build a string of package names
-            packages_to_remove=$(IFS=" "; echo "${found_apps[*]}")
-            
+            packages_to_remove=$(
+                IFS=" "
+                echo "${found_apps[*]}"
+            )
+
             sudo dnf remove $packages_to_remove
             sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
 
             read -p "Do you want to perform autoremove? (y/n): " autoremove_choice
-            if [ "$autoremove_choice" == "y" ]; then  
-                sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*              
+            if [ "$autoremove_choice" == "y" ]; then
+                sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
                 sudo dnf autoremove
             fi
             display_message "${GREEN}[✔]${NC} Uninstallation completed."
@@ -960,8 +962,8 @@ kde_crap() {
             display_message "${RED}[✘]${NC} No applications were uninstalled."
         fi
     else
-    sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*              
-                sudo dnf autoremove
+        sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
+        sudo dnf autoremove
         display_message "${GREEN}[✔]${NC} Congratulations, no KDE applications detected."
     fi
 }
