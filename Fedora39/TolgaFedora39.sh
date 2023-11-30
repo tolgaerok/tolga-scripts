@@ -1034,7 +1034,7 @@ btrfs_maint() {
     fi
 
     # Sleep for 10 seconds before checking again
-    display_message "${GREEN}[✔]${NC} Balance and scrub operations running in background.
+    display_message "${GREEN}[✔]${NC} Balance and scrub operations running in background."
     echo -e "\n ${YELLOW}==> ${NC} BTRFS balance and scrub will take a VERY LONG time ...\n"
     sleep 10
 
@@ -1075,7 +1075,6 @@ display_main_menu() {
     echo -e "\e[33m 23.\e[0m \e[32mInstall new DNF5                                             ( Testing for fedora 40/41 )\e[0m"
     echo -e "\e[33m 24.\e[0m \e[32mRemove KDE bloatware                                         ( Why are these installed? )\e[0m"
     echo -e "\e[33m 25.\e[0m \e[32mPerform BTRFS balance and scrub operation on / partition     ( !! WARNING, backup important data incase, 5 min operation )\e[0m"
-
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
     echo -e "\e[31m   (0) \e[0m \e[32mExit\e[0m"
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
