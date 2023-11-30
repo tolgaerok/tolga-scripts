@@ -950,6 +950,7 @@ kde_crap() {
             sudo dnf remove $packages_to_remove
             read -p "Do you want to perform autoremove? (y/n): " autoremove_choice
             if [ "$autoremove_choice" == "y" ]; then
+                sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter
                 sudo dnf autoremove
             fi
             display_message "${GREEN}[✔]${NC} Uninstallation completed."
