@@ -137,7 +137,7 @@ change_hotname() {
 
 # Template
 # display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC} 
+# display_message "${RED}[✘]${NC}
 
 # Function to install RPM Fusion
 install_rpmfusion() {
@@ -206,7 +206,7 @@ install_firmware() {
 
 # Template
 # display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC} 
+# display_message "${RED}[✘]${NC}
 
 # Function to install GPU drivers with a reboot option on a 3 min timer, Nvidia && AMD
 install_gpu_drivers() {
@@ -355,7 +355,7 @@ install_multimedia_codecs() {
 
 # Template
 # display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC} 
+# display_message "${RED}[✘]${NC}
 
 # Function to install H/W Video Acceleration for AMD or Intel chipset
 install_hw_video_acceleration_amd_or_intel() {
@@ -438,7 +438,7 @@ set_utc_time() {
 
 # Template
 # display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC} 
+# display_message "${RED}[✘]${NC}
 
 # Function to disable mitigations, old fedora hack and used on nixos also, thanks chris titus!
 disable_mitigations() {
@@ -912,7 +912,12 @@ kde_crap() {
     NC='\e[0m' # No Color
 
     # List of KDE applications to check..
-    apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail" "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler" "kaddressbook" "kcharselect" "konversation" "elisa-player" "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso" "kolourpaint" "krdc" "krfb")
+    apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail"
+        "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler"
+        "kaddressbook" "kcharselect" "konversation" "elisa-player"
+        "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso"
+        "kolourpaint" "krdc" "krfb" "kmail-account-wizard"
+        "pim-data-exporter" "pim-sieve-editor" "elisa")
 
     # Check if each application is installed
     found_apps=()
@@ -927,7 +932,7 @@ kde_crap() {
         clear
         display_message "${RED}[✘]${NC} The following applications are installed:"
         for app in "${found_apps[@]}"; do
-            echo -e "${RED}[✘]${NC}  - $app\n"
+            echo -e "${RED}[✘]${NC}  - $app"
         done
 
         read -p "Do you want to uninstall them? (y/n): " uninstall_choice
