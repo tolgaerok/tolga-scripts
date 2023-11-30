@@ -948,7 +948,7 @@ kde_crap() {
             packages_to_remove=$(IFS=" "; echo "${found_apps[*]}")
             
             sudo dnf remove $packages_to_remove
-            sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter
+            sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
 
             read -p "Do you want to perform autoremove? (y/n): " autoremove_choice
             if [ "$autoremove_choice" == "y" ]; then                
