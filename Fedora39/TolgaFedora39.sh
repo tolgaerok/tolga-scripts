@@ -746,6 +746,7 @@ Continuing..." -t 1 -n 1 -s
     sudo mkdir /home/fedora39
     sudo chgrp samba /home/fedora39
     sudo chmod 770 /home/fedora39
+    sudo restorecon -R /home/fedora39
 
     # Create the sambashares group if it doesn't exist
     sudo groupadd -r sambashares
