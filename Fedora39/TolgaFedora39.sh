@@ -1001,7 +1001,7 @@ start_scrub() {
 
 }
 
-# Function to check scrub status
+# Function to check scrub status.
 check_scrub_status() {
     display_message "${GREEN}[✔]${NC} Scrub operation successfull"
     sudo btrfs scrub status /
