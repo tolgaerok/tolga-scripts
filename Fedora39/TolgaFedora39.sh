@@ -985,7 +985,9 @@ start_balance() {
 
 # Function to check balance status
 check_balance_status() {
+    display_message "${GREEN}[✔]${NC} Balance operation successfull"
     sudo btrfs balance status /
+    sleep 2
 }
 
 # Function to start scrub operation
@@ -1001,7 +1003,9 @@ start_scrub() {
 
 # Function to check scrub status
 check_scrub_status() {
+    display_message "${GREEN}[✔]${NC} Scrub operation successfull"
     sudo btrfs scrub status /
+    sleep 2
 }
 
 # Function to display the main menu
