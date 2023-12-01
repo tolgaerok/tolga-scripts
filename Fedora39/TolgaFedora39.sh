@@ -1044,7 +1044,7 @@ btrfs_maint() {
 # display_message "${GREEN}[✔]${NC}
 # display_message "${RED}[✘]${NC}
 
-# Function to display the main menu
+# Function to display the main menu.
 display_main_menu() {
     clear
     clear
