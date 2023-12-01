@@ -924,7 +924,7 @@ kde_crap() {
         "kaddressbook" "kcharselect" "konversation" "elisa-player"
         "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso"
         "kolourpaint" "krdc" "krfb" "kmail-account-wizard"
-        "pim-data-exporter" "pim-sieve-editor" "elisa*")
+        "pim-data-exporter" "pim-sieve-editor" "elisa*" "kdeconnectd")
 
     display_message "Checking for KDE applications..."
 
