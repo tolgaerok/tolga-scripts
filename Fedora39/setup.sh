@@ -27,12 +27,24 @@ if [ "$EUID" -eq 0 ] || [ "$(id -u)" -eq 0 ]; then
     exit 1
 fi
 
+# Assign a color variable based on the RANDOM number
+RED='\e[1;31m'
+GREEN='\e[1;32m'
+YELLOW='\e[1;33m'
+BLUE='\e[1;34m'
+CYAN='\e[1;36m'
+WHITE='\e[1;37m'
+ORANGE='\e[1;93m'
+NC='\e[0m'
+YELLOW='\e[1;33m'
+NC='\e[0m'
+
 # Function to display messages
 display_message() {
     clear
-    echo -e "\n                  Tolga's online fedora updater\n"
+    echo -e "\n                  Tolga's online fedora setup\n"
     echo -e "\e[34m|--------------------\e[33m Setup Complete \e[34m-------------------|"
-    echo -e "|      ===>    $1"
+    echo -e "|${YELLOW}==>${NC}    $1"
     echo -e "\e[34m|-------------------------------------------------------|\e[0m"
     echo "" 
     sleep 1

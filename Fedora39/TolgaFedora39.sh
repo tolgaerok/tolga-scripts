@@ -43,7 +43,7 @@ display_message() {
     clear
     echo -e "\n                  Tolga's online fedora updater\n"
     echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
-    echo -e "| ===>  $1"
+    echo -e "|${YELLOW}==>${NC}  $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
     echo ""
     sleep 1
@@ -52,19 +52,23 @@ display_message() {
 # Function to check and display errors
 check_error() {
     if [ $? -ne 0 ]; then
-        display_message "Error occurred. Exiting."
+        display_message "[${RED}✘${NC}] Error occurred !!"
         # Print the error details
         echo "Error details: $1"
-        exit 1
+        sleep 10
     fi
 }
+
+# Template
+# display_message "[${GREEN}✔${NC}] 
+# display_message "[${RED}✘${NC}] 
 
 # Function to configure faster updates in DNF
 configure_dnf() {
     # Define the path to the DNF configuration file
     DNF_CONF_PATH="/etc/dnf/dnf.conf"
 
-    display_message "Configuring faster updates in DNF..."
+    display_message "[${GREEN}✔${NC}]  Configuring faster updates in DNF..."
 
     # Check if the file exists before attempting to edit it
     if [ -e "$DNF_CONF_PATH" ]; then
@@ -89,12 +93,14 @@ metadata_expire_filter=repo:updates:12h
 EOL
 
         # Inform the user that the update is complete
-        display_message "DNF configuration updated for faster updates."
+        display_message "[${GREEN}✔${NC}] DNF configuration updated for faster updates."
         sudo dnf install -y fedora-workstation-repositories
         sudo dnf update && sudo dnf makecache
     else
         # Inform the user that the configuration file doesn't exist
-        display_message "Error: DNF configuration file not found at $DNF_CONF_PATH."
+        display_message "[${RED}✘${NC}] Error: DNF configuration file not found at $DNF_CONF_PATH."
+        check_error
+        sleep 3
     fi
 
 }
@@ -102,7 +108,7 @@ EOL
 # Install new dnf5
 dnf5() {
     # Ask the user if they want to install dnf5
-    display_message "Beta: DNF5 for fedora 40/41 testing"
+    display_message "${GREEN}=>${NC} Beta: DNF5 for fedora 40/41 testing"
     read -p "Do you want to install dnf5? (y/n): " install_dnf5
     if [[ $install_dnf5 =~ ^[Yy]$ ]]; then
         sudo dnf install dnf5 -y
@@ -136,8 +142,8 @@ change_hotname() {
 }
 
 # Template
-# display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC}
+# display_message "[${GREEN}✔${NC}] 
+# display_message "[${RED}✘${NC}] 
 
 # Function to install RPM Fusion
 install_rpmfusion() {
@@ -205,16 +211,16 @@ install_firmware() {
 }
 
 # Template
-# display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC}
+# display_message "[${GREEN}✔${NC}] 
+# display_message "[${RED}✘${NC}] 
 
 # Function to install GPU drivers with a reboot option on a 3 min timer, Nvidia && AMD
 install_gpu_drivers() {
-    display_message "${GREEN}[✔]${NC} Checking GPU and installing drivers..."
+    display_message "[${GREEN}✔${NC}]  Checking GPU and installing drivers..."
 
     # Check for NVIDIA GPU
     if lspci | grep -i nvidia &>/dev/null; then
-        display_message "${GREEN}[✔]${NC} NVIDIA GPU detected. Installing NVIDIA drivers..."
+        display_message "[${GREEN}✔${NC}]  NVIDIA GPU detected. Installing NVIDIA drivers..."
 
         sudo dnf update
         sudo dnf install dnf-plugins-core -y
@@ -271,7 +277,7 @@ install_gpu_drivers() {
         # Enable nvidia-modeset
         sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"
 
-        display_message "${GREEN}[✔]${NC} nvidia-modeset enabled successfully."
+        display_message "[${GREEN}✔${NC}]  nvidia-modeset enabled successfully."
 
         driver_version=$(modinfo -F version nvidia 2>/dev/null)
 
@@ -279,13 +285,13 @@ install_gpu_drivers() {
             display_message "NVIDIA driver version: $driver_version"
             sleep 1
         else
-            display_message "${RED}[✘]${NC} NVIDIA driver not found."
+            display_message "[${RED}✘${NC}] NVIDIA driver not found."
         fi
 
         sleep 2
 
         check_error "Failed to install NVIDIA drivers."
-        display_message "${GREEN}[✔]${NC} NVIDIA drivers installed successfully."
+        display_message "[${GREEN}✔${NC}]  NVIDIA drivers installed successfully."
     fi
 
     # Check for AMD GPU
@@ -338,7 +344,7 @@ optimize_battery() {
 
 # Function to install multimedia codecs, old fedora hacks to meet new standards (F39)
 install_multimedia_codecs() {
-    display_message "${GREEN}[✔]${NC} Installing multimedia codecs..."
+    display_message "[${GREEN}✔${NC}]  Installing multimedia codecs..."
 
     sudo dnf groupupdate 'core' 'multimedia' 'sound-and-video' --setopt='install_weak_deps=False' --exclude='PackageKit-gstreamer-plugin' --allowerasing && sync
     sudo dnf swap 'ffmpeg-free' 'ffmpeg' --allowerasing
@@ -350,12 +356,12 @@ install_multimedia_codecs() {
     sudo dnf config-manager --set-enabled fedora-cisco-openh264 -y
     sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264 -y
 
-    display_message "${GREEN}[✔]${NC} Multimedia codecs installed successfully."
+    display_message "[${GREEN}✔${NC}]  Multimedia codecs installed successfully."
 }
 
 # Template
-# display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC}
+# display_message "[${GREEN}✔${NC}] 
+# display_message "[${RED}✘${NC}] 
 
 # Function to install H/W Video Acceleration for AMD or Intel chipset
 install_hw_video_acceleration_amd_or_intel() {
@@ -363,15 +369,15 @@ install_hw_video_acceleration_amd_or_intel() {
 
     # Check for AMD chipset
     if lspci | grep -i amd &>/dev/null; then
-        display_message "${GREEN}[✔]${NC} AMD chipset detected. Installing AMD video acceleration..."
+        display_message "[${GREEN}✔${NC}]  AMD chipset detected. Installing AMD video acceleration..."
 
         sudo dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
         sudo dnf config-manager --set-enabled fedora-cisco-openh264
         sudo dnf install -y openh264 gstreamer1-plugin-openh264 mozilla-openh264
 
-        display_message "${GREEN}[✔]${NC} H/W Video Acceleration for AMD chipset installed successfully."
+        display_message "[${GREEN}✔${NC}]  H/W Video Acceleration for AMD chipset installed successfully."
     else
-        display_message "${RED}[✘]${NC}  No AMD chipset found. Pausing for user confirmation..."
+        display_message "[${RED}✘${NC}]  No AMD chipset found. Pausing for user confirmation..."
 
         # Pause for user confirmation
         read -p "Press Enter to check for Intel chipset..."
@@ -387,7 +393,7 @@ install_hw_video_acceleration_amd_or_intel() {
             # Install video acceleration packages
             sudo dnf install libva libva-utils xorg-x11-drv-intel -y
 
-            display_message "${GREEN}[✔]${NC} H/W Video Acceleration for Intel chipset installed successfully."
+            display_message "[${GREEN}✔${NC}]  H/W Video Acceleration for Intel chipset installed successfully."
             sleep 1
         else
             display_message "No Intel chipset found. Skipping H/W Video Acceleration installation."
@@ -410,17 +416,17 @@ cleanup_flatpak_cruft() {
 
 # Function to update Flatpak
 update_flatpak() {
-    display_message "${GREEN}[✔]${NC} Updating Flatpak..."
+    display_message "[${GREEN}✔${NC}]  Updating Flatpak..."
 
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     # flatpak update
     flatpak update --refresh
 
-    display_message "${GREEN}[✔]${NC} Executing Tolga's Flatpak's..."
+    display_message "[${GREEN}✔${NC}]  Executing Tolga's Flatpak's..."
     # Execute the Flatpak Apps installation script from the given URL
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/FlatPakApps.sh)"
 
-    display_message "${GREEN}[✔]${NC} Flatpak updated successfully."
+    display_message "[${GREEN}✔${NC}]  Flatpak updated successfully."
 
     # Call the cleanup function
     cleanup_flatpak_cruft
@@ -432,13 +438,13 @@ set_utc_time() {
 
     sudo timedatectl set-local-rtc '0'
 
-    display_message "${GREEN}[✔]${NC} UTC Time set successfully."
+    display_message "[${GREEN}✔${NC}]  UTC Time set successfully."
     sleep 1
 }
 
 # Template
-# display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC}
+# display_message "[${GREEN}✔${NC}] 
+# display_message "[${RED}✘${NC}] 
 
 # Function to disable mitigations, old fedora hack and used on nixos also, thanks chris titus!
 disable_mitigations() {
@@ -446,7 +452,7 @@ disable_mitigations() {
     sleep 1
 
     # Inform the user about the security risks
-    display_message "${RED}[✘]${NC} Note: Disabling mitigations can present security risks. Only proceed if you understand the implications."
+    display_message "[${RED}✘${NC}] Note: Disabling mitigations can present security risks. Only proceed if you understand the implications."
 
     # Ask for user confirmation
     read -p "Do you want to proceed? (y/n): " choice
@@ -454,15 +460,15 @@ disable_mitigations() {
     y | Y)
         # Disable mitigations
         sudo grubby --update-kernel=ALL --args="mitigations=off"
-        display_message "${GREEN}[✔]${NC} Mitigations disabled successfully."
+        display_message "[${GREEN}✔${NC}]  Mitigations disabled successfully."
         sleep 1
         ;;
     n | N)
-        display_message "${RED}[✘]${NC} Mitigations not disabled. Exiting."
+        display_message "[${RED}✘${NC}] Mitigations not disabled. Exiting."
         sleep 2
         ;;
     *)
-        display_message "${RED}[✘]${NC} Invalid choice. Exiting."
+        display_message "[${RED}✘${NC}] Invalid choice. Exiting."
         sleep 2
         ;;
     esac
@@ -485,13 +491,13 @@ enable_nvidia_modeset() {
     # Enable nvidia-modeset
     sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"
 
-    display_message "${GREEN}[✔]${NC} nvidia-modeset enabled successfully."
+    display_message "[${GREEN}✔${NC}]  nvidia-modeset enabled successfully."
     sleep 1
 }
 
 # Function to disable NetworkManager-wait-online.service
 disable_network_manager_wait_online() {
-    display_message "${GREEN}[✔]${NC} Disabling NetworkManager-wait-online.service..."
+    display_message "[${GREEN}✔${NC}]  Disabling NetworkManager-wait-online.service..."
 
     # Disable NetworkManager-wait-online.service
     sudo systemctl disable NetworkManager-wait-online.service
@@ -501,8 +507,8 @@ disable_network_manager_wait_online() {
 }
 
 # Template
-# display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC}
+# display_message "[${GREEN}✔${NC}] 
+# display_message "[${RED}✘${NC}] 
 
 # Function to disable Gnome Software from Startup Apps, if gnome is used... in theory will save heaps of RAM on startup
 disable_gnome_software_startup() {
@@ -529,23 +535,23 @@ use_flatpak_themes() {
 
 # Function to check if mitigations=off is present in GRUB configuration
 check_mitigations_grub() {
-    display_message "${GREEN}[✔]${NC} Checking if mitigations=off is present in GRUB configuration..."
+    display_message "[${GREEN}✔${NC}]  Checking if mitigations=off is present in GRUB configuration..."
 
     # Read the GRUB configuration
     grub_config=$(cat /etc/default/grub)
 
     # Check if mitigations=off is present
     if echo "$grub_config" | grep -q "mitigations=off"; then
-        display_message "${GREEN}[✔]${NC} Mitigations are currently disabled in GRUB configuration: ==>  ( Success! )"
+        display_message "[${GREEN}✔${NC}]  Mitigations are currently disabled in GRUB configuration: ==>  ( Success! )"
         sleep 1
     else
-        display_message "${RED}[✘]${NC} Warning: Mitigations are not currently disabled in GRUB configuration."
+        display_message "[${RED}✘${NC}] Warning: Mitigations are not currently disabled in GRUB configuration."
     fi
 }
 
 # Template
-# display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC}
+# display_message "[${GREEN}✔${NC}] 
+# display_message "[${RED}✘${NC}] 
 
 download_and_install_code_tv() {
     local download_url="$1"
@@ -557,18 +563,18 @@ download_and_install_code_tv() {
         sleep 1
     else
         # Download and install the application
-        display_message "${GREEN}[✔]${NC} Downloading $3..."
+        display_message "[${GREEN}✔${NC}]  Downloading $3..."
         wget -O "$download_location" "$download_url"
 
-        display_message "${GREEN}[✔]${NC} Installing $3..."
+        display_message "[${GREEN}✔${NC}]  Installing $3..."
         sudo dnf install "$download_location" -y
 
         # Cleanup
-        display_message "${GREEN}[✔]${NC} Cleaning up /tmp..."
+        display_message "[${GREEN}✔${NC}]  Cleaning up /tmp..."
         rm "$download_location"
         sleep 1
 
-        display_message "${GREEN}[✔]${NC} $3 installation completed."
+        display_message "[${GREEN}✔${NC}]  $3 installation completed."
         sleep 1
     fi
 
@@ -601,7 +607,7 @@ download_and_install() {
 
     # Check if the package is already installed
     if sudo dnf list installed "$package_name" &>/dev/null; then
-        display_message "${RED}[✘]${NC} $package_name is already installed. Skipping installation."
+        display_message "[${RED}✘${NC}] $package_name is already installed. Skipping installation."
         sleep 1
         return
     fi
@@ -614,11 +620,11 @@ download_and_install() {
 }
 
 # Template
-# display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC}
+# display_message "[${GREEN}✔${NC}] 
+# display_message "[${RED}✘${NC}] 
 
 install_apps() {
-    display_message "${GREEN}[✔]${NC} Installing afew personal apps..."
+    display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
 
     # Install Apps
     sudo dnf install -y dconf-editor duf earlyoom espeak ffmpeg-libs figlet gedit git gimp gimp-devel grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch p7zip p7zip-plugins PackageKit pip rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip variety virt-manager wget
@@ -629,12 +635,12 @@ install_apps() {
     sudo dnf swap libavcodec-free libavcodec-freeworld
 
     # Start earlyloom services
-    display_message "${GREEN}[✔]${NC} Starting earlyloom services"
+    display_message "[${GREEN}✔${NC}]  Starting earlyloom services"
     sudo systemctl start earlyoom
     sudo systemctl enable earlyoom
 
     # Install some fonts
-    display_message "${GREEN}[✔]${NC} Installing some fonts"
+    display_message "[${GREEN}✔${NC}]  Installing some fonts"
     sudo dnf install -y fontawesome-fonts powerline-fonts
     sudo mkdir -p ~/.local/share/fonts
     cd ~/.local/share/fonts && curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/DroidSansMono/DroidSansMNerdFont-Regular.otf
@@ -651,56 +657,56 @@ install_apps() {
     sudo dnf install fontconfig-font-replacements -y --skip-broken && sudo dnf install fontconfig-enhanced-defaults -y --skip-broken
 
     # Install OpenRGB.
-    display_message "${GREEN}[✔]${NC} Installing OpenRGB"
+    display_message "[${GREEN}✔${NC}]  Installing OpenRGB"
     sudo modprobe i2c-dev && sudo modprobe i2c-piix4 && sudo dnf install openrgb -y
 
     # Install Docker
-    display_message "${GREEN}[✔]${NC} Installing Docker..this takes awhile"
+    display_message "[${GREEN}✔${NC}]  Installing Docker..this takes awhile"
     sudo dnf install docker -y
 
     # Install google
-    display_message "${GREEN}[✔]${NC} Installing Google chrome"
+    display_message "[${GREEN}✔${NC}]  Installing Google chrome"
     if command -v google-chrome &>/dev/null; then
-        display_message "${RED}[✘]${NC} Google Chrome is already installed. Skipping installation."
+        display_message "[${RED}✘${NC}] Google Chrome is already installed. Skipping installation."
         sleep 1
     else
         # Install Google Chrome
-        display_message "${GREEN}[✔]${NC} Installing Google Chrome browser..."
+        display_message "[${GREEN}✔${NC}]  Installing Google Chrome browser..."
         wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
         sudo dnf install -y ./google-chrome-stable_current_x86_64.rpm
         rm -f google-chrome-stable_current_x86_64.rpm
     fi
 
     # Download and install TeamViewer
-    display_message "${GREEN}[✔]${NC} Downloading && install TeamViewer"
+    display_message "[${GREEN}✔${NC}]  Downloading && install TeamViewer"
     teamviewer_url="https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm?utm_source=google&utm_medium=cpc&utm_campaign=au%7Cb%7Cpr%7C22%7Cjun%7Ctv-core-download-sn%7Cfree%7Ct0%7C0&utm_content=Download&utm_term=teamviewer+download"
     teamviewer_location="/tmp/teamviewer.x86_64.rpm"
     download_and_install "$teamviewer_url" "$teamviewer_location" "teamviewer"
 
     # Download and install Visual Studio Code
-    display_message "${GREEN}[✔]${NC} Downloading && install Vscode"
+    display_message "[${GREEN}✔${NC}]  Downloading && install Vscode"
     vscode_url="https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm-x64"
     vscode_location="/tmp/vscode.rpm"
     download_and_install "$vscode_url" "$vscode_location" "code"
 
     # Install extra package
-    display_message "${GREEN}[✔]${NC} Installing Extra RPM packages"
+    display_message "[${GREEN}✔${NC}]  Installing Extra RPM packages"
     sudo dnf groupupdate -y sound-and-video
     sudo dnf group upgrade -y --with-optional Multimedia
     sudo dnf groupupdate -y sound-and-video --allowerasing --skip-broken
     sudo dnf groupupdate multimedia sound-and-video
 
     # Cleanup
-    display_message "${GREEN}[✔]${NC} Cleaning up downloaded /tmp folder"
+    display_message "[${GREEN}✔${NC}]  Cleaning up downloaded /tmp folder"
     rm "$download_location"
 
-    display_message "${GREEN}[✔]${NC} Installing SAMBA and dependencies"
+    display_message "[${GREEN}✔${NC}]  Installing SAMBA and dependencies"
 
     # Install Samba and its dependencies
     sudo dnf install samba samba-client samba-common cifs-utils samba-usershares -y
 
     # Enable and start SMB and NMB services
-    display_message "${GREEN}[✔]${NC} SMB && NMB services started"
+    display_message "[${GREEN}✔${NC}]  SMB && NMB services started"
     sudo systemctl enable smb.service nmb.service
     sudo systemctl start smb.service nmb.service
 
@@ -708,20 +714,20 @@ install_apps() {
     sudo systemctl restart smb.service nmb.service
 
     # Configure the firewall
-    display_message "${GREEN}[✔]${NC} Firewall Configured"
+    display_message "[${GREEN}✔${NC}]  Firewall Configured"
     sudo firewall-cmd --add-service=samba --permanent
     sudo firewall-cmd --add-service=samba
     sudo firewall-cmd --runtime-to-permanent
     sudo firewall-cmd --reload
 
     # Set SELinux booleans
-    display_message "${GREEN}[✔]${NC} SELINUX parameters set "
+    display_message "[${GREEN}✔${NC}]  SELINUX parameters set "
     sudo setsebool -P samba_enable_home_dirs on
     sudo setsebool -P samba_export_all_rw on
     sudo setsebool -P smbd_anon_write 1
 
     # Create samba user/group
-    display_message "${GREEN}[✔]${NC} Create smb user and group"
+    display_message "[${GREEN}✔${NC}]  Create smb user and group"
     read -r -p "Set-up samba user & group's
 " -t 2 -n 1 -s
 
@@ -757,84 +763,84 @@ Continuing..." -t 1 -n 1 -s
     sudo chmod 1770 /var/lib/samba/usershares
 
     # Restore SELinux context for the usershares directory
-    display_message "${GREEN}[✔]${NC} Restore SELinux for usershares folder"
+    display_message "[${GREEN}✔${NC}]  Restore SELinux for usershares folder"
     sudo restorecon -R /var/lib/samba/usershares
 
     # Add the user to the sambashares group
-    display_message "${GREEN}[✔]${NC} Adding user to usershares"
+    display_message "[${GREEN}✔${NC}]  Adding user to usershares"
     sudo gpasswd sambashares -a $username
 
     # Add the user to the sambashares group (alternative method)
     sudo usermod -aG sambashares $username
 
     # Restart SMB and NMB services (optional)
-    display_message "${GREEN}[✔]${NC} Restart SMB && NMB (samba) services"
+    display_message "[${GREEN}✔${NC}]  Restart SMB && NMB (samba) services"
     sudo systemctl restart smb.service nmb.service
 
     # Set up SSH Server on Host
-    display_message "${GREEN}[✔]${NC} Setup SSH and start service.."
+    display_message "[${GREEN}✔${NC}]  Setup SSH and start service.."
     sudo systemctl enable sshd && sudo systemctl start sshd
 
-    display_message "${GREEN}[✔]${NC} Installation completed."
+    display_message "[${GREEN}✔${NC}]  Installation completed."
     sleep 2
 
     # Check for errors during installation
     if [ $? -eq 0 ]; then
         display_message "Apps installed successfully."
     else
-        display_message "${RED}[✘]${NC} Error: Unable to install Apps."
+        display_message "[${RED}✘${NC}] Error: Unable to install Apps."
     fi
 }
 
 # Template
-# display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC}
+# display_message "[${GREEN}✔${NC}] 
+# display_message "[${RED}✘${NC}] 
 
 cleanup_fedora() {
     # Clean package cache
-    display_message "${GREEN}[✔]${NC} Time to clean up system..."
+    display_message "[${GREEN}✔${NC}]  Time to clean up system..."
     sudo dnf clean all
 
     # Remove unnecessary dependencies
     sudo dnf autoremove -y
 
     # Sort the lists of installed packages and packages to keep
-    display_message "${GREEN}[✔]${NC} Sorting out list of installed packages and packages to keep..."
+    display_message "[${GREEN}✔${NC}]  Sorting out list of installed packages and packages to keep..."
     comm -23 <(sudo dnf repoquery --installonly --latest-limit=-1 -q | sort) <(sudo dnf list installed | awk '{print $1}' | sort) >/tmp/orphaned-pkgs
 
     if [ -s /tmp/orphaned-pkgs ]; then
         sudo dnf remove $(cat /tmp/orphaned-pkgs) -y --skip-broken
     else
-        display_message "${GREEN}[✔]${NC} Congratulations, no orphaned packages found."
+        display_message "[${GREEN}✔${NC}]  Congratulations, no orphaned packages found."
     fi
 
     # Clean up temporary files
-    display_message "${GREEN}[✔]${NC} Clean up temporary files ..."
+    display_message "[${GREEN}✔${NC}]  Clean up temporary files ..."
     sudo rm -rf /tmp/orphaned-pkgs
 
-    display_message "${GREEN}[✔]${NC} Trimming all mount points on SSD"
+    display_message "[${GREEN}✔${NC}]  Trimming all mount points on SSD"
     sudo fstrim -av
 
     echo -e "\e[1;32m[✔]\e[0m Restarting kernel tweaks...\n"
     sleep 1
     sudo sysctl -p
 
-    display_message "${GREEN}[✔]${NC} Cleanup complete, ENJOY!"
+    display_message "[${GREEN}✔${NC}]  Cleanup complete, ENJOY!"
     sleep 2
 }
 
 # Template
-# display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC}
+# display_message "[${GREEN}✔${NC}] 
+# display_message "[${RED}✘${NC}] 
 
 fix_chrome() {
-    display_message "${GREEN}[✔]${NC} Applying chrome HW accelerations issue for now"
+    display_message "[${GREEN}✔${NC}]  Applying chrome HW accelerations issue for now"
     # Prompt user for reboot or continue
     read -p "Do you want to down grade mesa dlibs now? (y/n): " choice
     case "$choice" in
     y | Y)
         # Apply fix
-        display_message "${GREEN}[✔]${NC} Applied"
+        display_message "[${GREEN}✔${NC}]  Applied"
         sudo sudo dnf downgrade mesa-libGL
         sudo rm -rf ./config/google-chrome
         sudo rm -rf ./cache/google-chrome
@@ -848,7 +854,7 @@ fix_chrome() {
         display_message "Fix skipped. Continuing with the script."
         ;;
     *)
-        display_message "${RED}[✘]${NC} Invalid choice. Continuing with the script."
+        display_message "[${RED}✘${NC}] Invalid choice. Continuing with the script."
         ;;
     esac
 
@@ -860,8 +866,8 @@ fix_chrome() {
 }
 
 # Template
-# display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC}
+# display_message "[${GREEN}✔${NC}] 
+# display_message "[${RED}✘${NC}] 
 
 display_XDG_session() {
     session=$XDG_SESSION_TYPE
@@ -882,7 +888,7 @@ fix_grub() {
     uefi_enabled=$(test -d /sys/firmware/efi && echo "UEFI" || echo "BIOS/Legacy")
 
     # Display information about GRUB configuration
-    display_message "${GREEN}[✔]${NC} Current GRUB configuration:"
+    display_message "[${GREEN}✔${NC}]  Current GRUB configuration:"
     echo "  - GRUB_TIMEOUT_STYLE: $(grep '^GRUB_TIMEOUT_STYLE' /etc/default/grub | cut -d '=' -f2)"
     echo "  - System firmware: $uefi_enabled"
 
@@ -933,7 +939,7 @@ kde_crap() {
     # Prompt the user to uninstall found applications
     if [ ${#found_apps[@]} -gt 0 ]; then
         clear
-        display_message "${RED}[✘]${NC} The following KDE applications are installed:"
+        display_message "[${RED}✘${NC}] The following KDE applications are installed:"
         for app in "${found_apps[@]}"; do
             echo -e "  ${RED}[✘]${NC}  ${YELLOW}==>${NC}  $app"
         done
@@ -941,7 +947,7 @@ kde_crap() {
         echo ""
         read -p "Do you want to uninstall them? (y/n): " uninstall_choice
         if [ "$uninstall_choice" == "y" ]; then
-            display_message "${RED}[✘]${NC} Uninstalling KDE applications..."
+            display_message "[${RED}✘${NC}] Uninstalling KDE applications..."
 
             # Build a string of package names
             packages_to_remove=$(
@@ -959,51 +965,51 @@ kde_crap() {
                 sudo dnf autoremove
                 dnf clean all
             fi
-            display_message "${GREEN}[✔]${NC} Uninstallation completed."
+            display_message "[${GREEN}✔${NC}]  Uninstallation completed."
         else
-            display_message "${RED}[✘]${NC} No applications were uninstalled."
+            display_message "[${RED}✘${NC}] No applications were uninstalled."
         fi
     else
         sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
         sudo dnf autoremove
         dnf clean all
-        display_message "${GREEN}[✔]${NC} Congratulations, no KDE applications detected."
+        display_message "[${GREEN}✔${NC}]  Congratulations, no KDE applications detected."
         sleep 1
     fi
 }
 
 # Function to start balance operation
 start_balance() {
-    display_message "${GREEN}[✔]${NC} Balance operation started successfully."
+    display_message "[${GREEN}✔${NC}]  Balance operation started successfully."
     echo -e "\n ${YELLOW}==>${NC} This will take a very LONG time..."
     check_balance_status
     sudo btrfs balance start --full-balance / &
     check_balance_status
-    display_message "${GREEN}[✔]${NC} Balance operation running in background."
+    display_message "[${GREEN}✔${NC}]  Balance operation running in background."
     sleep 6
 }
 
 # Function to check balance status
 check_balance_status() {
-    display_message "${GREEN}[✔]${NC} Balance operation successfull"
+    display_message "[${GREEN}✔${NC}]  Balance operation successfull"
     sudo btrfs balance status /
     sleep 2
 }
 
 # Function to start scrub operation
 start_scrub() {
-    display_message "${GREEN}[✔]${NC} Scrub operation started successfully."
+    display_message "[${GREEN}✔${NC}]  Scrub operation started successfully."
     check_scrub_status
     sudo btrfs scrub start /
     check_scrub_status
-    display_message "${GREEN}[✔]${NC} Scrub operation running in background."
+    display_message "[${GREEN}✔${NC}]  Scrub operation running in background."
     sleep 6
 
 }
 
 # Function to check scrub status.
 check_scrub_status() {
-    display_message "${GREEN}[✔]${NC} Scrub operation successfull"
+    display_message "[${GREEN}✔${NC}]  Scrub operation successfull"
     sudo btrfs scrub status /
     sleep 2
 }
@@ -1028,21 +1034,21 @@ btrfs_maint() {
     # Check if both operations have completed
     if ! pgrep -f "sudo btrfs balance start" >/dev/null &&
         ! pgrep -f "sudo btrfs scrub start" >/dev/null; then
-        display_message "${GREEN}[✔]${NC} Balance and scrub operations running in background."
+        display_message "[${GREEN}✔${NC}]  Balance and scrub operations running in background."
         sleep 5
         break
     fi
 
     # Sleep for 10 seconds before checking again
-    display_message "${GREEN}[✔]${NC} Balance and scrub operations running in background."
+    display_message "[${GREEN}✔${NC}]  Balance and scrub operations running in background."
     echo -e "\n ${YELLOW}==> ${NC} BTRFS balance and scrub will take a VERY LONG time ...\n"
     sleep 10
 
 }
 
 # Template
-# display_message "${GREEN}[✔]${NC}
-# display_message "${RED}[✘]${NC}
+# display_message "[${GREEN}✔${NC}] 
+# display_message "[${RED}✘${NC}] 
 
 # Function to display the main menu.
 display_main_menu() {
