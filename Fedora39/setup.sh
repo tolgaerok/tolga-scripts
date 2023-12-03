@@ -88,4 +88,4 @@ rm /tmp/MY-TOOLS.zip
 clear
 display_message "Files copied and permissions set successfully."
 sleep 1
-display_message "Check new shortcut on your desktop"
+display_message "Check new shortcut(s) on your desktop"
