@@ -52,14 +52,17 @@ display_message() {
 
 # Define URLs
 DESKTOP_FILE_URL="https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/my-online-fedora.desktop"
+DESKTOP_FILE_URL2="https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/google-chrome.desktop"
 MY_TOOLS_URL="https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/MY-TOOLS.zip"
 
 # Paths
 DESKTOP_FILE_DEST="$HOME/Desktop/my-online-fedora.desktop"
+DESKTOP_FILE_DEST2="$HOME/Desktop/google-chrome.desktop"
 MY_TOOLS_DEST="$HOME/.config/MY-TOOLS"
 
 # Download and copy desktop file
 curl -o "$DESKTOP_FILE_DEST" "$DESKTOP_FILE_URL"
+curl -o "$DESKTOP_FILE_DEST2" "$DESKTOP_FILE_URL2"
 
 # Hardcode the full path to the icon in the desktop file
 ICON_PATH="/$HOME/.config/MY-TOOLS/images/tolga-profile-5.png"
@@ -76,6 +79,7 @@ unzip -q -o "/tmp/MY-TOOLS.zip" -d "$HOME/.config/"
 
 # Set permissions
 chmod +x "$DESKTOP_FILE_DEST"
+chmod +x "$DESKTOP_FILE_DEST2"
 chmod -R +xw "$HOME/.config/MY-TOOLS"
 
 # Clean up
