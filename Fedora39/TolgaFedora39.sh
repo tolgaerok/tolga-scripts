@@ -636,6 +636,8 @@ install_apps() {
     sudo dnf install ffmpeg libavcodec-freeworld --best --allowerasing
     sudo dnf swap libavcodec-free libavcodec-freeworld
 
+    
+
     # Start earlyloom services
     display_message "[${GREEN}✔${NC}]  Starting earlyloom services"
     sudo systemctl start earlyoom
@@ -665,6 +667,28 @@ install_apps() {
     # Install Docker
     display_message "[${GREEN}✔${NC}]  Installing Docker..this takes awhile"
     sudo dnf install docker -y
+
+    # Install Btrfs
+    display_message "[${GREEN}✔${NC}]  Installing btrfs assistant.."
+    package_url="https://kojipkgs.fedoraproject.org//packages/btrfs-assistant/1.8/2.fc39/x86_64/btrfs-assistant-1.8-2.fc39.x86_64.rpm"
+package_name=$(echo "$package_url" | awk -F'/' '{print $NF}')
+
+# Check if the package is installed
+if rpm -q "$package_name" > /dev/null; then
+    display_message "[${RED}✘${NC}] $package_name is already installed."
+    sleep 2
+else
+    # Package is not installed, so proceed with the installation
+    display_message "[${GREEN}✔${NC}]  $package_name is not installed. Installing..."
+    sudo dnf install -y "$package_url"
+    if [ $? -eq 0 ]; then
+        display_message "[${GREEN}✔${NC}]  $package_name has been successfully installed."
+        sleep 1
+    else
+        display_message "[${RED}✘${NC}] Failed to install $package_name."
+        sleep 1
+    fi
+fi
 
     # Install google
     display_message "[${GREEN}✔${NC}]  Installing Google chrome"
