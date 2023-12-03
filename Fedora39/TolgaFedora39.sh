@@ -629,9 +629,10 @@ install_apps() {
     display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
 
     # Install Apps
-    sudo dnf install -y dconf-editor duf earlyoom espeak ffmpeg-libs figlet gedit git gimp gimp-devel grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch p7zip p7zip-plugins PackageKit pip rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip variety virt-manager wget
-    sudo dnf install -y digikam direnv python3 python3-pip rhythmbox sshpass
-    sudo dnf install -y lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins python3 python3-pip rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip variety virt-manager wget
+    sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
+    sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip 
+    sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip
+    sudo dnf install -y variety virt-manager wget
 
     sudo dnf install ffmpeg libavcodec-freeworld --best --allowerasing
     sudo dnf swap libavcodec-free libavcodec-freeworld
