@@ -625,6 +625,18 @@ download_and_install() {
 # display_message "[${GREEN}✔${NC}] 
 # display_message "[${RED}✘${NC}] 
 
+# Function to check port 22
+function check_port22() {
+    if pgrep sshd > /dev/null; then
+        display_message "[${GREEN}✔${NC}] SSH service is running on port 22\n"
+        sleep 1
+    else
+        display_message "${RED}[✘]${NC} SSH service is not running on port 22. Install and enable SSHD service.\n"
+        sleep 2
+        check_error
+    fi
+}
+
 install_apps() {
     display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
 
@@ -633,7 +645,7 @@ install_apps() {
     sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip 
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip
     sudo dnf install -y variety virt-manager wget
-    sudo yum install -y sshfs
+    sudo yum install -y sshfs fuse-sshfs rsync openssh-server openssh-clients 
 
     sudo dnf install ffmpeg libavcodec-freeworld --best --allowerasing
     sudo dnf swap libavcodec-free libavcodec-freeworld
@@ -1074,6 +1086,25 @@ btrfs_maint() {
 
 }
 
+check_internet_connection() {
+    echo -e "${YELLOW}[*]${NC} Checking Internet Connection .."
+    echo ""
+
+    if curl -s -m 10 https://www.google.com > /dev/null || curl -s -m 10 https://www.github.com > /dev/null; then
+        display_message "${GREEN}[✔]${NC} Network connection is OK ${GREEN}[✔]${NC}"
+        
+    else
+        display_message "${RED}[✘]${NC} Network connection is not available ${RED}[✘]${NC}"
+        sleep 1
+    fi
+
+    echo ""
+    sleep 1
+    echo -e "${YELLOW}[*]${NC} Executing menu ..."
+    sleep 2
+    clear
+}
+
 # Template
 # display_message "[${GREEN}✔${NC}] 
 # display_message "[${RED}✘${NC}] 
@@ -1179,6 +1210,8 @@ handle_user_input() {
         ;;
     esac
 }
+
+check_internet_connection
 
 # Main loop for the menu
 while true; do
