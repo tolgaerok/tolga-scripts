@@ -626,7 +626,7 @@ download_and_install() {
 # display_message "[${RED}✘${NC}] 
 
 # Function to check port 22
-function check_port22() {
+ check_port22() {
     if pgrep sshd > /dev/null; then
         display_message "[${GREEN}✔${NC}] SSH service is running on port 22\n"
         sleep 1
@@ -650,7 +650,13 @@ install_apps() {
     sudo dnf install ffmpeg libavcodec-freeworld --best --allowerasing
     sudo dnf swap libavcodec-free libavcodec-freeworld
 
-    
+    # Start and enable SSH
+    sudo systemctl start sshd
+    sudo systemctl enable sshd
+    display_message "[${GREEN}✔${NC}]  Checking SSh port"
+    sleep 1
+    check_port22
+    sudo systemctl status sshd    
 
     # Start earlyloom services
     display_message "[${GREEN}✔${NC}]  Starting earlyloom services"
@@ -1087,12 +1093,14 @@ btrfs_maint() {
 }
 
 check_internet_connection() {
-    echo -e "${YELLOW}[*]${NC} Checking Internet Connection .."
-    echo ""
+    display_message "${YELLOW}[*]${NC} Checking Internet Connection .."
+    sleep 1
+    display_message "${GREEN}[✔]${NC} connecting to google.. ${GREEN}[✔]${NC}"
+    sleep 1
 
     if curl -s -m 10 https://www.google.com > /dev/null || curl -s -m 10 https://www.github.com > /dev/null; then
         display_message "${GREEN}[✔]${NC} Network connection is OK ${GREEN}[✔]${NC}"
-        
+        sleep 1
     else
         display_message "${RED}[✘]${NC} Network connection is not available ${RED}[✘]${NC}"
         sleep 1
