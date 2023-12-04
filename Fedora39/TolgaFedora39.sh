@@ -671,8 +671,14 @@ install_apps() {
     wget https://github.com/tolgaerok/fonts-tolga/raw/main/WPS-FONTS.zip
     unzip WPS-FONTS.zip -d /usr/share/fonts
 
-    # Remove existing ZIP file
-    sudo rm -f "$zip_file"
+    zip_file="Apple-Fonts-San-Francisco-New-York-master.zip"
+
+    # Check if the ZIP file exists
+    if [ -f "$zip_file" ]; then
+        # Remove existing ZIP file
+        sudo rm -f "$zip_file"
+        echo "Existing ZIP file removed."
+    fi
 
     # Download the ZIP file
     curl -LJO https://github.com/tolgaerok/Apple-Fonts-San-Francisco-New-York/archive/refs/heads/master.zip
