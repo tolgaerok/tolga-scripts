@@ -633,6 +633,7 @@ install_apps() {
     sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip 
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip
     sudo dnf install -y variety virt-manager wget
+    sudo yum install -y sshfs
 
     sudo dnf install ffmpeg libavcodec-freeworld --best --allowerasing
     sudo dnf swap libavcodec-free libavcodec-freeworld
