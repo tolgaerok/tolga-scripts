@@ -628,7 +628,7 @@ download_and_install() {
 # Function to check port 22
  check_port22() {
     if pgrep sshd > /dev/null; then
-        display_message "[${GREEN}✔${NC}] SSH service is running on port 22\n"
+        display_message "[${GREEN}✔${NC}] SSH service is running on port 22"
         sleep 1
     else
         display_message "${RED}[✘]${NC} SSH service is not running on port 22. Install and enable SSHD service.\n"
@@ -668,14 +668,41 @@ install_apps() {
     sudo dnf install -y fontawesome-fonts powerline-fonts
     sudo mkdir -p ~/.local/share/fonts
     cd ~/.local/share/fonts && curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/DroidSansMono/DroidSansMNerdFont-Regular.otf
-    wget https://github.com/tolgaerok/fonts-tolga/raw/main/WPS-FONTS.zip
+    wget https://github.com/tolgaerok/fonts-tolga/raw/main/WPS-FONTS.zip    
     unzip WPS-FONTS.zip -d /usr/share/fonts
+   
+    
 
+# Remove existing ZIP file
+sudo rm -f "$zip_file"
+
+# Download the ZIP file
+curl -LJO https://github.com/tolgaerok/Apple-Fonts-San-Francisco-New-York/archive/refs/heads/master.zip
+
+# Check if the download was successful
+if [ -f "$zip_file" ]; then
+    # Unzip the contents to the system-wide fonts directory
+    sudo unzip -o "$zip_file" -d /usr/share/fonts/
+
+    # Update font cache
+    sudo fc-cache -f -v
+
+    # Remove the ZIP file
+    rm "$zip_file"
+
+   display_message "[${GREEN}✔${NC}] Apple fonts installed successfully."
+   sleep 1
+else
+    display_message "[${RED}✘${NC}] Download failed. Please check the URL and try again."
+    sleep 2
+fi
+
+    
     # Reloading Font
     sudo fc-cache -vf
 
     # Removing zip Files
-    rm ./WPS-FONTS.zip
+    rm ./WPS-FONTS.zip   
     sudo fc-cache -f -v
 
     sudo dnf install fontconfig-font-replacements -y --skip-broken && sudo dnf install fontconfig-enhanced-defaults -y --skip-broken
@@ -1095,11 +1122,11 @@ btrfs_maint() {
 check_internet_connection() {
     display_message "${YELLOW}[*]${NC} Checking Internet Connection .."
     sleep 1
-    display_message "${GREEN}[✔]${NC} connecting to google.. ${GREEN}[✔]${NC}"
+    display_message "${GREEN}[✔]${NC} connecting to google.."
     sleep 1
 
     if curl -s -m 10 https://www.google.com > /dev/null || curl -s -m 10 https://www.github.com > /dev/null; then
-        display_message "${GREEN}[✔]${NC} Network connection is OK ${GREEN}[✔]${NC}"
+        display_message "${GREEN}[✔]${NC} Network connection is OK "
         sleep 1
     else
         display_message "${RED}[✘]${NC} Network connection is not available ${RED}[✘]${NC}"
@@ -1109,7 +1136,7 @@ check_internet_connection() {
     echo ""
     sleep 1
     echo -e "${YELLOW}[*]${NC} Executing menu ..."
-    sleep 2
+    sleep 1
     clear
 }
 
