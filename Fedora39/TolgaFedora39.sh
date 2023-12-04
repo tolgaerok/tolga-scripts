@@ -60,8 +60,8 @@ check_error() {
 }
 
 # Template
-# display_message "[${GREEN}✔${NC}] 
-# display_message "[${RED}✘${NC}] 
+# display_message "[${GREEN}✔${NC}]
+# display_message "[${RED}✘${NC}]
 
 # Function to configure faster updates in DNF
 configure_dnf() {
@@ -114,7 +114,7 @@ dnf5() {
         sudo dnf install dnf5 -y
         sudo dnf5 update && sudo dnf5 makecache
         sudo dnf5 distro-sync --releasever=39 --refresh --disablerepo rawhide \
-  --enablerepo fedora --allowerasing --best 
+            --enablerepo fedora --allowerasing --best
 
         echo "In order to use dnf, you need to use sudo dnf5 update"
     else
@@ -144,8 +144,8 @@ change_hotname() {
 }
 
 # Template
-# display_message "[${GREEN}✔${NC}] 
-# display_message "[${RED}✘${NC}] 
+# display_message "[${GREEN}✔${NC}]
+# display_message "[${RED}✘${NC}]
 
 # Function to install RPM Fusion
 install_rpmfusion() {
@@ -213,8 +213,8 @@ install_firmware() {
 }
 
 # Template
-# display_message "[${GREEN}✔${NC}] 
-# display_message "[${RED}✘${NC}] 
+# display_message "[${GREEN}✔${NC}]
+# display_message "[${RED}✘${NC}]
 
 # Function to install GPU drivers with a reboot option on a 3 min timer, Nvidia && AMD
 install_gpu_drivers() {
@@ -362,8 +362,8 @@ install_multimedia_codecs() {
 }
 
 # Template
-# display_message "[${GREEN}✔${NC}] 
-# display_message "[${RED}✘${NC}] 
+# display_message "[${GREEN}✔${NC}]
+# display_message "[${RED}✘${NC}]
 
 # Function to install H/W Video Acceleration for AMD or Intel chipset
 install_hw_video_acceleration_amd_or_intel() {
@@ -445,8 +445,8 @@ set_utc_time() {
 }
 
 # Template
-# display_message "[${GREEN}✔${NC}] 
-# display_message "[${RED}✘${NC}] 
+# display_message "[${GREEN}✔${NC}]
+# display_message "[${RED}✘${NC}]
 
 # Function to disable mitigations, old fedora hack and used on nixos also, thanks chris titus!
 disable_mitigations() {
@@ -509,8 +509,8 @@ disable_network_manager_wait_online() {
 }
 
 # Template
-# display_message "[${GREEN}✔${NC}] 
-# display_message "[${RED}✘${NC}] 
+# display_message "[${GREEN}✔${NC}]
+# display_message "[${RED}✘${NC}]
 
 # Function to disable Gnome Software from Startup Apps, if gnome is used... in theory will save heaps of RAM on startup
 disable_gnome_software_startup() {
@@ -552,8 +552,8 @@ check_mitigations_grub() {
 }
 
 # Template
-# display_message "[${GREEN}✔${NC}] 
-# display_message "[${RED}✘${NC}] 
+# display_message "[${GREEN}✔${NC}]
+# display_message "[${RED}✘${NC}]
 
 download_and_install_code_tv() {
     local download_url="$1"
@@ -622,12 +622,12 @@ download_and_install() {
 }
 
 # Template
-# display_message "[${GREEN}✔${NC}] 
-# display_message "[${RED}✘${NC}] 
+# display_message "[${GREEN}✔${NC}]
+# display_message "[${RED}✘${NC}]
 
 # Function to check port 22
- check_port22() {
-    if pgrep sshd > /dev/null; then
+check_port22() {
+    if pgrep sshd >/dev/null; then
         display_message "[${GREEN}✔${NC}] SSH service is running on port 22"
         sleep 1
     else
@@ -642,10 +642,10 @@ install_apps() {
 
     # Install Apps
     sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
-    sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip 
+    sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip
     sudo dnf install -y variety virt-manager wget
-    sudo yum install -y sshfs fuse-sshfs rsync openssh-server openssh-clients 
+    sudo yum install -y sshfs fuse-sshfs rsync openssh-server openssh-clients
 
     sudo dnf install ffmpeg libavcodec-freeworld --best --allowerasing
     sudo dnf swap libavcodec-free libavcodec-freeworld
@@ -656,7 +656,7 @@ install_apps() {
     display_message "[${GREEN}✔${NC}]  Checking SSh port"
     sleep 1
     check_port22
-    sudo systemctl status sshd    
+    sudo systemctl status sshd
 
     # Start earlyloom services
     display_message "[${GREEN}✔${NC}]  Starting earlyloom services"
@@ -668,41 +668,38 @@ install_apps() {
     sudo dnf install -y fontawesome-fonts powerline-fonts
     sudo mkdir -p ~/.local/share/fonts
     cd ~/.local/share/fonts && curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/DroidSansMono/DroidSansMNerdFont-Regular.otf
-    wget https://github.com/tolgaerok/fonts-tolga/raw/main/WPS-FONTS.zip    
+    wget https://github.com/tolgaerok/fonts-tolga/raw/main/WPS-FONTS.zip
     unzip WPS-FONTS.zip -d /usr/share/fonts
-   
-    
 
-# Remove existing ZIP file
-sudo rm -f "$zip_file"
+    # Remove existing ZIP file
+    sudo rm -f "$zip_file"
 
-# Download the ZIP file
-curl -LJO https://github.com/tolgaerok/Apple-Fonts-San-Francisco-New-York/archive/refs/heads/master.zip
+    # Download the ZIP file
+    curl -LJO https://github.com/tolgaerok/Apple-Fonts-San-Francisco-New-York/archive/refs/heads/master.zip
 
-# Check if the download was successful
-if [ -f "$zip_file" ]; then
-    # Unzip the contents to the system-wide fonts directory
-    sudo unzip -o "$zip_file" -d /usr/share/fonts/
+    # Check if the download was successful
+    if [ -f "$zip_file" ]; then
+        # Unzip the contents to the system-wide fonts directory
+        sudo unzip -o "$zip_file" -d /usr/share/fonts/
 
-    # Update font cache
-    sudo fc-cache -f -v
+        # Update font cache
+        sudo fc-cache -f -v
 
-    # Remove the ZIP file
-    rm "$zip_file"
+        # Remove the ZIP file
+        rm "$zip_file"
 
-   display_message "[${GREEN}✔${NC}] Apple fonts installed successfully."
-   sleep 1
-else
-    display_message "[${RED}✘${NC}] Download failed. Please check the URL and try again."
-    sleep 2
-fi
+        display_message "[${GREEN}✔${NC}] Apple fonts installed successfully."
+        sleep 1
+    else
+        display_message "[${RED}✘${NC}] Download failed. Please check the URL and try again."
+        sleep 2
+    fi
 
-    
     # Reloading Font
     sudo fc-cache -vf
 
     # Removing zip Files
-    rm ./WPS-FONTS.zip   
+    rm ./WPS-FONTS.zip
     sudo fc-cache -f -v
 
     sudo dnf install fontconfig-font-replacements -y --skip-broken && sudo dnf install fontconfig-enhanced-defaults -y --skip-broken
@@ -718,24 +715,24 @@ fi
     # Install Btrfs
     display_message "[${GREEN}✔${NC}]  Installing btrfs assistant.."
     package_url="https://kojipkgs.fedoraproject.org//packages/btrfs-assistant/1.8/2.fc39/x86_64/btrfs-assistant-1.8-2.fc39.x86_64.rpm"
-package_name=$(echo "$package_url" | awk -F'/' '{print $NF}')
+    package_name=$(echo "$package_url" | awk -F'/' '{print $NF}')
 
-# Check if the package is installed
-if rpm -q "$package_name" > /dev/null; then
-    display_message "[${RED}✘${NC}] $package_name is already installed."
-    sleep 2
-else
-    # Package is not installed, so proceed with the installation
-    display_message "[${GREEN}✔${NC}]  $package_name is not installed. Installing..."
-    sudo dnf install -y "$package_url"
-    if [ $? -eq 0 ]; then
-        display_message "[${GREEN}✔${NC}]  $package_name has been successfully installed."
-        sleep 1
+    # Check if the package is installed
+    if rpm -q "$package_name" >/dev/null; then
+        display_message "[${RED}✘${NC}] $package_name is already installed."
+        sleep 2
     else
-        display_message "[${RED}✘${NC}] Failed to install $package_name."
-        sleep 1
+        # Package is not installed, so proceed with the installation
+        display_message "[${GREEN}✔${NC}]  $package_name is not installed. Installing..."
+        sudo dnf install -y "$package_url"
+        if [ $? -eq 0 ]; then
+            display_message "[${GREEN}✔${NC}]  $package_name has been successfully installed."
+            sleep 1
+        else
+            display_message "[${RED}✘${NC}] Failed to install $package_name."
+            sleep 1
+        fi
     fi
-fi
 
     # Install google
     display_message "[${GREEN}✔${NC}]  Installing Google chrome"
@@ -866,8 +863,8 @@ Continuing..." -t 1 -n 1 -s
 }
 
 # Template
-# display_message "[${GREEN}✔${NC}] 
-# display_message "[${RED}✘${NC}] 
+# display_message "[${GREEN}✔${NC}]
+# display_message "[${RED}✘${NC}]
 
 cleanup_fedora() {
     # Clean package cache
@@ -903,8 +900,8 @@ cleanup_fedora() {
 }
 
 # Template
-# display_message "[${GREEN}✔${NC}] 
-# display_message "[${RED}✘${NC}] 
+# display_message "[${GREEN}✔${NC}]
+# display_message "[${RED}✘${NC}]
 
 fix_chrome() {
     display_message "[${GREEN}✔${NC}]  Applying chrome HW accelerations issue for now"
@@ -939,8 +936,8 @@ fix_chrome() {
 }
 
 # Template
-# display_message "[${GREEN}✔${NC}] 
-# display_message "[${RED}✘${NC}] 
+# display_message "[${GREEN}✔${NC}]
+# display_message "[${RED}✘${NC}]
 
 display_XDG_session() {
     session=$XDG_SESSION_TYPE
@@ -1125,7 +1122,7 @@ check_internet_connection() {
     display_message "${GREEN}[✔]${NC} connecting to google.."
     sleep 1
 
-    if curl -s -m 10 https://www.google.com > /dev/null || curl -s -m 10 https://www.github.com > /dev/null; then
+    if curl -s -m 10 https://www.google.com >/dev/null || curl -s -m 10 https://www.github.com >/dev/null; then
         display_message "${GREEN}[✔]${NC} Network connection is OK "
         sleep 1
     else
@@ -1141,8 +1138,8 @@ check_internet_connection() {
 }
 
 # Template
-# display_message "[${GREEN}✔${NC}] 
-# display_message "[${RED}✘${NC}] 
+# display_message "[${GREEN}✔${NC}]
+# display_message "[${RED}✘${NC}]
 
 # Function to display the main menu.
 display_main_menu() {
