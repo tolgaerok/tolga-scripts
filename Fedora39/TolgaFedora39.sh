@@ -1129,7 +1129,7 @@ check_internet_connection() {
     display_message "${YELLOW}[*]${NC} Checking Internet Connection .."
     sleep 1
     display_message "${GREEN}[✔]${NC} connecting to google.."
-    sleep 1
+    
 
     if curl -s -m 10 https://www.google.com >/dev/null || curl -s -m 10 https://www.github.com >/dev/null; then
         display_message "${GREEN}[✔]${NC} Network connection is OK "
@@ -1140,7 +1140,7 @@ check_internet_connection() {
     fi
 
     echo ""
-    sleep 1
+    
     echo -e "${YELLOW}[*]${NC} Executing menu ..."
     sleep 1
     clear
