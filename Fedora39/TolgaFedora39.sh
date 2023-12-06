@@ -640,6 +640,21 @@ check_port22() {
     fi
 }
 
+# Function to check if a service is active
+is_service_active() {
+    systemctl is-active "$1" &>/dev/null
+}
+
+# Function to check if a service is enabled
+is_service_enabled() {
+    systemctl is-enabled "$1" &>/dev/null
+}
+
+# Function to print text in yellow color
+print_yellow() {
+    echo -e "\e[93m$1\e[0m"
+}
+
 install_apps() {
     display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
 
@@ -664,7 +679,36 @@ install_apps() {
     # Start earlyloom services
     display_message "[${GREEN}✔${NC}]  Starting earlyloom services"
     sudo systemctl start earlyoom
-    sudo systemctl enable earlyoom
+    sudo systemctl enable --now earlyoom
+    sleep 2
+    display_message "[${GREEN}✔${NC}]  Checking earlyloom status service"
+
+    # Check EarlyOOM status
+    earlyoom_status=$(systemctl status earlyoom | cat)
+
+    # Check if EarlyOOM is active and enabled
+    if is_service_active earlyoom; then
+        active_status="Active"
+    else
+        active_status="Inactive"
+    fi
+
+    if is_service_enabled earlyoom; then
+        enabled_status=$(print_yellow "Enabled")
+    else
+        enabled_status="Disabled"
+    fi
+
+    # Get memory information
+    mem_total=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+    swap_total=$(grep SwapTotal /proc/meminfo | awk '{print $2}')
+
+    # Display information
+    echo -e "EarlyOOM Status: $active_status"
+    echo -e "Service Enablement: $enabled_status"
+    echo -e "Total Memory: $mem_total KB"
+    echo -e "Total Swap: $swap_total KB"
+    sleep 3
 
     # Install some fonts
     display_message "[${GREEN}✔${NC}]  Installing some fonts"
