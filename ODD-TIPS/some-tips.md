@@ -110,3 +110,31 @@ https://wiki.debian.org/ZRam
     sudo semodule -l | grep mac_admin
     sudo reboot
 ```
+## Create Chrome desktop shortcut to execute in X11 when in Wayland session
+```bash
+[Desktop Entry]
+Categories=Network;WebBrowser;
+Comment[en_AU]=Access the Internet
+Comment=Access the Internet
+Exec=GDK_BACKEND=x11 google-chrome --use-cmd-decoder=validating --use-gl=desktop %U
+GenericName[en_AU]=Web Browser
+GenericName=Web Browser
+Icon=google-chrome
+MimeType=video/webm;text/html;image/png;image/jpeg;image/gif;audio/webm;application/xml;application/xml;application/xhtml+xml;application/vnd.mozilla.xul+xml;application/rss+xml;application/rdf+xml;
+Name[en_AU]=Google Chrome x11 Wayland Nvidia
+Name=Google Chrome x11 Wayland Nvidia
+Path=
+StartupNotify=true
+StartupWMClass=google-chrome
+Terminal=false
+TerminalOptions=
+Type=Application
+Version=1.0
+X-KDE-SubstituteUID=false
+X-KDE-Username=
+X-MultipleArgs=false
+```
+## Run from remote location [ GitHub ]
+```bash
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgaFedora39.sh)"
+```
