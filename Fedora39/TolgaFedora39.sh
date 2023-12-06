@@ -38,6 +38,10 @@ NC='\e[0m'
 YELLOW='\e[1;33m'
 NC='\e[0m'
 
+# Super tweak I/o scheduler
+sudo echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
+cat /sys/block/sda/queue/scheduler
+
 # Function to display messages
 display_message() {
     clear
