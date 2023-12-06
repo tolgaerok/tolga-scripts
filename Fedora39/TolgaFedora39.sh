@@ -662,7 +662,7 @@ install_apps() {
     sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
     sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip
-    sudo dnf install -y variety virt-manager wget
+    sudo dnf install -y variety virt-manager wget xclip
     sudo yum install -y sshfs fuse-sshfs rsync openssh-server openssh-clients
 
     sudo dnf install ffmpeg libavcodec-freeworld --best --allowerasing
@@ -707,7 +707,9 @@ install_apps() {
     echo -e "EarlyOOM Status: $active_status"
     echo -e "Service Enablement: $enabled_status"
     echo -e "Total Memory: $mem_total KB"
-    echo -e "Total Swap: $swap_total KB"
+    echo -e "Total Swap: $swap_total KB\n\n"
+    sleep 2
+    sudo journalctl -u earlyoom | grep sending
     sleep 3
 
     # Install some fonts
