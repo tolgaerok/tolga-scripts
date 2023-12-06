@@ -136,9 +136,30 @@ X-MultipleArgs=false
 ```
 ## Super I/O scheduler [ Not persistent across reboot ]
 ```bash
-sudo echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
-cat /sys/block/sda/queue/scheduler
-sleep 2
+#!/bin/bash
+# Tolga Erok
+# I/O scheduler for SSD tweak
+
+# Prompt user
+echo -e "\e[93mDo you want to apply the scheduler to \e[92mNONE\e[93m? (yes/no)\e[0m"
+read -r response
+
+# Convert the response to lowercase for case-insensitive
+response_lower=$(echo "$response" | tr '[:upper:]' '[:lower:]')
+
+# Check if the user's response is a variation of "yes"
+if [[ "$response_lower" == "y" || "$response_lower" == "yes" ]]; then
+    # Run the command with sudo
+    # Options none mq-deadline kyber bfq
+    echo "none" | sudo tee /sys/block/sda/queue/scheduler
+    echo -e "\e[92mScheduler applied successfully.\e[0m"
+    cat /sys/block/sda/queue/scheduler
+    sleep 3
+    exit
+fi
+
+# Close the terminal window
+exit
 ```
 ## Run from remote location [ GitHub ]
 ```bash
