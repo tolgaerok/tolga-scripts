@@ -712,6 +712,13 @@ install_apps() {
     sudo journalctl -u earlyoom | grep sending
     sleep 3
 
+    # Install fedora preload
+    display_message "[${GREEN}✔${NC}]  Install fedora preload"
+    sudo dnf copr enable atim/preload -y && sudo dnf install preload -y
+    display_message "[${GREEN}✔${NC}]  Enable fedora preload service"
+    sudo systemctl enable --now preload.service
+    sleep 1
+
     # Install some fonts
     display_message "[${GREEN}✔${NC}]  Installing some fonts"
     sudo dnf install -y fontawesome-fonts powerline-fonts
