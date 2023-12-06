@@ -134,6 +134,12 @@ X-KDE-SubstituteUID=false
 X-KDE-Username=
 X-MultipleArgs=false
 ```
+## Super I/O scheduler [ Not persistent across reboot ]
+```bash
+sudo echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
+cat /sys/block/sda/queue/scheduler
+sleep 2
+```
 ## Run from remote location [ GitHub ]
 ```bash
 sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgaFedora39.sh)"
