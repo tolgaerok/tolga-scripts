@@ -41,6 +41,7 @@ NC='\e[0m'
 # Super tweak I/o scheduler
 sudo echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
 cat /sys/block/sda/queue/scheduler
+sleep 2
 
 # Function to display messages
 display_message() {
