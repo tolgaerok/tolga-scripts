@@ -80,3 +80,33 @@ If zswap is working, you should see a Y printed.
 ```bash
 https://wiki.debian.org/ZRam
 ```
+## Fix systemd-sysctl.service failed to start apply kernel variables [ Fedora 39 ]
+```bash
+    sudo dnf reinstall systemd
+    reboot
+    sudo ausearch -m avc
+    sudo setenforce 0
+    sudo restorecon -Rv /usr/lib/sysctl.d/
+    sudo restorecon -Rv /etc/sysctl.d/
+    sudo ausearch -m avc
+    sudo dnf update selinux-policy
+    sudo setenforce 1
+    ls -l $(command -v chcon)
+    sudo semodule -l | grep chcon
+    sudo seinfo -t | grep chcon
+    sudo ausearch -m avc --msg 1701697374.564:195
+    sudo semodule -l | grep chcon
+    sudo ausearch -m avc -ts recent
+    sudo cat /var/log/audit/audit.log | grep chcon
+    ls -lZ $(command -v chcon)
+    sudo restorecon $(command -v chcon)
+    sudo getsebool -a | grep mac_admin
+    sudo setsebool -P mac_admin=1
+    sudo dnf update
+    sudo getsebool -a | grep mac_admin
+    sudo setenforce 0
+    sudo ausearch -m avc
+    sudo restorecon -v $(command -v chcon)
+    sudo semodule -l | grep mac_admin
+    sudo reboot
+```
