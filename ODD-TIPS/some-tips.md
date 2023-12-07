@@ -140,6 +140,8 @@ X-MultipleArgs=false
 # Tolga Erok
 # I/O scheduler for SSD tweak
 
+clear
+
 # Prompt user
 echo -e "\e[93mDo you want to apply the scheduler to \e[92mNONE\e[93m? (yes/no)\e[0m"
 read -r response
@@ -152,9 +154,20 @@ if [[ "$response_lower" == "y" || "$response_lower" == "yes" ]]; then
     # Run the command with sudo
     # Options none mq-deadline kyber bfq
     echo "none" | sudo tee /sys/block/sda/queue/scheduler
-    echo -e "\e[92mScheduler applied successfully.\e[0m"
+    echo -e "\e[92mScheduler applied successfully.\e[0m\n"
     cat /sys/block/sda/queue/scheduler
     sleep 3
+
+    echo -e "\e[93m\n Enable and status of earlyloom: \e[0m\n"
+    sudo systemctl enable --now earlyoom
+    systemctl status earlyoom
+
+    echo -e "\e[93m\n Available kernel congestion control: \e[0m"
+    sysctl net.ipv4.tcp_available_congestion_control
+
+    echo -e "\e[93m\nCurrent congestion control: \e[0m"
+    sysctl net.ipv4.tcp_congestion_control
+
     exit
 fi
 
