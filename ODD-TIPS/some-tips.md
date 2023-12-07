@@ -165,3 +165,8 @@ exit
 ```bash
 sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgaFedora39.sh)"
 ```
+## BIOS setup for G4-800-BIOS-NVME
+```bash
+BIOS Setup (F10) → Advance → System Options → Configure Storage Controller for Intel Optane.
+No, not related with AHCI, but “disable Intel Optane” is a frequent tip on the forum as well.
+```
