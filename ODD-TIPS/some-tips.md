@@ -183,3 +183,87 @@ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scr
 BIOS Setup (F10) → Advance → System Options → Configure Storage Controller for Intel Optane.
 No, not related with AHCI, but “disable Intel Optane” is a frequent tip on the forum as well.
 ```
+## To run scripts @ login
+Place script in prefered location i.e. /usr/local/bin/none.sh and set arguments to log errors: '>>' /tmp/none_script.log '2>&1'
+```bash
+sudo visudo
+```
+then add: 
+```bash
+yourusername ALL=(ALL) NOPASSWD: /path/to/your/script.sh
+i.e. tolga ALL=(ALL) NOPASSWD: /usr/local/bin/none.sh
+```
+then create: 
+```bash
+touch ~/.profile
+```
+then create autostart file: 
+```bash
+/home/tolga/.config/autostart/none.sh.desktop
+```
+Open with Kwrite and add:
+```bash
+[Desktop Entry]
+Comment[en_AU]=
+Comment=
+Exec=/usr/local/bin/none.sh >> /tmp/none_script.log 2>&1
+GenericName[en_AU]=
+GenericName=
+Icon=dialog-scripts
+MimeType=
+Name[en_AU]=none.sh
+Name=none.sh
+Path=
+StartupNotify=true
+Terminal=true
+TerminalOptions=
+Type=Application
+X-KDE-AutostartScript=true
+X-KDE-SubstituteUID=true
+X-KDE-Username=tolga
+```
+Create personal script in: /usr/local/bin/none.sh
+```bash
+#!/bin/bash
+
+# Function to display a desktop notification
+show_notification() {
+    notify-send "Script Notification" "$1"
+}
+
+# Apply scheduler
+echo "none" | sudo tee /sys/block/sda/queue/scheduler
+show_notification "Scheduler applied successfully."
+
+# Display current scheduler
+current_scheduler=$(cat /sys/block/sda/queue/scheduler)
+show_notification "Current scheduler: $current_scheduler"
+
+# Enable and display status of earlyoom
+echo -e "\nEnable and status of earlyoom:\n"
+echo "ibm450" | sudo -S systemctl enable --now earlyoom
+sudo systemctl status earlyoom
+show_notification "Earlyoom enabled successfully."
+
+# Display available kernel congestion control
+echo -e "\nAvailable kernel congestion control:"
+sysctl net.ipv4.tcp_available_congestion_control
+
+# Display current congestion control
+echo -e "\nCurrent congestion control:"
+sysctl net.ipv4.tcp_congestion_control
+
+sleep 1
+exit
+```
+Test by loging out then in
+
+
+
+
+
+
+
+
+
+
