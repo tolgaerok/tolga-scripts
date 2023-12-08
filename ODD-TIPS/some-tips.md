@@ -241,7 +241,7 @@ show_notification "Current scheduler: $current_scheduler"
 
 # Enable and display status of earlyoom
 echo -e "\nEnable and status of earlyoom:\n"
-echo "ibm450" | sudo -S systemctl enable --now earlyoom
+echo "< PASSWORD >" | sudo -S systemctl enable --now earlyoom
 sudo systemctl status earlyoom
 show_notification "Earlyoom enabled successfully."
 
