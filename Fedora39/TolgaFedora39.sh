@@ -233,7 +233,18 @@ install_gpu_drivers() {
         display_message "[${GREEN}✔${NC}]  NVIDIA GPU detected. Installing NVIDIA drivers..."
 
         sudo dnf update
+        sudo dnf upgrade --refresh
         sudo dnf install dnf-plugins-core -y
+
+        # Install the tools required for auto signing to work
+        sudo dnf -y install kmodtool akmods mokutil openssl
+
+        # Generate a signing key
+        # sudo kmodgenca -a
+
+        # nitiate the key enrollment
+        # sudo mokutil --import /etc/pki/akmods/certs/public_key.der
+        
         sudo dnf copr enable t0xic0der/nvidia-auto-installer-for-fedora -y
         sudo dnf install nvautoinstall -y
 
@@ -243,9 +254,11 @@ install_gpu_drivers() {
         # inntf
         # echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
 
+        # KMS stands for "Kernel Mode Setting" which is the opposite of "Userland Mode Setting". This feature allows to set the screen resolution 
+        # on the kernel side once (at boot), instead of after login from the display manager.
         sudo sed -i '/GRUB_CMDLINE_LINUX/ s/"$/ rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
 
-        # remove mouveau
+        # remove nouveau
         sudo dnf remove -y xorg-x11-drv-nouveau
 
         # Backup old initramfs nouveau image #
@@ -254,6 +267,7 @@ install_gpu_drivers() {
         # Create new initramfs image #
         sudo dracut /boot/initramfs-$(uname -r).img $(uname -r)
 
+        # Install NVidia driver
         sudo dnf install -y akmod-nvidia
         sudo systemctl disable --now fwupd-refresh.timer
         sudo dnf repolist | grep 'rpmfusion-nonfree-updates'
@@ -262,9 +276,25 @@ install_gpu_drivers() {
         sudo dnf config-manager --set-enabled rpmfusion-free rpmfusion-free-updates rpmfusion-nonfree rpmfusion-nonfree-updates
 
         sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs
-        sudo dnf install -y vdpauinfo libva-vdpau-driver libva-utils vulkan akmods
-        sudo dnf install -y nvidia-settings nvidia-persistenced
+        sudo dnf install -y gcc kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686
+        sudo dnf install -y vdpauinfo libva-vdpau-driver libva-utils vulkan akmods nvidia-vaapi-driver libva-utils vdpauinfo
+        sudo dnf install -y nvidia-settings nvidia-persistenced xorg-x11-drv-nvidia-power 
+
+        sudo systemctl enable nvidia-{suspend,resume,hibernate}
+
+        # sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs.x86_64
+        # sudo dnf install -y vdpauinfo libva-vdpau-driver libva-utils vulkan akmods
+        # sudo dnf install -y nvidia-settings nvidia-persistenced
+
+        # Make sure the kernel modules got compiled
         sudo akmods --force
+
+        # Make sure the boot image got updated as well
+        sudo dracut --force
+
+        sudo dnf install xrandr
+        sudo cp -p /usr/share/X11/xorg.conf.d/nvidia.conf /etc/X11/xorg.conf.d/nvidia.conf
+        
         sudo sudo nvautoinstall rpmadd
         sudo nvautoinstall driver
         sudo nvautoinstall nvrepo
@@ -275,12 +305,39 @@ install_gpu_drivers() {
         sudo nvautoinstall compat
         sleep 1
 
-        # sudo dracut -f
-        # sudo dracut --force
-        # sudo dnf remove xorg-x11-drv-nvidia\*
-        # sudo dnf install xrandr
-        # sudo systemctl start nvidia-powerd.service
-        # sudo systemctl status nvidia-powerd.service
+        # Latest/Beta driver
+        # Install the latest drivers from Rawhide
+        # Make sure to replace 'uname -r' with the actual kernel version if needed
+        # sudo dnf install "kernel-devel-uname-r >= $(uname -r)"
+        # sudo dnf update -y
+        # sudo dnf copr enable kwizart/nvidia-driver-rawhide -y
+        # sudo dnf install rpmfusion-nonfree-release-rawhide -y
+        # sudo dnf --enablerepo=rpmfusion-nonfree-rawhide install akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-cuda --nogpgcheck
+
+        # Or if you want to grab it from the latest Fedora stable release
+        # Make sure to replace 'uname -r' with the actual kernel version if needed
+        # sudo dnf install "kernel-devel-uname-r == $(uname -r)"
+        # sudo dnf update -y
+        # sudo dnf --releasever=30 install akmod-nvidia xorg-x11-drv-nvidia --nogpgcheck
+
+        # Uninstall the NVIDIA driver
+        # dnf remove xorg-x11-drv-nvidia\*
+
+        # Recover from NVIDIA installer
+        # The NVIDIA binary driver installer overwrites some configuration and libraries. 
+        # If you want to recover to a clean state, either to use nouveau or the packaged driver, use:
+        # rm -f /usr/lib{,64}/libGL.so.* /usr/lib{,64}/libEGL.so.*
+        # rm -f /usr/lib{,64}/xorg/modules/extensions/libglx.so
+        # dnf reinstall xorg-x11-server-Xorg mesa-libGL mesa-libEGL libglvnd\*
+        # mv /etc/X11/xorg.conf /etc/X11/xorg.conf.saved
+
+        # Version Lock
+        # Sometime, there is a need to lock to a particular driver version for any reason (regression, compatibility with another application, vulkan beta branch or else).
+        # Using dnf versionlock module is the appropriate way to deal with that. 
+        # Please remember that version lock will prevent any updates to the NVIDIA driver including fixes for kernel compatibilities if relevant.
+
+        # dnf install python3-dnf-plugin-versionlock
+        # rpm -qa xorg-x11-drv-nvidia* *kmod-nvidia* nvidia-{settings,xconfig,modprobe,persistenced}  >> /etc/dnf/plugins/versionlock.list
 
         display_message "Enabling nvidia-modeset..."
 
@@ -314,6 +371,8 @@ install_gpu_drivers() {
         display_message "AMD drivers installed successfully."
     fi
 
+    glxinfo | egrep "OpenGL vendor|OpenGL renderer"
+    
     # Prompt user for reboot or continue
     read -p "Do you want to reboot now? (y/n): " choice
     case "$choice" in
