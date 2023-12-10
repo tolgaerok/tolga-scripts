@@ -27,6 +27,46 @@ fi
 # Add Flathub repository if not already added
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
+if lspci | grep VGA | grep "Intel" > /dev/null; then
+  flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/22.08
+  flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/23.08
+fi
+
+# Install Flatpak runtimes
+flatpak install -y flathub org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
+flatpak install -y flathub org.freedesktop.Platform.ffmpeg-full/x86_64/23.08
+flatpak install -y flathub org.freedesktop.Platform.GStreamer.gstreamer-vaapi/x86_64/22.08
+flatpak install -y flathub org.freedesktop.Platform.GStreamer.gstreamer-vaapi/x86_64/23.08
+
+
+# Install Bottles
+flatpak install -y flathub com.usebottles.bottles
+
+# Allow Bottles to create application shortcuts
+flatpak override --user --filesystem=xdg-data/applications com.usebottles.bottles
+
+# Allow Bottles to access Steam folder
+flatpak override --user --filesystem=home/.var/app/com.valvesoftware.Steam/data/Steam com.usebottles.bottles
+
+# Install Firefox from Flathub
+flatpak install -y flathub org.mozilla.firefox
+
+# Enable wayland support
+flatpak override --user --socket=wayland --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.firefox
+
+ Temporarily open Firefox to create profiles
+timeout 5 flatpak run org.mozilla.firefox --headless
+
+# Set Firefox profile path
+FIREFOX_PROFILE_PATH=$(realpath ${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox/*.default-release)
+
+# Import extensions
+mkdir -p ${FIREFOX_PROFILE_PATH}/extensions
+curl https://addons.mozilla.org/firefox/downloads/file/4003969/ublock_origin-latest.xpi -o ${FIREFOX_PROFILE_PATH}/extensions/uBlock0@raymondhill.net.xpi
+curl https://addons.mozilla.org/firefox/downloads/file/4018008/bitwarden_password_manager-latest.xpi -o ${FIREFOX_PROFILE_PATH}/extensions/{446900e4-71c2-419f-a6a7-df9c091e268b}.xpi
+curl https://addons.mozilla.org/firefox/downloads/file/3998783/floccus-latest.xpi -o ${FIREFOX_PROFILE_PATH}/extensions/floccus@handmadeideas.org.xpi
+curl https://addons.mozilla.org/firefox/downloads/file/3932862/multi_account_containers-latest.xpi -o ${FIREFOX_PROFILE_PATH}/extensions/@testpilot-containers.xpi
+
 # Define an array of Flatpak application IDs
 flatpak_apps=(
     "com.sindresorhus.Caprine"
