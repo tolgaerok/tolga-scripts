@@ -7,6 +7,11 @@
 ```bash
 git config --global user.email "kingtolga@gmail.com"
 git config --global user.name "Tolga Erok"
+DATE=`date '+%Y-%m-%d %H:%M:%S'`
+git add .
+git commit -a -m "new backup $DATE"
+git push origin main
+git push --tags
 ```
 ## Setting up earlyloom Ubuntu / Debian
 For Debian 10+ and Ubuntu 18.04+, there's a Debian package: ``` https://packages.debian.org/search?keywords=earlyoom ```
