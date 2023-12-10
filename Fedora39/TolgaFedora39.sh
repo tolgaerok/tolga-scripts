@@ -743,6 +743,17 @@ install_apps() {
     check_port22
     sudo systemctl status sshd
 
+    display_message "[${GREEN}✔${NC}]  Install vitualization group and set permissions"
+    sleep 1
+    # Install virtualization group
+    sudo dnf install -y @virtualization
+
+    # Enable libvirtd service
+    sudo systemctl enable libvirtd
+
+    # Add user to libvirt group
+    sudo usermod -a -G libvirt ${USER}
+
     # Start earlyloom services
     display_message "[${GREEN}✔${NC}]  Starting earlyloom services"
     sudo systemctl start earlyoom
