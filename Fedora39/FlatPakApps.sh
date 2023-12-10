@@ -48,13 +48,19 @@ flatpak override --user --filesystem=xdg-data/applications com.usebottles.bottle
 # Allow Bottles to access Steam folder
 flatpak override --user --filesystem=home/.var/app/com.valvesoftware.Steam/data/Steam com.usebottles.bottles
 
+# Install Breeze-GTK flatpak theme
+flatpak install -y flathub org.gtk.Gtk3theme.Breeze
+
+# Install applications
+flatpak install -y flathub org.videolan.VLC
+
 # Install Firefox from Flathub
 flatpak install -y flathub org.mozilla.firefox
 
 # Enable wayland support
 flatpak override --user --socket=wayland --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.firefox
 
- Temporarily open Firefox to create profiles
+# Temporarily open Firefox to create profiles
 timeout 5 flatpak run org.mozilla.firefox --headless
 
 # Set Firefox profile path
@@ -66,6 +72,15 @@ curl https://addons.mozilla.org/firefox/downloads/file/4003969/ublock_origin-lat
 curl https://addons.mozilla.org/firefox/downloads/file/4018008/bitwarden_password_manager-latest.xpi -o ${FIREFOX_PROFILE_PATH}/extensions/{446900e4-71c2-419f-a6a7-df9c091e268b}.xpi
 curl https://addons.mozilla.org/firefox/downloads/file/3998783/floccus-latest.xpi -o ${FIREFOX_PROFILE_PATH}/extensions/floccus@handmadeideas.org.xpi
 curl https://addons.mozilla.org/firefox/downloads/file/3932862/multi_account_containers-latest.xpi -o ${FIREFOX_PROFILE_PATH}/extensions/@testpilot-containers.xpi
+
+# KDE specific configurations
+tee -a ${FIREFOX_PROFILE_PATH}/user.js << 'EOF'
+
+// KDE integration
+// https://wiki.archlinux.org/title/firefox#KDE_integration
+user_pref("widget.use-xdg-desktop-portal.mime-handler", 1);
+user_pref("widget.use-xdg-desktop-portal.file-picker", 1);
+EOF
 
 # Define an array of Flatpak application IDs
 flatpak_apps=(
