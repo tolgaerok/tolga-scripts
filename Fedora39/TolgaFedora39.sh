@@ -743,6 +743,28 @@ install_apps() {
     check_port22
     sudo systemctl status sshd
 
+display_message "[${GREEN}✔${NC}]  Setup KDE Wallet"
+sleep 1
+    # Install Plasma related packages
+sudo dnf install -y \
+    ksshaskpass
+
+# Use the KDE Wallet to store ssh key passphrases
+# https://wiki.archlinux.org/title/KDE_Wallet#Using_the_KDE_Wallet_to_store_ssh_key_passphrases
+tee ${HOME}/.config/autostart/ssh-add.desktop << EOF
+[Desktop Entry]
+Exec=ssh-add -q
+Name=ssh-add
+Type=Application
+EOF
+
+tee ${HOME}/.config/environment.d/ssh_askpass.conf << EOF
+SSH_ASKPASS='/usr/bin/ksshaskpass'
+GIT_ASKPASS=ksshaskpass
+SSH_ASKPASS=ksshaskpass
+SSH_ASKPASS_REQUIRE=prefer
+EOF
+
     display_message "[${GREEN}✔${NC}]  Install vitualization group and set permissions"
     sleep 1
     # Install virtualization group
