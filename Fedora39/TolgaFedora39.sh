@@ -88,7 +88,8 @@ installonly_limit=3
 clean_requirements_on_remove=True
 best=False
 skip_if_unavailable=True
-fastestmirror=1
+fastestmirror=True
+keepcache=True
 max_parallel_downloads=10
 deltarpm=true
 metadata_timer_sync=0
@@ -366,6 +367,8 @@ install_gpu_drivers() {
         display_message "AMD GPU detected. Installing AMD drivers..."
 
         sudo dnf install -y mesa-dri-drivers
+        sudo dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
+        sudo dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
 
         check_error "Failed to install AMD drivers."
         display_message "AMD drivers installed successfully."
@@ -415,8 +418,8 @@ optimize_battery() {
 install_multimedia_codecs() {
     display_message "[${GREEN}✔${NC}]  Installing multimedia codecs..."
 
-    sudo dnf groupupdate 'core' 'multimedia' 'sound-and-video' --setopt='install_weak_deps=False' --exclude='PackageKit-gstreamer-plugin' --allowerasing && sync
-    sudo dnf swap 'ffmpeg-free' 'ffmpeg' --allowerasing
+    sudo dnf groupupdate -y 'core' 'multimedia' 'sound-and-video' --setopt='install_weak_deps=False' --exclude='PackageKit-gstreamer-plugin' --allowerasing && sync
+    sudo dnf swap -y 'ffmpeg-free' 'ffmpeg' --allowerasing
     sudo dnf install -y gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-plugin-openh264 gstreamer1-libav --exclude=gstreamer1-plugins-bad-free-devel ffmpeg gstreamer-ffmpeg
     sudo dnf install -y lame\* --exclude=lame-devel
     sudo dnf group upgrade --with-optional Multimedia
@@ -726,11 +729,11 @@ install_apps() {
     sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
     sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip
-    sudo dnf install -y variety virt-manager wget xclip
+    sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf
     sudo yum install -y sshfs fuse-sshfs rsync openssh-server openssh-clients
 
-    sudo dnf install ffmpeg libavcodec-freeworld --best --allowerasing
-    sudo dnf swap libavcodec-free libavcodec-freeworld
+    sudo dnf install -y ffmpeg libavcodec-freeworld --best --allowerasing
+    sudo dnf swap -y libavcodec-free ffmpeg-free libavcodec-freeworld --allowerasing
 
     # Start and enable SSH
     sudo systemctl start sshd
@@ -1241,6 +1244,59 @@ btrfs_maint() {
     sleep 10
 
 }
+create-extra-dir() {
+display_message "[${GREEN}✔${NC}]  Create extra needed directories"
+# Directories to create
+directories=(
+  "${HOME}/.local/share/applications"
+  "${HOME}/.local/share/icons"
+  "${HOME}/.local/share/themes"
+  "${HOME}/.local/share/fonts"
+  "${HOME}/.zshrc.d"
+  "${HOME}/.local/bin"
+  "${HOME}/.config/autostart"
+  "${HOME}/.config/systemd/user"
+  "${HOME}/.ssh"
+  "${HOME}/.config/environment.d"
+  "${HOME}/src"
+)
+
+# Create directories
+for dir in "${directories[@]}"; do
+  mkdir -p "$dir"
+done
+
+# Set SSH folder permissions
+chmod 700 ${HOME}/.ssh
+
+sleep 1
+display_message "[${GREEN}✔${NC}]  Extra hidden dirs created"
+sleep 1
+
+}
+
+speed-up-shutdown() {
+display_message "${YELLOW}[*]${NC} Configure shutdown of units and services to 10s .."
+sleep 1
+
+# Configure default timeout to stop system units
+sudo mkdir -p /etc/systemd/system.conf.d
+sudo tee /etc/systemd/system.conf.d/default-timeout.conf << EOF
+[Manager]
+DefaultTimeoutStopSec=10s
+EOF
+
+# Configure default timeout to stop user units
+sudo mkdir -p /etc/systemd/user.conf.d
+sudo tee /etc/systemd/user.conf.d/default-timeout.conf << EOF
+[Manager]
+DefaultTimeoutStopSec=10s
+EOF
+
+display_message "${GREEN}[✔]${NC} Shutdown speed configured"
+sleep 1
+
+}
 
 check_internet_connection() {
     display_message "${YELLOW}[*]${NC} Checking Internet Connection .."
@@ -1267,8 +1323,7 @@ check_internet_connection() {
 # display_message "[${RED}✘${NC}]
 
 # Function to display the main menu.
-display_main_menu() {
-    clear
+display_main_menu() {   
     clear
     echo -e "\n                  Tolga's online Fedora updater\n"
     echo -e "\e[34m|--------------------------|\e[33m Main Menu \e[34m |-------------------------------------|\e[0m"
@@ -1297,6 +1352,8 @@ display_main_menu() {
     echo -e "\e[33m 23.\e[0m \e[32mInstall new DNF5                                             ( Testing for fedora 40/41 )\e[0m"
     echo -e "\e[33m 24.\e[0m \e[32mRemove KDE bloatware                                         ( Why are these installed? )\e[0m"
     echo -e "\e[33m 25.\e[0m \e[32mPerform BTRFS balance and scrub operation on / partition     ( !! WARNING, backup important data incase, 5 min operation )\e[0m"
+    echo -e "\e[33m 26.\e[0m \e[32mCreate extra hidden dir in HOME                                "
+    echo -e "\e[33m 27.\e[0m \e[32mModify systemd timeout settings to 10s                         "
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
     echo -e "\e[31m   (0) \e[0m \e[32mExit\e[0m"
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
@@ -1345,7 +1402,8 @@ handle_user_input() {
     23) dnf5 ;;
     24) kde_crap ;;
     25) btrfs_maint ;;
-    #26) start_scrub ;;
+    26) create-extra-dir ;;
+    27) speed-up-shutdown ;;
 
     0)
         # Before exiting, check if duf and neofetch are installed
