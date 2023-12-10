@@ -256,8 +256,97 @@ sysctl net.ipv4.tcp_congestion_control
 sleep 1
 exit
 ```
+
 Test by loging out then in
 
+## Updated
+* Location: /usr/local/bin/
+* Saved as: none.sh
+```bash
+#!/bin/bash
+
+# Log file path
+LOG_FILE="$HOME/none_script.log"
+
+# Function to log a message
+log_message() {
+    echo "$(date +"%Y-%m-%d %H:%M:%S") - $1" >> "$LOG_FILE"
+}
+
+# Function to display a desktop notification
+show_notification() {
+    DISPLAY=:0 notify-send "Script Notification" "$1"
+}
+
+# Password
+PASSWORD="ibm450"
+
+# Apply scheduler
+echo "ibm450" | sudo -S sh -c 'echo none > /sys/block/sda/queue/scheduler' > /dev/null 2>&1
+
+if [ $? -eq 0 ]; then
+    show_notification "Scheduler applied successfully."
+    log_message "Scheduler applied successfully."
+else
+    show_notification "Failed to apply scheduler."
+    log_message "Failed to apply scheduler."
+fi
+
+# Display current scheduler
+current_scheduler=$(cat /sys/block/sda/queue/scheduler)
+show_notification "Current scheduler: $current_scheduler"
+log_message "Current scheduler: $current_scheduler"
+
+# Enable and display status of earlyoom
+#log_message "Enabling and checking status of earlyoom..."
+#echo "$PASSWORD" | sudo -S /usr/bin/systemctl enable --now earlyoom > >(tee -a "$LOG_FILE") 2> >(tee -a "$LOG_FILE" >&2)
+#if [ $? -eq 0 ]; then
+ #   show_notification "Earlyoom enabled successfully."
+  #  log_message "Earlyoom enabled successfully."
+#else
+ #   show_notification "Failed to enable Earlyoom."
+ #   log_message "Failed to enable Earlyoom."
+#fi
+
+# Display available kernel congestion control
+log_message "Displaying available kernel congestion control..."
+/usr/sbin/sysctl net.ipv4.tcp_available_congestion_control >> "$LOG_FILE"
+
+# Display current congestion control
+log_message "Displaying current congestion control..."
+/usr/sbin/sysctl net.ipv4.tcp_congestion_control >> "$LOG_FILE"
+
+# Wait for a moment
+sleep 1
+log_message "Script execution completed."
+exit
+```
+## systemd
+* Location: /etc/systemd/system/tolga.service
+* Saved as: tolga.service
+```bash
+[Unit]
+Description=Set i/o scheduler
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/none.sh
+User=tolga
+Group=tolga
+Restart=always
+
+[Install]
+WantedBy=default.target
+```
+## Start service
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now tolga.service
+sudo systemctl start tolga.service
+systemctl --user restart tolga.service
+sudo systemctl status tolga.service
+```
 
 
 
