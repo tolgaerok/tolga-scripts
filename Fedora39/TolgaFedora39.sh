@@ -340,6 +340,10 @@ install_gpu_drivers() {
         # dnf install python3-dnf-plugin-versionlock
         # rpm -qa xorg-x11-drv-nvidia* *kmod-nvidia* nvidia-{settings,xconfig,modprobe,persistenced}  >> /etc/dnf/plugins/versionlock.list
 
+        ###### DOWNGRADE NVIDIA FROM 545x to 535x
+        # sudo dnf remove \*nvidia\* --exclude nvidia-gpu-firmware
+        # sudo dnf install akmod-nvidia-535.129.03\* xorg-x11-drv-nvidia-cuda-535.129.03\* nvidia\*535.129.03\*
+
         display_message "Enabling nvidia-modeset..."
 
         # Enable nvidia-modeset
