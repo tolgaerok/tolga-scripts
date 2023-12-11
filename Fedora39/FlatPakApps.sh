@@ -69,7 +69,7 @@ flatpak install -y flathub org.mozilla.firefox
 flatpak override --user --socket=wayland --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.firefox
 
 # Temporarily open Firefox to create profiles
-timeout 5 flatpak run org.mozilla.firefox --headless
+timeout 5 flatpak run org.mozilla.firefox
 
 # Set Firefox profile path
 FIREFOX_PROFILE_PATH=$(realpath ${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox/*.default-release)
