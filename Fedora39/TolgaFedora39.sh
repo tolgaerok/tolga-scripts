@@ -245,7 +245,7 @@ install_gpu_drivers() {
 
         # nitiate the key enrollment
         # sudo mokutil --import /etc/pki/akmods/certs/public_key.der
-        
+
         sudo dnf copr enable t0xic0der/nvidia-auto-installer-for-fedora -y
         sudo dnf install nvautoinstall -y
 
@@ -255,7 +255,7 @@ install_gpu_drivers() {
         # inntf
         # echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
 
-        # KMS stands for "Kernel Mode Setting" which is the opposite of "Userland Mode Setting". This feature allows to set the screen resolution 
+        # KMS stands for "Kernel Mode Setting" which is the opposite of "Userland Mode Setting". This feature allows to set the screen resolution
         # on the kernel side once (at boot), instead of after login from the display manager.
         sudo sed -i '/GRUB_CMDLINE_LINUX/ s/"$/ rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
 
@@ -279,7 +279,7 @@ install_gpu_drivers() {
         sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs
         sudo dnf install -y gcc kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686
         sudo dnf install -y vdpauinfo libva-vdpau-driver libva-utils vulkan akmods nvidia-vaapi-driver libva-utils vdpauinfo
-        sudo dnf install -y nvidia-settings nvidia-persistenced xorg-x11-drv-nvidia-power 
+        sudo dnf install -y nvidia-settings nvidia-persistenced xorg-x11-drv-nvidia-power
 
         sudo systemctl enable nvidia-{suspend,resume,hibernate}
 
@@ -295,7 +295,7 @@ install_gpu_drivers() {
 
         sudo dnf install xrandr
         sudo cp -p /usr/share/X11/xorg.conf.d/nvidia.conf /etc/X11/xorg.conf.d/nvidia.conf
-        
+
         sudo sudo nvautoinstall rpmadd
         sudo nvautoinstall driver
         sudo nvautoinstall nvrepo
@@ -325,7 +325,7 @@ install_gpu_drivers() {
         # dnf remove xorg-x11-drv-nvidia\*
 
         # Recover from NVIDIA installer
-        # The NVIDIA binary driver installer overwrites some configuration and libraries. 
+        # The NVIDIA binary driver installer overwrites some configuration and libraries.
         # If you want to recover to a clean state, either to use nouveau or the packaged driver, use:
         # rm -f /usr/lib{,64}/libGL.so.* /usr/lib{,64}/libEGL.so.*
         # rm -f /usr/lib{,64}/xorg/modules/extensions/libglx.so
@@ -334,7 +334,7 @@ install_gpu_drivers() {
 
         # Version Lock
         # Sometime, there is a need to lock to a particular driver version for any reason (regression, compatibility with another application, vulkan beta branch or else).
-        # Using dnf versionlock module is the appropriate way to deal with that. 
+        # Using dnf versionlock module is the appropriate way to deal with that.
         # Please remember that version lock will prevent any updates to the NVIDIA driver including fixes for kernel compatibilities if relevant.
 
         # dnf install python3-dnf-plugin-versionlock
@@ -375,7 +375,7 @@ install_gpu_drivers() {
     fi
 
     glxinfo | egrep "OpenGL vendor|OpenGL renderer"
-    
+
     # Prompt user for reboot or continue
     read -p "Do you want to reboot now? (y/n): " choice
     case "$choice" in
@@ -743,22 +743,22 @@ install_apps() {
     check_port22
     sudo systemctl status sshd
 
-display_message "[${GREEN}✔${NC}]  Setup KDE Wallet"
-sleep 1
+    display_message "[${GREEN}✔${NC}]  Setup KDE Wallet"
+    sleep 1
     # Install Plasma related packages
-sudo dnf install -y \
-    ksshaskpass
+    sudo dnf install -y \
+        ksshaskpass
 
-# Use the KDE Wallet to store ssh key passphrases
-# https://wiki.archlinux.org/title/KDE_Wallet#Using_the_KDE_Wallet_to_store_ssh_key_passphrases
-tee ${HOME}/.config/autostart/ssh-add.desktop << EOF
+    # Use the KDE Wallet to store ssh key passphrases
+    # https://wiki.archlinux.org/title/KDE_Wallet#Using_the_KDE_Wallet_to_store_ssh_key_passphrases
+    tee ${HOME}/.config/autostart/ssh-add.desktop <<EOF
 [Desktop Entry]
 Exec=ssh-add -q
 Name=ssh-add
 Type=Application
 EOF
 
-tee ${HOME}/.config/environment.d/ssh_askpass.conf << EOF
+    tee ${HOME}/.config/environment.d/ssh_askpass.conf <<EOF
 SSH_ASKPASS='/usr/bin/ksshaskpass'
 GIT_ASKPASS=ksshaskpass
 SSH_ASKPASS=ksshaskpass
@@ -1188,33 +1188,33 @@ kde_crap() {
             )
 
             sudo dnf remove $packages_to_remove
-            
+
             sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
             dnf clean all
 
             # Remove media players
             sudo dnf remove -y \
-            dragon \
-            elisa-player \
-            kamoso
+                dragon \
+                elisa-player \
+                kamoso
 
             # Remove akonadi
             sudo dnf remove -y *akonadi*
 
             # Remove games
             sudo dnf remove -y \
-            kmahjongg \
-            kmines \
-            kpat
+                kmahjongg \
+                kmines \
+                kpat
 
             # Remove misc applications
             sudo dnf remove -y \
-            dnfdragora \
-            konversation \
-            krdc \
-            krfb \
-            plasma-welcome
-            
+                dnfdragora \
+                konversation \
+                krdc \
+                krfb \
+                plasma-welcome
+
             read -p "Do you want to perform autoremove? (y/n): " autoremove_choice
             if [ "$autoremove_choice" == "y" ]; then
                 sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
@@ -1302,56 +1302,56 @@ btrfs_maint() {
 
 }
 create-extra-dir() {
-display_message "[${GREEN}✔${NC}]  Create extra needed directories"
-# Directories to create
-directories=(
-  "${HOME}/.local/share/applications"
-  "${HOME}/.local/share/icons"
-  "${HOME}/.local/share/themes"
-  "${HOME}/.local/share/fonts"
-  "${HOME}/.zshrc.d"
-  "${HOME}/.local/bin"
-  "${HOME}/.config/autostart"
-  "${HOME}/.config/systemd/user"
-  "${HOME}/.ssh"
-  "${HOME}/.config/environment.d"
-  "${HOME}/src"
-)
+    display_message "[${GREEN}✔${NC}]  Create extra needed directories"
+    # Directories to create
+    directories=(
+        "${HOME}/.local/share/applications"
+        "${HOME}/.local/share/icons"
+        "${HOME}/.local/share/themes"
+        "${HOME}/.local/share/fonts"
+        "${HOME}/.zshrc.d"
+        "${HOME}/.local/bin"
+        "${HOME}/.config/autostart"
+        "${HOME}/.config/systemd/user"
+        "${HOME}/.ssh"
+        "${HOME}/.config/environment.d"
+        "${HOME}/src"
+    )
 
-# Create directories
-for dir in "${directories[@]}"; do
-  mkdir -p "$dir"
-done
+    # Create directories
+    for dir in "${directories[@]}"; do
+        mkdir -p "$dir"
+    done
 
-# Set SSH folder permissions
-chmod 700 ${HOME}/.ssh
+    # Set SSH folder permissions
+    chmod 700 ${HOME}/.ssh
 
-sleep 1
-display_message "[${GREEN}✔${NC}]  Extra hidden dirs created"
-sleep 1
+    sleep 1
+    display_message "[${GREEN}✔${NC}]  Extra hidden dirs created"
+    sleep 1
 
 }
 
 speed-up-shutdown() {
-display_message "${YELLOW}[*]${NC} Configure shutdown of units and services to 10s .."
-sleep 1
+    display_message "${YELLOW}[*]${NC} Configure shutdown of units and services to 10s .."
+    sleep 1
 
-# Configure default timeout to stop system units
-sudo mkdir -p /etc/systemd/system.conf.d
-sudo tee /etc/systemd/system.conf.d/default-timeout.conf << EOF
+    # Configure default timeout to stop system units
+    sudo mkdir -p /etc/systemd/system.conf.d
+    sudo tee /etc/systemd/system.conf.d/default-timeout.conf <<EOF
 [Manager]
 DefaultTimeoutStopSec=10s
 EOF
 
-# Configure default timeout to stop user units
-sudo mkdir -p /etc/systemd/user.conf.d
-sudo tee /etc/systemd/user.conf.d/default-timeout.conf << EOF
+    # Configure default timeout to stop user units
+    sudo mkdir -p /etc/systemd/user.conf.d
+    sudo tee /etc/systemd/user.conf.d/default-timeout.conf <<EOF
 [Manager]
 DefaultTimeoutStopSec=10s
 EOF
 
-display_message "${GREEN}[✔]${NC} Shutdown speed configured"
-sleep 1
+    display_message "${GREEN}[✔]${NC} Shutdown speed configured"
+    sleep 1
 
 }
 
@@ -1380,7 +1380,7 @@ check_internet_connection() {
 # display_message "[${RED}✘${NC}]
 
 # Function to display the main menu.
-display_main_menu() {   
+display_main_menu() {
     clear
     echo -e "\n                  Tolga's online Fedora updater\n"
     echo -e "\e[34m|--------------------------|\e[33m Main Menu \e[34m |-------------------------------------|\e[0m"
