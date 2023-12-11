@@ -32,6 +32,14 @@ if lspci | grep VGA | grep "Intel" > /dev/null; then
   flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/23.08
 fi
 
+ echo "#####################################"
+ echo
+ echo "Enabling Flatpak Theming Overrides"
+ echo
+ sudo flatpak override --filesystem=$HOME/.themes
+ sudo flatpak override --filesystem=xdg-config/gtk-4.0:ro
+ sudo flatpak override --filesystem=xdg-config/gtk-3.0:ro
+
 # Install Flatpak runtimes
 flatpak install -y flathub org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
 flatpak install -y flathub org.freedesktop.Platform.ffmpeg-full/x86_64/23.08
