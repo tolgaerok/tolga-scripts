@@ -1188,9 +1188,33 @@ kde_crap() {
             )
 
             sudo dnf remove $packages_to_remove
+            
             sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
             dnf clean all
 
+            # Remove media players
+            sudo dnf remove -y \
+            dragon \
+            elisa-player \
+            kamoso
+
+            # Remove akonadi
+            sudo dnf remove -y *akonadi*
+
+            # Remove games
+            sudo dnf remove -y \
+            kmahjongg \
+            kmines \
+            kpat
+
+            # Remove misc applications
+            sudo dnf remove -y \
+            dnfdragora \
+            konversation \
+            krdc \
+            krfb \
+            plasma-welcome
+            
             read -p "Do you want to perform autoremove? (y/n): " autoremove_choice
             if [ "$autoremove_choice" == "y" ]; then
                 sudo dnf remove kmail-account-wizard mbox-importer kdeconnect pim-data-exporter elisa*
