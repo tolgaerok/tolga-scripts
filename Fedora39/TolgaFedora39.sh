@@ -1203,7 +1203,7 @@ kde_crap() {
                 kamoso
 
             # Remove akonadi
-            sudo dnf remove -y *akonadi*
+           # sudo dnf remove -y *akonadi*
 
             # Remove games
             sudo dnf remove -y \
