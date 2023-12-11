@@ -734,10 +734,10 @@ install_apps() {
     sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip
     sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf
-    sudo yum install -y sshfs fuse-sshfs rsync openssh-server openssh-clients
+    sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients
 
-    sudo dnf install -y ffmpeg libavcodec-freeworld --best --allowerasing
-    sudo dnf swap -y libavcodec-free ffmpeg-free libavcodec-freeworld --allowerasing
+    sudo dnf swap -y libavcodec-free libavcodec-freeworld --allowerasing
+    sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing
 
     # Start and enable SSH
     sudo systemctl start sshd
