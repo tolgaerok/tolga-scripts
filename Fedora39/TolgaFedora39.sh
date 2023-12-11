@@ -753,6 +753,9 @@ install_apps() {
     sudo dnf install -y \
         ksshaskpass
 
+    mkdir -p ${HOME}/.config/autostart/
+    mkdir -p ${HOME}/.config/environment.d/
+
     # Use the KDE Wallet to store ssh key passphrases
     # https://wiki.archlinux.org/title/KDE_Wallet#Using_the_KDE_Wallet_to_store_ssh_key_passphrases
     tee ${HOME}/.config/autostart/ssh-add.desktop <<EOF
