@@ -74,6 +74,9 @@ timeout 5 flatpak run org.mozilla.firefox
 # Set Firefox profile path
 FIREFOX_PROFILE_PATH=$(realpath ${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox/*.default-release)
 
+# Disable D-Bus warnings in Firefox
+echo 'pref("toolkit.startup.max_resumed_crashes", -1);' >> ${FIREFOX_PROFILE_PATH}/user.js
+
 # Import extensions
 mkdir -p ${FIREFOX_PROFILE_PATH}/extensions
 curl https://addons.mozilla.org/firefox/downloads/file/4003969/ublock_origin-latest.xpi -o ${FIREFOX_PROFILE_PATH}/extensions/uBlock0@raymondhill.net.xpi
