@@ -66,7 +66,6 @@ red_msg() {
     tput sgr0
 }
 
-
 # Declare Paths & Settings.
 SYS_PATH="/etc/sysctl.conf"
 PROF_PATH="/etc/profile"
@@ -760,7 +759,7 @@ print_yellow() {
 
 install_apps() {
     display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
-    
+
     sudo dnf -y up
     sudo dnf -y autoremove
     sudo dnf -y clean all
@@ -771,7 +770,7 @@ install_apps() {
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip
     sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf
     sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients
-    
+
     ## Networking packages
     sudo dnf -y install iptables iptables-services nftables
 
@@ -793,14 +792,14 @@ install_apps() {
     ## Make a backup of the original sysctl.conf file
     cp $SYS_PATH /etc/sysctl.conf.bak
 
-    echo 
+    echo
     yellow_msg 'Default sysctl.conf file Saved. Directory: /etc/sysctl.conf.bak'
-    echo 
+    echo
     sleep 1
 
-    echo 
+    echo
     yellow_msg 'Optimizing the Network...'
-    echo 
+    echo
     sleep 0.5
 
     sed -i -e '/fs.file-max/d' \
@@ -843,10 +842,9 @@ install_apps() {
         -e '/vm.vfs_cache_pressure/d' \
         "$SYS_PATH"
 
-        ## Add new parameteres. Read More: https://github.com/hawshemi/Linux-Optimizer/blob/main/files/sysctl.conf
+    ## Add new parameteres. Read More: https://github.com/hawshemi/Linux-Optimizer/blob/main/files/sysctl.conf
 
-
-cat <<EOF >> "$SYS_PATH"
+    cat <<EOF >>"$SYS_PATH"
 fs.file-max = 67108864
 net.core.default_qdisc = fq_codel
 net.core.netdev_max_backlog = 32768
@@ -887,13 +885,12 @@ vm.swappiness = 10
 vm.vfs_cache_pressure = 50
 EOF
 
-sudo sysctl -p
-    
-    echo 
+    sudo sysctl -p
+
+    echo
     green_msg 'Network is Optimized.'
-    echo 
+    echo
     sleep 0.5
-        
 
     # Start and enable SSH
     sudo systemctl start sshd
