@@ -89,7 +89,7 @@ fi
 
 # Super tweak I/O scheduler
 echo -e "${BLUE}Tweaking I/O Scheduler...${NC}"
-echo "none" | sudo tee /sys/block/sda/queue/scheduler
+echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
 printf "${YELLOW}> ${NC}"
 cat /sys/block/sda/queue/scheduler
 sleep 2
