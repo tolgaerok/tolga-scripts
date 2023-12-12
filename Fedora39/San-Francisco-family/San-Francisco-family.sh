@@ -4,7 +4,7 @@
 # My personal San-Francisco-family Font Downloader
 # 18/11/2023
 # Run from remote location:::...1112
-# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/San-Francisco-family/San-Francisco-family.sh)"
+# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgaFedora39.sh)"
 clear
 
 # Check if the script is run as root
@@ -26,7 +26,7 @@ NC='\e[0m'
 # Function to display messages
 display_message() {
     clear
-    echo -e "\n           Tolga's San-Francisco-family Font Downloader\n"
+    echo -e "\n                  Tolga's San-Francisco-family Font Downloader\n"
     echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
     echo -e "|${YELLOW}==>${NC}  $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
@@ -91,6 +91,12 @@ fi
 sudo echo "none" | sudo tee /sys/block/sda/queue/scheduler
 cat /sys/block/sda/queue/scheduler
 sleep 2
+
+# Create missing directories and fix permissions
+sudo mkdir -p /root/.cache/fontconfig
+sudo mkdir -p /root/.fontconfig
+sudo chown -R root:root /root/.cache/fontconfig
+sudo chown -R root:root /root/.fontconfig
 
 sudo mkdir -p "$FONTS_DIR"
 zip_file="San-Francisco-family-master.zip"
