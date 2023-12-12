@@ -90,7 +90,8 @@ fi
 # Super tweak I/O scheduler
 echo -e "${BLUE}Tweaking I/O Scheduler...${NC}"
 echo "none" | sudo tee /sys/block/sda/queue/scheduler
-cat /sys/block/sda/queue/scheduler | sed -e "s/^/${YELLOW}> ${NC}/"
+printf "${YELLOW}> ${NC}"
+cat /sys/block/sda/queue/scheduler
 sleep 2
 
 # Create missing directories and fix permissions
@@ -127,3 +128,6 @@ rm ./San-Francisco-family-master.zip
 
 # Update font cache one more time
 sudo $FC_CACHE_CMD
+sleep 1
+display_message "[${GREEN}✔${NC}] Apple/San-Francisco-family fonts installed successfully."
+sleep 1
