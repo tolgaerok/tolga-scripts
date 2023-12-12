@@ -26,7 +26,7 @@ NC='\e[0m'
 # Function to display messages
 display_message() {
     clear
-    echo -e "\n          Tolga's San-Francisco-family Font Downloader\n"
+    echo -e "\n           Tolga's San-Francisco-family Font Downloader\n"
     echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
     echo -e "|${YELLOW}==>${NC}  $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
@@ -88,8 +88,9 @@ if [ "$extract_choice" != "y" ]; then
 fi
 
 # Super tweak I/O scheduler
-sudo echo "none" | sudo tee /sys/block/sda/queue/scheduler
-cat /sys/block/sda/queue/scheduler
+echo -e "${BLUE}Tweaking I/O Scheduler...${NC}"
+echo "none" | sudo tee /sys/block/sda/queue/scheduler
+cat /sys/block/sda/queue/scheduler | sed -e "s/^/${YELLOW}> ${NC}/"
 sleep 2
 
 # Create missing directories and fix permissions
@@ -123,4 +124,6 @@ fi
 
 # Removing zip Files
 rm ./San-Francisco-family-master.zip
+
+# Update font cache one more time
 sudo $FC_CACHE_CMD
