@@ -27,25 +27,24 @@ fi
 # Add Flathub repository if not already added
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
-if lspci | grep VGA | grep "Intel" > /dev/null; then
-  flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/22.08
-  flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/23.08
+if lspci | grep VGA | grep "Intel" >/dev/null; then
+    flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/22.08
+    flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/23.08
 fi
 
- echo "#####################################"
- echo
- echo "Enabling Flatpak Theming Overrides"
- echo
- sudo flatpak override --filesystem=$HOME/.themes
- sudo flatpak override --filesystem=xdg-config/gtk-4.0:ro
- sudo flatpak override --filesystem=xdg-config/gtk-3.0:ro
+echo "#####################################"
+echo
+echo "Enabling Flatpak Theming Overrides"
+echo
+sudo flatpak override --filesystem=$HOME/.themes
+sudo flatpak override --filesystem=xdg-config/gtk-4.0:ro
+sudo flatpak override --filesystem=xdg-config/gtk-3.0:ro
 
 # Install Flatpak runtimes
 flatpak install -y flathub org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
 flatpak install -y flathub org.freedesktop.Platform.ffmpeg-full/x86_64/23.08
 flatpak install -y flathub org.freedesktop.Platform.GStreamer.gstreamer-vaapi/x86_64/22.08
 flatpak install -y flathub org.freedesktop.Platform.GStreamer.gstreamer-vaapi/x86_64/23.08
-
 
 # Install Bottles
 flatpak install -y flathub com.usebottles.bottles
@@ -75,7 +74,7 @@ timeout 5 flatpak run org.mozilla.firefox
 FIREFOX_PROFILE_PATH=$(realpath ${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox/*.default-release)
 
 # Disable D-Bus warnings in Firefox
-echo 'pref("toolkit.startup.max_resumed_crashes", -1);' >> ${FIREFOX_PROFILE_PATH}/user.js
+echo 'pref("toolkit.startup.max_resumed_crashes", -1);' >>${FIREFOX_PROFILE_PATH}/user.js
 
 # Import extensions
 mkdir -p ${FIREFOX_PROFILE_PATH}/extensions
@@ -85,7 +84,7 @@ curl https://addons.mozilla.org/firefox/downloads/file/3998783/floccus-latest.xp
 curl https://addons.mozilla.org/firefox/downloads/file/3932862/multi_account_containers-latest.xpi -o ${FIREFOX_PROFILE_PATH}/extensions/@testpilot-containers.xpi
 
 # KDE specific configurations
-tee -a ${FIREFOX_PROFILE_PATH}/user.js << 'EOF'
+tee -a ${FIREFOX_PROFILE_PATH}/user.js <<'EOF'
 
 // KDE integration
 // https://wiki.archlinux.org/title/firefox#KDE_integration
@@ -125,13 +124,11 @@ else
     echo -e "\e[1;32m[✔]\e[0m No old Flatpak cruft found.\n"
 fi
 
-
 sleep 1
 
 # Display all platpaks installed on system
 flatpak --columns=app,name,size,installation list
 echo -e "\e[1;32m[✔]\e[0m List of flatpaks on system...\n"
-
 
 echo "Installation completed. You can now run the installed applications."
 sleep 10
