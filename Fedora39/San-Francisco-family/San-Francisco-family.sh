@@ -77,6 +77,7 @@ else
     FC_CACHE_CMD="fc-cache -f -v"
 fi
 
+
 # Display OS in blue
 display_message "[${BLUE}✔${NC}] Detected OS: ${BLUE}${OS_NAME}${NC}"
 
