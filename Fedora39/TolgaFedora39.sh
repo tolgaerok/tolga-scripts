@@ -38,10 +38,13 @@ NC='\e[0m'
 YELLOW='\e[1;33m'
 NC='\e[0m'
 
-# Super tweak I/o scheduler
 # none [mq-deadline] kyber bfq 
-sudo echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
+# Super tweak I/O scheduler
+echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
+echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
+printf "\n${YELLOW}I/O Scheduler has been set to ==>  ${NC}"
 cat /sys/block/sda/queue/scheduler
+echo ""
 sleep 2
 
 # Function to display messages
