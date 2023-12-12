@@ -47,6 +47,34 @@ cat /sys/block/sda/queue/scheduler
 echo ""
 sleep 2
 
+# Green, Yellow & Red Messages.
+green_msg() {
+    tput setaf 2
+    echo "[*] ----- $1"
+    tput sgr0
+}
+
+yellow_msg() {
+    tput setaf 3
+    echo "[*] ----- $1"
+    tput sgr0
+}
+
+red_msg() {
+    tput setaf 1
+    echo "[*] ----- $1"
+    tput sgr0
+}
+
+
+# Declare Paths & Settings.
+SYS_PATH="/etc/sysctl.conf"
+PROF_PATH="/etc/profile"
+SSH_PORT=""
+SSH_PATH="/etc/ssh/sshd_config"
+SWAP_PATH="/swapfile"
+SWAP_SIZE=2G
+
 # Function to display messages
 display_message() {
     clear
@@ -732,6 +760,10 @@ print_yellow() {
 
 install_apps() {
     display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
+    
+    sudo dnf -y up
+    sudo dnf -y autoremove
+    sudo dnf -y clean all
 
     # Install Apps
     sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
@@ -739,9 +771,129 @@ install_apps() {
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip
     sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf
     sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients
+    
+    ## Networking packages
+    sudo dnf -y install iptables iptables-services nftables
+
+    ## System utilities
+    sudo dnf -y install bash-completion busybox crontabs ca-certificates curl dnf-plugins-core dnf-utils gnupg2 nano screen ufw unzip vim wget zip
+
+    ## Programming and development tools
+    sudo dnf -y install autoconf automake bash-completion git libtool make pkg-config python3 python3-pip
+
+    ## Additional libraries and dependencies
+    sudo dnf -y install bc binutils haveged jq libsodium libsodium-devel PackageKit qrencode socat
+
+    ## Miscellaneous
+    sudo dnf -y install dialog htop net-tools
 
     sudo dnf swap -y libavcodec-free libavcodec-freeworld --allowerasing
     sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing
+
+    ## Make a backup of the original sysctl.conf file
+    cp $SYS_PATH /etc/sysctl.conf.bak
+
+    echo 
+    yellow_msg 'Default sysctl.conf file Saved. Directory: /etc/sysctl.conf.bak'
+    echo 
+    sleep 1
+
+    echo 
+    yellow_msg 'Optimizing the Network...'
+    echo 
+    sleep 0.5
+
+    sed -i -e '/fs.file-max/d' \
+        -e '/net.core.default_qdisc/d' \
+        -e '/net.core.netdev_max_backlog/d' \
+        -e '/net.core.optmem_max/d' \
+        -e '/net.core.somaxconn/d' \
+        -e '/net.core.rmem_max/d' \
+        -e '/net.core.wmem_max/d' \
+        -e '/net.core.rmem_default/d' \
+        -e '/net.core.wmem_default/d' \
+        -e '/net.ipv4.tcp_rmem/d' \
+        -e '/net.ipv4.tcp_wmem/d' \
+        -e '/net.ipv4.tcp_congestion_control/d' \
+        -e '/net.ipv4.tcp_fastopen/d' \
+        -e '/net.ipv4.tcp_fin_timeout/d' \
+        -e '/net.ipv4.tcp_keepalive_time/d' \
+        -e '/net.ipv4.tcp_keepalive_probes/d' \
+        -e '/net.ipv4.tcp_keepalive_intvl/d' \
+        -e '/net.ipv4.tcp_max_orphans/d' \
+        -e '/net.ipv4.tcp_max_syn_backlog/d' \
+        -e '/net.ipv4.tcp_max_tw_buckets/d' \
+        -e '/net.ipv4.tcp_mem/d' \
+        -e '/net.ipv4.tcp_mtu_probing/d' \
+        -e '/net.ipv4.tcp_notsent_lowat/d' \
+        -e '/net.ipv4.tcp_retries2/d' \
+        -e '/net.ipv4.tcp_sack/d' \
+        -e '/net.ipv4.tcp_dsack/d' \
+        -e '/net.ipv4.tcp_slow_start_after_idle/d' \
+        -e '/net.ipv4.tcp_window_scaling/d' \
+        -e '/net.ipv4.tcp_ecn/d' \
+        -e '/net.ipv4.ip_forward/d' \
+        -e '/net.ipv4.udp_mem/d' \
+        -e '/net.ipv6.conf.all.disable_ipv6/d' \
+        -e '/net.ipv6.conf.all.forwarding/d' \
+        -e '/net.ipv6.conf.default.disable_ipv6/d' \
+        -e '/net.unix.max_dgram_qlen/d' \
+        -e '/vm.min_free_kbytes/d' \
+        -e '/vm.swappiness/d' \
+        -e '/vm.vfs_cache_pressure/d' \
+        "$SYS_PATH"
+
+        ## Add new parameteres. Read More: https://github.com/hawshemi/Linux-Optimizer/blob/main/files/sysctl.conf
+
+
+cat <<EOF >> "$SYS_PATH"
+fs.file-max = 67108864
+net.core.default_qdisc = fq_codel
+net.core.netdev_max_backlog = 32768
+net.core.optmem_max = 65536
+net.core.somaxconn = 65536
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+net.core.rmem_default = 1048576
+net.core.wmem_default = 1048576
+net.ipv4.tcp_rmem = 8192 1048576 16777216
+net.ipv4.tcp_wmem = 8192 1048576 16777216
+net.ipv4.tcp_congestion_control = bbr
+net.ipv4.tcp_fastopen = 3
+net.ipv4.tcp_fin_timeout = 25
+net.ipv4.tcp_keepalive_time = 1200
+net.ipv4.tcp_keepalive_probes = 7
+net.ipv4.tcp_keepalive_intvl = 30
+net.ipv4.tcp_max_orphans = 819200
+net.ipv4.tcp_max_syn_backlog = 20480
+net.ipv4.tcp_max_tw_buckets = 1440000
+net.ipv4.tcp_mem = 65536 1048576 16777216
+net.ipv4.tcp_mtu_probing = 1
+net.ipv4.tcp_notsent_lowat = 16384
+net.ipv4.tcp_retries2 = 8
+net.ipv4.tcp_sack = 1
+net.ipv4.tcp_dsack = 1
+net.ipv4.tcp_slow_start_after_idle = 0
+net.ipv4.tcp_window_scaling = 1
+net.ipv4.tcp_ecn = 1
+net.ipv4.ip_forward = 1
+net.ipv4.udp_mem = 65536 1048576 16777216
+net.ipv6.conf.all.disable_ipv6 = 0
+net.ipv6.conf.all.forwarding = 1
+net.ipv6.conf.default.disable_ipv6 = 0
+net.unix.max_dgram_qlen = 50
+vm.min_free_kbytes = 65536
+vm.swappiness = 10
+vm.vfs_cache_pressure = 50
+EOF
+
+sudo sysctl -p
+    
+    echo 
+    green_msg 'Network is Optimized.'
+    echo 
+    sleep 0.5
+        
 
     # Start and enable SSH
     sudo systemctl start sshd
