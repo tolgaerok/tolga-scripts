@@ -24,6 +24,14 @@ WHITE='\e[1;37m'
 ORANGE='\e[1;93m'
 NC='\e[0m'
 
+# Super tweak I/O scheduler
+echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
+echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
+printf "\n${YELLOW}I/O Scheduler has been set to ==>  ${NC}"
+cat /sys/block/sda/queue/scheduler
+echo ""
+sleep 2
+
 # Function to display messages
 display_message() {
     clear
@@ -88,14 +96,6 @@ if [ "$extract_choice" != "y" ]; then
     display_message "Exiting font extraction. No changes were made."
     exit 0
 fi
-
-# Super tweak I/O scheduler
-echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
-echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
-printf "\n${YELLOW}I/O Scheduler has been set to ==>  ${NC}"
-cat /sys/block/sda/queue/scheduler
-echo ""
-sleep 2
 
 # Create missing directories and fix permissions
 sudo mkdir -p /root/.cache/fontconfig
