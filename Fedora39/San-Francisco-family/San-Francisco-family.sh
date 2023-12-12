@@ -90,10 +90,11 @@ if [ "$extract_choice" != "y" ]; then
 fi
 
 # Super tweak I/O scheduler
-echo -e "\n${BLUE} Configuring I/O Scheduler to: ${NC}"
+echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
 echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
-printf "${YELLOW} I/O Scheduler has been set to ==>  ${NC}"
+printf "\n${YELLOW}I/O Scheduler has been set to ==>  ${NC}"
 cat /sys/block/sda/queue/scheduler
+echo ""
 sleep 2
 
 # Create missing directories and fix permissions
