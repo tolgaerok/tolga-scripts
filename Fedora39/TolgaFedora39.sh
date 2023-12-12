@@ -38,7 +38,7 @@ NC='\e[0m'
 YELLOW='\e[1;33m'
 NC='\e[0m'
 
-# none [mq-deadline] kyber bfq 
+# none [mq-deadline] kyber bfq
 # Super tweak I/O scheduler
 echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
 echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
@@ -1210,7 +1210,7 @@ kde_crap() {
                 kamoso
 
             # Remove akonadi
-           # sudo dnf remove -y *akonadi*
+            # sudo dnf remove -y *akonadi*
 
             # Remove games
             sudo dnf remove -y \

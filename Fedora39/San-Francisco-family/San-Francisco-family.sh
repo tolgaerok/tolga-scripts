@@ -58,33 +58,32 @@ if [ -f "/etc/os-release" ]; then
     source "/etc/os-release"
     OS_NAME="${PRETTY_NAME}"
     case $ID in
-        ubuntu)
-            FONTS_DIR="/usr/share/fonts/truetype"
-            FC_CACHE_CMD="fc-cache -f -v"
-            ;;
-        fedora | rhel)
-            FONTS_DIR="/usr/share/fonts"
-            FC_CACHE_CMD="fc-cache -f -v"
-            ;;
-        arch)
-            FONTS_DIR="/usr/share/fonts"
-            FC_CACHE_CMD="fc-cache -fv"
-            ;;
-        debian)
-            FONTS_DIR="/usr/share/fonts/truetype"
-            FC_CACHE_CMD="fc-cache -f -v"
-            ;;
-        *)
-            FONTS_DIR="/usr/share/fonts"
-            FC_CACHE_CMD="fc-cache -f -v"
-            ;;
+    ubuntu)
+        FONTS_DIR="/usr/share/fonts/truetype"
+        FC_CACHE_CMD="fc-cache -f -v"
+        ;;
+    fedora | rhel)
+        FONTS_DIR="/usr/share/fonts"
+        FC_CACHE_CMD="fc-cache -f -v"
+        ;;
+    arch)
+        FONTS_DIR="/usr/share/fonts"
+        FC_CACHE_CMD="fc-cache -fv"
+        ;;
+    debian)
+        FONTS_DIR="/usr/share/fonts/truetype"
+        FC_CACHE_CMD="fc-cache -f -v"
+        ;;
+    *)
+        FONTS_DIR="/usr/share/fonts"
+        FC_CACHE_CMD="fc-cache -f -v"
+        ;;
     esac
 else
     OS_NAME=$(uname -s)
     FONTS_DIR="/usr/share/fonts"
     FC_CACHE_CMD="fc-cache -f -v"
 fi
-
 
 # Display OS in blue
 display_message "[${BLUE}✔${NC}] Detected OS: ${BLUE}${OS_NAME}${NC}"
