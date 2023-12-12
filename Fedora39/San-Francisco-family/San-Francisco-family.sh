@@ -2,7 +2,7 @@
 
 # Tolga Erok...
 # My personal San-Francisco-family Font Downloader
-# 18/11/2023
+# 12/12/2023
 # Run from remote location:::...1112
 # sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgaFedora39.sh)"
 clear
