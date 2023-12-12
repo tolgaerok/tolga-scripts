@@ -886,6 +886,7 @@ vm.vfs_cache_pressure = 50
 EOF
 
     sudo sysctl -p
+    sudo systemctl restart systemd-sysctl
 
     echo
     green_msg 'Network is Optimized.'
