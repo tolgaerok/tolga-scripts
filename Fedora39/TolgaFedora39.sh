@@ -267,6 +267,8 @@ install_gpu_drivers() {
         sudo dnf update
         sudo dnf upgrade --refresh
         sudo dnf install dnf-plugins-core -y
+        sudo dnf install fedora-workstation-repositories
+        sudo dnf config-manager --set-enabled rpmfusion-nonfree-nvidia-driver
 
         # Install the tools required for auto signing to work
         # sudo dnf -y install kmodtool akmods mokutil openssl
