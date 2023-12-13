@@ -384,6 +384,31 @@ install_gpu_drivers() {
         sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"
 
         display_message "[${GREEN}✔${NC}]  nvidia-modeset enabled successfully."
+        sleep 1.5
+
+        SETTINGS_FILE="/etc/environment"
+
+        # Check if the export statements already exist
+        if ! grep -q "export __GL_THREADED_OPTIMIZATION=1" "$SETTINGS_FILE" &&
+            ! grep -q "export __GL_SHADER_CACHE=1" "$SETTINGS_FILE"; then
+
+            # Add NVIDIA environment variables
+            echo "export __GL_THREADED_OPTIMIZATION=1" | sudo tee -a "$SETTINGS_FILE" >/dev/null
+            echo "export __GL_SHADER_CACHE=1" | sudo tee -a "$SETTINGS_FILE" >/dev/null
+            # Optionally, set a custom shader cache path
+            # echo "export __GL_SHADER_DISK_CACHE_PATH=/path/to/shader/cache" | sudo tee -a "$SETTINGS_FILE" > /dev/null
+
+            # Notify user
+            display_message "[${GREEN}✔${NC}] NVIDIA environment settings have been added to /etc/environment."
+            sleep 1
+
+            display_message "[${GREEN}✔${NC}] Please reboot or log out/in for the changes to take effect."
+            sleep 1.5
+
+        else
+            # Notify user that export statements already exist
+            display_message "[${RED}✘${NC}] NVIDIA environment settings (export statements) already exist in /etc/environment. No changes made."
+        fi
 
         driver_version=$(modinfo -F version nvidia 2>/dev/null)
 
