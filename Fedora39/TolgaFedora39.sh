@@ -480,7 +480,10 @@ install_gpu_drivers() {
 
         # Make sure the boot image got updated as well
         sudo dracut --force
-        sleep 1.5
+        uname -m && cat /etc/*release
+        gcc --version
+        uname -r
+        sleep 4
     fi
 
     # Check for AMD GPU
