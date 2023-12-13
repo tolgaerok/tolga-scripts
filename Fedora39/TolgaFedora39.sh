@@ -474,6 +474,13 @@ install_gpu_drivers() {
 
         check_error "Failed to install NVIDIA drivers."
         display_message "[${GREEN}✔${NC}]  NVIDIA drivers installed successfully."
+
+        # Make sure the kernel modules got compiled
+        sudo akmods --force
+
+        # Make sure the boot image got updated as well
+        sudo dracut --force
+        sleep 1.5
     fi
 
     # Check for AMD GPU
