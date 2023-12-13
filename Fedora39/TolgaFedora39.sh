@@ -536,13 +536,14 @@ install_multimedia_codecs() {
     sudo dnf swap -y 'ffmpeg-free' 'ffmpeg' --allowerasing
     sudo dnf install -y gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-plugin-openh264 gstreamer1-libav --exclude=gstreamer1-plugins-bad-free-devel ffmpeg gstreamer-ffmpeg
     sudo dnf install -y lame\* --exclude=lame-devel
-    sudo dnf group upgrade --with-optional Multimedia
+    sudo dnf group upgrade --with-optional Multimedia -y
 
     # Enable support for Cisco OpenH264 codec
     sudo dnf config-manager --set-enabled fedora-cisco-openh264 -y
     sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264 -y
 
     display_message "[${GREEN}✔${NC}]  Multimedia codecs installed successfully."
+    sleep 1.5
 }
 
 # Template
@@ -558,6 +559,7 @@ install_hw_video_acceleration_amd_or_intel() {
         display_message "[${GREEN}✔${NC}]  AMD chipset detected. Installing AMD video acceleration..."
 
         sudo dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
+        sudo dnf swap -y swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
         sudo dnf config-manager --set-enabled fedora-cisco-openh264
         sudo dnf install -y openh264 gstreamer1-plugin-openh264 mozilla-openh264
 
@@ -844,6 +846,10 @@ install_apps() {
     sudo dnf -y clean all
 
     # Install Apps
+    sudo dnf install rpmfusion-free-release-tainted
+    sudo dnf install rpmfusion-nonfree-release-tainted
+    sudo dnf --repo=rpmfusion-nonfree-tainted install "*-firmware"
+    
     sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
     sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip
