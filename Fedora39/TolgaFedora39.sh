@@ -790,6 +790,8 @@ install_apps() {
     sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing
 
     ## Make a backup of the original sysctl.conf file
+    display_message "[${GREEN}✔${NC}]  Tweaking network settings"
+
     cp $SYS_PATH /etc/sysctl.conf.bak
 
     echo
@@ -841,6 +843,9 @@ install_apps() {
         -e '/vm.swappiness/d' \
         -e '/vm.vfs_cache_pressure/d' \
         "$SYS_PATH"
+        
+        display_message "[${GREEN}✔${NC}]  Previous settings deleted"
+        sleep 1
 
     ## Add new parameteres. Read More: https://github.com/hawshemi/Linux-Optimizer/blob/main/files/sysctl.conf
 
@@ -885,13 +890,15 @@ vm.swappiness = 10
 vm.vfs_cache_pressure = 50
 EOF
 
+    display_message "[${GREEN}✔${NC}]  Adding New network settings"
     sudo sysctl -p
     sudo systemctl restart systemd-sysctl
+    sleep 4
 
     echo
     green_msg 'Network is Optimized.'
     echo
-    sleep 0.5
+    sleep 1.5
 
     # Start and enable SSH
     sudo systemctl start sshd
