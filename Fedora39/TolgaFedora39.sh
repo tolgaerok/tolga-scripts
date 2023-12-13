@@ -843,9 +843,9 @@ install_apps() {
         -e '/vm.swappiness/d' \
         -e '/vm.vfs_cache_pressure/d' \
         "$SYS_PATH"
-        
-        display_message "[${GREEN}✔${NC}]  Previous settings deleted"
-        sleep 1
+
+    display_message "[${GREEN}✔${NC}]  Previous settings deleted"
+    sleep 1.5
 
     ## Add new parameteres. Read More: https://github.com/hawshemi/Linux-Optimizer/blob/main/files/sysctl.conf
 
@@ -893,7 +893,7 @@ EOF
     display_message "[${GREEN}✔${NC}]  Adding New network settings"
     sudo sysctl -p
     sudo systemctl restart systemd-sysctl
-    sleep 4
+    sleep 2.5
 
     echo
     green_msg 'Network is Optimized.'
