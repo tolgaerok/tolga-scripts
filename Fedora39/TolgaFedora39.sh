@@ -388,41 +388,69 @@ install_gpu_drivers() {
 
         SETTINGS_FILE="/etc/environment"
         BASHRC_FILE="$HOME/.bashrc"
+        PAM_LOGIN_FILE="/etc/pam.d/login"
+
+        # Add PAM module for environment variables to /etc/pam.d/login
+        if ! grep -q "session    required     pam_env.so" "$PAM_LOGIN_FILE"; then
+            echo "session    required     pam_env.so" | sudo tee -a "$PAM_LOGIN_FILE" >/dev/null
+            display_message "[${GREEN}✔${NC}] PAM module for environment variables added to $PAM_LOGIN_FILE."
+            sleep 1.5
+        else
+            display_message "[${RED}✘${NC}] PAM module for environment variables already exists in $PAM_LOGIN_FILE. No changes made."
+            sleep 1.5
+        fi
 
         # Check if the export statements already exist in /etc/environment
         if ! grep -q "export __GL_THREADED_OPTIMIZATION=1" "$SETTINGS_FILE" &&
-            ! grep -q "export __GL_SHADER_CACHE=1" "$SETTINGS_FILE"; then
+            ! grep -q "export __GL_SHADER_CACHE=1" "$SETTINGS_FILE" &&
+            ! grep -q "export __GLX_VENDOR_LIBRARY_NAME=nvidia" "$SETTINGS_FILE" &&
+            ! grep -q "export LIBVA_DRIVER_NAME=nvidia" "$SETTINGS_FILE" &&
+            ! grep -q "export WLR_NO_HARDWARE_CURSORS=1" "$SETTINGS_FILE"; then
 
-            # Add NVIDIA environment variables to /etc/environment
+            # Add existing NVIDIA environment variables to /etc/environment
             echo "export __GL_THREADED_OPTIMIZATION=1" | sudo tee -a "$SETTINGS_FILE" >/dev/null
             echo "export __GL_SHADER_CACHE=1" | sudo tee -a "$SETTINGS_FILE" >/dev/null
             # Optionally, set a custom shader cache path
             # echo "export __GL_SHADER_DISK_CACHE_PATH=/path/to/shader/cache" | sudo tee -a "$SETTINGS_FILE" > /dev/null
 
+            # Add new NVIDIA environment variables to /etc/environment
+            echo "export __GLX_VENDOR_LIBRARY_NAME=nvidia" | sudo tee -a "$SETTINGS_FILE" >/dev/null
+            echo "export LIBVA_DRIVER_NAME=nvidia" | sudo tee -a "$SETTINGS_FILE" >/dev/null
+            echo "export WLR_NO_HARDWARE_CURSORS=1" | sudo tee -a "$SETTINGS_FILE" >/dev/null
+
             # Notify user for /etc/environment
-            display_message "[${GREEN}✔${NC}] NVIDIA environment settings have been added to /etc/environment."
-            sleep 1
+            display_message "[${GREEN}✔${NC}] NVIDIA environment settings have been added to $SETTINGS_FILE."
+            sleep 1.5
 
             display_message "[${GREEN}✔${NC}] Please reboot or log out/in for the changes to take effect."
             sleep 1.5
 
         else
             # Notify user that export statements already exist in /etc/environment
-            display_message "[${RED}✘${NC}] NVIDIA environment settings (export statements) already exist in /etc/environment. No changes made."
+            display_message "[${RED}✘${NC}] NVIDIA environment settings (export statements) already exist in $SETTINGS_FILE. No changes made."
+            sleep 1.5
         fi
 
         # Check if the export statements already exist in .bashrc
         if ! grep -q "export __GL_THREADED_OPTIMIZATION=1" "$BASHRC_FILE" &&
-            ! grep -q "export __GL_SHADER_CACHE=1" "$BASHRC_FILE"; then
+            ! grep -q "export __GL_SHADER_CACHE=1" "$BASHRC_FILE" &&
+            ! grep -q "export __GLX_VENDOR_LIBRARY_NAME=nvidia" "$BASHRC_FILE" &&
+            ! grep -q "export LIBVA_DRIVER_NAME=nvidia" "$BASHRC_FILE" &&
+            ! grep -q "export WLR_NO_HARDWARE_CURSORS=1" "$BASHRC_FILE"; then
 
-            # Add NVIDIA environment variables to .bashrc
+            # Add existing NVIDIA environment variables to .bashrc
             echo "export __GL_THREADED_OPTIMIZATION=1" >>"$BASHRC_FILE"
             echo "export __GL_SHADER_CACHE=1" >>"$BASHRC_FILE"
             # Optionally, set a custom shader cache path
             # echo "export __GL_SHADER_DISK_CACHE_PATH=/path/to/shader/cache" >> "$BASHRC_FILE"
 
+            # Add new NVIDIA environment variables to .bashrc
+            echo "export __GLX_VENDOR_LIBRARY_NAME=nvidia" >>"$BASHRC_FILE"
+            echo "export LIBVA_DRIVER_NAME=nvidia" >>"$BASHRC_FILE"
+            echo "export WLR_NO_HARDWARE_CURSORS=1" >>"$BASHRC_FILE"
+
             # Notify user for .bashrc
-            display_message "[${GREEN}✔${NC}] NVIDIA environment settings have been added to .bashrc."
+            display_message "[${GREEN}✔${NC}] NVIDIA environment settings have been added to $BASHRC_FILE."
             sleep 1
 
             display_message "[${GREEN}✔${NC}] Please restart your shell session for the changes to take effect."
@@ -430,7 +458,7 @@ install_gpu_drivers() {
 
         else
             # Notify user that export statements already exist in .bashrc
-            display_message "[${RED}✘${NC}] NVIDIA environment settings (export statements) already exist in .bashrc. No changes made."
+            display_message "[${RED}✘${NC}] NVIDIA environment settings (export statements) already exist in $BASHRC_FILE. No changes made."
         fi
 
         driver_version=$(modinfo -F version nvidia 2>/dev/null)
