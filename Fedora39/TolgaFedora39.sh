@@ -269,7 +269,8 @@ install_gpu_drivers() {
         sudo dnf install dnf-plugins-core -y
 
         # Install the tools required for auto signing to work
-        sudo dnf -y install kmodtool akmods mokutil openssl
+        # sudo dnf -y install kmodtool akmods mokutil openssl
+        sudo dnf -y install akmods openssl
 
         # Generate a signing key
         # sudo kmodgenca -a
