@@ -859,7 +859,7 @@ install_apps() {
     sudo dnf install rpmfusion-free-release-tainted
     sudo dnf install rpmfusion-nonfree-release-tainted
     sudo dnf --repo=rpmfusion-nonfree-tainted install "*-firmware"
-    
+
     sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
     sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip
