@@ -67,6 +67,9 @@ SWAP_PATH="/swapfile"
 SWAP_SIZE=2G
 SYS_PATH="/etc/sysctl.conf"
 
+sudo dnf install -y figlet
+clear
+
 # none [mq-deadline] kyber bfq
 # Super tweak I/O scheduler
 echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
@@ -87,7 +90,7 @@ else
 fi
 
 echo""
-for_exit "figlet"
+# for_exit "figlet"
 figlet Fedora_39 Tweaks
 sleep 2
 
