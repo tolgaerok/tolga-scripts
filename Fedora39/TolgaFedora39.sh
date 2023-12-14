@@ -38,15 +38,6 @@ NC='\e[0m'
 YELLOW='\e[1;33m'
 NC='\e[0m'
 
-# none [mq-deadline] kyber bfq
-# Super tweak I/O scheduler
-echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
-echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
-printf "\n${YELLOW}I/O Scheduler has been set to ==>  ${NC}"
-cat /sys/block/sda/queue/scheduler
-echo ""
-sleep 2
-
 # Green, Yellow & Red Messages.
 green_msg() {
     tput setaf 2
@@ -67,12 +58,33 @@ red_msg() {
 }
 
 # Declare Paths & Settings.
-SYS_PATH="/etc/sysctl.conf"
+CONFIG_CONTENT="[General]\nNumlock=on"
 PROF_PATH="/etc/profile"
-SSH_PORT=""
+SDDM_CONF="/etc/sddm.conf.d/sddm.conf"
 SSH_PATH="/etc/ssh/sshd_config"
+SSH_PORT=""
 SWAP_PATH="/swapfile"
 SWAP_SIZE=2G
+SYS_PATH="/etc/sysctl.conf"
+
+# none [mq-deadline] kyber bfq
+# Super tweak I/O scheduler
+echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
+echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
+printf "\n${YELLOW}I/O Scheduler has been set to ==>  ${NC}"
+cat /sys/block/sda/queue/scheduler
+echo ""
+sleep 2
+
+# Turn on NumLock in SDDM login screen
+# Check if the SDDM configuration file exists
+if [ ! -f "$SDDM_CONF" ]; then
+    # If not, create the file and echo the configuration content into it
+    echo -e "$CONFIG_CONTENT" | sudo tee "$SDDM_CONF" >/dev/null
+else
+    # If the file exists, append the configuration content
+    echo -e "$CONFIG_CONTENT" | sudo tee -a "$SDDM_CONF" >/dev/null
+fi
 
 # Function to display messages
 display_message() {
@@ -863,8 +875,8 @@ install_apps() {
     sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
     sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip
-    sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf
     sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients
+    sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf
 
     ## Networking packages
     sudo dnf -y install iptables iptables-services nftables
@@ -1415,8 +1427,8 @@ kde_crap() {
 
     # List of KDE applications to check..
     apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail"
-        "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler"
         "kaddressbook" "kcharselect" "konversation" "elisa-player"
+        "kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler"
         "kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso"
         "kolourpaint" "krdc" "krfb" "kmail-account-wizard"
         "pim-data-exporter" "pim-sieve-editor" "elisa*" "kdeconnectd")
@@ -1568,16 +1580,16 @@ create-extra-dir() {
     display_message "[${GREEN}✔${NC}]  Create extra needed directories"
     # Directories to create
     directories=(
+        "${HOME}/.config/autostart"
+        "${HOME}/.config/environment.d"
+        "${HOME}/.config/systemd/user"
+        "${HOME}/.local/bin"
         "${HOME}/.local/share/applications"
+        "${HOME}/.local/share/fonts"
         "${HOME}/.local/share/icons"
         "${HOME}/.local/share/themes"
-        "${HOME}/.local/share/fonts"
-        "${HOME}/.zshrc.d"
-        "${HOME}/.local/bin"
-        "${HOME}/.config/autostart"
-        "${HOME}/.config/systemd/user"
         "${HOME}/.ssh"
-        "${HOME}/.config/environment.d"
+        "${HOME}/.zshrc.d"
         "${HOME}/src"
     )
 
