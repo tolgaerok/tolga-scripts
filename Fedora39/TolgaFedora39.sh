@@ -57,7 +57,7 @@ red_msg() {
     tput sgr0
 }
 
-# Declare Paths & Settings.
+# Declare Paths & Settings
 CONFIG_CONTENT="[General]\nNumlock=on"
 PROF_PATH="/etc/profile"
 SDDM_CONF="/etc/sddm.conf.d/sddm.conf"
