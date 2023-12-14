@@ -63,6 +63,10 @@ flatpak install -y flathub org.videolan.VLC
 
 # Install Firefox from Flathub
 flatpak install -y flathub org.mozilla.firefox
+# If flatpak, although it may not apply to your issue, but if you have Nvidia, set all varibles to true in about:config:
+# gfx.webrender.all
+# media.ffmpeg.vaapi.enabled
+# widget.dmabuf.force-enabled
 
 # Enable wayland support
 flatpak override --user --socket=wayland --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.firefox
