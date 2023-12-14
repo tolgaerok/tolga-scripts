@@ -86,6 +86,10 @@ else
     echo -e "$CONFIG_CONTENT" | sudo tee -a "$SDDM_CONF" >/dev/null
 fi
 
+for_exit "figlet"
+figlet Fedora_39 Tweaks
+sleep 2
+
 # Function to display messages
 display_message() {
     clear
