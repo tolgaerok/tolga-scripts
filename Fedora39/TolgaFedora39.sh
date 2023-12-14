@@ -492,7 +492,7 @@ install_gpu_drivers() {
 
         # Make sure the boot image got updated as well
         sudo dracut --force
-        
+
         source ~/.bashrc
         uname -m && cat /etc/*release
         gcc --version
@@ -898,6 +898,18 @@ install_apps() {
     sudo dnf swap -y libavcodec-free libavcodec-freeworld --allowerasing
     sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing
 
+    display_message "[${GREEN}✔${NC}]  Installing GUM"
+
+    echo '[charm]
+name=Charm
+baseurl=https://repo.charm.sh/yum/
+enabled=1
+gpgcheck=1
+gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
+    sudo yum install gum -y
+
+    gum spin --spinner dot --title "GUM installed" -- sleep 2
+
     ## Make a backup of the original sysctl.conf file
     display_message "[${GREEN}✔${NC}]  Tweaking network settings"
 
@@ -1002,7 +1014,8 @@ EOF
     display_message "[${GREEN}✔${NC}]  Adding New network settings"
     sudo sysctl -p
     sudo systemctl restart systemd-sysctl
-    sleep 2.5
+    echo ""
+    gum spin --spinner dot --title "Restarting systemd custom settings.." -- sleep 4
 
     echo
     green_msg 'Network is Optimized.'
@@ -1057,7 +1070,8 @@ EOF
     display_message "[${GREEN}✔${NC}]  Starting earlyloom services"
     sudo systemctl start earlyoom
     sudo systemctl enable --now earlyoom
-    sleep 2
+    echo ""
+    gum spin --spinner dot --title "Restarting Earlyloom.." -- sleep 2.5
     display_message "[${GREEN}✔${NC}]  Checking earlyloom status service"
 
     # Check EarlyOOM status
@@ -1128,7 +1142,8 @@ EOF
         rm "$zip_file"
 
         display_message "[${GREEN}✔${NC}] Apple fonts installed successfully."
-        sleep 1
+        echo ""
+        gum spin --spinner dot --title "Re-thinking... 1 sec" -- sleep 2
     else
         display_message "[${RED}✘${NC}] Download failed. Please check the URL and try again."
         sleep 2
@@ -1149,6 +1164,8 @@ EOF
 
     # Install Docker
     display_message "[${GREEN}✔${NC}]  Installing Docker..this takes awhile"
+    echo ""
+    gum spin --spinner dot --title "If this is the first time installing docker, it usually takes VERY long" -- sleep 2
     sudo dnf install docker -y
 
     # Install Btrfs
