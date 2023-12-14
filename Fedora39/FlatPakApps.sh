@@ -71,7 +71,7 @@ flatpak install -y flathub org.mozilla.firefox
 # Set Firefox about:config variables for Nvidia and Flatpak
 # flatpak override --env=MOZ_ENABLE_WAYLAND=1 --env=GDK_BACKEND=x11 org.mozilla.firefox
 
-flatpak override --env=gfx.webrender.all=true \
+sudo flatpak override --env=gfx.webrender.all=true \
     --env=media.ffmpeg.vaapi.enabled=true \
     --env=widget.dmabuf.force-enabled=true \
     org.mozilla.firefox
