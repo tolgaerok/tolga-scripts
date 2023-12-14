@@ -808,13 +808,13 @@ for_exit() {
     if command -v "$package_name" &>/dev/null; then
         # If the package is already installed, do nothing
         echo "$package_name is already installed. Exiting."
-        sleep 1
+        # sleep 1
         clear
     else
         # Install the package
         sudo dnf install -y "$package_name"
         echo "$package_name has been installed."
-        sleep 1
+        # sleep 1
         clear
     fi
 }
