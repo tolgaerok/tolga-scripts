@@ -86,6 +86,7 @@ else
     echo -e "$CONFIG_CONTENT" | sudo tee -a "$SDDM_CONF" >/dev/null
 fi
 
+echo""
 for_exit "figlet"
 figlet Fedora_39 Tweaks
 sleep 2
