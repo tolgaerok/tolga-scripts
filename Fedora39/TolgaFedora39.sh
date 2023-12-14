@@ -492,6 +492,8 @@ install_gpu_drivers() {
 
         # Make sure the boot image got updated as well
         sudo dracut --force
+        
+        source ~/.bashrc
         uname -m && cat /etc/*release
         gcc --version
         uname -r
