@@ -658,6 +658,8 @@ update_flatpak() {
     flatpak update --refresh
 
     display_message "[${GREEN}✔${NC}]  Executing Tolga's Flatpak's..."
+    
+    sudo flatpak override --env=GTK_MODULES=colorreload-gtk-module org.mozilla.firefox
 
     # Execute the Flatpak Apps installation script from the given URL
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/FlatPakApps.sh)"
