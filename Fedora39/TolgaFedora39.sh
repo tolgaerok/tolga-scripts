@@ -698,7 +698,7 @@ disable_mitigations() {
     y | Y)
         # Disable mitigations
         sudo grubby --update-kernel=ALL --args="mitigations=off threadirqs"
-        display_message "[${GREEN}✔${NC}]  Mitigations disabled successfully."
+        display_message "[${GREEN}✔${NC}]  Mitigations disabled successfully and multi-threading enabled."
         gum spin --spinner dot --title "Stand-by..." -- sleep 2
         ;;
     n | N)
