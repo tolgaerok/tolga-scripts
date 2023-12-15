@@ -99,21 +99,19 @@ sudo flatpak override --env=gfx.webrender.all=true \
 flatpak override --user --socket=wayland --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.firefox
 
 # Temporarily open Firefox to create profiles
-timeout 5 flatpak run --user org.mozilla.firefox
+flatpak run --user org.mozilla.firefox
 
 # Set Firefox profile path
-# FIREFOX_PROFILE_PATH=$(realpath ${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox/*.default-release)
-# FIREFOX_PROFILE_PATH=$(realpath "${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox"/*.default-release)
-# FIREFOX_PROFILE_PATH=$(find "${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox/" -maxdepth 1 -type d -name '*.default-release')
-FIREFOX_PROFILE_PATH=$(find "${HOME}/.mozilla/firefox" -name "*.default-release")
+FIREFOX_PROFILE_PATH=$(find "${HOME}/.mozilla/firefox" -maxdepth 1 -type d -name '*.default-release')
 
 # Check if the profile directory is found
 if [ -z "$FIREFOX_PROFILE_PATH" ]; then
     echo "Error: Firefox profile directory not found."
 else
-    echo "All good, Firefox profile directory  found"
-    sleep 1
+    echo "All good"
+    sleep 4
 fi
+
 
 # Create or update the user.js file in the Firefox profile directory
 cat <<EOL >"$FIREFOX_PROFILE_PATH/user.js"
