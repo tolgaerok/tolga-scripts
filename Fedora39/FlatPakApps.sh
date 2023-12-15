@@ -96,8 +96,14 @@ if [ "$EUID" -eq 0 ]; then
         sleep 4
     fi
 
+    # Check and set XDG_RUNTIME_DIR
+    if [ -z "$XDG_RUNTIME_DIR" ]; then
+        export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+    fi
+
 EOF
 fi
+
 
 
 # Create or update the user.js file in the Firefox profile directory
