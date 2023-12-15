@@ -658,7 +658,7 @@ update_flatpak() {
     flatpak update --refresh
 
     display_message "[${GREEN}✔${NC}]  Executing Tolga's Flatpak's..."
-    
+
     # Execute the Flatpak Apps installation script from the given URL
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/FlatPakApps.sh)"
 
@@ -904,7 +904,8 @@ install_apps() {
     sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune
     sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients
-    sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf
+    sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3-engines
+
 
     ## Networking packages
     sudo dnf -y install iptables iptables-services nftables
