@@ -76,6 +76,7 @@ baseurl=https://repo.charm.sh/yum/
 enabled=1
 gpgcheck=1
 gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
+
 sudo yum install gum -y
 clear
 
@@ -86,7 +87,7 @@ echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
 printf "\n${YELLOW}I/O Scheduler has been set to ==>  ${NC}"
 cat /sys/block/sda/queue/scheduler
 echo ""
-sleep 2
+gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
 # Turn on NumLock in SDDM login screen
 # Check if the SDDM configuration file exists
@@ -120,7 +121,7 @@ check_error() {
         display_message "[${RED}✘${NC}] Error occurred !!"
         # Print the error details
         echo "Error details: $1"
-        sleep 10
+            gum spin --spinner dot --title "Stand-by..." -- sleep 8
     fi
 }
 
@@ -166,7 +167,7 @@ EOL
         # Inform the user that the configuration file doesn't exist
         display_message "[${RED}✘${NC}] Error: DNF configuration file not found at $DNF_CONF_PATH."
         check_error
-        sleep 3
+            gum spin --spinner dot --title "Stand-by..." -- sleep 3
     fi
 
 }
