@@ -25,7 +25,7 @@
 #fi
 
 # Prompt user for confirmation
-read -p "==> This script will install Flatpak applications and make system modifications. Do you want to continue? (y/n): " choice
+read -p ")==> This script will install Flatpak applications and make system modifications. Do you want to continue? (y/n): " choice
 if [[ ! "$choice" =~ ^[Yy]$ ]]; then
     echo "Installation aborted."
     exit 0
