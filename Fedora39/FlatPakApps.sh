@@ -89,7 +89,7 @@ FIREFOX_PROFILE_PATH=$(find "${HOME}/.mozilla/firefox" -maxdepth 1 -type d -name
 if [ -z "$FIREFOX_PROFILE_PATH" ]; then
     echo "Error: Firefox profile directory not found."
 else
-    echo "All good"
+    echo "All good, Firefox profile directory found"
     sleep 4
 fi
 
