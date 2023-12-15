@@ -1765,6 +1765,7 @@ firewall() {
     done
 
     # Add extra command for NetBIOS name resolution traffic on UDP port 137
+    display_message "[${GREEN}✔${NC}] Adding NetBIOS name resolution traffic on UDP port 137"
     gum spin --spinner dot --title "Add extra command for NetBIOS name resolution traffic on UDP port 137" -- sleep 1.5
     sudo iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns
 
