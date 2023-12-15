@@ -45,20 +45,6 @@ flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/22.08
 flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/23.08
 # fi
 
-echo "#####################################"
-echo
-echo "Enabling Flatpak Theming Overrides"
-echo
-
-# Check and set XDG_RUNTIME_DIR
-if [ -z "$XDG_RUNTIME_DIR" ]; then
-    export XDG_RUNTIME_DIR="/run/user/$(id -u)"
-fi
-
-sudo flatpak override --filesystem=$HOME/.themes
-sudo flatpak override --filesystem=xdg-config/gtk-4.0:ro
-sudo flatpak override --filesystem=xdg-config/gtk-3.0:ro
-
 # Install Flatpak runtimes
 flatpak install -y flathub org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
 flatpak install -y flathub org.freedesktop.Platform.ffmpeg-full/x86_64/23.08
@@ -90,11 +76,6 @@ flatpak install -y flathub org.mozilla.firefox
 # Set Firefox about:config variables for Nvidia and Flatpak
 # flatpak override --env=MOZ_ENABLE_WAYLAND=1 --env=GDK_BACKEND=x11 org.mozilla.firefox
 
-sudo flatpak override --env=gfx.webrender.all=true \
-    --env=media.ffmpeg.vaapi.enabled=true \
-    --env=widget.dmabuf.force-enabled=true \
-    org.mozilla.firefox
-
 # Enable wayland support
 flatpak override --user --socket=wayland --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.firefox
 
@@ -111,7 +92,6 @@ else
     echo "All good"
     sleep 4
 fi
-
 
 # Create or update the user.js file in the Firefox profile directory
 cat <<EOL >"$FIREFOX_PROFILE_PATH/user.js"
@@ -215,6 +195,25 @@ sleep 1
 echo -e "\e[1;32m[✔]\e[0m Removing Old Flatpak Cruft...\n"
 flatpak uninstall --unused
 flatpak uninstall --delete-data
+
+echo "#####################################"
+echo
+echo "Enabling Flatpak Theming Overrides"
+echo
+
+# Check and set XDG_RUNTIME_DIR
+if [ -z "$XDG_RUNTIME_DIR" ]; then
+    export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+fi
+
+sudo flatpak override --filesystem=$HOME/.themes
+sudo flatpak override --filesystem=xdg-config/gtk-4.0:ro
+sudo flatpak override --filesystem=xdg-config/gtk-3.0:ro
+
+sudo flatpak override --env=gfx.webrender.all=true \
+    --env=media.ffmpeg.vaapi.enabled=true \
+    --env=widget.dmabuf.force-enabled=true \
+    org.mozilla.firefox
 
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 # Check if the directory exists before attempting to remove it
