@@ -5,7 +5,7 @@
 # 23/11/2023
 
 # Run from remote location:::.
-# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/FlatPakApps.sh)"
+# bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/FlatPakApps.sh)"
 
 #  ¯\_(ツ)_/¯
 #    █████▒▓█████ ▓█████▄  ▒█████   ██▀███   ▄▄▄
