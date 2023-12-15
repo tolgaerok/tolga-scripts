@@ -904,7 +904,7 @@ install_apps() {
     sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune
     sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients
-    sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3-engines
+    sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3
 
 
     ## Networking packages
