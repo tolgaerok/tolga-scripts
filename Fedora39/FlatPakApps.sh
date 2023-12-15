@@ -19,10 +19,10 @@
 #   ░  ░      ░    ░ ░     ░              ░  ░   ░
 
 # Check if script is run as root
-if [ "$(id -u)" -ne 0 ]; then
-    echo "This script must be run as root. Please use sudo."
-    exit 0
-fi
+#if [ "$(id -u)" -ne 0 ]; then
+#    echo "This script must be run as root. Please use sudo."
+#    exit 0
+#fi
 
 # Prompt user for confirmation
 read -p "This script will install Flatpak applications and make system modifications. Do you want to continue? (y/n): " choice
