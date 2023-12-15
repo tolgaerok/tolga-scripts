@@ -34,7 +34,7 @@ fi
 # Check if Flatpak is installed
 if ! command -v flatpak &>/dev/null; then
     echo "Flatpak is not installed. Please install Flatpak and run the script again."
-    exit 1
+    sleep 10
 fi
 
 # Add Flathub repository if not already added
@@ -74,11 +74,8 @@ flatpak override --user --filesystem=xdg-data/applications com.usebottles.bottle
 # Allow Bottles to access Steam folder
 flatpak override --user --filesystem=home/.var/app/com.valvesoftware.Steam/data/Steam com.usebottles.bottles
 
-# Check if Breeze-GTK theme is already installed
-if ! flatpak list | grep -q org.gtk.Gtk3theme.Breeze; then
-    # Install Breeze-GTK flatpak theme
-    flatpak install -y flathub org.gtk.Gtk3theme.Breeze
-fi
+# Install Breeze-GTK flatpak theme
+flatpak install -y flathub org.gtk.Gtk3theme.Breeze
 
 # Install applications
 flatpak install -y flathub org.videolan.VLC
@@ -113,7 +110,9 @@ FIREFOX_PROFILE_PATH=$(find "${HOME}/.mozilla/firefox" -name "*.default-release"
 # Check if the profile directory is found
 if [ -z "$FIREFOX_PROFILE_PATH" ]; then
     echo "Error: Firefox profile directory not found."
-    sleep 4
+else
+    echo "All good, Firefox profile directory  found"
+    sleep 1
 fi
 
 # Create or update the user.js file in the Firefox profile directory
