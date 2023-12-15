@@ -926,12 +926,12 @@ gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
     echo
     yellow_msg 'Default sysctl.conf file Saved. Directory: /etc/sysctl.conf.bak'
     echo
-    sleep 1
+    sleep 0.5
 
     echo
     yellow_msg 'Optimizing the Network...'
     echo
-    sleep 0.5
+     gum spin --spinner dot --title "tweaking network" -- sleep 3
 
     sed -i -e '/fs.file-max/d' \
         -e '/net.core.default_qdisc/d' \
@@ -974,7 +974,7 @@ gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
         "$SYS_PATH"
 
     display_message "[${GREEN}✔${NC}]  Previous settings deleted"
-    sleep 1.5
+    gum spin --spinner dot --title "Re-accessing, stanby" -- sleep 2
 
     ## Add new parameteres. Read More: https://github.com/hawshemi/Linux-Optimizer/blob/main/files/sysctl.conf
 
@@ -1028,7 +1028,7 @@ EOF
     echo
     green_msg 'Network is Optimized.'
     echo
-    sleep 1.5
+     gum spin --spinner dot --title "Starting SSH..." -- sleep 3
 
     # Start and enable SSH
     sudo systemctl start sshd
@@ -1039,7 +1039,7 @@ EOF
     sudo systemctl status sshd
 
     display_message "[${GREEN}✔${NC}]  Setup KDE Wallet"
-    sleep 1
+    gum spin --spinner dot --title "Standby.." -- sleep 1
     # Install Plasma related packages
     sudo dnf install -y \
         ksshaskpass
@@ -1064,7 +1064,7 @@ SSH_ASKPASS_REQUIRE=prefer
 EOF
 
     display_message "[${GREEN}✔${NC}]  Install vitualization group and set permissions"
-    sleep 1
+    gum spin --spinner dot --title "Standby.." -- sleep 1
     # Install virtualization group
     sudo dnf install -y @virtualization
 
@@ -1107,16 +1107,16 @@ EOF
     echo -e "Service Enablement: $enabled_status"
     echo -e "Total Memory: $mem_total KB"
     echo -e "Total Swap: $swap_total KB\n\n"
-    sleep 2
+   gum spin --spinner dot --title "Standby.." -- sleep 1
     sudo journalctl -u earlyoom | grep sending
-    sleep 3
+    gum spin --spinner dot --title "Standby.." -- sleep 3
 
     # Install fedora preload
     display_message "[${GREEN}✔${NC}]  Install fedora preload"
     sudo dnf copr enable atim/preload -y && sudo dnf install preload -y
     display_message "[${GREEN}✔${NC}]  Enable fedora preload service"
     sudo systemctl enable --now preload.service
-    sleep 1
+    gum spin --spinner dot --title "Standby.." -- sleep 1.5
 
     # Install some fonts
     display_message "[${GREEN}✔${NC}]  Installing some fonts"
@@ -1184,17 +1184,17 @@ EOF
     # Check if the package is installed
     if rpm -q "$package_name" >/dev/null; then
         display_message "[${RED}✘${NC}] $package_name is already installed."
-        sleep 2
+        gum spin --spinner dot --title "Standby.." -- sleep 1
     else
         # Package is not installed, so proceed with the installation
         display_message "[${GREEN}✔${NC}]  $package_name is not installed. Installing..."
         sudo dnf install -y "$package_url"
         if [ $? -eq 0 ]; then
             display_message "[${GREEN}✔${NC}]  $package_name has been successfully installed."
-            sleep 1
+            gum spin --spinner dot --title "Standby.." -- sleep 1
         else
             display_message "[${RED}✘${NC}] Failed to install $package_name."
-            sleep 1
+            gum spin --spinner dot --title "Standby.." -- sleep 1
         fi
     fi
 
@@ -1202,7 +1202,7 @@ EOF
     display_message "[${GREEN}✔${NC}]  Installing Google chrome"
     if command -v google-chrome &>/dev/null; then
         display_message "[${RED}✘${NC}] Google Chrome is already installed. Skipping installation."
-        sleep 1
+        gum spin --spinner dot --title "Standby.." -- sleep 1
     else
         # Install Google Chrome
         display_message "[${GREEN}✔${NC}]  Installing Google Chrome browser..."
@@ -1316,13 +1316,15 @@ Continuing..." -t 1 -n 1 -s
     sudo systemctl enable sshd && sudo systemctl start sshd
 
     display_message "[${GREEN}✔${NC}]  Installation completed."
-    sleep 2
+    gum spin --spinner dot --title "Standby.." -- sleep 3
 
     # Check for errors during installation
     if [ $? -eq 0 ]; then
         display_message "Apps installed successfully."
+        gum spin --spinner dot --title "Standby.." -- sleep 2
     else
         display_message "[${RED}✘${NC}] Error: Unable to install Apps."
+        gum spin --spinner dot --title "Standby.." -- sleep 2
     fi
 }
 
