@@ -121,7 +121,7 @@ check_error() {
         display_message "[${RED}✘${NC}] Error occurred !!"
         # Print the error details
         echo "Error details: $1"
-            gum spin --spinner dot --title "Stand-by..." -- sleep 8
+        gum spin --spinner dot --title "Stand-by..." -- sleep 8
     fi
 }
 
@@ -167,7 +167,7 @@ EOL
         # Inform the user that the configuration file doesn't exist
         display_message "[${RED}✘${NC}] Error: DNF configuration file not found at $DNF_CONF_PATH."
         check_error
-            gum spin --spinner dot --title "Stand-by..." -- sleep 3
+        gum spin --spinner dot --title "Stand-by..." -- sleep 3
     fi
 
 }
@@ -658,7 +658,7 @@ update_flatpak() {
     flatpak update --refresh
 
     display_message "[${GREEN}✔${NC}]  Executing Tolga's Flatpak's..."
-    
+
     sudo flatpak override --env=GTK_MODULES=colorreload-gtk-module org.mozilla.firefox
 
     # Execute the Flatpak Apps installation script from the given URL
@@ -906,8 +906,9 @@ install_apps() {
     sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune
     sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients
-    sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3
+    sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel
 
+    /usr/bin/rygel-preferences
 
     ## Networking packages
     sudo dnf -y install iptables iptables-services nftables
@@ -1704,6 +1705,77 @@ check_internet_connection() {
     clear
 }
 
+firewall() {
+    # Define allowed TCP ports
+    allowedTCPPorts=(
+        21    # FTP
+        53    # DNS
+        80    # HTTP
+        443   # HTTPS
+        143   # IMAP
+        389   # LDAP
+        139   # Samba
+        445   # Samba
+        25    # SMTP
+        22    # SSH
+        5432  # PostgreSQL
+        3306  # MySQL/MariaDB
+        3307  # MySQL/MariaDB
+        111   # NFS
+        2049  # NFS
+        2375  # Docker
+        22000 # Syncthing
+        9091  # Transmission
+        60450 # Transmission
+        80    # Gnomecast server
+        8010  # Gnomecast server
+        8888  # Gnomecast server
+        5357  # wsdd: Samba
+        1714  # Open KDE Connect
+        1764  # Open KDE Connect
+        8200  # Teamviewer
+    )
+
+    # Define allowed UDP ports
+    allowedUDPPorts=(
+        53    # DNS
+        137   # NetBIOS Name Service
+        138   # NetBIOS Datagram Service
+        3702  # wsdd: Samba
+        5353  # Device discovery
+        21027 # Syncthing
+        22000 # Syncthing
+        8200  # Teamviewer
+        1714  # Open KDE Connect
+        1764  # Open KDE Connect
+    )
+    display_message "[${GREEN}✔${NC}] Setting up firewall ports (OLD NixOs settings)"
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
+
+    # Add allowed TCP ports
+    for port in "${allowedTCPPorts[@]}"; do
+        sudo firewall-cmd --permanent --add-port="$port/tcp"
+        gum spin --spinner dot --title "Setting up TCPorts:  $port" -- sleep 0.5
+    done
+
+    # Add allowed UDP ports
+    for port in "${allowedUDPPorts[@]}"; do
+        sudo firewall-cmd --permanent --add-port="$port/udp"
+        gum spin --spinner dot --title "Setting up UDPPorts:  $port" -- sleep 0.5
+    done
+
+    # Add extra command for NetBIOS name resolution traffic on UDP port 137
+    gum spin --spinner dot --title "Add extra command for NetBIOS name resolution traffic on UDP port 137" -- sleep 1.5
+    sudo iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns
+
+    # Reload the firewall for changes to take effect
+    sudo firewall-cmd --reload
+    gum spin --spinner dot --title "Reloading firewall" -- sleep 0.5
+
+    display_message "[${GREEN}✔${NC}] Firewall rules applied successfully."
+    gum spin --spinner dot --title "Reloading MainMenu" -- sleep 1.5
+}
+
 # Template
 # display_message "[${GREEN}✔${NC}]
 # display_message "[${RED}✘${NC}]
@@ -1740,6 +1812,7 @@ display_main_menu() {
     echo -e "\e[33m 25.\e[0m \e[32mPerform BTRFS balance and scrub operation on / partition     ( !! WARNING, backup important data incase, 5 min operation )\e[0m"
     echo -e "\e[33m 26.\e[0m \e[32mCreate extra hidden dir in HOME                                "
     echo -e "\e[33m 27.\e[0m \e[32mModify systemd timeout settings to 10s                         "
+    echo -e "\e[33m 28.\e[0m \e[32mSet-up TCP && UDP firewall settings                          ( Mimic my NixOS firewall settings )                         "
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
     echo -e "\e[31m   (0) \e[0m \e[32mExit\e[0m"
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
@@ -1790,6 +1863,7 @@ handle_user_input() {
     25) btrfs_maint ;;
     26) create-extra-dir ;;
     27) speed-up-shutdown ;;
+    28) firewall ;;
 
     0)
         # Before exiting, check if duf and neofetch are installed
