@@ -87,11 +87,12 @@ FIREFOX_PROFILE_PATH=$(find "${HOME}/.mozilla/firefox" -maxdepth 1 -type d -name
 
 # Check if the profile directory is found
 if [ -z "$FIREFOX_PROFILE_PATH" ]; then
-    echo "Error: Firefox profile directory not found."
+    echo -e "\nError: Firefox profile directory not found.\n"
 else
-    echo "All good, Firefox profile directory found"
+    echo -e "\nAll good, Firefox profile directory found\n"
     sleep 4
 fi
+
 
 # Create or update the user.js file in the Firefox profile directory
 cat <<EOL >"$FIREFOX_PROFILE_PATH/user.js"
