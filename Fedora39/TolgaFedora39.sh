@@ -697,7 +697,7 @@ disable_mitigations() {
     case "$choice" in
     y | Y)
         # Disable mitigations
-        sudo grubby --update-kernel=ALL --args="mitigations=off"
+        sudo grubby --update-kernel=ALL --args="mitigations=off threadirqs"
         display_message "[${GREEN}✔${NC}]  Mitigations disabled successfully."
         gum spin --spinner dot --title "Stand-by..." -- sleep 2
         ;;
@@ -780,7 +780,7 @@ check_mitigations_grub() {
     grub_config=$(cat /etc/default/grub)
 
     # Check if mitigations=off is present
-    if echo "$grub_config" | grep -q "mitigations=off"; then
+    if echo "$grub_config" | grep -q "mitigations=off threadirqs"; then
         display_message "[${GREEN}✔${NC}]  Mitigations are currently disabled in GRUB configuration: ==>  ( Success! )"
         gum spin --spinner dot --title "Stand-by..." -- sleep 2
     else
