@@ -89,12 +89,19 @@ flatpak override --user --socket=wayland --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.
 timeout 5 flatpak run org.mozilla.firefox
 
 # Set Firefox profile path
-#FIREFOX_PROFILE_PATH=$(realpath ${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox/*.default-release)
-FIREFOX_PROFILE_PATH=$(realpath "${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox"/*.default-release)
+# FIREFOX_PROFILE_PATH=$(realpath ${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox/*.default-release)
+# FIREFOX_PROFILE_PATH=$(realpath "${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox"/*.default-release)
+FIREFOX_PROFILE_PATH=$(find "${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox/" -maxdepth 1 -type d -name '*.default-release')
+
+if [ -z "$FIREFOX_PROFILE_PATH" ]; then
+    echo "Error: Firefox profile directory not found."
+    exit 1
+fi
 
 # Disable D-Bus warnings in Firefox
 # echo 'pref("toolkit.startup.max_resumed_crashes", -1);' >>${FIREFOX_PROFILE_PATH}/user.js
-echo 'pref("toolkit.startup.max_resumed_crashes", -1);' >>"${FIREFOX_PROFILE_PATH}/user.js"
+# echo 'pref("toolkit.startup.max_resumed_crashes", -1);' >>"${FIREFOX_PROFILE_PATH}/user.js"
+echo 'pref("toolkit.startup.max_resumed_crashes", -1);' >> "${FIREFOX_PROFILE_PATH}/user.js"
 
 # Import extensions
 mkdir -p ${FIREFOX_PROFILE_PATH}/extensions
