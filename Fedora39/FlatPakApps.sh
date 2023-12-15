@@ -113,7 +113,7 @@ FIREFOX_PROFILE_PATH=$(find "${HOME}/.mozilla/firefox" -name "*.default-release"
 # Check if the profile directory is found
 if [ -z "$FIREFOX_PROFILE_PATH" ]; then
     echo "Error: Firefox profile directory not found."
-    exit 1
+    sleep 4
 fi
 
 # Create or update the user.js file in the Firefox profile directory
