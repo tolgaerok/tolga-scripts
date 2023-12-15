@@ -931,7 +931,7 @@ gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
     echo
     yellow_msg 'Optimizing the Network...'
     echo
-     gum spin --spinner dot --title "tweaking network" -- sleep 3
+    gum spin --spinner dot --title "tweaking network" -- sleep 3
 
     sed -i -e '/fs.file-max/d' \
         -e '/net.core.default_qdisc/d' \
@@ -1028,7 +1028,7 @@ EOF
     echo
     green_msg 'Network is Optimized.'
     echo
-     gum spin --spinner dot --title "Starting SSH..." -- sleep 3
+    gum spin --spinner dot --title "Starting SSH..." -- sleep 3
 
     # Start and enable SSH
     sudo systemctl start sshd
@@ -1107,7 +1107,7 @@ EOF
     echo -e "Service Enablement: $enabled_status"
     echo -e "Total Memory: $mem_total KB"
     echo -e "Total Swap: $swap_total KB\n\n"
-   gum spin --spinner dot --title "Standby.." -- sleep 1
+    gum spin --spinner dot --title "Standby.." -- sleep 1
     sudo journalctl -u earlyoom | grep sending
     gum spin --spinner dot --title "Standby.." -- sleep 3
 
