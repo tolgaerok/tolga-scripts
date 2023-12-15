@@ -25,7 +25,7 @@
 #fi
 
 # Prompt user for confirmation
-read -p "This script will install Flatpak applications and make system modifications. Do you want to continue? (y/n): " choice
+read -p "==> This script will install Flatpak applications and make system modifications. Do you want to continue? (y/n): " choice
 if [[ ! "$choice" =~ ^[Yy]$ ]]; then
     echo "Installation aborted."
     exit 0
@@ -82,15 +82,21 @@ flatpak override --user --socket=wayland --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.
 # Temporarily open Firefox to create profiles
 flatpak run --user org.mozilla.firefox
 
-# Set Firefox profile path
-FIREFOX_PROFILE_PATH=$(find "${HOME}/.mozilla/firefox" -maxdepth 1 -type d -name '*.default-release')
+# Run tasks as the invoking user
+if [ "$EUID" -eq 0 ]; then
+    echo "Switching to the invoking user..."
+    sudo -u $(logname) bash << 'EOF'
 
-# Check if the profile directory is found
-if [ -z "$FIREFOX_PROFILE_PATH" ]; then
-    echo -e "\nError: Firefox profile directory not found.\n"
-else
-    echo -e "\nAll good, Firefox profile directory found\n"
-    sleep 4
+    # Check if the profile directory is found
+    FIREFOX_PROFILE_PATH=$(find "${HOME}/.mozilla/firefox" -name "*.default-release")
+    if [ -z "$FIREFOX_PROFILE_PATH" ]; then
+        echo -e "\nError: Firefox profile directory not found.\n"
+    else
+        echo -e "\nAll good, Firefox profile directory found\n"
+        sleep 4
+    fi
+
+EOF
 fi
 
 
