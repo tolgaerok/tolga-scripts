@@ -27,15 +27,21 @@ fi
 # Add Flathub repository if not already added
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
-if lspci | grep VGA | grep "Intel" >/dev/null; then
-    flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/22.08
-    flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/23.08
-fi
+# if lspci | grep VGA | grep "Intel" >/dev/null; then
+flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/22.08
+flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/23.08
+# fi
 
 echo "#####################################"
 echo
 echo "Enabling Flatpak Theming Overrides"
 echo
+
+# Check and set XDG_RUNTIME_DIR
+if [ -z "$XDG_RUNTIME_DIR" ]; then
+    export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+fi
+
 sudo flatpak override --filesystem=$HOME/.themes
 sudo flatpak override --filesystem=xdg-config/gtk-4.0:ro
 sudo flatpak override --filesystem=xdg-config/gtk-3.0:ro
@@ -83,10 +89,12 @@ flatpak override --user --socket=wayland --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.
 timeout 5 flatpak run org.mozilla.firefox
 
 # Set Firefox profile path
-FIREFOX_PROFILE_PATH=$(realpath ${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox/*.default-release)
+#FIREFOX_PROFILE_PATH=$(realpath ${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox/*.default-release)
+FIREFOX_PROFILE_PATH=$(realpath "${HOME}/.var/app/org.mozilla.firefox/.mozilla/firefox"/*.default-release)
 
 # Disable D-Bus warnings in Firefox
-echo 'pref("toolkit.startup.max_resumed_crashes", -1);' >>${FIREFOX_PROFILE_PATH}/user.js
+# echo 'pref("toolkit.startup.max_resumed_crashes", -1);' >>${FIREFOX_PROFILE_PATH}/user.js
+echo 'pref("toolkit.startup.max_resumed_crashes", -1);' >>"${FIREFOX_PROFILE_PATH}/user.js"
 
 # Import extensions
 mkdir -p ${FIREFOX_PROFILE_PATH}/extensions
