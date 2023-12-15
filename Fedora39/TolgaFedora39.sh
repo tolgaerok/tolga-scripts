@@ -70,6 +70,15 @@ SYS_PATH="/etc/sysctl.conf"
 sudo dnf install -y figlet
 clear
 
+echo '[charm]
+name=Charm
+baseurl=https://repo.charm.sh/yum/
+enabled=1
+gpgcheck=1
+gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
+sudo yum install gum -y
+clear
+
 # none [mq-deadline] kyber bfq
 # Super tweak I/O scheduler
 echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
@@ -92,7 +101,7 @@ fi
 echo""
 # for_exit "figlet"
 figlet Fedora_39 Tweaks
-sleep 2
+gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
 # Function to display messages
 display_message() {
@@ -102,7 +111,7 @@ display_message() {
     echo -e "|${YELLOW}==>${NC}  $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
     echo ""
-    sleep 1
+    gum spin --spinner dot --title "Stand-by..." -- sleep 1
 }
 
 # Function to check and display errors
@@ -174,11 +183,11 @@ dnf5() {
             --enablerepo fedora --allowerasing --best
         display_message "${GREEN}=>${NC} Beta: DNF5 installed"
         echo -e "In order to use dnf5, you need to use ${YELLOW}==>${NC} ${GREEN} sudo dnf5 update${NC}"
-        sleep 5
+        gum spin --spinner dot --title "Stand-by..." -- sleep 5
     else
         display_message "[${RED}✘${NC}] DNF5 installation error !"
         echo "Aborted installation of dnf5. Returning to the main menu."
-        sleep 3
+        gum spin --spinner dot --title "Stand-by..." -- sleep 3
     fi
 
 }
@@ -200,7 +209,7 @@ change_hotname() {
 
     # Display the new hostname
     echo "Hostname changed to: $new_hostname"
-    sleep 2
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 }
 
 # Template
@@ -245,6 +254,7 @@ update_system() {
     check_error
 
     display_message "System updated successfully."
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 }
 
 # Function to install firmware updates with a countdown on error
@@ -358,7 +368,7 @@ install_gpu_drivers() {
         sudo nvautoinstall vulkan
         sudo nvautoinstall vidacc
         sudo nvautoinstall compat
-        sleep 1
+        gum spin --spinner dot --title "Stand-by..." -- sleep 1
 
         # Latest/Beta driver
         # Install the latest drivers from Rawhide
@@ -404,7 +414,7 @@ install_gpu_drivers() {
         sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"
 
         display_message "[${GREEN}✔${NC}]  nvidia-modeset enabled successfully."
-        sleep 1.5
+        gum spin --spinner dot --title "Stand-by..." -- sleep 1.5
 
         SETTINGS_FILE="/etc/environment"
         BASHRC_FILE="$HOME/.bashrc"
@@ -414,10 +424,10 @@ install_gpu_drivers() {
         if ! grep -q "session    required     pam_env.so" "$PAM_LOGIN_FILE"; then
             echo "session    required     pam_env.so" | sudo tee -a "$PAM_LOGIN_FILE" >/dev/null
             display_message "[${GREEN}✔${NC}] PAM module for environment variables added to $PAM_LOGIN_FILE."
-            sleep 1.5
+            gum spin --spinner dot --title "Stand-by..." -- sleep 2
         else
             display_message "[${RED}✘${NC}] PAM module for environment variables already exists in $PAM_LOGIN_FILE. No changes made."
-            sleep 1.5
+            gum spin --spinner dot --title "Stand-by..." -- sleep 2
         fi
 
         # Check if the export statements already exist in /etc/environment
@@ -440,15 +450,15 @@ install_gpu_drivers() {
 
             # Notify user for /etc/environment
             display_message "[${GREEN}✔${NC}] NVIDIA environment settings have been added to $SETTINGS_FILE."
-            sleep 1.5
+            gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
             display_message "[${GREEN}✔${NC}] Please reboot or log out/in for the changes to take effect."
-            sleep 1.5
+            gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
         else
             # Notify user that export statements already exist in /etc/environment
             display_message "[${RED}✘${NC}] NVIDIA environment settings (export statements) already exist in $SETTINGS_FILE. No changes made."
-            sleep 1.5
+            gum spin --spinner dot --title "Stand-by..." -- sleep 2
         fi
 
         # Check if the export statements already exist in .bashrc
@@ -471,10 +481,10 @@ install_gpu_drivers() {
 
             # Notify user for .bashrc
             display_message "[${GREEN}✔${NC}] NVIDIA environment settings have been added to $BASHRC_FILE."
-            sleep 1
+            gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
             display_message "[${GREEN}✔${NC}] Please restart your shell session for the changes to take effect."
-            sleep 1.5
+            gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
         else
             # Notify user that export statements already exist in .bashrc
@@ -485,12 +495,12 @@ install_gpu_drivers() {
 
         if [ -n "$driver_version" ]; then
             display_message "NVIDIA driver version: $driver_version"
-            sleep 1
+            gum spin --spinner dot --title "Stand-by..." -- sleep 2
         else
             display_message "[${RED}✘${NC}] NVIDIA driver not found."
         fi
 
-        sleep 2
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
         check_error "Failed to install NVIDIA drivers."
         display_message "[${GREEN}✔${NC}]  NVIDIA drivers installed successfully."
@@ -505,7 +515,7 @@ install_gpu_drivers() {
         uname -m && cat /etc/*release
         gcc --version
         uname -r
-        sleep 4
+        gum spin --spinner dot --title "Stand-by..." -- sleep 3.5
     fi
 
     # Check for AMD GPU
@@ -518,6 +528,7 @@ install_gpu_drivers() {
 
         check_error "Failed to install AMD drivers."
         display_message "AMD drivers installed successfully."
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
     fi
 
     glxinfo | egrep "OpenGL vendor|OpenGL renderer"
@@ -555,8 +566,10 @@ optimize_battery() {
         sudo powertop --auto-tune
 
         display_message "Battery optimization completed."
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
     else
         display_message "No battery found. Skipping battery optimization."
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
     fi
 }
 
@@ -575,7 +588,7 @@ install_multimedia_codecs() {
     sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264 -y
 
     display_message "[${GREEN}✔${NC}]  Multimedia codecs installed successfully."
-    sleep 1.5
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 }
 
 # Template
@@ -614,9 +627,10 @@ install_hw_video_acceleration_amd_or_intel() {
             sudo dnf install libva libva-utils xorg-x11-drv-intel -y
 
             display_message "[${GREEN}✔${NC}]  H/W Video Acceleration for Intel chipset installed successfully."
-            sleep 1
+            gum spin --spinner dot --title "Stand-by..." -- sleep 2
         else
             display_message "No Intel chipset found. Skipping H/W Video Acceleration installation."
+            gum spin --spinner dot --title "Stand-by..." -- sleep 2
         fi
     fi
 }
@@ -659,7 +673,7 @@ set_utc_time() {
     sudo timedatectl set-local-rtc '0'
 
     display_message "[${GREEN}✔${NC}]  UTC Time set successfully."
-    sleep 1
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 }
 
 # Template
@@ -669,7 +683,7 @@ set_utc_time() {
 # Function to disable mitigations, old fedora hack and used on nixos also, thanks chris titus!
 disable_mitigations() {
     display_message "Disabling Mitigations..."
-    sleep 1
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
     # Inform the user about the security risks
     display_message "[${RED}✘${NC}] Note: Disabling mitigations can present security risks. Only proceed if you understand the implications."
@@ -681,15 +695,15 @@ disable_mitigations() {
         # Disable mitigations
         sudo grubby --update-kernel=ALL --args="mitigations=off"
         display_message "[${GREEN}✔${NC}]  Mitigations disabled successfully."
-        sleep 1
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
         ;;
     n | N)
         display_message "[${RED}✘${NC}] Mitigations not disabled. Exiting."
-        sleep 2
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
         ;;
     *)
         display_message "[${RED}✘${NC}] Invalid choice. Exiting."
-        sleep 2
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
         ;;
     esac
 }
@@ -702,6 +716,7 @@ enable_modern_standby() {
     sudo grubby --update-kernel=ALL --args="mem_sleep_default=s2idle"
 
     display_message "Modern Standby enabled successfully."
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 }
 
 # Function to enable nvidia-modeset
@@ -712,7 +727,7 @@ enable_nvidia_modeset() {
     sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"
 
     display_message "[${GREEN}✔${NC}]  nvidia-modeset enabled successfully."
-    sleep 1
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 }
 
 # Function to disable NetworkManager-wait-online.service
@@ -723,7 +738,7 @@ disable_network_manager_wait_online() {
     sudo systemctl disable NetworkManager-wait-online.service
 
     display_message "NetworkManager-wait-online.service disabled successfully."
-    sleep 1
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 }
 
 # Template
@@ -763,9 +778,10 @@ check_mitigations_grub() {
     # Check if mitigations=off is present
     if echo "$grub_config" | grep -q "mitigations=off"; then
         display_message "[${GREEN}✔${NC}]  Mitigations are currently disabled in GRUB configuration: ==>  ( Success! )"
-        sleep 1
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
     else
         display_message "[${RED}✘${NC}] Warning: Mitigations are not currently disabled in GRUB configuration."
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
     fi
 }
 
@@ -792,10 +808,10 @@ download_and_install_code_tv() {
         # Cleanup
         display_message "[${GREEN}✔${NC}]  Cleaning up /tmp..."
         rm "$download_location"
-        sleep 1
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
         display_message "[${GREEN}✔${NC}]  $3 installation completed."
-        sleep 1
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
     fi
 
 }
@@ -847,10 +863,10 @@ download_and_install() {
 check_port22() {
     if pgrep sshd >/dev/null; then
         display_message "[${GREEN}✔${NC}] SSH service is running on port 22"
-        sleep 1
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
     else
         display_message "${RED}[✘]${NC} SSH service is not running on port 22. Install and enable SSHD service.\n"
-        sleep 2
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
         check_error
     fi
 }
@@ -926,7 +942,7 @@ gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
     echo
     yellow_msg 'Default sysctl.conf file Saved. Directory: /etc/sysctl.conf.bak'
     echo
-    sleep 0.5
+    gum spin --spinner dot --title "Stand-by..." -- sleep 1
 
     echo
     yellow_msg 'Optimizing the Network...'
@@ -1034,7 +1050,7 @@ EOF
     sudo systemctl start sshd
     sudo systemctl enable sshd
     display_message "[${GREEN}✔${NC}]  Checking SSh port"
-    sleep 1
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
     check_port22
     sudo systemctl status sshd
 
@@ -1154,7 +1170,7 @@ EOF
         gum spin --spinner dot --title "Re-thinking... 1 sec" -- sleep 2
     else
         display_message "[${RED}✘${NC}] Download failed. Please check the URL and try again."
-        sleep 2
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
     fi
 
     # Reloading Font
@@ -1358,11 +1374,11 @@ cleanup_fedora() {
     sudo fstrim -av
 
     echo -e "\e[1;32m[✔]\e[0m Restarting kernel tweaks...\n"
-    sleep 1
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
     sudo sysctl -p
 
     display_message "[${GREEN}✔${NC}]  Cleanup complete, ENJOY!"
-    sleep 2
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 }
 
 # Template
@@ -1397,7 +1413,7 @@ fix_chrome() {
     echo "If problems persist, copy and pate the following into chrome address bar and disable HW acceleration"
     echo ""
     echo "chrome://settings/?search=hardware+acceleration"
-    sleep 3
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
     sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/execute-python-script.sh)"
 }
 
@@ -1410,6 +1426,7 @@ display_XDG_session() {
 
     display_message "Current XDG session is [ $session ]"
     echo "Current XDG session is [ $session ]"
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
 }
 
@@ -1546,14 +1563,14 @@ start_balance() {
     sudo btrfs balance start --full-balance / &
     check_balance_status
     display_message "[${GREEN}✔${NC}]  Balance operation running in background."
-    sleep 6
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 }
 
 # Function to check balance status
 check_balance_status() {
     display_message "[${GREEN}✔${NC}]  Balance operation successfull"
     sudo btrfs balance status /
-    sleep 2
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 }
 
 # Function to start scrub operation
@@ -1563,7 +1580,7 @@ start_scrub() {
     sudo btrfs scrub start /
     check_scrub_status
     display_message "[${GREEN}✔${NC}]  Scrub operation running in background."
-    sleep 6
+    gum spin --spinner dot --title "Stand-by..." -- sleep 4
 
 }
 
@@ -1571,7 +1588,7 @@ start_scrub() {
 check_scrub_status() {
     display_message "[${GREEN}✔${NC}]  Scrub operation successfull"
     sudo btrfs scrub status /
-    sleep 2
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 }
 
 # Function to display the main menu
@@ -1602,9 +1619,10 @@ btrfs_maint() {
     # Sleep for 10 seconds before checking again
     display_message "[${GREEN}✔${NC}]  Balance and scrub operations running in background."
     echo -e "\n ${YELLOW}==> ${NC} BTRFS balance and scrub will take a VERY LONG time ...\n"
-    sleep 10
+    gum spin --spinner dot --title "Stand-by..." -- sleep 7
 
 }
+
 create-extra-dir() {
     display_message "[${GREEN}✔${NC}]  Create extra needed directories"
     # Directories to create
@@ -1619,20 +1637,22 @@ create-extra-dir() {
         "${HOME}/.local/share/themes"
         "${HOME}/.ssh"
         "${HOME}/.zshrc.d"
+        "${HOME}/Applications"
         "${HOME}/src"
     )
 
     # Create directories
     for dir in "${directories[@]}"; do
         mkdir -p "$dir"
+        gum spin --spinner dot --title "[✔]  Creating: $dir" -- sleep 1
+        sleep 0.5
     done
 
     # Set SSH folder permissions
     chmod 700 ${HOME}/.ssh
 
-    sleep 1
     display_message "[${GREEN}✔${NC}]  Extra hidden dirs created"
-    sleep 1
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
 }
 
@@ -1655,27 +1675,27 @@ DefaultTimeoutStopSec=10s
 EOF
 
     display_message "${GREEN}[✔]${NC} Shutdown speed configured"
-    sleep 1
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
 }
 
 check_internet_connection() {
     display_message "${YELLOW}[*]${NC} Checking Internet Connection .."
-    sleep 1
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
     display_message "${GREEN}[✔]${NC} connecting to google.."
 
     if curl -s -m 10 https://www.google.com >/dev/null || curl -s -m 10 https://www.github.com >/dev/null; then
         display_message "${GREEN}[✔]${NC} Network connection is OK "
-        sleep 1
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
     else
         display_message "${RED}[✘]${NC} Network connection is not available ${RED}[✘]${NC}"
-        sleep 1
+        gum spin --spinner dot --title "Stand-by..." -- sleep 2
     fi
 
     echo ""
 
     echo -e "${YELLOW}[*]${NC} Executing menu ..."
-    sleep 1
+    gum spin --spinner dot --title "Stand-by..." -- sleep 2
     clear
 }
 
@@ -1782,7 +1802,7 @@ handle_user_input() {
         ;;
     *)
         echo -e "Invalid choice. Please enter a number from 0 to 26."
-        sleep 2
+        gum spin --spinner dot --title "Stand-by..." -- sleep 1
         ;;
     esac
 }
