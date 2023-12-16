@@ -1633,18 +1633,18 @@ create-extra-dir() {
     display_message "[${GREEN}✔${NC}]  Create extra needed directories"
     # Directories to create
     directories=(
-        "${HOME}/.config/autostart"
-        "${HOME}/.config/environment.d"
-        "${HOME}/.config/systemd/user"
-        "${HOME}/.local/bin"
-        "${HOME}/.local/share/applications"
-        "${HOME}/.local/share/fonts"
-        "${HOME}/.local/share/icons"
-        "${HOME}/.local/share/themes"
-        "${HOME}/.ssh"
-        "${HOME}/.zshrc.d"
-        "${HOME}/Applications"
-        "${HOME}/src"
+        "~/.config/autostart"
+        "~/.config/environment.d"
+        "~/.config/systemd/user"
+        "~/.local/bin"
+        "~/.local/share/applications"
+        "~/.local/share/fonts"
+        "~/.local/share/icons"
+        "~/.local/share/themes"
+        "~/.ssh"
+        "~/.zshrc.d"
+        "~/Applications"
+        "~/src"
     )
 
     # Create directories
@@ -1655,11 +1655,10 @@ create-extra-dir() {
     done
 
     # Set SSH folder permissions
-    chmod 700 ${HOME}/.ssh
+    chmod 700 ~/.ssh
 
     display_message "[${GREEN}✔${NC}]  Extra hidden dirs created"
     gum spin --spinner dot --title "Stand-by..." -- sleep 2
-
 }
 
 speed-up-shutdown() {
