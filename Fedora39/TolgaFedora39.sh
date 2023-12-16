@@ -1777,6 +1777,39 @@ firewall() {
     gum spin --spinner dot --title "Reloading MainMenu" -- sleep 1.5
 }
 
+zram() {
+    display_message "[${GREEN}✔${NC}] Setting up ZRAM."
+
+    # Step 1: Create and configure swap file
+    if [ "$(free -h | grep -c 'Swap')" -eq 0 ]; then
+        sudo su
+        fallocate -l 4G /swapfile
+        chmod 600 /swapfile
+        mkswap /swapfile
+        swapon /swapfile
+        echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+        gum spin --spinner dot --title "Create and configure swap file in progress" -- sleep 1.5
+    fi
+
+    # Step 2: Use sed to update GRUB_CMDLINE_LINUX_DEFAULT
+    display_message "[${GREEN}✔${NC}] Updating GRUB."
+    sudo sed -i '/GRUB_CMDLINE_LINUX_DEFAULT/ s/"$/ GRUB_CMDLINE_LINUX_DEFAULT="quiet splash zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=10 zswap.zpool=z3fold"/' /etc/default/grub
+    sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+    sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+
+    gum spin --spinner dot --title "GRUB updated successfully. Initializing ( initramfs )" -- sleep 1
+    echo ""
+    sudo su
+    echo lz4 >>/etc/initramfs-tools/modules
+    echo lz4_compress >>/etc/initramfs-tools/modules
+    echo z3fold >>/etc/initramfs-tools/modules
+    update-initramfs -u
+
+    display_message "[${GREEN}✔${NC}] ZRAM setup complete"
+    echo""
+    gum spin --spinner dot --title "REBOOT to enable" -- sleep 3
+}
+
 # Template
 # display_message "[${GREEN}✔${NC}]
 # display_message "[${RED}✘${NC}]
@@ -1813,7 +1846,8 @@ display_main_menu() {
     echo -e "\e[33m 25.\e[0m \e[32mPerform BTRFS balance and scrub operation on / partition     ( !! WARNING, backup important data incase, 5 min operation )\e[0m"
     echo -e "\e[33m 26.\e[0m \e[32mCreate extra hidden dir in HOME                                "
     echo -e "\e[33m 27.\e[0m \e[32mModify systemd timeout settings to 10s                         "
-    echo -e "\e[33m 28.\e[0m \e[32mSet-up TCP && UDP firewall settings                          ( Mimic my NixOS firewall settings )                         "
+    echo -e "\e[33m 28.\e[0m \e[32mSet-up TCP && UDP firewall settings                          ( Mimic my NixOS firewall settings ) "
+    echo -e "\e[33m 29.\e[0m \e[32mSet-up ZRAM                                                  ( For systems with low RAM (<+ 8 GB) ) "
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
     echo -e "\e[31m   (0) \e[0m \e[32mExit\e[0m"
     echo -e "\e[34m|-------------------------------------------------------------------------------|\e[0m"
@@ -1865,7 +1899,7 @@ handle_user_input() {
     26) create-extra-dir ;;
     27) speed-up-shutdown ;;
     28) firewall ;;
-
+    29) zram ;;
     0)
         # Before exiting, check if duf and neofetch are installed
         for_exit "duf"
