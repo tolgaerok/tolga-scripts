@@ -1817,7 +1817,7 @@ zram() {
 display_main_menu() {
     clear
     echo -e "\n                  Tolga's online Fedora updater\n"
-    echo -e "\e[34m|--------------------------|\e[33m Main Menu \e[34m |-------------------------------------|\e[0m"
+    echo -e "\e[34m|----| \e[33m Main Menu \e[34m |---------------------------------------------------------------------------------------------------------------------|\e[0m"
     echo -e "\e[33m 1.\e[0m \e[32m Configure faster updates in DNF\e[0m"
     echo -e "\e[33m 2.\e[0m \e[32m Install RPM Fusion repositories\e[0m"
     echo -e "\e[33m 3.\e[0m \e[32m Update the system                                            ( Create meta cache etc )\e[0m"
@@ -1841,7 +1841,7 @@ display_main_menu() {
     echo -e "\e[33m 21.\e[0m \e[32mDisplay XDG session\e[0m"
     echo -e "\e[33m 22.\e[0m \e[32mFix grub or rebuild grub                                     ( Checks and enables menu output to grub menu )\e[0m"
     echo -e "\e[33m 23.\e[0m \e[32mInstall new DNF5                                             ( Testing for fedora 40/41 )\e[0m"
-    echo -e "\e[33m 24.\e[0m \e[32mRemove KDE bloatware                                         ( Why are these installed? )\e[0m"
+    echo -e "\e[33m 24.\e[0m \e[32mRemove Useless KDE Apps                                      ( Why are these installed? )\e[0m"
     echo -e "\e[33m 25.\e[0m \e[32mPerform BTRFS balance and scrub operation on / partition     ( !! WARNING, backup important data incase, 5 min operation )\e[0m"
     echo -e "\e[33m 26.\e[0m \e[32mCreate extra hidden dir in HOME                                "
     echo -e "\e[33m 27.\e[0m \e[32mModify systemd timeout settings to 10s                         "
