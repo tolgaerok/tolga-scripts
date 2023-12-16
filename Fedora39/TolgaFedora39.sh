@@ -1781,33 +1781,33 @@ zram() {
     display_message "[${GREEN}✔${NC}] Setting up ZRAM."
 
     # Step 1: Create and configure swap file
-    if [ "$(free -h | grep -c 'Swap')" -eq 0 ]; then
-        sudo fallocate -l 4G /swapfile
-        sudo chmod 600 /swapfile
-        sudo mkswap /swapfile
-        sudo swapon /swapfile
-        echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
-        gum spin --spinner dot --title "Create and configure swap file in progress" -- sleep 1.5
-    fi
+    #if [ "$(free -h | grep -c 'Swap')" -eq 0 ]; then
+    sudo fallocate -l 4G /swapfile
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+    gum spin --spinner dot --title "Create and configure swap file in progress" -- sleep 1.5
+    # fi
 
-    # Step 2: Use sed to update GRUB_CMDLINE_LINUX_DEFAULT
+    # Step 2: Use echo and sed to update GRUB_CMDLINE_LINUX_DEFAULT
     display_message "[${GREEN}✔${NC}] Updating GRUB."
-    sudo sed -i '/GRUB_CMDLINE_LINUX_DEFAULT/ s/"$/ GRUB_CMDLINE_LINUX_DEFAULT="quiet splash zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=10 zswap.zpool=z3fold"/' /etc/default/grub
+    echo 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=50 zswap.zpool=z3fold"' | sudo tee -a /etc/default/grub >/dev/null
+    sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=50 zswap.zpool=z3fold"/' /etc/default/grub
     sudo grub2-mkconfig -o /boot/grub2/grub.cfg
     sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 
     gum spin --spinner dot --title "GRUB updated successfully. Initializing ( initramfs )" -- sleep 1
     echo ""
-    echo lz4 | sudo tee -a /etc/initramfs-tools/modules
-    echo lz4_compress | sudo tee -a /etc/initramfs-tools/modules
-    echo z3fold | sudo tee -a /etc/initramfs-tools/modules
+    echo lz4 | sudo tee -a /etc/initramfs-tools/modules >/dev/null
+    echo lz4_compress | sudo tee -a /etc/initramfs-tools/modules >/dev/null
+    echo z3fold | sudo tee -a /etc/initramfs-tools/modules >/dev/null
     sudo update-initramfs -u
 
     display_message "[${GREEN}✔${NC}] ZRAM setup complete"
-    echo""
+    echo ""
     gum spin --spinner dot --title "REBOOT to enable" -- sleep 3
 }
-
 
 # Template
 # display_message "[${GREEN}✔${NC}]
