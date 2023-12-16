@@ -1782,11 +1782,10 @@ zram() {
 
     # Step 1: Create and configure swap file
     if [ "$(free -h | grep -c 'Swap')" -eq 0 ]; then
-        sudo su
-        fallocate -l 4G /swapfile
-        chmod 600 /swapfile
-        mkswap /swapfile
-        swapon /swapfile
+        sudo fallocate -l 4G /swapfile
+        sudo chmod 600 /swapfile
+        sudo mkswap /swapfile
+        sudo swapon /swapfile
         echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
         gum spin --spinner dot --title "Create and configure swap file in progress" -- sleep 1.5
     fi
@@ -1799,16 +1798,16 @@ zram() {
 
     gum spin --spinner dot --title "GRUB updated successfully. Initializing ( initramfs )" -- sleep 1
     echo ""
-    sudo su
-    echo lz4 >>/etc/initramfs-tools/modules
-    echo lz4_compress >>/etc/initramfs-tools/modules
-    echo z3fold >>/etc/initramfs-tools/modules
-    update-initramfs -u
+    echo lz4 | sudo tee -a /etc/initramfs-tools/modules
+    echo lz4_compress | sudo tee -a /etc/initramfs-tools/modules
+    echo z3fold | sudo tee -a /etc/initramfs-tools/modules
+    sudo update-initramfs -u
 
     display_message "[${GREEN}✔${NC}] ZRAM setup complete"
     echo""
     gum spin --spinner dot --title "REBOOT to enable" -- sleep 3
 }
+
 
 # Template
 # display_message "[${GREEN}✔${NC}]
