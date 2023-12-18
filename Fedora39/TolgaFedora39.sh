@@ -290,6 +290,8 @@ install_firmware() {
 # Function to install GPU drivers with a reboot option on a 3 min timer, Nvidia && AMD
 install_gpu_drivers() {
     display_message "[${GREEN}✔${NC}]  Checking GPU and installing drivers..."
+    sudo dnf install -y mesa-vdpau-drivers
+
 
     # Check for NVIDIA GPU
     if lspci | grep -i nvidia &>/dev/null; then
@@ -1006,19 +1008,20 @@ fs.inotify.max_user_watches = 524288
 net.core.default_qdisc = fq_codel
 net.core.netdev_max_backlog = 32768
 net.core.optmem_max = 65536
-net.core.somaxconn = 65536
-net.core.rmem_max = 16777216
-net.core.wmem_max = 16777216
 net.core.rmem_default = 1048576
+net.core.rmem_max = 16777216
+net.core.somaxconn = 65536
 net.core.wmem_default = 1048576
-net.ipv4.tcp_rmem = 8192 1048576 16777216
-net.ipv4.tcp_wmem = 8192 1048576 16777216
+net.core.wmem_max = 16777216
+net.ipv4.ip_forward = 1
 net.ipv4.tcp_congestion_control = westwood
+net.ipv4.tcp_dsack = 1
+net.ipv4.tcp_ecn = 1
 net.ipv4.tcp_fastopen = 3
 net.ipv4.tcp_fin_timeout = 25
-net.ipv4.tcp_keepalive_time = 1200
-net.ipv4.tcp_keepalive_probes = 7
 net.ipv4.tcp_keepalive_intvl = 30
+net.ipv4.tcp_keepalive_probes = 7
+net.ipv4.tcp_keepalive_time = 1200
 net.ipv4.tcp_max_orphans = 819200
 net.ipv4.tcp_max_syn_backlog = 20480
 net.ipv4.tcp_max_tw_buckets = 1440000
@@ -1026,12 +1029,11 @@ net.ipv4.tcp_mem = 65536 1048576 16777216
 net.ipv4.tcp_mtu_probing = 1
 net.ipv4.tcp_notsent_lowat = 16384
 net.ipv4.tcp_retries2 = 8
+net.ipv4.tcp_rmem = 8192 1048576 16777216
 net.ipv4.tcp_sack = 1
-net.ipv4.tcp_dsack = 1
 net.ipv4.tcp_slow_start_after_idle = 0
 net.ipv4.tcp_window_scaling = 1
-net.ipv4.tcp_ecn = 1
-net.ipv4.ip_forward = 1
+net.ipv4.tcp_wmem = 8192 1048576 16777216
 net.ipv4.udp_mem = 65536 1048576 16777216
 net.ipv6.conf.all.disable_ipv6 = 0
 net.ipv6.conf.all.forwarding = 1
