@@ -292,7 +292,6 @@ install_gpu_drivers() {
     display_message "[${GREEN}✔${NC}]  Checking GPU and installing drivers..."
     sudo dnf install -y mesa-vdpau-drivers
 
-
     # Check for NVIDIA GPU
     if lspci | grep -i nvidia &>/dev/null; then
         display_message "[${GREEN}✔${NC}]  NVIDIA GPU detected. Installing NVIDIA drivers..."
@@ -319,8 +318,9 @@ install_gpu_drivers() {
         # Install some dependencies
         sudo dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig
 
-        # inntf
-        # echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
+        # Blacklist some modules
+        echo "blacklist nouveau" >>/etc/modprobe.d/blacklist.conf
+        echo "blacklist iTCO_wdt" >>/etc/modprobe.d/blacklist.conf
 
         # KMS stands for "Kernel Mode Setting" which is the opposite of "Userland Mode Setting". This feature allows to set the screen resolution
         # on the kernel side once (at boot), instead of after login from the display manager.
