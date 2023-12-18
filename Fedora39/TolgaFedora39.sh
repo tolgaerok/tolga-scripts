@@ -1025,8 +1025,11 @@ vm.dirty_expire_centisecs = 3000         # Set the time at which dirty data is o
 vm.dirty_ratio = 80                      # Set the ratio of dirty memory at which a process is forced to write out dirty data (10%). Adjusted for SSD.
 vm.dirty_writeback_centisecs = 300       # Set the interval between two consecutive background writeback passes (500 centiseconds).
 
-fs.file-max = 67108864                         # Maximum number of file handles the kernel can allocate (Default: 67108864)
-kernel.pty.max = 24000                         # Maximum number of pseudo-terminals (PTYs) in the system
+fs.file-max = 67108864                        # Maximum number of file handles the kernel can allocate (Default: 67108864)
+kernel.nmi_watchdog = 0                       # Disable NMI watchdog
+kernel.pty.max = 24000                        # Maximum number of pseudo-terminals (PTYs) in the system
+kernel.sched_autogroup_enabled = 0            # Disable automatic task grouping for better server performance
+kernel.unprivileged_bpf_disabled = 1          # Disable unprivileged BPF
 net.core.default_qdisc = fq_codel              
 net.core.netdev_max_backlog = 32768            # Maximum length of the input queue of a network device
 net.core.optmem_max = 65536                    # Maximum ancillary buffer size allowed per socket
@@ -1035,7 +1038,13 @@ net.core.rmem_max = 16777216                   # Maximum socket receive buffer s
 net.core.somaxconn = 65536                     # Maximum listen queue backlog
 net.core.wmem_default = 1048576                # Default socket send buffer size
 net.core.wmem_max = 16777216                   # Maximum socket send buffer size
-net.ipv4.ip_forward = 1                        # Enable IP forwarding
+net.ipv4.conf.all.accept_redirects = 0        # Disable acceptance of all ICMP redirected packets
+net.ipv4.conf.all.secure_redirects = 0        # Disable acceptance of secure ICMP redirected packets
+net.ipv4.conf.all.send_redirects = 0          # Disable sending of all IPv4 ICMP redirected packets
+net.ipv4.conf.default.accept_redirects = 0    # Disable acceptance of all ICMP redirected packets (default)
+net.ipv4.conf.default.secure_redirects = 0    # Disable acceptance of secure ICMP redirected packets (default)
+net.ipv4.conf.default.send_redirects = 0      # Disable sending of all IPv4 ICMP redirected packets (default)
+net.ipv4.ip_forward = 1                       # Enable IP forwarding
 net.ipv4.tcp_congestion_control = westwood     
 net.ipv4.tcp_dsack = 1                         # Enable Delayed SACK
 net.ipv4.tcp_ecn = 1                           # Enable Explicit Congestion Notification (ECN)
@@ -1054,34 +1063,39 @@ net.ipv4.tcp_retries2 = 8                      # Number of times TCP retransmits
 net.ipv4.tcp_rmem = 8192 1048576 16777216      # TCP read memory allocation for network sockets
 net.ipv4.tcp_sack = 1                          # Enable Selective Acknowledgment (SACK)
 net.ipv4.tcp_slow_start_after_idle = 0         # Disable slow start after idle
+net.ipv4.tcp_slow_start_after_idle = 0         # Disable TCP slow start after idle
 net.ipv4.tcp_window_scaling = 1                # Enable TCP window scaling
 net.ipv4.tcp_wmem = 8192 1048576 16777216      # TCP write memory allocation for network sockets
 net.ipv4.udp_mem = 65536 1048576 16777216      # UDP memory allocation limits
+net.ipv6.conf.all.accept_redirects = 0         # Disable acceptance of all ICMP redirected packets for IPv6
 net.ipv6.conf.all.disable_ipv6 = 0             # Enable IPv6
 net.ipv6.conf.all.forwarding = 1               # Enable IPv6 packet forwarding
+net.ipv6.conf.default.accept_redirects = 0     # Disable acceptance of all ICMP redirected packets for IPv6 (default)
 net.ipv6.conf.default.disable_ipv6 = 0         # Enable IPv6
 net.unix.max_dgram_qlen = 50                   # Maximum length of the UNIX domain socket datagram queue
+vm.dirty_background_ratio = 5                  # Percentage of system memory at which background writeback starts
+vm.extfrag_threshold = 100                     # Fragmentation threshold for the kernel
 vm.min_free_kbytes = 65536                     # Minimum free kilobytes
+vm.mmap_min_addr = 65536                       # Minimum address allowed for a user-space mmap
 vm.swappiness = 10                             # Swappiness parameter (tendency to swap out unused pages)
 vm.vfs_cache_pressure = 50                     # Controls the tendency of the kernel to reclaim the memory used for caching of directory and inode objects
-vm.dirty_background_ratio = 5                 # Percentage of system memory at which background writeback starts
-kernel.unprivileged_bpf_disabled = 1          # Disable unprivileged BPF
-vm.mmap_min_addr = 65536                      # Minimum address allowed for a user-space mmap
-vm.extfrag_threshold = 100                    # Fragmentation threshold for the kernel
-kernel.sched_autogroup_enabled = 0            # Disable automatic task grouping for better server performance
-net.ipv4.conf.all.accept_redirects = 0        # Disable acceptance of all ICMP redirected packets
-net.ipv4.conf.default.accept_redirects = 0    # Disable acceptance of all ICMP redirected packets (default)
-net.ipv6.conf.all.accept_redirects = 0        # Disable acceptance of all ICMP redirected packets for IPv6
-net.ipv6.conf.default.accept_redirects = 0    # Disable acceptance of all ICMP redirected packets for IPv6 (default)
-net.ipv4.conf.all.send_redirects = 0          # Disable sending of all IPv4 ICMP redirected packets
-net.ipv4.conf.default.send_redirects = 0      # Disable sending of all IPv4 ICMP redirected packets (default)
-net.ipv4.conf.all.secure_redirects = 0        # Disable acceptance of secure ICMP redirected packets
-net.ipv4.conf.default.secure_redirects = 0    # Disable acceptance of secure ICMP redirected packets (default)
-net.ipv4.tcp_slow_start_after_idle = 0        # Disable TCP slow start after idle
-kernel.nmi_watchdog = 0                       # Disable NMI watchdog
-
 EOF
 
+    # To Do For NVME ssd
+    #block.sd*/queue/nr_requests=4096
+    #block.sd*/queue/scheduler=bfq
+    #block.sd*/queue/nr_requests=4096
+    #block.sd*/queue/read_ahead_kb=1024
+    #block.sd*/queue/add_random=1
+    #block.nvme*/queue/scheduler=mq-deadline
+    #block.nvme*/queue/scheduler=bfq
+    #3block.nvme*/queue/iosched/low_latency=0
+    #block.nvme*/queue/iosched/low_latency=1
+    #block.nvme*/queue/nr_requests=2048
+    #block.nvme*/queue/read_ahead_kb=1024
+    #block.nvme*/queue/add_random=1
+    #kernel.nmi_watchdog=0
+    #block.{sd,mmc,nvme,0}*/queue/iosched/slice_idle=0
 
     display_message "[${GREEN}✔${NC}]  Adding New network settings"
     sudo sysctl -p
