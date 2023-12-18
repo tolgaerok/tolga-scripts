@@ -1002,6 +1002,7 @@ gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
 
     cat <<EOF >>"$SYS_PATH"
 fs.file-max = 67108864
+fs.inotify.max_user_watches = 524288
 net.core.default_qdisc = fq_codel
 net.core.netdev_max_backlog = 32768
 net.core.optmem_max = 65536
