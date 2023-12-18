@@ -1042,6 +1042,7 @@ net.unix.max_dgram_qlen = 50
 vm.min_free_kbytes = 65536
 vm.swappiness = 10
 vm.vfs_cache_pressure = 50
+
 # OOM less
 vm.extfrag_threshold = 100
 #vm.ksm.sleep_millisecs = 4000
@@ -1123,7 +1124,7 @@ block.{sd,mmc,nvme,0}*/queue/iosched/slice_idle = 0
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #   Old Nixos Tweaks, to suit  ( 28GB system )
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# kernel.sysrq = 1                         # Enable SysRQ for rebooting the machine properly if it freezes. [Source](https://oglo.dev/tutorials/sysrq/index.html)
+kernel.sysrq = 1                         # Enable SysRQ for rebooting the machine properly if it freezes. [Source](https://oglo.dev/tutorials/sysrq/index.html)
 vm.dirty_background_bytes = 474217728    # 128 MB + 300 MB + 400 MB = 828 MB (rounded to 474217728)
 vm.dirty_bytes = 742653184               # 384 MB + 300 MB + 400 MB = 1084 MB (rounded to 742653184)
 
