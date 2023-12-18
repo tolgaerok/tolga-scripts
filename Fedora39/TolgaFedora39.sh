@@ -699,7 +699,7 @@ disable_mitigations() {
     case "$choice" in
     y | Y)
         # Disable mitigations
-        sudo grubby --update-kernel=ALL --args="mitigations=off threadirqs"
+        sudo grubby --update-kernel=ALL --args="mitigations=off threadirqs swap=0 nowatchdog=1 transparent_hugepage=never intel_idle.max_cstate=0 processor.max_cstate=0"
         display_message "[${GREEN}✔${NC}]  Mitigations disabled successfully and multi-threading enabled."
         gum spin --spinner dot --title "Stand-by..." -- sleep 2
         ;;
@@ -782,7 +782,7 @@ check_mitigations_grub() {
     grub_config=$(cat /etc/default/grub)
 
     # Check if mitigations=off is present
-    if echo "$grub_config" | grep -q "mitigations=off threadirqs"; then
+    if echo "$grub_config" | grep -q "mitigations=off threadirqs swap=0 nowatchdog=1 transparent_hugepage=never intel_idle.max_cstate=0 processor.max_cstate=0"; then
         display_message "[${GREEN}✔${NC}]  Mitigations are currently disabled in GRUB configuration: ==>  ( Success! )"
         gum spin --spinner dot --title "Stand-by..." -- sleep 2
     else
@@ -1042,7 +1042,108 @@ net.unix.max_dgram_qlen = 50
 vm.min_free_kbytes = 65536
 vm.swappiness = 10
 vm.vfs_cache_pressure = 50
+# OOM less
+vm.extfrag_threshold = 100
+#vm.ksm.sleep_millisecs = 4000
+#vm.ksm.pages_to_scan = 1000
+
+# Minimum time a task will be allowed to run on CPU before being pre-empted
+#kernel.sched_min_granularity_ns = 2250000
+#kernel.sched_migration_cost_ns = 50000
+#kernel.sched_wakeup_granularity_ns = 15000000
+
+# Disable sched_autogroup on Server
+kernel.sched_autogroup_enabled = 0
+
+# Audio PM
+#module.snd_hda_intel.parameters.power_save = 1
+
+# P state stuff
+devices.system.cpu.cpu*/cpufreq/scaling_governor = performance
+# devices.system.cpu.intel_pstate.min_perf_pct = 50
+
+# Default QDisc for network
+net.core.default_qdisc = fq
+
+# Disable acceptance of all ICMP redirected packets
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv6.conf.all.accept_redirects = 0
+net.ipv4.conf.default.accept_redirects = 0
+net.ipv6.conf.default.accept_redirects = 0
+
+# Disable sending of all IPv4 ICMP redirected packets
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.default.send_redirects = 0
+
+# Disable acceptance of secure ICMP redirected packets
+net.ipv4.conf.all.secure_redirects = 0
+net.ipv4.conf.default.secure_redirects = 0
+
+# TCP slow start after idle
+net.ipv4.tcp_slow_start_after_idle = 0
+
+# SATA link power management
+class.scsi_host.*/link_power_management_policy = med_power_with_dipm
+
+# Performance tuning for SATA and NVME storage
+block.sd*/queue/scheduler = bfq
+block.sd*/queue/nr_requests = 4096
+block.sd*/queue/read_ahead_kb = 1024
+block.sd*/queue/add_random = 1
+
+# Prefer mq-deadline for server
+block.nvme*/queue/scheduler = mq-deadline
+
+# Prefer bfq low_latency for desktop
+block.nvme*/queue/scheduler = bfq
+block.nvme*/queue/iosched/low_latency = 0
+block.nvme*/queue/iosched/low_latency = 1
+
+block.nvme*/queue/nr_requests = 2048
+block.nvme*/queue/read_ahead_kb = 1024
+block.nvme*/queue/add_random = 1
+
+# Enable turbo mode max
+#kernel.sched_itmt_enabled = 1
+
+# Reload microcode at boot
+#devices.system.cpu.microcode.reload = 1
+#devices.system.cpu.cpu0.power.energy_perf_bias = performance
+
+# Disable NMI watchdog
+kernel.nmi_watchdog = 0
+
+# Slice idle for block devices
+block.{sd,mmc,nvme,0}*/queue/iosched/slice_idle = 0
+
+# SPR uncore
+#devices.system.cpu.intel_uncore_frequency.package_00_die_00.max_freq_khz = 2300000
+#devices.system.cpu.intel_uncore_frequency.package_01_die_00.max_freq_khz = 2300000
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#   Old Nixos Tweaks, to suit  ( 28GB system )
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# kernel.sysrq = 1                         # Enable SysRQ for rebooting the machine properly if it freezes. [Source](https://oglo.dev/tutorials/sysrq/index.html)
+vm.dirty_background_bytes = 474217728    # 128 MB + 300 MB + 400 MB = 828 MB (rounded to 474217728)
+vm.dirty_bytes = 742653184               # 384 MB + 300 MB + 400 MB = 1084 MB (rounded to 742653184)
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#   Nobara Tweaks
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+fs.aio-max-nr = 1000000                  # defines the maximum number of asynchronous I/O requests that can be in progress at a given time.     1048576
+fs.inotify.max_user_watches = 8192      # sets the maximum number of file system watches, enhancing file system monitoring capabilities.       Default: 8192  TWEAKED: 524288
+kernel.panic = 5                         # Reboot after 5 seconds on kernel panic                                                               Default: 0
+kernel.pid_max = 32768                  # allows a large number of processes and threads to be managed                                         Default: 32768 TWEAKED: 4194304
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#   SSD tweaks: Adjust settings for an SSD to optimize performance.
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+vm.dirty_background_ratio = 40         # Set the ratio of dirty memory at which background writeback starts (5%). Adjusted for SSD.
+vm.dirty_expire_centisecs = 3000       # Set the time at which dirty data is old enough to be eligible for writeout (6000 centiseconds). Adjusted for SSD.
+vm.dirty_ratio = 80                    # Set the ratio of dirty memory at which a process is forced to write out dirty data (10%). Adjusted for SSD.
+vm.dirty_writeback_centisecs = 300     # Set the interval between two consecutive background writeback passes (500 centiseconds).
 EOF
+
 
     display_message "[${GREEN}✔${NC}]  Adding New network settings"
     sudo sysctl -p
