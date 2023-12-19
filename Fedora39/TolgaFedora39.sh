@@ -434,22 +434,22 @@ install_gpu_drivers() {
         fi
 
         # Check if the export statements already exist in /etc/environment
-        if ! grep -q "export __GL_THREADED_OPTIMIZATION=1" "$SETTINGS_FILE" &&
-            ! grep -q "export __GL_SHADER_CACHE=1" "$SETTINGS_FILE" &&
-            ! grep -q "export __GLX_VENDOR_LIBRARY_NAME=nvidia" "$SETTINGS_FILE" &&
-            ! grep -q "export LIBVA_DRIVER_NAME=nvidia" "$SETTINGS_FILE" &&
-            ! grep -q "export WLR_NO_HARDWARE_CURSORS=1" "$SETTINGS_FILE"; then
+        if ! grep -q "__GL_THREADED_OPTIMIZATION=1" "$SETTINGS_FILE" &&
+            ! grep -q "__GL_SHADER_CACHE=1" "$SETTINGS_FILE" &&
+            ! grep -q "__GLX_VENDOR_LIBRARY_NAME=nvidia" "$SETTINGS_FILE" &&
+            ! grep -q "LIBVA_DRIVER_NAME=nvidia" "$SETTINGS_FILE" &&
+            ! grep -q "WLR_NO_HARDWARE_CURSORS=1" "$SETTINGS_FILE"; then
 
             # Add existing NVIDIA environment variables to /etc/environment
-            echo "export __GL_THREADED_OPTIMIZATION=1" | sudo tee -a "$SETTINGS_FILE" >/dev/null
-            echo "export __GL_SHADER_CACHE=1" | sudo tee -a "$SETTINGS_FILE" >/dev/null
+            echo "__GL_THREADED_OPTIMIZATION=1" | sudo tee -a "$SETTINGS_FILE" >/dev/null
+            echo "__GL_SHADER_CACHE=1" | sudo tee -a "$SETTINGS_FILE" >/dev/null
             # Optionally, set a custom shader cache path
             # echo "export __GL_SHADER_DISK_CACHE_PATH=/path/to/shader/cache" | sudo tee -a "$SETTINGS_FILE" > /dev/null
 
             # Add new NVIDIA environment variables to /etc/environment
-            echo "export __GLX_VENDOR_LIBRARY_NAME=nvidia" | sudo tee -a "$SETTINGS_FILE" >/dev/null
-            echo "export LIBVA_DRIVER_NAME=nvidia" | sudo tee -a "$SETTINGS_FILE" >/dev/null
-            echo "export WLR_NO_HARDWARE_CURSORS=1" | sudo tee -a "$SETTINGS_FILE" >/dev/null
+            echo "__GLX_VENDOR_LIBRARY_NAME=nvidia" | sudo tee -a "$SETTINGS_FILE" >/dev/null
+            echo "LIBVA_DRIVER_NAME=nvidia" | sudo tee -a "$SETTINGS_FILE" >/dev/null
+            echo "WLR_NO_HARDWARE_CURSORS=1" | sudo tee -a "$SETTINGS_FILE" >/dev/null
 
             # Notify user for /etc/environment
             display_message "[${GREEN}✔${NC}] NVIDIA environment settings have been added to $SETTINGS_FILE."
@@ -474,6 +474,7 @@ install_gpu_drivers() {
             # Add existing NVIDIA environment variables to .bashrc
             echo "export __GL_THREADED_OPTIMIZATION=1" >>"$BASHRC_FILE"
             echo "export __GL_SHADER_CACHE=1" >>"$BASHRC_FILE"
+            
             # Optionally, set a custom shader cache path
             # echo "export __GL_SHADER_DISK_CACHE_PATH=/path/to/shader/cache" >> "$BASHRC_FILE"
 
