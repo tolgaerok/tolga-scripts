@@ -519,6 +519,8 @@ install_gpu_drivers() {
         uname -m && cat /etc/*release
         gcc --version
         uname -r
+        sudo systemctl enable nvidia-persistenced.service
+        sudo systemctl status nvidia-persistenced.service
         gum spin --spinner dot --title "Stand-by..." -- sleep 3.5
     fi
 
