@@ -660,7 +660,7 @@ update_flatpak() {
 
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     # flatpak update
-    flatpak update --refresh
+    flatpak update -y
 
     display_message "[${GREEN}✔${NC}]  Executing Tolga's Flatpak's..."
 

@@ -85,7 +85,7 @@ flatpak run --user org.mozilla.firefox
 # Run tasks as the invoking user
 if [ "$EUID" -eq 0 ]; then
     echo "Switching to the invoking user..."
-    sudo -u $(logname) bash << 'EOF'
+    sudo -u $(logname) bash <<'EOF'
 
     # Check if the profile directory is found
     FIREFOX_PROFILE_PATH=$(find "${HOME}/.mozilla/firefox" -name "*.default-release")
@@ -103,8 +103,6 @@ if [ "$EUID" -eq 0 ]; then
 
 EOF
 fi
-
-
 
 # Create or update the user.js file in the Firefox profile directory
 cat <<EOL >"$FIREFOX_PROFILE_PATH/user.js"
@@ -220,6 +218,7 @@ if [ -z "$XDG_RUNTIME_DIR" ]; then
 fi
 
 sudo flatpak override --filesystem=$HOME/.themes
+sudo flatpak override --env=GTK_MODULES=colorreload-gtk-module org.mozilla.firefox
 sudo flatpak override --filesystem=xdg-config/gtk-4.0:ro
 sudo flatpak override --filesystem=xdg-config/gtk-3.0:ro
 
@@ -237,6 +236,14 @@ else
     echo -e "\e[1;32m[✔]\e[0m No old Flatpak cruft found.\n"
 fi
 
+clear && echo -e "\e[1;32m[✔]\e[0m Checking updates for installed flatpak programs...\n"
+sudo flatpak update -y
+sleep 2
+
+clear && echo -e "\e[1;32m[✔]\e[0m Removing Old Flatpak Cruft...\n"
+flatpak uninstall --unused
+flatpak uninstall --delete-data
+sudo rm -rfv /var/tmp/flatpak-cache-*
 sleep 1
 
 # Display all platpaks installed on system
