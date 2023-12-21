@@ -1430,10 +1430,19 @@ EOF
     # Prompt for the desired name for samba
     read -p $'\n'"Enter the GROUP name to add username to Samba: " sambagroup
 
+    # Add the custom group
     sudo groupadd $sambagroup
+    
+    # ensures that a home directory is created for the user
     sudo useradd -m $sambausername
+
+    # Add the user to the Samba user database
     sudo smbpasswd -a $sambausername
+    
+    # enable or activate the Samba user account for login
     sudo smbpasswd -e $sambausername
+
+    # Add the user to the specified group
     sudo usermod -aG $sambagroup $sambausername
 
     read -r -p "
