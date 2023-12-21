@@ -1355,6 +1355,7 @@ EOF
     sudo groupadd $sambagroup
     sudo useradd -m $sambausername
     sudo smbpasswd -a $sambausername
+    sudo smbpasswd -e $sambausername
     sudo usermod -aG $sambagroup $sambausername
 
     read -r -p "
