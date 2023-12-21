@@ -474,7 +474,7 @@ install_gpu_drivers() {
             # Add existing NVIDIA environment variables to .bashrc
             echo "export __GL_THREADED_OPTIMIZATION=1" >>"$BASHRC_FILE"
             echo "export __GL_SHADER_CACHE=1" >>"$BASHRC_FILE"
-            
+
             # Optionally, set a custom shader cache path
             # echo "export __GL_SHADER_DISK_CACHE_PATH=/path/to/shader/cache" >> "$BASHRC_FILE"
 
@@ -911,7 +911,7 @@ install_apps() {
     sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
     sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune
-    sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients
+    sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients wsdd
     sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel
 
     /usr/bin/rygel-preferences
@@ -1119,6 +1119,16 @@ EOF
     gum spin --spinner dot --title "Stand-by..." -- sleep 2
     check_port22
     sudo systemctl status sshd
+
+    display_message "[${GREEN}✔${NC}]  Setup Web Service Discovery host daemon"
+    sudo firewall-cmd --add-rich-rule='rule family="ipv4" source address="239.255.255.250" port protocol="udp" port="3702" accept'
+    sudo firewall-cmd --add-rich-rule='rule family="ipv6" source address="ff02::c" port protocol="udp" port="3702" accept'
+    sudo firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="udp" port="3702" accept'
+    sudo firewall-cmd --add-rich-rule='rule family="ipv6" port protocol="udp" port="3702" accept'
+    sudo firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="tcp" port="5357" accept'
+    sudo firewall-cmd --add-rich-rule='rule family="ipv6" port protocol="tcp" port="5357" accept'
+
+    gum spin --spinner dot --title "Standby.." -- sleep 1
 
     display_message "[${GREEN}✔${NC}]  Setup KDE Wallet"
     gum spin --spinner dot --title "Standby.." -- sleep 1
