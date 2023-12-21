@@ -246,7 +246,7 @@ flatpak uninstall --delete-data
 sudo rm -rfv /var/tmp/flatpak-cache-*
 sleep 1
 
-systemctl status dbus
+# systemctl status dbus
 sudo systemctl start dbus
 
 # Display all platpaks installed on system
