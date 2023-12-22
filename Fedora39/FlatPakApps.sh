@@ -33,6 +33,18 @@ fi
 
 [ ${UID} -eq 0 ] && read -p "Username: " user && export user || export user="$USER"
 
+# Check whether if the windowing system is Xorg or Wayland
+if [[ ${XDG_SESSION_TYPE} == "wayland" ]]; then
+    export MOZ_ENABLE_WAYLAND=1
+    export OBS_USE_EGL=1
+fi
+
+# QT/Kvantum theme
+if [ -f /usr/bin/qt5ct ]; then
+    export QT_QPA_PLATFORM="xcb"
+    export QT_QPA_PLATFORMTHEME="qt5ct"
+fi
+
 # Check if Flatpak is installed
 if ! command -v flatpak &>/dev/null; then
     echo "Flatpak is not installed. Please install Flatpak and run the script again."

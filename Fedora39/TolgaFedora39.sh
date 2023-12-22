@@ -30,6 +30,30 @@ fi
 
 [ ${UID} -eq 0 ] && read -p "Username for this script: " user && export user || export user="$USER"
 
+# Check whether if the windowing system is Xorg or Wayland
+if [[ ${XDG_SESSION_TYPE} == "wayland" ]]; then
+    export MOZ_ENABLE_WAYLAND=1
+    export OBS_USE_EGL=1
+fi
+
+# QT/Kvantum theme
+if [ -f /usr/bin/qt5ct ]; then
+    export QT_QPA_PLATFORM="xcb"
+    export QT_QPA_PLATFORMTHEME="qt5ct"
+fi
+
+BASHRC_FILE="$HOME/.bashrc"
+desired_ps1="PS1=\"\\[\\e[1;${fg}m\\]┌[\\[\\e[1;32m\\]\\u\\[\\e[1;34m\\]@\\h\\[\\e[1;${fg}m\\]] \\[\\e[1;${fg}m\\]::\\[\\e[1;36m\\] \\W \\[\\e[1;${fg}m\\]::\\n\\[\\e[1;${fg}m\\]└\\[\\e[1;33m\\]➤\\[\\e[0;${fg}m\\]  \""
+
+if ! grep -q "$desired_ps1" "$BASHRC_FILE"; then
+    # Add desired PS1 configuration to .bashrc
+    echo "$desired_ps1" >>"$BASHRC_FILE"
+    source "$BASHRC_FILE"
+    gum spin --spinner dot --title "Custom bashrc colors added, standby..." -- sleep 2
+else
+    gum spin --spinner dot --title "Bashrc custom colors already exist, standby..." -- sleep 2
+fi
+
 # Assign a color variable based on the RANDOM number
 RED='\e[1;31m'
 GREEN='\e[1;32m'
