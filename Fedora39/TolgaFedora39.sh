@@ -18,6 +18,8 @@
 #   ░ ░       ░    ░ ░  ░ ░ ░ ░ ▒    ░░   ░   ░   ▒
 #   ░  ░      ░    ░ ░     ░              ░  ░   ░
 
+# https://github.com/massgravel/Microsoft-Activation-Scripts
+
 clear
 
 # Check if the script is run as root
