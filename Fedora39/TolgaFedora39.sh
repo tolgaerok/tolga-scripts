@@ -28,6 +28,8 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+[ ${UID} -eq 0 ] && read -p "Username for this script: " user && export user || export user="$USER"
+
 # Assign a color variable based on the RANDOM number
 RED='\e[1;31m'
 GREEN='\e[1;32m'
