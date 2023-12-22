@@ -31,6 +31,8 @@ if [[ ! "$choice" =~ ^[Yy]$ ]]; then
     exit 0
 fi
 
+[ ${UID} -eq 0 ] && read -p "Username: " user && export user || export user="$USER"
+
 # Check if Flatpak is installed
 if ! command -v flatpak &>/dev/null; then
     echo "Flatpak is not installed. Please install Flatpak and run the script again."
@@ -244,6 +246,9 @@ clear && echo -e "\e[1;32m[✔]\e[0m Removing Old Flatpak Cruft...\n"
 flatpak uninstall --unused
 flatpak uninstall --delete-data
 sudo rm -rfv /var/tmp/flatpak-cache-*
+
+[ -f /usr/bin/flatpak ] && flatpak uninstall --unused --delete-data --assumeyes
+
 sleep 1
 
 # systemctl status dbus

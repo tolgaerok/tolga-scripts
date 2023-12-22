@@ -70,6 +70,16 @@ SWAP_SIZE=2G
 SYS_PATH="/etc/sysctl.conf"
 
 sudo dnf install -y figlet
+
+# Update Time (Enable Network Time)
+sudo timedatectl set-ntp true
+
+# Update User Dirs
+[ -f /usr/bin/xdg-user-dirs-update ] && xdg-user-dirs-update
+
+# Set to performance
+[ -f /usr/bin/powerprofilesctl ] && powerprofilesctl list | grep -q performance && powerprofilesctl set performance
+
 clear
 
 echo '[charm]
@@ -910,6 +920,28 @@ install_apps() {
     sudo dnf install rpmfusion-nonfree-release-tainted
     sudo dnf --repo=rpmfusion-nonfree-tainted install "*-firmware"
 
+    # Essential Packages
+    if [ -f /usr/bin/nala ]; then
+        sudo nala install --assume-yes \
+            flatpak neofetch nano htop zip un{zip,rar} tar ffmpeg ffmpegthumbnailer tumbler sassc \
+            fonts-noto gtk2-engines-murrine gtk2-engines-pixbuf ntfs-3g wget curl git openssh-client \
+            intel-media-va-driver i965-va-driver webext-ublock-origin-firefox
+    elif [ -f /usr/bin/pacman ]; then
+        sudo pacman -S --needed --noconfirm \
+            flatpak neofetch nano htop zip un{zip,rar} tar ffmpeg ffmpegthumbnailer tumbler sassc \
+            noto-fonts-{cjk,emoji} gtk-engine-murrine gtk-engines ntfs-3g wget curl git openssh \
+            libva-intel-driver intel-media-driver firefox-ublock-origin
+    elif [ -f /usr/bin/dnf ]; then
+        sudo dnf install --assumeyes --best --allowerasing \
+            flatpak neofetch nano htop zip un{zip,rar} tar ffmpeg ffmpegthumbnailer tumbler sassc \
+            google-noto-{cjk,emoji-color}-fonts gtk-murrine-engine gtk2-engines ntfs-3g wget curl git openssh \
+            libva-intel-driver intel-media-driver mozilla-ublock-origin easyeffects pulseeffects
+    fi
+
+    # Audio
+    [ -f /usr/bin/easyeffects ] && [ -f $HOME/.config/easyeffects/output/default.json ] && easyeffects -l default
+    [ -f /usr/bin/pulseeffects ] && [ -f $HOME/.config/PulseEffects/output/default.json ] && pulseeffects -l default
+
     sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
     sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune
@@ -1327,6 +1359,8 @@ EOF
 
     sudo dnf install fontconfig-font-replacements -y --skip-broken && sudo dnf install fontconfig-enhanced-defaults -y --skip-broken
 
+    sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/San-Francisco-family/San-Francisco-family.sh)"
+
     # Install OpenRGB.
     display_message "[${GREEN}✔${NC}]  Installing OpenRGB"
     sudo modprobe i2c-dev && sudo modprobe i2c-piix4 && sudo dnf install openrgb -y
@@ -1434,13 +1468,13 @@ EOF
 
     # Add the custom group
     sudo groupadd $sambagroup
-    
+
     # ensures that a home directory is created for the user
     sudo useradd -m $sambausername
 
     # Add the user to the Samba user database
     sudo smbpasswd -a $sambausername
-    
+
     # enable or activate the Samba user account for login
     sudo smbpasswd -e $sambausername
 
