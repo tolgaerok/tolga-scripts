@@ -47,7 +47,7 @@ desired_ps1="PS1=\"\\[\\e[1;${fg}m\\]┌[\\[\\e[1;32m\\]\\u\\[\\e[1;34m\\]@\\h\\
 fortune="echo "" && fortune && echo """
 
 if ! grep -q "$desired_ps1" "$BASHRC_FILE"; then
-    
+
     # Add desired PS1 configuration to .bashrc
     echo "$desired_ps1" >>"$BASHRC_FILE"
     echo "$fortune" >>"$BASHRC_FILE"
@@ -452,6 +452,24 @@ install_gpu_drivers() {
         ###### DOWNGRADE NVIDIA FROM 545x to 535x
         # sudo dnf remove \*nvidia\* --exclude nvidia-gpu-firmware
         # sudo dnf install akmod-nvidia-535.129.03\* xorg-x11-drv-nvidia-cuda-535.129.03\* nvidia\*535.129.03\*
+        # sudo dnf install dnf-plugin-versionlock
+        #sudo dnf versionlock add akmod-nvidia-3:535.129.03-1.fc39
+        #sudo dnf versionlock add nvidia-modprobe-3:535.129.03-1.fc39
+        #sudo dnf versionlock add nvidia-persistenced-3:535.129.03-1.fc39
+        #sudo dnf versionlock add nvidia-settings-3:535.129.03-1.fc39
+        #sudo dnf versionlock add nvidia-xconfig-3:535.129.03-1.fc39
+        #sudo dnf versionlock add xorg-x11-drv-nvidia-3:535.129.03-1.fc39
+        #sudo dnf versionlock add xorg-x11-drv-nvidia-cuda-3:535.129.03-1.fc39
+        #sudo dnf versionlock add xorg-x11-drv-nvidia-cuda-libs-3:535.129.03-1.fc39
+        #sudo dnf versionlock add xorg-x11-drv-nvidia-kmodsrc-3:535.129.03-1.fc39
+        #sudo dnf versionlock add xorg-x11-drv-nvidia-libs-3:535.129.03-1.fc39
+        #sudo dnf versionlock add xorg-x11-drv-nvidia-power-3:535.129.03-1.fc39
+        #sudo rm /etc/yum.repos.d/nvidia-exclude.repo
+        #sudo dnf versionlock list
+        #sudo dnf update
+        #cl
+        #sudo dnf update
+        #sudo dnf versionlock list
 
         display_message "Enabling nvidia-modeset..."
 
