@@ -470,6 +470,12 @@ install_gpu_drivers() {
         #cl
         #sudo dnf update
         #sudo dnf versionlock list
+        ########################## DELETE LOCKS ###############################
+        #sudo dnf versionlock delete akmod-nvidia-3:535.129.03-1.fc39
+        #sudo dnf versionlock delete nvidia-modprobe-3:535.129.03-1.fc39
+        #sudo dnf versionlock delete nvidia-persistenced-3:535.129.03-1.fc39
+        #sudo dnf versionlock delete nvidia-settings-3:535.129.03-1.fc39
+        #sudo dnf versionlock delete nvidia-xconfig-3:535.129.03-1.fc39
 
         display_message "Enabling nvidia-modeset..."
 
