@@ -29,7 +29,7 @@ display_message() {
     echo -e "|${YELLOW}==>${NC}  $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
     echo ""
-   
+
 }
 
 # Ask for the username
@@ -64,11 +64,15 @@ source /home/$username/.bashrc
 
 sleep 2
 
+display_message "[${GREEN}✔${NC}] Finished"
+
+echo ""
+echo "Done"
+sleep 1
+
 # Verify that the changes took effect
-nix --version
+echo "Nix package version: " && nix --version
 nix-shell
 
-display_message "[${GREEN}✔${NC}] Finished"
-sleep 1
-echo -e"\nDone\n"
+
 
