@@ -56,7 +56,7 @@ sleep 2
 display_message "[${GREEN}✔${NC}] Setting up default.nix in $HOME"
 
 # Create a default.nix file in the home directory
-echo '{ pkgs ? import <nixpkgs> {} }: pkgs.mkShell { buildInputs = [ pkgs.nixpkgs-fmt ]; }' > /home/$username/default.nix
+echo '{ pkgs ? import <nixpkgs> {} }: pkgs.mkShell { buildInputs = [ pkgs.nixpkgs-fmt pkgs.gum pkgs.espeak-classic ]; }' > /home/$username/default.nix
 
 # Source the modified .bashrc to apply changes without restarting the shell
 source /home/$username/.bashrc
@@ -72,3 +72,6 @@ sleep 1
 # Verify that the changes took effect
 echo "Nix package version: " && nix --version
 nix-shell /home/$username/default.nix
+gum spin --spinner dot --title "Stand-by..." -- sleep 3
+espeak -v en+m7 -s 165 "Thank you for using! my configuration." --punct=","
+
