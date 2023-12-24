@@ -72,6 +72,6 @@ sleep 1
 # Verify that the changes took effect
 echo "Nix package version: " && nix --version
 nix-shell /home/$username/default.nix
-gum spin --spinner dot --title "Stand-by..." -- sleep 3
-espeak -v en+m7 -s 165 "Thank you for using! my configuration." --punct=","
+#  gum spin --spinner dot --title "Stand-by..." -- sleep 3
+#  espeak -v en+m7 -s 165 "Thank you for using! my configuration." --punct=","
 
