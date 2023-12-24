@@ -68,5 +68,7 @@ sleep 2
 nix --version
 nix-shell
 
+display_message "[${GREEN}✔${NC}] Finished"
+sleep 1
 echo -e"\nDone\n"
 
