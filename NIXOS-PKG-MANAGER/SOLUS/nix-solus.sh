@@ -2,6 +2,7 @@
 
 # tolga erok
 # 25 Dec 2023
+# bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/NIXOS-PKG-MANAGER/SOLUS/nix-solus.sh)"
 
 clear
 
