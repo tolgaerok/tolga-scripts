@@ -2,9 +2,6 @@
 
 # tolga erok
 # 25 Dec 2023
-# My personal Nix package manager installer
-# Execute remotely, DO NOT USE SUDO OR AS ROOT! It needs to setup default.nix in the users $HOME directory
-
 # bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/NIXOS-PKG-MANAGER/SOLUS/nix-solus.sh)"
 
 clear
@@ -27,7 +24,7 @@ NC='\e[0m'
 # Function to display messages
 display_message() {
     clear
-    echo -e "\n                  Tolga's online Nix-Package Manager setup\n"
+    echo -e "\n                  Tolga's online Nix-Package setup\n"
     echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
     echo -e "|${YELLOW}==>${NC}  $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
@@ -74,7 +71,4 @@ sleep 1
 
 # Verify that the changes took effect
 echo "Nix package version: " && nix --version
-nix-shell
-
-
-
+nix-shell /home/$username/default.nix
