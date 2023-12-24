@@ -21,6 +21,7 @@ echo "export PATH=\"/home/$username/.nix-profile/bin:\$PATH\"" >> /home/$usernam
 echo ". /home/$username/.nix-profile/etc/profile.d/nix.sh" >> /home/$username/.bashrc
 
 
+
 # Create a default.nix file in the home directory
 echo '{ pkgs ? import <nixpkgs> {} }: pkgs.mkShell { buildInputs = [ pkgs.nixpkgs-fmt ]; }' > /home/$username/default.nix
 
