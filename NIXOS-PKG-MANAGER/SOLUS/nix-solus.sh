@@ -47,7 +47,6 @@ display_message "[${GREEN}✔${NC}] Downloading nix pgk manager"
 
 sh <(curl -L https://nixos.org/nix/install) --no-daemon
 . /home/$username/.nix-profile/etc/profile.d/nix.sh
-nix --version
 
 display_message "[${GREEN}✔${NC}] Setting up profile PATHS"
 
