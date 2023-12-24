@@ -17,8 +17,9 @@ sh <(curl -L https://nixos.org/nix/install) --no-daemon
 nix --version
 
 # Add the following lines to append export statements to .bashrc
-echo 'export PATH="/home/$username/.nix-profile/bin:$PATH"' >> /home/$username/.bashrc
-echo '. /home/$username/.nix-profile/etc/profile.d/nix.sh' >> /home/$username/.bashrc
+echo "export PATH=\"/home/$username/.nix-profile/bin:\$PATH\"" >> /home/$username/.bashrc
+echo ". /home/$username/.nix-profile/etc/profile.d/nix.sh" >> /home/$username/.bashrc
+
 
 # Create a default.nix file in the home directory
 echo '{ pkgs ? import <nixpkgs> {} }: pkgs.mkShell { buildInputs = [ pkgs.nixpkgs-fmt ]; }' > /home/$username/default.nix
