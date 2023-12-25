@@ -51,7 +51,12 @@ display_message "[${GREEN}✔${NC}] Setting up profile PATHS"
 echo "export PATH=\"/home/$username/.nix-profile/bin:\$PATH\"" >> /home/$username/.bashrc
 echo ". /home/$username/.nix-profile/etc/profile.d/nix.sh" >> /home/$username/.bashrc
 
-sleep 2
+# Try to detect system locale and set locale variables into bashrc
+system_locale=$(locale | grep "LANG" | cut -d '=' -f 2)
+echo "export LC_ALL=$system_locale" >> /home/$username/.bashrc
+echo "export LANG=$system_locale" >> /home/$username/.bashrc
+
+sleep 1
 
 display_message "[${GREEN}✔${NC}] Setting up default.nix in $HOME"
 
@@ -61,7 +66,7 @@ echo '{ pkgs ? import <nixpkgs> {} }: pkgs.mkShell { buildInputs = [ pkgs.nixpkg
 # Source the modified .bashrc to apply changes without restarting the shell
 source /home/$username/.bashrc
 
-sleep 2
+sleep 1
 
 display_message "[${GREEN}✔${NC}] Finished"
 
