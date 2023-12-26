@@ -43,11 +43,10 @@ if [ -f /usr/bin/qt5ct ]; then
 fi
 
 BASHRC_FILE="$HOME/.bashrc"
-desired_ps1="PS1="\[\e[1;m\]┌[\[\e[1;32m\]\u\[\e[1;34m\]@\h\[\e[1;m\]] \[\e[1;m\]::\[\e[1;36m\] \W \[\e[1;m\]::\n\[\e[1;m\]└\[\e[1;33m\]➤🖐️👀👉\[\e[0;m\]  ""
-fortune="echo "" && fortune && echo """
+desired_ps1='PS1="\[\e[1;m\]┌[\[\e[1;32m\]\u\[\e[1;34m\]@\h\[\e[1;m\]] \[\e[1;m\]::\[\e[1;36m\] \W \[\e[1;m\]::\n\[\e[1;m\]└\[\e[1;33m\]➤🖐️👀👉\[\e[0;m\]  "'
+fortune='echo "" && fortune && echo ""'
 
 if ! grep -q "$desired_ps1" "$BASHRC_FILE"; then
-
     # Add desired PS1 configuration to .bashrc
     echo "$desired_ps1" >>"$BASHRC_FILE"
     echo "$fortune" >>"$BASHRC_FILE"
@@ -57,6 +56,7 @@ if ! grep -q "$desired_ps1" "$BASHRC_FILE"; then
 else
     gum spin --spinner dot --title "Bashrc custom colors already exist, standby..." -- sleep 2
 fi
+
 
 # Assign a color variable based on the RANDOM number
 RED='\e[1;31m'
