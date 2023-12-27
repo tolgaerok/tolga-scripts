@@ -1878,6 +1878,12 @@ btrfs_maint() {
 
 create-extra-dir() {
     display_message "[${GREEN}✔${NC}]  Create extra needed directories"
+
+    # Check if username is provided, otherwise use default
+    if [ -z "$user" ]; then
+        user="$USER"
+    fi
+
     # Directories to create
     directories=(
         "~/.config/autostart"
@@ -1894,15 +1900,17 @@ create-extra-dir() {
         "~/src"
     )
 
-    # Create directories
+    # Create directories using the specified username
     for dir in "${directories[@]}"; do
-        mkdir -p "$dir"
-        gum spin --spinner dot --title "[✔]  Creating: $dir" -- sleep 1
+        dir_path=$(eval echo "$dir" | sed "s|~|/home/$user|")
+        mkdir -p "$dir_path"
+        gum spin --spinner dot --title "[✔]  Creating: $dir_path" -- sleep 1
         sleep 0.5
+        chown "$user:$user" "$dir_path"
     done
 
     # Set SSH folder permissions
-    chmod 700 ~/.ssh
+    chmod 700 "/home/$user/.ssh"
 
     display_message "[${GREEN}✔${NC}]  Extra hidden dirs created"
     gum spin --spinner dot --title "Stand-by..." -- sleep 2
