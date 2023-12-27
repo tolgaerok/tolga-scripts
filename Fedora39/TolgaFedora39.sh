@@ -45,19 +45,17 @@ fi
 BASHRC_FILE="$HOME/.bashrc"
 desired_ps1='PS1="\[\e[1;32m\]┌[\[\e[1;32m\]\u\[\e[1;34m\]@\h\[\e[1;m\]] \[\e[1;m\]::\[\e[1;36m\] \W \[\e[1;m\]::\n\[\e[1;m\]└\[\e[1;33m\]➤ 🖐️👀 👉\[\e[0;m\] "'
 fortune='echo "" && fortune && echo "" '
- 
+
 if ! grep -qF "$desired_ps1" "$BASHRC_FILE"; then
     # Add desired PS1 configuration to .bashrc
-    echo -e "$desired_ps1" >> "$BASHRC_FILE"
-    echo -e "$fortune" >> "$BASHRC_FILE"
+    echo -e "$desired_ps1" >>"$BASHRC_FILE"
+    echo -e "$fortune" >>"$BASHRC_FILE"
     source "$BASHRC_FILE"
 
     gum spin --spinner dot --title "Custom bashrc colors added, standby..." -- sleep 2
 else
     gum spin --spinner dot --title "Bashrc custom colors already exist, standby..." -- sleep 2
 fi
-
-
 
 # Assign a color variable based on the RANDOM number
 RED='\e[1;31m'
@@ -367,7 +365,7 @@ install_gpu_drivers() {
 
         # KMS stands for "Kernel Mode Setting" which is the opposite of "Userland Mode Setting". This feature allows to set the screen resolution
         # on the kernel side once (at boot), instead of after login from the display manager.
-                    sudo sed -i '/GRUB_CMDLINE_LINUX/ s/"$/ rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
+        sudo sed -i '/GRUB_CMDLINE_LINUX/ s/"$/ rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
 
         # remove nouveau
         sudo dnf remove -y xorg-x11-drv-nouveau
@@ -481,7 +479,7 @@ install_gpu_drivers() {
         display_message "Enabling nvidia-modeset..."
 
         # Enable nvidia-modeset
-                    sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"
+        sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"
 
         display_message "[${GREEN}✔${NC}]  nvidia-modeset enabled successfully."
         gum spin --spinner dot --title "Stand-by..." -- sleep 1.5
@@ -770,10 +768,10 @@ disable_mitigations() {
     case "$choice" in
     y | Y)
         # Disable mitigations
-                    sudo grubby --update-kernel=ALL --args="mitigations=off"
+        sudo grubby --update-kernel=ALL --args="mitigations=off"
 
         # Custon Tweak for tolga
-                    # sudo grubby --update-kernel=ALL --args="mitigations=off threadirqs swap=0 nowatchdog=1 transparent_hugepage=never intel_idle.max_cstate=0 processor.max_cstate=0"
+        # sudo grubby --update-kernel=ALL --args="mitigations=off threadirqs swap=0 nowatchdog=1 transparent_hugepage=never intel_idle.max_cstate=0 processor.max_cstate=0"
 
         display_message "[${GREEN}✔${NC}]  Mitigations disabled successfully and multi-threading enabled."
         gum spin --spinner dot --title "Stand-by..." -- sleep 2
@@ -794,7 +792,7 @@ enable_modern_standby() {
     display_message "Enabling Modern Standby..."
 
     # Enable Modern Standby
-                sudo grubby --update-kernel=ALL --args="mem_sleep_default=s2idle"
+    sudo grubby --update-kernel=ALL --args="mem_sleep_default=s2idle"
 
     display_message "Modern Standby enabled successfully."
     gum spin --spinner dot --title "Stand-by..." -- sleep 2
@@ -805,7 +803,7 @@ enable_nvidia_modeset() {
     display_message "Enabling nvidia-modeset..."
 
     # Enable nvidia-modeset
-                sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"
+    sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"
 
     display_message "[${GREEN}✔${NC}]  nvidia-modeset enabled successfully."
     gum spin --spinner dot --title "Stand-by..." -- sleep 2
@@ -849,23 +847,23 @@ use_flatpak_themes() {
     display_message "Themes applied to Flatpaks successfully."
 }
 
-            # Function to check if mitigations=off is present in GRUB configuration
-            check_mitigations_grub() {
-                display_message "[${GREEN}✔${NC}]  Checking if mitigations=off is present in GRUB configuration..."
+# Function to check if mitigations=off is present in GRUB configuration
+check_mitigations_grub() {
+    display_message "[${GREEN}✔${NC}]  Checking if mitigations=off is present in GRUB configuration..."
 
-                # Read the GRUB configuration
-                grub_config=$(cat /etc/default/grub)
+    # Read the GRUB configuration
+    grub_config=$(cat /etc/default/grub)
 
     # Check if mitigations=off is present
     # for tolga's system
-                # if echo "$grub_config" | grep -q "mitigations=off threadirqs swap=0 nowatchdog=1 transparent_hugepage=never intel_idle.max_cstate=0 processor.max_cstate=0"; then
+    # if echo "$grub_config" | grep -q "mitigations=off threadirqs swap=0 nowatchdog=1 transparent_hugepage=never intel_idle.max_cstate=0 processor.max_cstate=0"; then
 
-                if echo "$grub_config" | grep -q "mitigations=off"; then
+    if echo "$grub_config" | grep -q "mitigations=off"; then
 
-                    display_message "[${GREEN}✔${NC}]  Mitigations are currently disabled in GRUB configuration: ==>  ( Success! )"
+        display_message "[${GREEN}✔${NC}]  Mitigations are currently disabled in GRUB configuration: ==>  ( Success! )"
         gum spin --spinner dot --title "Stand-by..." -- sleep 2
     else
-                    display_message "[${RED}✘${NC}] Warning: Mitigations are not currently disabled in GRUB configuration."
+        display_message "[${RED}✘${NC}] Warning: Mitigations are not currently disabled in GRUB configuration."
         gum spin --spinner dot --title "Stand-by..." -- sleep 2
     fi
 }
@@ -1006,7 +1004,7 @@ install_apps() {
     [ -f /usr/bin/pulseeffects ] && [ -f $HOME/.config/PulseEffects/output/default.json ] && pulseeffects -l default
 
     sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
-                sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
+    sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
     sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune
     sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients wsdd
     sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel
@@ -1683,7 +1681,7 @@ display_XDG_session() {
 }
 
 fix_grub() {
-# Check if GRUB_TIMEOUT_STYLE is present
+    # Check if GRUB_TIMEOUT_STYLE is present
     if ! grep -q '^GRUB_TIMEOUT_STYLE=menu' /etc/default/grub; then
         # Add GRUB_TIMEOUT_STYLE=menu if not present
         echo 'GRUB_TIMEOUT_STYLE=menu' | sudo tee -a /etc/default/grub >/dev/null
@@ -1692,27 +1690,27 @@ fix_grub() {
     # Check if UEFI is enabled
     uefi_enabled=$(test -d /sys/firmware/efi && echo "UEFI" || echo "BIOS/Legacy")
 
-                # Display information about GRUB configuration
-                display_message "[${GREEN}✔${NC}]  Current GRUB configuration:"
-                echo "  - GRUB_TIMEOUT_STYLE: $(grep '^GRUB_TIMEOUT_STYLE' /etc/default/grub | cut -d '=' -f2)"
+    # Display information about GRUB configuration
+    display_message "[${GREEN}✔${NC}]  Current GRUB configuration:"
+    echo "  - GRUB_TIMEOUT_STYLE: $(grep '^GRUB_TIMEOUT_STYLE' /etc/default/grub | cut -d '=' -f2)"
     echo "  - System firmware: $uefi_enabled"
 
     # Prompt user to proceed
-                read -p "Do you want to proceed with updating GRUB? (yes/no): " choice
+    read -p "Do you want to proceed with updating GRUB? (yes/no): " choice
     case "$choice" in
     [Yy] | [Yy][Ee][Ss]) ;;
     *)
-                    echo "GRUB update aborted."
+        echo "GRUB update aborted."
         return
         ;;
     esac
 
-                # Update GRUB configuration
-                sudo grub2-mkconfig -o /boot/grub2/grub.cfg
-                sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+    # Update GRUB configuration
+    sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+    sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 
-                echo "GRUB updated successfully."
-                sleep 2
+    echo "GRUB updated successfully."
+    sleep 2
 }
 
 # Remove KDE Junk
@@ -2044,14 +2042,14 @@ zram() {
     gum spin --spinner dot --title "Create and configure swap file in progress" -- sleep 1.5
     # fi
 
-                # Step 2: Use echo and sed to update GRUB_CMDLINE_LINUX_DEFAULT
-                display_message "[${GREEN}✔${NC}] Updating GRUB."
-                echo 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=50 zswap.zpool=z3fold"' | sudo tee -a /etc/default/grub >/dev/null
-                sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=50 zswap.zpool=z3fold"/' /etc/default/grub
-                sudo grub2-mkconfig -o /boot/grub2/grub.cfg
-                sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+    # Step 2: Use echo and sed to update GRUB_CMDLINE_LINUX_DEFAULT
+    display_message "[${GREEN}✔${NC}] Updating GRUB."
+    echo 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=50 zswap.zpool=z3fold"' | sudo tee -a /etc/default/grub >/dev/null
+    sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=50 zswap.zpool=z3fold"/' /etc/default/grub
+    sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+    sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 
-                gum spin --spinner dot --title "GRUB updated successfully. Initializing ( initramfs )" -- sleep 1
+    gum spin --spinner dot --title "GRUB updated successfully. Initializing ( initramfs )" -- sleep 1
     echo ""
     echo lz4 | sudo tee -a /etc/initramfs-tools/modules >/dev/null
     echo lz4_compress | sudo tee -a /etc/initramfs-tools/modules >/dev/null
@@ -2088,12 +2086,12 @@ display_main_menu() {
     echo -e "\e[33m 14.\e[0m \e[32mDisable NetworkManager-wait-online.service\e[0m"
     echo -e "\e[33m 15.\e[0m \e[32mDisable Gnome Software from Startup Apps\e[0m"
     echo -e "\e[33m 16.\e[0m \e[32mChange hostname                                              ( Change current localname/pc name )\e[0m"
-                echo -e "\e[33m 17.\e[0m \e[32mCheck mitigations=off in GRUB\e[0m"
+    echo -e "\e[33m 17.\e[0m \e[32mCheck mitigations=off in GRUB\e[0m"
     echo -e "\e[33m 18.\e[0m \e[32mInstall additional apps\e[0m"
     echo -e "\e[33m 19.\e[0m \e[32mCleanup Fedora\e[0m"
     echo -e "\e[33m 20.\e[0m \e[32mFix Chrome HW accelerations issue                            ( No guarantee )\e[0m"
     echo -e "\e[33m 21.\e[0m \e[32mDisplay XDG session\e[0m"
-                echo -e "\e[33m 22.\e[0m \e[32mFix grub or rebuild grub                                     ( Checks and enables menu output to grub menu )\e[0m"
+    echo -e "\e[33m 22.\e[0m \e[32mFix grub or rebuild grub                                     ( Checks and enables menu output to grub menu )\e[0m"
     echo -e "\e[33m 23.\e[0m \e[32mInstall new DNF5                                             ( Testing for fedora 40/41 )\e[0m"
     echo -e "\e[33m 24.\e[0m \e[32mRemove Useless KDE Apps                                      ( Why are these installed? )\e[0m"
     echo -e "\e[33m 25.\e[0m \e[32mPerform BTRFS balance and scrub operation on / partition     ( !! WARNING, backup important data incase, 5 min operation )\e[0m"
@@ -2140,12 +2138,12 @@ handle_user_input() {
     14) disable_network_manager_wait_online ;;
     15) disable_gnome_software_startup ;;
     16) change_hotname ;;
-                17) check_mitigations_grub ;;
+    17) check_mitigations_grub ;;
     18) install_apps ;;
     19) cleanup_fedora ;;
     20) fix_chrome ;;
     21) display_XDG_session ;;
-                22) fix_grub ;;
+    22) fix_grub ;;
     23) dnf5 ;;
     24) kde_crap ;;
     25) btrfs_maint ;;
