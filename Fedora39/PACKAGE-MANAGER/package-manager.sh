@@ -48,12 +48,14 @@ display_message() {
 create_user_installed_list() {
     dnf repoquery --userinstalled > ~/installed-packages.txt
     display_message "[${GREEN}✔${NC}] Creating user installed package list"
+    sleep 0.5
 }
 
 # Function to create a list of all installed packages on user's system
 create_all_installed_list() {
     dnf repoquery --installed > ~/packages.txt
     display_message "[${GREEN}✔${NC}] Creating list if local installed package list"
+    sleep 0.5
 }
 
 # Function to show the installed packages on current set-up
@@ -61,6 +63,7 @@ show_installed_packages() {
     display_message "[${GREEN}✔${NC}] Installed package list"
     echo "Installed packages:"
     dnf list installed
+    read -p "  Press enter to continue:==> "
 }
 
 # Function to prepare the file for dnf shell use
@@ -71,6 +74,8 @@ prep_file_for_dnf_shell() {
         sed 's/^/install /' ~/installed-packages.txt > ~/pkgs.txt
         echo "run" >> ~/pkgs.txt
         echo "File prepared successfully."
+        echo ""
+        read -p "  Press enter to continue:==> "
     else
         display_message "[${RED}✘${NC}] ERROR"
         echo "Error: The list of user-installed packages is empty."
@@ -83,6 +88,8 @@ install_packages() {
     display_message "[${GREEN}✔${NC}] Installing package list"
     sleep 0.5
     dnf shell ~/pkgs.txt
+    echo ""
+    read -p "  Installed, press enter to continue:==> "
 }
 
 # Main menu
