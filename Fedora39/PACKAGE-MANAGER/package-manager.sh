@@ -2,6 +2,7 @@
 
 # Tolga Erok
 # 27-12-2023
+# bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/PACKAGE-MANAGER/package-manager.sh)"
 
 # Inspired by Brian Francisco
 
@@ -27,14 +28,6 @@ ORANGE='\e[1;93m'
 NC='\e[0m'
 YELLOW='\e[1;33m'
 NC='\e[0m'
-
-# Super tweak I/O scheduler
-echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
-echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
-printf "\n${YELLOW}I/O Scheduler has been set to ==>  ${NC}"
-cat /sys/block/sda/queue/scheduler
-echo ""
-sleep 0.5
 
 # Template
 # display_message "[${GREEN}✔${NC}]
