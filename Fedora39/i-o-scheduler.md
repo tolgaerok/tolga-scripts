@@ -50,6 +50,11 @@ How create a systemd service to run i/o scheduler on fedora
 
 This systemd service will run the specified commands during system boot. 
 
-TODO:
+##TODO:
 Keep in mind that modifying system settings during boot requires elevated privileges, so the service will be executed with sudo.
+
+![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/7c5c7631-1c4a-4c8b-93ed-5275a8c1e9e6)
+
+
+
 
