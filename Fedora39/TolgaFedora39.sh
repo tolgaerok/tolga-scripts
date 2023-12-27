@@ -100,7 +100,7 @@ SWAP_PATH="/swapfile"
 SWAP_SIZE=2G
 SYS_PATH="/etc/sysctl.conf"
 
-sudo dnf install -y figlet
+sudo dnf install -y figlet fortune
 
 # Update Time (Enable Network Time)
 sudo timedatectl set-ntp true
