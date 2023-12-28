@@ -185,19 +185,22 @@ configure_dnf() {
         # Use sudo to edit the DNF configuration file with nano
         sudo nano "$DNF_CONF_PATH" <<EOL
 [main]
-gpgcheck=1
-installonly_limit=3
-clean_requirements_on_remove=True
 best=False
-skip_if_unavailable=True
+clean_requirements_on_remove=True
+color=auto
+deltarpm=true
+exactarch=True
 fastestmirror=True
+gpgcheck=True
+installonly_limit=3
 keepcache=True
 max_parallel_downloads=10
-deltarpm=true
-metadata_timer_sync=0
 metadata_expire=6h
 metadata_expire_filter=repo:base:2h
 metadata_expire_filter=repo:updates:12h
+metadata_timer_sync=0
+showdupesfromrepos=True
+skip_if_unavailable=True
 EOL
 
         # Inform the user that the update is complete
