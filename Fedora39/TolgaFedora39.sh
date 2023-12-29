@@ -335,7 +335,7 @@ install_firmware() {
 # Function to install GPU drivers with a reboot option on a 3 min timer, Nvidia && AMD
 install_gpu_drivers() {
     display_message "[${GREEN}✔${NC}]  Checking GPU and installing drivers..."
-    sudo dnf install -y mesa-vdpau-drivers
+    sudo dnf install -y mesa-vdpau-drivers zenity
 
     # Check for NVIDIA GPU
     if lspci | grep -i nvidia &>/dev/null; then
@@ -387,6 +387,8 @@ install_gpu_drivers() {
         sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
         sudo dnf install -y https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
         sudo dnf config-manager --set-enabled rpmfusion-free rpmfusion-free-updates rpmfusion-nonfree rpmfusion-nonfree-updates
+
+        sudo bash -c "dnf remove -y nvidia*; dnf remove -y akmod-nvidia; dnf remove -y dkms-nvidia; rm -rf /var/lib/dkms/nvidia*; dnf install -y akmod-nvidia nvidia-driver nvidia-driver-NVML nvidia-driver-NVML.i686 nvidia-driver-NvFBCOpenGL nvidia-driver-cuda nvidia-driver-cuda-libs nvidia-driver-cuda-libs.i686 nvidia-driver-libs nvidia-driver-libs.i686 nvidia-kmod-common nvidia-libXNVCtrl nvidia-modprobe nvidia-persistenced nvidia-settings nvidia-xconfig nvidia-vaapi-driver nvidia-gpu-firmware --refresh; systemctl enable --now akmods; dracut -f"
 
         sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs
         sudo dnf install -y gcc kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686
@@ -493,7 +495,6 @@ install_gpu_drivers() {
         #          --exclude="xorg-x11-drv-nvidia-power*3:545.29.06-1.fc39*" \
         #          --exclude="xorg-x11-drv-nvidia*3:545.29.06-1.fc39*"
 
-
         display_message "Enabling nvidia-modeset..."
 
         # Enable nvidia-modeset
@@ -598,6 +599,9 @@ install_gpu_drivers() {
         # Make sure the boot image got updated as well
         sudo dracut --force
 
+        # Once more and enable akmods
+        sudo systemctl enable --now akmods --force && sudo dracut --force
+
         source ~/.bashrc
         uname -m && cat /etc/*release
         gcc --version
@@ -622,6 +626,25 @@ install_gpu_drivers() {
     fi
 
     glxinfo | egrep "OpenGL vendor|OpenGL renderer"
+
+    REBOOT_REQUIRED="yes"
+    if [ "$REBOOT_REQUIRED" == "yes" ]; then
+
+        zenity --question \
+            --title="Reboot Required." \
+            --width=600 \
+            --text="$(printf "The system requires a reboot before changes can take effect. Would you like to reboot now?\n\n")"
+
+        if [ $? = 0 ]; then
+            shutdown -r now &>>/tmp/nvcheck.log || {
+                zenity --error --text="Failed to issue reboot:\n\n $(cat /tmp/nvcheck.log)\n\n Please reboot the system manually."
+                exit 1
+            }
+        else
+            exit 0
+        fi
+
+    fi
 
     # Prompt user for reboot or continue
     read -p "Do you want to reboot now? (y/n): " choice
