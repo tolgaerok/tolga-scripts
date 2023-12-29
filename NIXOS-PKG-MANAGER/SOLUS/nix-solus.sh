@@ -53,8 +53,8 @@ echo ". /home/$username/.nix-profile/etc/profile.d/nix.sh" >> /home/$username/.b
 
 # Try to detect system locale and set locale variables into bashrc
 system_locale=$(locale | grep "LANG" | cut -d '=' -f 2)
-echo "export LC_ALL=$system_locale" >> /home/$username/.bashrc
-echo "export LANG=$system_locale" >> /home/$username/.bashrc
+# echo "export LC_ALL=$system_locale" >> /home/$username/.bashrc
+# echo "export LANG=$system_locale" >> /home/$username/.bashrc
 
 sleep 1
 
