@@ -1,12 +1,14 @@
 ## How create a systemd service to run mq-deadline I/O scheduler on Fedora, Solus or Mint
 
-![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/e62aae39-2b2c-4458-8a4a-7d6eddf898a7)
+
 
 Tolga Erok
 
-- 26/12/2023
+26/12/2023
 
+![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/7c5c7631-1c4a-4c8b-93ed-5275a8c1e9e6)
 
+![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/e62aae39-2b2c-4458-8a4a-7d6eddf898a7)
 
 # Steps
 
@@ -67,12 +69,12 @@ Tolga Erok
 
 This systemd service will run the specified commands during system boot.
 
-## TODO:
+# Note:
 
 Keep in mind that modifying system settings during boot requires elevated privileges, so the service will be executed with sudo.
 
 
-![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/7c5c7631-1c4a-4c8b-93ed-5275a8c1e9e6)
+
 
 
 
