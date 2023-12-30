@@ -388,7 +388,7 @@ install_gpu_drivers() {
         sudo dnf install -y https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
         sudo dnf config-manager --set-enabled rpmfusion-free rpmfusion-free-updates rpmfusion-nonfree rpmfusion-nonfree-updates
 
-        sudo bash -c "dnf remove -y nvidia*; dnf remove -y akmod-nvidia; dnf remove -y dkms-nvidia; rm -rf /var/lib/dkms/nvidia*; dnf install -y akmod-nvidia nvidia-driver nvidia-driver-NVML nvidia-driver-NVML.i686 nvidia-driver-NvFBCOpenGL nvidia-driver-cuda nvidia-driver-cuda-libs nvidia-driver-cuda-libs.i686 nvidia-driver-libs nvidia-driver-libs.i686 nvidia-kmod-common nvidia-libXNVCtrl nvidia-modprobe nvidia-persistenced nvidia-settings nvidia-xconfig nvidia-vaapi-driver nvidia-gpu-firmware --refresh; systemctl enable --now akmods; dracut -f"
+       #  sudo bash -c "dnf remove -y nvidia*; dnf remove -y akmod-nvidia; dnf remove -y dkms-nvidia; rm -rf /var/lib/dkms/nvidia*; dnf install -y akmod-nvidia nvidia-driver nvidia-driver-NVML nvidia-driver-NVML.i686 nvidia-driver-NvFBCOpenGL nvidia-driver-cuda nvidia-driver-cuda-libs nvidia-driver-cuda-libs.i686 nvidia-driver-libs nvidia-driver-libs.i686 nvidia-kmod-common nvidia-libXNVCtrl nvidia-modprobe nvidia-persistenced nvidia-settings nvidia-xconfig nvidia-vaapi-driver nvidia-gpu-firmware --refresh; systemctl enable --now akmods; dracut -f"
 
         sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs
         sudo dnf install -y gcc kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686
