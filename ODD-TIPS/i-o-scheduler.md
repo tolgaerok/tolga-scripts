@@ -1,11 +1,13 @@
-## How create a systemd service to run i/o scheduler on fedora
+## How create a systemd service to run mq-deadline I/O scheduler on Fedora, Solus or Mint
+
 ![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/e62aae39-2b2c-4458-8a4a-7d6eddf898a7)
 
 Tolga Erok
-26/12/2023
 
-Target:
-Fedora, Solus, Mint
+- 26/12/2023
+
+
+
 
 1. Open a terminal and create a new systemd service file:
 
