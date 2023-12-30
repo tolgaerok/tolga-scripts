@@ -5,6 +5,22 @@
 
 # Basic info
 
+# Run from remote location:
+# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/FEDORA%20RELATED/EARLYOOM-ZRAM-INFO/earlyoom-zram-info.sh)"
+
+#  ¯\_(ツ)_/¯
+#    █████▒▓█████ ▓█████▄  ▒█████   ██▀███   ▄▄▄
+#  ▓██   ▒ ▓█   ▀ ▒██▀ ██▌▒██▒  ██▒▓██ ▒ ██▒▒████▄
+#  ▒████ ░ ▒███   ░██   █▌▒██░  ██▒▓██ ░▄█ ▒▒██  ▀█▄
+#  ░▓█▒  ░ ▒▓█  ▄ ░▓█▄   ▌▒██   ██░▒██▀▀█▄  ░██▄▄▄▄██
+#  ░▒█░    ░▒████▒░▒████▓ ░ ████▓▒░░██▓ ▒██▒ ▓█   ▓██▒
+#   ▒ ░    ░░ ▒░ ░ ▒▒▓  ▒ ░ ▒░▒░▒░ ░ ▒▓ ░▒▓░ ▒▒   ▓▒█░
+#   ░       ░ ░  ░ ░ ▒  ▒   ░ ▒ ▒░   ░▒ ░ ▒░  ▒   ▒▒ ░
+#   ░ ░       ░    ░ ░  ░ ░ ░ ░ ▒    ░░   ░   ░   ▒
+#   ░  ░      ░    ░ ░     ░              ░  ░   ░
+
+# https://github.com/massgravel/Microsoft-Activation-Scripts
+
 # Colors
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
