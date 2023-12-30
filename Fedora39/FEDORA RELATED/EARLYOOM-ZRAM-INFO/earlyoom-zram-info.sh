@@ -30,7 +30,7 @@ RESET='\033[0m'
 display_message() {
     clear
     echo -e "\n                  Tolga's Earlyoom and Zram info\n"
-    echo -e "\e[34m|--------------------\e[33m ---------:\e[34m :-------------------|"
+    echo -e ""
     echo -e "|${YELLOW}  ==>${NC}  $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
     echo ""
