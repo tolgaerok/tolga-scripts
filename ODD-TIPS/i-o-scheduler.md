@@ -44,13 +44,21 @@ How create a systemd service to run i/o scheduler on fedora
    ```bash
    sudo systemctl start io-scheduler.service
    ```
+
 7. Check status
    
   ```bash
   sudo systemctl status io-scheduler.service
   ```
 
-This systemd service will run the specified commands during system boot. 
+8. Check i/o assignment 
+   
+  ```bash
+  cat /sys/block/sda/queue/scheduler
+  ```
+ 
+
+This systemd service will run the specified commands during system boot.
 
 ## TODO:
 
