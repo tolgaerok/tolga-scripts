@@ -46,6 +46,7 @@ UUID=5992d417-423a-4ff9-bf05-93a0a2963e49 / btrfs subvol=root,compress=zstd:1,di
 UUID=f85c1f1b-adc9-4a4c-a5bd-41892ed3b6d7 /boot                   ext4    defaults        1 2
 UUID=44FF-C70A                            /boot/efi               vfat    umask=0077,shortname=winnt 0 2
 UUID=5992d417-423a-4ff9-bf05-93a0a2963e49 /home                   btrfs   subvol=home,compress=zstd:1 0 0
+tmpfs                                     /tmp                    tmpfs   defaults,noatime,mode=1777 0 0
 
 or
 
