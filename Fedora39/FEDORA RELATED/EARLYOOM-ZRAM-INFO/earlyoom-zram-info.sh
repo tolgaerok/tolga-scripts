@@ -27,6 +27,16 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 RESET='\033[0m'
 
+display_message() {
+    clear
+    echo -e "\n                  Tolga's Earlyoom and Zram info\n"
+    echo -e "\e[34m|--------------------\e[33m ---------:\e[34m :-------------------|"
+    echo -e "|${YELLOW}  ==>${NC}  $1"
+    echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
+    echo ""
+    
+}
+ display_message "[${GREEN}✔${NC}] Standby.."
 # Check EarlyOOM statuss
 earlyoom_status=$(systemctl is-active earlyoom 2>/dev/null)
 echo -e "${YELLOW}EarlyOOM Status:${RESET} $earlyoom_status"
@@ -60,3 +70,4 @@ echo -e "${YELLOW}Zram Configuration File:${RESET} $zram_conf"
 # Output memory and swap information
 echo -e "${YELLOW}Memory and Swap Information:${RESET}"
 free -h
+ 
