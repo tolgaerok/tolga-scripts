@@ -339,9 +339,11 @@ Name: startup.sh
 
 ```bash
 #!/bin/bash
+
 mpg123 /home/tolga/Music/darth_vader_breathe.mp3
+
 exit
-```bash
+```
 
 
 
