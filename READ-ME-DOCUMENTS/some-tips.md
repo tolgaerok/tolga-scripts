@@ -266,8 +266,9 @@ exit
 ```
 ## Create user systemd conf file
 
-* Location: /home/tolga/.config/systemd/user/tolga.service
-* Saved as: tolga.service
+* Location:  /home/tolga/.config/systemd/user/tolga.service
+* Saved as:  tolga.service
+  
 ```bash
 [Unit]
 Description=Set i/o scheduler
@@ -279,8 +280,9 @@ ExecStart=/usr/local/bin/none.sh
 WantedBy=default.target
 ```
 ## systemd
-* Location: /etc/systemd/system/tolga.service
-* Saved as: tolga.service
+* Location:  /etc/systemd/system/tolga.service
+* Saved as:  tolga.service
+  
 ```bash
 [Unit]
 Description=Set i/o scheduler
@@ -297,7 +299,9 @@ Restart=always
 [Install]
 WantedBy=default.target
 ```
+
 ## Start service
+
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable --now tolga.service
@@ -309,8 +313,8 @@ systemctl --user restart tolga.service
 
 ## Create audio startup on login
 
-Location: /home/tolga/.config/autostart
-Name: startup.sh.desktop
+* Location:  /home/tolga/.config/autostart
+* Name:      startup.sh.desktop
 
 ```bash
 [Desktop Entry]
@@ -334,8 +338,8 @@ X-KDE-AutostartScript=true
 X-KDE-SubstituteUID=false
 X-KDE-Username=
 ```
-Location: /home/tolga/Music/startup.sh
-Name: startup.sh
+* Location:  /home/tolga/Music/startup.sh
+* Name:      startup.sh
 
 ```bash
 #!/bin/bash
