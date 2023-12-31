@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Tolga Erok
-# 31/12/203
+# 31/12/2023
 
 # Run from remote location:
 # sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/STOP-SNAP-SERVICE/stop_snap_service.sh)"
