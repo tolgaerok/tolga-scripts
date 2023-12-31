@@ -36,7 +36,7 @@ display_message() {
     echo ""
 }
 
-display_message "[${GREEN}✔${NC}] Checking if Snap is present.\n\n${snap_info}" 
+display_message "[${GREEN}✔${NC}] Checking if Snap is present." 
 
 # Check if Snap is present
 if command -v snap &> /dev/null
