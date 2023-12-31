@@ -289,12 +289,13 @@ Description=Set i/o scheduler
 After=network.target
 
 [Service]
-Type=simple
+# Type=simple
+Type=oneshot
 # ExecStart=/usr/local/bin/none.sh
 ExecStart=/bin/bash -c '/usr/local/bin/none.sh'
 User=tolga
 Group=tolga
-Restart=always
+# Restart=always
 
 [Install]
 WantedBy=default.target
@@ -309,6 +310,18 @@ sudo systemctl status tolga.service
 systemctl --user daemon-reload
 systemctl --user enable --now tolga.service
 systemctl --user restart tolga.service
+```
+
+## Log file should look like this
+```bash
+2024-01-01 00:21:19 - Scheduler applied successfully.
+2024-01-01 00:21:19 - Current scheduler: none [mq-deadline] kyber bfq 
+2024-01-01 00:21:19 - Displaying available kernel congestion control...
+net.ipv4.tcp_available_congestion_control = reno cubic westwood
+2024-01-01 00:21:19 - Displaying current congestion control...
+net.ipv4.tcp_congestion_control = westwood
+2024-01-01 00:21:20 - Script execution completed.
+2024-01-01 00:21:20 - User executing the script: tolga
 ```
 
 ## Create audio startup on login
