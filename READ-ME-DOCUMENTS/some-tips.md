@@ -260,6 +260,7 @@ log_message "Script execution completed."
 
 # Log the user executing the script
 log_message "User executing the script: $(whoami)"
+log_message "## ==================  EOF  ================== ##"
 
 exit
 
