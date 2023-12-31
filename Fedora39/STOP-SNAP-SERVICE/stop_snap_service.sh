@@ -19,7 +19,6 @@
 
 # https://github.com/massgravel/Microsoft-Activation-Scripts
 
-
 # Colors
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -36,19 +35,26 @@ display_message() {
     echo ""
 }
 
-display_message "[${GREEN}✔${NC}] Checking if Snap is present." 
+# Check if Snap is installed
+if ! command -v snap &> /dev/null; then
+    display_message "[${RED}✖${NC}] Snap is not installed on this system."
+    exit 1
+fi
 
-# Check if Snap is present
-if command -v snap &> /dev/null
-then
-    snap_version=$(snap --version)
-    snap_series=$(snap version | grep series | awk '{print $2}')
-    snap_info="Snap version: $snap_version\nSeries: $snap_series"
+# Check if Snap services are active
+snap_services_active() {
+    sudo systemctl is-active --quiet snapd.socket && sudo systemctl is-active --quiet snapd.service
+}
 
-    display_message "[${GREEN}✔${NC}] Snap is present.\n\n${snap_info}"
-    
-    read -p "Do you want to stop and disable Snap services? (y/n): " response
-    if [ "$response" == "y" ]; then
+if snap_services_active; then
+    display_message "[${GREEN}✔${NC}] Snap services are currently active."
+
+    response=""
+    while [[ ! "$response" =~ ^[yYnN]$ ]]; do
+        read -p "Do you want to stop and disable Snap services? (y/n): " response
+    done
+
+    if [ "$response" == "y" ] || [ "$response" == "Y" ]; then
         # Stop Snap services
         sudo systemctl stop snapd.socket
         sudo systemctl stop snapd.service
@@ -65,5 +71,7 @@ then
         display_message "[${YELLOW}✔${NC}] Snap services were not modified. Exiting..."
     fi
 else
-    display_message "[${RED}✖${NC}] Snap is not installed on this system."
+    display_message "[${YELLOW}✔${NC}] Snap services are not currently active."
 fi
+
+
