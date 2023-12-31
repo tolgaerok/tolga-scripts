@@ -3,6 +3,21 @@
 # Tolga Erok
 # 31/12/203
 
+# Run from remote location:
+# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/STOP-SNAP-SERVICE/stop_snap_service.sh"
+
+#  ¯\_(ツ)_/¯
+#    █████▒▓█████ ▓█████▄  ▒█████   ██▀███   ▄▄▄
+#  ▓██   ▒ ▓█   ▀ ▒██▀ ██▌▒██▒  ██▒▓██ ▒ ██▒▒████▄
+#  ▒████ ░ ▒███   ░██   █▌▒██░  ██▒▓██ ░▄█ ▒▒██  ▀█▄
+#  ░▓█▒  ░ ▒▓█  ▄ ░▓█▄   ▌▒██   ██░▒██▀▀█▄  ░██▄▄▄▄██
+#  ░▒█░    ░▒████▒░▒████▓ ░ ████▓▒░░██▓ ▒██▒ ▓█   ▓██▒
+#   ▒ ░    ░░ ▒░ ░ ▒▒▓  ▒ ░ ▒░▒░▒░ ░ ▒▓ ░▒▓░ ▒▒   ▓▒█░
+#   ░       ░ ░  ░ ░ ▒  ▒   ░ ▒ ▒░   ░▒ ░ ▒░  ▒   ▒▒ ░
+#   ░ ░       ░    ░ ░  ░ ░ ░ ░ ▒    ░░   ░   ░   ▒
+#   ░  ░      ░    ░ ░     ░              ░  ░   ░
+
+# https://github.com/massgravel/Microsoft-Activation-Scripts
 
 
 # Colors
