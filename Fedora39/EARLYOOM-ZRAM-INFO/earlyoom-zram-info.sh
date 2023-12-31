@@ -6,7 +6,7 @@
 # Basic info
 
 # Run from remote location:
-# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/FEDORA%20RELATED/EARLYOOM-ZRAM-INFO/earlyoom-zram-info.sh)"
+# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/EARLYOOM-ZRAM-INFO/earlyoom-zram-info.sh)"
 
 #  ¯\_(ツ)_/¯
 #    █████▒▓█████ ▓█████▄  ▒█████   ██▀███   ▄▄▄
