@@ -28,7 +28,7 @@ RESET='\033[0m'
 
 display_message() {
     clear
-    echo -e "\n                  Tolga's Snap service disabler\n"
+    echo -e "\n                  Tolga's Snap service and app manager\n"
     echo -e ""
     echo -e "|${YELLOW}  ==>${NC}  $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
@@ -50,11 +50,11 @@ if snap_services_active; then
     display_message "[${GREEN}✔${NC}] Snap services are currently active."
 
     response=""
-    while [[ ! "$response" =~ ^[yYnN]$ ]]; do
-        read -p "Do you want to stop and disable Snap services? (y/n): " response
+    while [[ ! "$response" =~ ^(stop|disable|list|exit)$ ]]; do
+        read -p "Do you want to (stop) and disable Snap services, (list) installed apps, or (exit)? " response
     done
 
-    if [ "$response" == "y" ] || [ "$response" == "Y" ]; then
+    if [ "$response" == "stop" ]; then
         # Stop Snap services
         sudo systemctl stop snapd.socket
         sudo systemctl stop snapd.service
@@ -67,11 +67,29 @@ if snap_services_active; then
         sudo systemctl daemon-reload
 
         display_message "[${GREEN}✔${NC}] Snap services stopped and disabled."
+    elif [ "$response" == "list" ]; then
+        # List installed Snap apps
+        snap_list=$(snap list)
+        display_message "Installed Snap applications:\n\n${snap_list}"
+
+        read -p "Do you want to uninstall each app individually? (yes/no): " uninstall_response
+
+        if [ "$uninstall_response" == "yes" ]; then
+            for app in $(echo "$snap_list" | awk '{print $1}'); do
+                read -p "Do you want to uninstall $app? (yes/no): " uninstall_app_response
+                if [ "$uninstall_app_response" == "yes" ]; then
+                    sudo snap remove "$app"
+                    display_message "Uninstalled $app."
+                else
+                    display_message "Skipped uninstalling $app."
+                fi
+            done
+        else
+            display_message "[${YELLOW}✔${NC}] Skipped uninstalling Snap applications."
+        fi
     else
         display_message "[${YELLOW}✔${NC}] Snap services were not modified. Exiting..."
     fi
 else
     display_message "[${YELLOW}✔${NC}] Snap services are not currently active."
 fi
-
-
