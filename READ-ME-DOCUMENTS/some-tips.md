@@ -196,135 +196,87 @@ sudo visudo
 then add: 
 ```bash
 yourusername ALL=(ALL) NOPASSWD: /path/to/your/script.sh
-i.e. tolga ALL=(ALL) NOPASSWD: /usr/local/bin/none.sh
+i.e. tolga ALL=(ALL) NOPASSWD: /usr/bin/systemctl, /usr/local/bin/none.sh
+
 ```
 then create: 
 ```bash
 touch ~/.profile
 ```
-then create autostart file: 
-```bash
-/home/tolga/.config/autostart/none.sh.desktop
-```
-Open with Kwrite and add:
-```bash
-[Desktop Entry]
-Comment[en_AU]=
-Comment=
-Exec=/usr/local/bin/none.sh >> /tmp/none_script.log 2>&1
-GenericName[en_AU]=
-GenericName=
-Icon=dialog-scripts
-MimeType=
-Name[en_AU]=none.sh
-Name=none.sh
-Path=
-StartupNotify=true
-Terminal=true
-TerminalOptions=
-Type=Application
-X-KDE-AutostartScript=true
-X-KDE-SubstituteUID=true
-X-KDE-Username=tolga
-```
+
 Create personal script in: /usr/local/bin/none.sh
+
 ```bash
 #!/bin/bash
+# tolga erok
+# 10/12/2023.
 
-# Function to display a desktop notification
-show_notification() {
-    notify-send "Script Notification" "$1"
-}
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus
 
-# Apply scheduler
-echo "none" | sudo tee /sys/block/sda/queue/scheduler
-show_notification "Scheduler applied successfully."
+# Reload user services
+systemctl --user daemon-reload
 
-# Display current scheduler
-current_scheduler=$(cat /sys/block/sda/queue/scheduler)
-show_notification "Current scheduler: $current_scheduler"
+# Enable and start the user service
+systemctl --user enable --now tolga.service
 
-# Enable and display status of earlyoom
-echo -e "\nEnable and status of earlyoom:\n"
-echo "< PASSWORD >" | sudo -S systemctl enable --now earlyoom
-sudo systemctl status earlyoom
-show_notification "Earlyoom enabled successfully."
-
-# Display available kernel congestion control
-echo -e "\nAvailable kernel congestion control:"
-sysctl net.ipv4.tcp_available_congestion_control
-
-# Display current congestion control
-echo -e "\nCurrent congestion control:"
-sysctl net.ipv4.tcp_congestion_control
-
-sleep 1
-exit
-```
-
-Test by loging out then in
-
-## Updated
-* Location: /usr/local/bin/
-* Saved as: none.sh
-```bash
-#!/bin/bash
+# Restart the user service
+systemctl --user restart tolga.service
 
 # Log file path
 LOG_FILE="$HOME/none_script.log"
 
 # Function to log a message
 log_message() {
-    echo "$(date +"%Y-%m-%d %H:%M:%S") - $1" >> "$LOG_FILE"
+    echo "$(date +"%Y-%m-%d %H:%M:%S") - $1" >>"$LOG_FILE"
 }
 
-# Function to display a desktop notification
-show_notification() {
-    DISPLAY=:0 notify-send "Script Notification" "$1"
-}
-
-# Password
+# Password for privileged operations
 PASSWORD="ibm450"
 
-# Apply scheduler
-echo "ibm450" | sudo -S sh -c 'echo none > /sys/block/sda/queue/scheduler' > /dev/null 2>&1
+# Apply scheduler change without using sudo
+echo "$PASSWORD" | sudo -S bash -c 'echo mq-deadline > /sys/block/sda/queue/scheduler' >/dev/null 2>&1
 
 if [ $? -eq 0 ]; then
-    show_notification "Scheduler applied successfully."
     log_message "Scheduler applied successfully."
 else
-    show_notification "Failed to apply scheduler."
     log_message "Failed to apply scheduler."
 fi
 
 # Display current scheduler
 current_scheduler=$(cat /sys/block/sda/queue/scheduler)
-show_notification "Current scheduler: $current_scheduler"
 log_message "Current scheduler: $current_scheduler"
-
-# Enable and display status of earlyoom
-#log_message "Enabling and checking status of earlyoom..."
-#echo "$PASSWORD" | sudo -S /usr/bin/systemctl enable --now earlyoom > >(tee -a "$LOG_FILE") 2> >(tee -a "$LOG_FILE" >&2)
-#if [ $? -eq 0 ]; then
- #   show_notification "Earlyoom enabled successfully."
-  #  log_message "Earlyoom enabled successfully."
-#else
- #   show_notification "Failed to enable Earlyoom."
- #   log_message "Failed to enable Earlyoom."
-#fi
 
 # Display available kernel congestion control
 log_message "Displaying available kernel congestion control..."
-/usr/sbin/sysctl net.ipv4.tcp_available_congestion_control >> "$LOG_FILE"
+/usr/sbin/sysctl net.ipv4.tcp_available_congestion_control >>"$LOG_FILE"
 
 # Display current congestion control
 log_message "Displaying current congestion control..."
-/usr/sbin/sysctl net.ipv4.tcp_congestion_control >> "$LOG_FILE"
+/usr/sbin/sysctl net.ipv4.tcp_congestion_control >>"$LOG_FILE"
 
 # Wait for a moment
 sleep 1
 log_message "Script execution completed."
+
+# Log the user executing the script
+log_message "User executing the script: $(whoami)"
+
 exit
+
+```
+## Create user systemd conf file
+
+* Location: /home/tolga/.config/systemd/user/tolga.service
+* Saved as: tolga.service
+```bash
+[Unit]
+Description=Set i/o scheduler
+
+[Service]
+ExecStart=/usr/local/bin/none.sh
+
+[Install]
+WantedBy=default.target
 ```
 ## systemd
 * Location: /etc/systemd/system/tolga.service
@@ -336,7 +288,8 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/none.sh
+# ExecStart=/usr/local/bin/none.sh
+ExecStart=/bin/bash -c '/usr/local/bin/none.sh'
 User=tolga
 Group=tolga
 Restart=always
@@ -348,14 +301,47 @@ WantedBy=default.target
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable --now tolga.service
-sudo systemctl start tolga.service
-systemctl --user restart tolga.service
 sudo systemctl status tolga.service
+systemctl --user daemon-reload
+systemctl --user enable --now tolga.service
+systemctl --user restart tolga.service
 ```
 
+## Create audio startup on login
 
+Location: /home/tolga/.config/autostart
+Name: startup.sh.desktop
 
+```bash
+[Desktop Entry]
+Comment[en_AU]=
+Comment=
+Exec=/home/tolga/Music/startup.sh
+Hidden=false
+NoDisplay=false
+GenericName[en_AU]=
+GenericName=
+Icon=dialog-scripts
+MimeType=
+Name[en_AU]=startup.sh
+Name=startup.sh
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-KDE-AutostartScript=true
+X-KDE-SubstituteUID=false
+X-KDE-Username=
+```
+Location: /home/tolga/Music/startup.sh
+Name: startup.sh
 
+```bash
+#!/bin/bash
+mpg123 /home/tolga/Music/darth_vader_breathe.mp3
+exit
+```bash
 
 
 
