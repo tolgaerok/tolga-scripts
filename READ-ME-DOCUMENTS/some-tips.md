@@ -260,14 +260,16 @@ log_message "Script execution completed."
 
 # Log the user executing the script
 log_message "User executing the script: $(whoami)"
+log_message "## ==================  EOF  ================== ##"
 
 exit
 
 ```
 ## Create user systemd conf file
 
-* Location: /home/tolga/.config/systemd/user/tolga.service
-* Saved as: tolga.service
+* Location:  /home/tolga/.config/systemd/user/tolga.service
+* Saved as:  tolga.service
+  
 ```bash
 [Unit]
 Description=Set i/o scheduler
@@ -279,25 +281,29 @@ ExecStart=/usr/local/bin/none.sh
 WantedBy=default.target
 ```
 ## systemd
-* Location: /etc/systemd/system/tolga.service
-* Saved as: tolga.service
+* Location:  /etc/systemd/system/tolga.service
+* Saved as:  tolga.service
+  
 ```bash
 [Unit]
 Description=Set i/o scheduler
 After=network.target
 
 [Service]
-Type=simple
+# Type=simple
+Type=oneshot
 # ExecStart=/usr/local/bin/none.sh
 ExecStart=/bin/bash -c '/usr/local/bin/none.sh'
 User=tolga
 Group=tolga
-Restart=always
+# Restart=always
 
 [Install]
 WantedBy=default.target
 ```
+
 ## Start service
+
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable --now tolga.service
@@ -307,10 +313,23 @@ systemctl --user enable --now tolga.service
 systemctl --user restart tolga.service
 ```
 
+## Log file should look like this
+```bash
+2024-01-01 00:21:19 - Scheduler applied successfully.
+2024-01-01 00:21:19 - Current scheduler: none [mq-deadline] kyber bfq 
+2024-01-01 00:21:19 - Displaying available kernel congestion control...
+net.ipv4.tcp_available_congestion_control = reno cubic westwood
+2024-01-01 00:21:19 - Displaying current congestion control...
+net.ipv4.tcp_congestion_control = westwood
+2024-01-01 00:21:20 - Script execution completed.
+2024-01-01 00:21:20 - User executing the script: tolga
+2024-01-01 00:21:20 - ## ==================  EOF  ================== ##
+```
+
 ## Create audio startup on login
 
-Location: /home/tolga/.config/autostart
-Name: startup.sh.desktop
+* Location:  /home/tolga/.config/autostart
+* Name:      startup.sh.desktop
 
 ```bash
 [Desktop Entry]
@@ -334,14 +353,16 @@ X-KDE-AutostartScript=true
 X-KDE-SubstituteUID=false
 X-KDE-Username=
 ```
-Location: /home/tolga/Music/startup.sh
-Name: startup.sh
+* Location:  /home/tolga/Music/startup.sh
+* Name:      startup.sh
 
 ```bash
 #!/bin/bash
+
 mpg123 /home/tolga/Music/darth_vader_breathe.mp3
+
 exit
-```bash
+```
 
 
 
