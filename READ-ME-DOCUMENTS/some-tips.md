@@ -322,6 +322,7 @@ net.ipv4.tcp_available_congestion_control = reno cubic westwood
 net.ipv4.tcp_congestion_control = westwood
 2024-01-01 00:21:20 - Script execution completed.
 2024-01-01 00:21:20 - User executing the script: tolga
+2024-01-01 00:21:20 - ## ==================  EOF  ================== ##
 ```
 
 ## Create audio startup on login
