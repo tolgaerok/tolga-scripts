@@ -1,4 +1,3 @@
-```bash
 # to reload
 # sudo sysctl -p
 
@@ -59,20 +58,20 @@ fs.suid_dumpable=2                         # Set SUID_DUMPABLE flag. 0 means not
 kernel.core_uses_pid = 1                   # Append the PID to the core filename
 
 # Source route verification
-net.ipv4.conf.default.rp_filter = 2        # Enable source route verification
-net.ipv4.conf.*.rp_filter = 2              # Enable source route verification
--net.ipv4.conf.all.rp_filter                # Disable source route verification for all interfaces
+net.ipv4.conf.default.rp_filter = 2          # Enable source route verification
+net.ipv4.conf.*.rp_filter = 2                # Enable source route verification
+-net.ipv4.conf.all.rp_filter                 # Disable source route verification for all interfaces
 
 # Do not accept source routing
-net.ipv4.conf.default.accept_source_route = 0    # Disable acceptance of source-routed packets
-net.ipv4.conf.*.accept_source_route = 0          # Disable acceptance of source-routed packets
+net.ipv4.conf.default.accept_source_route = 0     # Disable acceptance of source-routed packets
+net.ipv4.conf.*.accept_source_route = 0           # Disable acceptance of source-routed packets
 -net.ipv4.conf.all.accept_source_route            # Disable acceptance of source-routed packets for all interfaces
 
 # Promote secondary addresses when the primary address is removed
-net.ipv4.conf.default.promote_secondaries = 1   # Promote secondary addresses when the primary address is removed
-net.ipv4.conf.*.promote_secondaries = 1         # Promote secondary addresses when the primary address is removed
+net.ipv4.conf.default.promote_secondaries = 1    # Promote secondary addresses when the primary address is removed
+net.ipv4.conf.*.promote_secondaries = 1          # Promote secondary addresses when the primary address is removed
 -net.ipv4.conf.all.promote_secondaries           # Disable promoting secondary addresses for all interfaces
--net.ipv4.ping_group_range = 0 2147483647       # Restrict the range of user IDs that can create ICMP Echo sockets
+-net.ipv4.ping_group_range = 0 2147483647        # Restrict the range of user IDs that can create ICMP Echo sockets
 
 # Enable hard and soft link protection
 fs.protected_hardlinks = 1                # Protect hard links against tampering by not allowing users to create or modify them
@@ -82,7 +81,7 @@ fs.protected_symlinks = 1                 # Protect symlinks against tampering b
 fs.protected_regular = 1                  # Protect regular files against tampering by not allowing users to create or modify them
 fs.protected_fifos = 1                    # Protect FIFOs against tampering by not allowing users to create or modify them
 
--vm.unprivileged_userfaultfd = 1          # Enable unprivileged userfaultfd
+-vm.unprivileged_userfaultfd = 1           # Enable unprivileged userfaultfd
 vm.page-cluster = 0                        # Disable page clustering for filesystems
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -100,7 +99,7 @@ vm.dirty_bytes = 742653184               # Set dirty bytes for optimized perform
 fs.aio-max-nr = 1048576                  # Defines the maximum number of asynchronous I/O requests that can be in progress at a given time.
 fs.inotify.max_user_watches = 524288     # Sets the maximum number of file system watches, enhancing file system monitoring capabilities. Default: 8192, Tweaked: 524288
 kernel.panic = 5                         # Reboot after 5 seconds on kernel panic. Default: 0
-kernel.pid_max = 4194304                  # Allows a large number of processes and threads to be managed. Default: 32768, Tweaked: 4194304
+kernel.pid_max = 4194304                 # Allows a large number of processes and threads to be managed. Default: 32768, Tweaked: 4194304
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # SSD tweaks: Adjust settings for an SSD to optimize performance.
@@ -138,18 +137,18 @@ kernel.core_uses_pid = 1                   # Append the PID to the core filename
 # Source route verification
 net.ipv4.conf.default.rp_filter = 2        # Enable source route verification
 net.ipv4.conf.*.rp_filter = 2              # Enable source route verification
--net.ipv4.conf.all.rp_filter                # Disable source route verification for all interfaces
+-net.ipv4.conf.all.rp_filter               # Disable source route verification for all interfaces
 
 # Do not accept source routing
 net.ipv4.conf.default.accept_source_route = 0    # Disable acceptance of source-routed packets
 net.ipv4.conf.*.accept_source_route = 0          # Disable acceptance of source-routed packets
--net.ipv4.conf.all.accept_source_route            # Disable acceptance of source-routed packets for all interfaces
+-net.ipv4.conf.all.accept_source_route           # Disable acceptance of source-routed packets for all interfaces
 
 # Promote secondary addresses when the primary address is removed
-net.ipv4.conf.default.promote_secondaries = 1   # Promote secondary addresses when the primary address is removed
-net.ipv4.conf.*.promote_secondaries = 1         # Promote secondary addresses when the primary address is removed
+net.ipv4.conf.default.promote_secondaries = 1    # Promote secondary addresses when the primary address is removed
+net.ipv4.conf.*.promote_secondaries = 1          # Promote secondary addresses when the primary address is removed
 -net.ipv4.conf.all.promote_secondaries           # Disable promoting secondary addresses for all interfaces
--net.ipv4.ping_group_range = 0 2147483647       # Restrict the range of user IDs that can create ICMP Echo sockets
+-net.ipv4.ping_group_range = 0 2147483647        # Restrict the range of user IDs that can create ICMP Echo sockets
 
 # Enable hard and soft link protection
 fs.protected_hardlinks = 1                # Protect hard links against tampering by not allowing users to create or modify them
@@ -160,5 +159,4 @@ fs.protected_regular = 1                  # Protect regular files against tamper
 fs.protected_fifos = 1                    # Protect FIFOs against tampering by not allowing users to create or modify them
 
 -vm.unprivileged_userfaultfd = 1          # Enable unprivileged userfaultfd
-vm.page-cluster = 0                        # Disable page clustering for filesystems
-```
+vm.page-cluster = 0                       # Disable page clustering for filesystems
