@@ -2,6 +2,12 @@
 # to reload
 # sudo sysctl -p
 
+# About These Settings
+# These configurations aim to optimize various aspects of the Linux system, including network performance, file systems, and kernel behavior. The tweaks are inspired by configurations from RHEL,
+# Fedora, Solus, Mint, and Windows Server. Adjustments have been made based on personal experimentation and preferences.
+# Keep in mind that before applying these tweaks, it's recommended to test in a controlled environment and monitor system behavior.
+
+# Linux System Optimization
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Old Nixos Tweaks, to suit (28GB system)
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
