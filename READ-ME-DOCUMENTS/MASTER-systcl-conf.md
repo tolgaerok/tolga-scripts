@@ -1,3 +1,4 @@
+```bash
 # to reload
 # sudo sysctl -p
 
@@ -160,3 +161,4 @@ fs.protected_fifos = 1                    # Protect FIFOs against tampering by n
 
 -vm.unprivileged_userfaultfd = 1          # Enable unprivileged userfaultfd
 vm.page-cluster = 0                       # Disable page clustering for filesystems
+```
