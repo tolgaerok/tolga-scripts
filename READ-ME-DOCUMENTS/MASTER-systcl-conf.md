@@ -47,6 +47,7 @@ net.core.somaxconn = 65536               # Maximum listen queue backlog
 net.core.wmem_default = 1048576          # Default socket send buffer size
 net.core.wmem_max = 16777216             # Maximum socket send buffer size
 net.ipv4.conf.all.accept_redirects = 0   # Disable acceptance of all ICMP redirected packets
+net.ipv4.tcp_congestion_control = westwood 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Additional Tweaks
