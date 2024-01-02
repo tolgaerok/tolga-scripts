@@ -4,6 +4,9 @@
 # Tolga Erok. ¯\_(ツ)_/¯
 # 1/1/2024
 
+# Run from remote location:
+# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/BACKUP-HOME/home-backup.sh)"
+
 # Define the backup folder path
 backup_folder="$HOME"
 
