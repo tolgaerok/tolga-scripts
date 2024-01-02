@@ -2,7 +2,8 @@
 
 # tolga erok
 # 25 Dec 2023
-# bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/NIXOS-PKG-MANAGER/SOLUS/nix-solus.sh)"
+# Use remote location below;
+# bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/INSTALL-NIXOS-PKG-MANAGER/SOLUS/nix-solus.sh)"
 
 clear
 # Assign a color variable based on the RANDOM number
