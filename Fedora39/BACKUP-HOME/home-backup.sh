@@ -22,6 +22,10 @@
 
 # Check if the script is run with sudo from terminal
 
+if [ "$EUID" -eq 0 ]; then
+    echo "Please do not run this script with sudo or as root."
+    exit 1
+fi
 
 # Define the backup folder path
 backup_folder="$HOME"
