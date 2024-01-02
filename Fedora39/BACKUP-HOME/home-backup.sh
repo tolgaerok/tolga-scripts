@@ -21,10 +21,9 @@
 # https://github.com/massgravel/Microsoft-Activation-Scripts
 
 # Check if the script is run as root
-if [ "$EUID" -eq 0 ]; then
-    echo ""
-    echo "Please do not run this script as root or with sudo privileges."
-    echo ""
+# Check if the script is run with sudo
+if [ "$1" != "0" ]; then
+    echo -e "\nPlease do not run this script with sudo.\n"
     exit 1
 fi
 
