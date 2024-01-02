@@ -20,10 +20,9 @@
 
 # https://github.com/massgravel/Microsoft-Activation-Scripts
 
-# Check if the script is run as root
-# Check if the script is run with sudo
-if [ "$1" != "0" ]; then
-    echo -e "\nPlease do not run this script with sudo.\n"
+# Check if the script is run with sudo from terminal
+if [ -n "$SUDO_USER" ]; then
+    echo "Please do not run this script with sudo."
     exit 1
 fi
 
