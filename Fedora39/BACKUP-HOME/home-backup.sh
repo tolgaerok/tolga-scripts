@@ -5,7 +5,7 @@
 # 1/1/2024
 
 # Run from remote location:
-# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/BACKUP-HOME/home-backup.sh)"
+# bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/BACKUP-HOME/home-backup.sh)"
 
 #  ¯\_(ツ)_/¯
 #    █████▒▓█████ ▓█████▄  ▒█████   ██▀███   ▄▄▄
@@ -19,6 +19,14 @@
 #   ░  ░      ░    ░ ░     ░              ░  ░   ░
 
 # https://github.com/massgravel/Microsoft-Activation-Scripts
+
+# Check if the script is run as root
+if [ "$EUID" -eq 0 ]; then
+    echo ""
+    echo "Please do not run this script as root or with sudo privileges."
+    echo ""
+    exit 1
+fi
 
 # Define the backup folder path
 backup_folder="$HOME"
