@@ -19,6 +19,7 @@
 #   ░  ░      ░    ░ ░     ░              ░  ░   ░
 
 # https://github.com/massgravel/Microsoft-Activation-Scripts
+echo "why"
 
 # Check if the script is run with sudo from terminal
 if [ "$(id -u)" -eq 0 ]; then
