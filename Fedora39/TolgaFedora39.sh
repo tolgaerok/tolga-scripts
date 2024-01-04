@@ -1052,10 +1052,23 @@ install_apps() {
 	sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients wsdd
 	sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel
  	sudo dnf install dnf5 dnf5-plugins
-
-
+  
+	sudo dnf install --assumeyes --best --allowerasing \
+			flatpak neofetch nano htop zip un{zip,rar} tar ffmpeg ffmpegthumbnailer tumbler sassc \
+			google-noto-{cjk,emoji-color}-fonts gtk-murrine-engine gtk2-engines ntfs-3g wget curl git openssh \
+			libva-intel-driver intel-media-driver mozilla-ublock-origin easyeffects pulseeffects
+  
+	sudo dnf install -y 'google-roboto*' 'mozilla-fira*' fira-code-fonts
+ 
+	# Execute rygel to start DLNA sharing
 	/usr/bin/rygel-preferences
 
+ 	# Install profile-sync: it to manage browser profile(s) in tmpfs and to periodically sync back to the physical disc (HDD/SSD)
+  	sudo dnf install profile-sync-daemon
+   	/usr/bin/profile-sync-daemon preview
+	# sudo dnf remove profile-sync-daemon
+	# psd profile located in $HOME/.config/psd/psd.conf
+ 
 	## Networking packages
 	sudo dnf -y install iptables iptables-services nftables
 
