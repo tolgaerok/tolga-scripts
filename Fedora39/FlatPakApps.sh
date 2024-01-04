@@ -231,6 +231,9 @@ if [ -z "$XDG_RUNTIME_DIR" ]; then
     export XDG_RUNTIME_DIR="/run/user/$(id -u)"
 fi
 
+# Enable the flathub remote (which is disabled by default)
+flatpak remote-modify --enable flathub
+
 sudo flatpak override --filesystem=$HOME/.themes
 sudo flatpak override --env=GTK_MODULES=colorreload-gtk-module org.mozilla.firefox
 sudo flatpak override --filesystem=xdg-config/gtk-4.0:ro
