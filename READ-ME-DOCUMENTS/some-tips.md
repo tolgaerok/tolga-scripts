@@ -17,7 +17,6 @@ git push --tags
 ## Cron Jobs
 ```bash
 # A crontab file that runs x.sh every five minues
-
 #min hour date mon wkday command
 */5  *    *    *   *     /path/to/x.sh
 ```
