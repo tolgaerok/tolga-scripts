@@ -1014,6 +1014,7 @@ install_apps() {
 	display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
 
 	sudo dnf -y up
+	sudo dnf remove -y *libreoffice*
 	sudo dnf -y autoremove
 	sudo dnf -y clean all
 

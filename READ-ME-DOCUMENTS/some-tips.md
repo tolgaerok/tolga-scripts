@@ -13,6 +13,15 @@ git commit -a -m "new backup $DATE"
 git push origin main
 git push --tags
 ```
+
+## Cron Jobs
+```bash
+# A crontab file that runs x.sh every five minues
+
+#min hour date mon wkday command
+*/5  *    *    *   *     /path/to/x.sh
+```
+
 ## Setting up earlyloom Ubuntu / Debian
 For Debian 10+ and Ubuntu 18.04+, there's a Debian package: ``` https://packages.debian.org/search?keywords=earlyoom ```
 ```bash
