@@ -224,6 +224,7 @@ dnf5() {
 	read -p "Do you want to install dnf5? (y/n): " install_dnf5
 	if [[ $install_dnf5 =~ ^[Yy]$ ]]; then
 		sudo dnf install dnf5 -y
+  		sudo dnf5 install dnf5 dnf5-plugins
 		sudo dnf5 update && sudo dnf5 makecache
 		sudo dnf5 distro-sync --releasever=39 --refresh --disablerepo rawhide \
 			--enablerepo fedora --allowerasing --best
@@ -1050,6 +1051,8 @@ install_apps() {
 	sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune
 	sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients wsdd
 	sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel
+ 	sudo dnf install dnf5 dnf5-plugins
+
 
 	/usr/bin/rygel-preferences
 
