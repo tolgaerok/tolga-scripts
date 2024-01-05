@@ -1783,10 +1783,10 @@ kde_crap() {
 	NC='\e[0m' # No Color
 
 	# List of KDE applications to check..
-	apps=("akregator" "ksysguard" "dnfdragora" "kfind" "kmag" "kmail"
-		"kaddressbook" "kcharselect" "konversation" "elisa-player"
-		"kcolorchooser" "kmouth" "korganizer" "kmousetool" "kruler"
-		"kmahjongg" "kpat" "kmines" "dragonplayer" "kamoso"
+	apps=("akregator" "ksysguard" "kmag" "kmail"
+		"kaddressbook" "konversation" "elisa-player"
+		"kcolorchooser" "kmouth" "korganizer" "kmousetool" "kmahjongg" 
+  		"kpat" "kmines" "dragonplayer" "kamoso"
 		"kolourpaint" "krdc" "krfb" "kmail-account-wizard"
 		"pim-data-exporter" "pim-sieve-editor" "elisa*" "kdeconnectd")
 
