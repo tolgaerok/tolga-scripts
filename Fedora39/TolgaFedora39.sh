@@ -1053,7 +1053,7 @@ install_apps() {
         # If you want to display a specific fortune file or category, you can use the -e option followed by the file or category name. For example:
 	# fortune -e art ascii-art bofh-excuses computers cookie definitions disclaimer drugs education fortunes humorists kernelnewbies knghtbrd law linux literature miscellaneous news people riddles science
 	# or to see a list:
- 	# fortue -f
+ 	# fortune -f
 
 	sudo dnf install --assumeyes --best --allowerasing \
 			flatpak neofetch nano htop zip un{zip,rar} tar ffmpeg ffmpegthumbnailer tumbler sassc \
