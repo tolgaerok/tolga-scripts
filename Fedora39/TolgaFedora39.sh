@@ -1044,11 +1044,17 @@ install_apps() {
 
 	sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
 	sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
-	sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune
+	sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune-mod
 	sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients wsdd
 	sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel
  	sudo dnf install dnf5 dnf5-plugins
-  
+
+ 	# Configure fortune
+        # If you want to display a specific fortune file or category, you can use the -e option followed by the file or category name. For example:
+	# fortune -e art ascii-art bofh-excuses computers cookie definitions disclaimer drugs education fortunes humorists kernelnewbies knghtbrd law linux literature miscellaneous news people riddles science
+	# or to see a list:
+ 	# fortue -f
+
 	sudo dnf install --assumeyes --best --allowerasing \
 			flatpak neofetch nano htop zip un{zip,rar} tar ffmpeg ffmpegthumbnailer tumbler sassc \
 			google-noto-{cjk,emoji-color}-fonts gtk-murrine-engine gtk2-engines ntfs-3g wget curl git openssh \
