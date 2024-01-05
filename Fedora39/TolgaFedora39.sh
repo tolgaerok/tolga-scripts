@@ -224,7 +224,7 @@ dnf5() {
 	read -p "Do you want to install dnf5? (y/n): " install_dnf5
 	if [[ $install_dnf5 =~ ^[Yy]$ ]]; then
 		sudo dnf install dnf5 -y
-  		sudo dnf5 install dnf5 dnf5-plugins
+		sudo dnf5 install dnf5 dnf5-plugins
 		sudo dnf5 update && sudo dnf5 makecache
 		sudo dnf5 distro-sync --releasever=39 --refresh --disablerepo rawhide \
 			--enablerepo fedora --allowerasing --best
@@ -1030,7 +1030,7 @@ install_apps() {
 			flatpak neofetch nano htop zip un{zip,rar} tar ffmpeg ffmpegthumbnailer tumbler sassc \
 			fonts-noto gtk2-engines-murrine gtk2-engines-pixbuf ntfs-3g wget curl git openssh-client \
 			intel-media-va-driver i965-va-driver webext-ublock-origin-firefox
-	
+
 	elif [ -f /usr/bin/dnf ]; then
 		sudo dnf install --assumeyes --best --allowerasing \
 			flatpak neofetch nano htop zip un{zip,rar} tar ffmpeg ffmpegthumbnailer tumbler sassc \
@@ -1047,30 +1047,30 @@ install_apps() {
 	sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune-mod
 	sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients wsdd
 	sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel
- 	sudo dnf install dnf5 dnf5-plugins
+	sudo dnf install dnf5 dnf5-plugins
 
- 	# Configure fortune
-    # If you want to display a specific fortune file or category, you can use the -e option followed by the file or category name. For example:
+	# Configure fortune
+	# If you want to display a specific fortune file or category, you can use the -e option followed by the file or category name. For example:
 	# fortune -e art ascii-art bofh-excuses computers cookie definitions disclaimer drugs education fortunes humorists kernelnewbies knghtbrd law linux literature miscellaneous news people riddles science
 	# or to see a list:
- 	# fortune -f
+	# fortune -f
 
 	sudo dnf install --assumeyes --best --allowerasing \
-			flatpak neofetch nano htop zip un{zip,rar} tar ffmpeg ffmpegthumbnailer tumbler sassc \
-			google-noto-{cjk,emoji-color}-fonts gtk-murrine-engine gtk2-engines ntfs-3g wget curl git openssh \
-			libva-intel-driver intel-media-driver mozilla-ublock-origin easyeffects pulseeffects
-  
+		flatpak neofetch nano htop zip un{zip,rar} tar ffmpeg ffmpegthumbnailer tumbler sassc \
+		google-noto-{cjk,emoji-color}-fonts gtk-murrine-engine gtk2-engines ntfs-3g wget curl git openssh \
+		libva-intel-driver intel-media-driver mozilla-ublock-origin easyeffects pulseeffects
+
 	sudo dnf install -y 'google-roboto*' 'mozilla-fira*' fira-code-fonts
- 
+
 	# Execute rygel to start DLNA sharing
 	/usr/bin/rygel-preferences
 
- 	# Install profile-sync: it to manage browser profile(s) in tmpfs and to periodically sync back to the physical disc (HDD/SSD)
-  	sudo dnf install profile-sync-daemon
-   	/usr/bin/profile-sync-daemon preview
+	# Install profile-sync: it to manage browser profile(s) in tmpfs and to periodically sync back to the physical disc (HDD/SSD)
+	sudo dnf install profile-sync-daemon
+	/usr/bin/profile-sync-daemon preview
 	# sudo dnf remove profile-sync-daemon
 	# psd profile located in $HOME/.config/psd/psd.conf
- 
+
 	## Networking packages
 	sudo dnf -y install iptables iptables-services nftables
 
