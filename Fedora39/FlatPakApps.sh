@@ -66,13 +66,13 @@ flatpak install -y flathub org.freedesktop.Platform.GStreamer.gstreamer-vaapi/x8
 flatpak install -y flathub org.freedesktop.Platform.GStreamer.gstreamer-vaapi/x86_64/23.08
 
 # Install Bottles
-flatpak install -y flathub com.usebottles.bottles
+# flatpak install -y flathub com.usebottles.bottles
 
 # Allow Bottles to create application shortcuts
-flatpak override --user --filesystem=xdg-data/applications com.usebottles.bottles
+# flatpak override --user --filesystem=xdg-data/applications com.usebottles.bottles
 
 # Allow Bottles to access Steam folder
-flatpak override --user --filesystem=home/.var/app/com.valvesoftware.Steam/data/Steam com.usebottles.bottles
+# flatpak override --user --filesystem=home/.var/app/com.valvesoftware.Steam/data/Steam com.usebottles.bottles
 
 # Install Breeze-GTK flatpak theme
 flatpak install -y flathub org.gtk.Gtk3theme.Breeze
