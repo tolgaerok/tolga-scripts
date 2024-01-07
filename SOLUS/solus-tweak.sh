@@ -42,3 +42,5 @@ echo "Configuration files created and changes applied. You may need to reboot fo
 # Notes: from fedora && nixos
 # sudo bash -c 'echo "westwood" > /proc/sys/net/ipv4/tcp_congestion_control'
 # sudo echo mq-deadline | sudo tee /sys/block/sda/queue/scheduler
+
+# /usr/lib/sysctl.d/70-zram.conf is where zram settings are found
