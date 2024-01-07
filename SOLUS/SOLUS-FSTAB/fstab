@@ -4,7 +4,7 @@
 
 none        /proc        proc    nosuid,noexec  0 0
 none        /dev/shm     tmpfs   defaults       0 0
-UUID=5f5121f0-815c-4d45-8668-0c891e00db63	/	ext4	rw,relatime,noatime,errors=remount-ro	0	1
+UUID=5f5121f0-815c-4d45-8668-0c891e00db63	/	ext4	rw,relatime,noatime,errors=remount-ro,elevator=deadline	0	1
 
 
 # ===== Disabled HHD swap ================#
@@ -22,6 +22,7 @@ UUID=5f5121f0-815c-4d45-8668-0c891e00db63	/	ext4	rw,relatime,noatime,errors=remo
 # sudo zramctl --size 5G --find
 # sudo mkswap /dev/zram0
 # sudo swapon /dev/zram0
+# sudo systemctl daemon-reload
 # cat /proc/swaps
 
 # Result:
