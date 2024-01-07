@@ -54,8 +54,10 @@ apply_solus_tweaks() {
     echo "Checking zswap status"
     if [ "$zswap_enabled" = "Y" ]; then
         echo "Zswap is active."
+        echo
     else
         echo "Zswap is not active."
+        echo
     fi
 
     # Create sysctl configuration file
@@ -75,6 +77,11 @@ apply_solus_tweaks() {
     # Update clr-boot-manager
     sudo clr-boot-manager update
 
+    echo
+    cat /sys/block/sda/queue/scheduler
+    echo 
+    sysctl net.ipv4.tcp_congestion_control
+    echo 
     echo "Solus configuration files created and changes applied. You may need to reboot for the changes to take effect."
 }
 
