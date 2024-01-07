@@ -61,3 +61,10 @@ sudo smbpasswd -d some_user
 # Remove the some_user account from the Samba login db
 sudo smbpasswd -x some_user
 
+windows11-nord
+breeze
+windiws11OS-nord
+windows11nord
+utterly-round-dark-solid
+beautyfolders
+sweet-cursos
