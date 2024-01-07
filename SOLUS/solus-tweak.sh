@@ -31,17 +31,23 @@ detect_distro() {
 # Function to apply tweaks for Solus
 apply_solus_tweaks() {
 
+    clear 
+    
     # Install lsd dependencies
     sudo eopkg up
     sudo eopkg it lsd
 
     # Check zram
     if [ -e /dev/zram0 ]; then
+        echo
         echo "Zram is active."
     else
+        echo
         echo "Zram is not active."
     fi
 
+    echo
+    
     # Check zswap parameters
     zswap_enabled=$(cat /sys/module/zswap/parameters/enabled)
     echo "zswap.enabled = $zswap_enabled"
