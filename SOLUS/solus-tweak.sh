@@ -4,7 +4,7 @@
 # Solus tweaks
 
 # Remote:
-# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgaFedora39.sh)"
+# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/SOLUS/solus-tweak.sh)"
 
 
 #    ██████  ▒█████   ██▓     █    ██   ██████ 
