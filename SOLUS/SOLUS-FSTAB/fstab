@@ -44,4 +44,3 @@ UUID=5f5121f0-815c-4d45-8668-0c891e00db63	/	ext4	rw,relatime,noatime,errors=remo
 # zram0                            [SWAP]                8G
 
 
-

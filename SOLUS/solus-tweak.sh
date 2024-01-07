@@ -163,15 +163,4 @@ esac
 #   /etc/sysctl.d/99-custom.conf
 #   /etc/sysctl.conf
 
-# Zram
-# commented out in fstab:  UUID=a7c229a8-2bdb-4d04-9886-1aaa6347284c	swap	swap	sw	0	0
-#root@solus /etc # sudo swapoff -a
-#root@solus /etc # sudo mount -a
-#root@solus /etc # sudo zramctl --reset /dev/zram0
-#sudo zramctl --size 5G --find
-#sudo mkswap /dev/zram0
-#sudo swapon /dev/zram0
-#root@solus /etc # cat /proc/swaps
-#Filename                                Type            Size            Used            Priority
-#/dev/zram0                              partition       5242876         0               -2
-#root@solus /etc # 
+
