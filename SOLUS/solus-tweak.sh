@@ -147,3 +147,17 @@ esac
 # sudo echo mq-deadline | sudo tee /sys/block/sda/queue/scheduler
 
 # /usr/lib/sysctl.d/70-zram.conf is where zram settings are found
+
+# errors found in:        /usr/lib64/sysctl.d/50-default.conf
+# corrected parameter:   -net.ipv4.conf.all.rp_filter = 2
+# corrected parameter:   -net.ipv4.conf.all.accept_source_route = 0
+# corrected parameter:   -net.ipv4.conf.all.promote_secondaries = 1
+
+# sysctl conf files:
+#   /usr/lib/sysctl.d/20-solus.conf
+#   /usr/lib/sysctl.d/50-coredump.conf
+#   /usr/lib/sysctl.d/50-default.conf
+#   /usr/lib/sysctl.d/50-pid-max.conf
+#   /usr/lib/sysctl.d/70-zram.conf
+#   /etc/sysctl.d/99-custom.conf
+#   /etc/sysctl.conf
