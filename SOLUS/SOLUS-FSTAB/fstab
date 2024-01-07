@@ -5,6 +5,7 @@
 none        /proc        proc    nosuid,noexec  0 0
 none        /dev/shm     tmpfs   defaults       0 0
 UUID=5f5121f0-815c-4d45-8668-0c891e00db63	/	ext4	rw,relatime,noatime,errors=remount-ro,elevator=deadline	0	1
+UUID=5f5121f0-815c-4d45-8668-0c891e00db63	/	ext4	rw,relatime,noatime,errors=remount-ro,elevator=mq-deadline	0	1
 
 
 # ===== Disabled HHD swap ================#
