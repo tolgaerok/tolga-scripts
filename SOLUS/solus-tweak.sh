@@ -64,7 +64,7 @@ apply_solus_tweaks() {
     echo 'net.ipv4.tcp_congestion_control = westwood' | sudo tee /etc/sysctl.d/99-custom.conf
 
     # Create udev rule for I/O scheduler
-    echo 'ACTION=="add|change", KERNEL=="sda", ATTR{queue/scheduler}="none"' | sudo tee /etc/udev/rules.d/60-scheduler.rules
+    echo 'ACTION=="add|change", KERNEL=="sda", ATTR{queue/scheduler}="deadline"' | sudo tee /etc/udev/rules.d/60-scheduler.rules
 
     # Enable zswap in clr-boot-manager configuration
     # echo 'zswap.enabled=1' | sudo tee -a /etc/kernel/cmdline
@@ -91,7 +91,7 @@ apply_fedora_tweaks() {
     echo 'net.ipv4.tcp_congestion_control = westwood' | sudo tee /etc/sysctl.d/99-custom.conf
 
     # Create udev rule for I/O scheduler
-    echo 'ACTION=="add|change", KERNEL=="sda", ATTR{queue/scheduler}="none"' | sudo tee /etc/udev/rules.d/60-scheduler.rules
+    echo 'ACTION=="add|change", KERNEL=="sda", ATTR{queue/scheduler}="deadline"' | sudo tee /etc/udev/rules.d/60-scheduler.rules
 
     # Apply sysctl changes
     sudo sysctl --system

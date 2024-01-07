@@ -1,0 +1,46 @@
+# /etc/fstab: static file system information.
+#
+# <fs>      <mountpoint> <type> <opts>      <dump/pass>
+
+none        /proc        proc    nosuid,noexec  0 0
+none        /dev/shm     tmpfs   defaults       0 0
+UUID=5f5121f0-815c-4d45-8668-0c891e00db63	/	ext4	rw,relatime,noatime,errors=remount-ro	0	1
+
+
+# ===== Disabled HHD swap ================#
+# UUID=a7c229a8-2bdb-4d04-9886-1aaa6347284c	swap	swap	sw	0	0
+
+# ===== Assigned 5GB zram and rest auto configures ====== #
+
+# sudo swapoff -a
+
+# COMMENT OUT MOUNT POINTS IN QUESTION [ SWAP ]
+# SAVE
+
+# sudo mount -a
+# sudo zramctl --reset /dev/zram0
+# sudo zramctl --size 5G --find
+# sudo mkswap /dev/zram0
+# sudo swapon /dev/zram0
+# cat /proc/swaps
+
+# Result:
+# Filename                                Type            Size            Used            Priority
+# /dev/zram0                              partition       8388604         0               100
+
+# sudo lsblk -o NAME,FSTYPE,MOUNTPOINT,SIZE
+
+# NAME                 FSTYPE      MOUNTPOINT          SIZE
+# loop0                squashfs    /snap/core18/2812  55.7M
+# loop1                squashfs    /snap/snapd/20671  40.4M
+# loop2                squashfs    /snap/lolcat/1     30.5M
+# sda                                                465.8G
+# ├─sda1               vfat                            489M
+# └─sda2               LVM2_member                   465.3G
+#   ├─SolusSystem-Swap swap                            3.7G
+#   └─SolusSystem-Root ext4        /                 461.6G
+# sr0                                                 1024M
+# zram0                            [SWAP]                8G
+
+
+
