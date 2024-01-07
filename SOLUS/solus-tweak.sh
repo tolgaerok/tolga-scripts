@@ -148,6 +148,7 @@ esac
 
 # /usr/lib/sysctl.d/70-zram.conf is where zram settings are found
 
+# Solus
 # errors found in:        /usr/lib64/sysctl.d/50-default.conf
 # corrected parameter:   -net.ipv4.conf.all.rp_filter = 2
 # corrected parameter:   -net.ipv4.conf.all.accept_source_route = 0
