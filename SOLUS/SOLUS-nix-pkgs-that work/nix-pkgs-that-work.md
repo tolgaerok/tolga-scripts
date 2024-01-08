@@ -2,6 +2,11 @@
  - Tolga Erok
  - 8/1/2024
 
+### ------------------------------------------------ ###
+### Various nix packages to work on solus
+### ------------------------------------------------ ###
+
+    export NIXPKGS_ALLOW_UNFREE=1 && nix-env -iA nixpkgs.wpsoffice
 
 ### ------------------------------------------------ ###
 ### Akonadi for calender and etc to work on solus
