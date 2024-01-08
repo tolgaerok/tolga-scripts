@@ -1,12 +1,12 @@
-### ----------      Solus related       ------------ ###
-# Tolga Erok
-# 8/1/2024
+# ----------      Solus related       ------------ ###
+ - Tolga Erok
+ - 8/1/2024
 
 
 ### ------------------------------------------------ ###
 ### Akonadi for calender and etc to work on solus
 ### ------------------------------------------------ ###
-    
+```bash   
     nix-env -iA nixpkgs.libsForQt5.akonadi-calendar
     nix-env -iA nixpkgs.libsForQt5.akonadi
     nix-env -iA nixpkgs.libsForQt5.akonadi-mime
@@ -18,7 +18,7 @@
     nix-env -iA nixpkgs.libsForQt5.akonadi-import-wizard
     nix-env -iA nixpkgs.libsForQt5.akonadi-calendar-tools
     nix-env -iA nixpkgs.libsForQt5.merkuro
-
+```
 ### ------------------------------------------------ ###
 ### Fortune and DUF
 ### ------------------------------------------------ ###
