@@ -31,8 +31,8 @@ detect_distro() {
 # Function to apply tweaks for Solus
 apply_solus_tweaks() {
 
-    clear 
-    
+    clear
+
     # Install lsd dependencies
     sudo eopkg up
     sudo eopkg it lsd
@@ -47,7 +47,7 @@ apply_solus_tweaks() {
     fi
 
     echo
-    
+
     # Check zswap parameters
     zswap_enabled=$(cat /sys/module/zswap/parameters/enabled)
     echo "zswap.enabled = $zswap_enabled"
@@ -79,9 +79,9 @@ apply_solus_tweaks() {
 
     echo
     cat /sys/block/sda/queue/scheduler
-    echo 
+    echo
     sysctl net.ipv4.tcp_congestion_control
-    echo 
+    echo
     echo "Solus configuration files created and changes applied. You may need to reboot for the changes to take effect."
 }
 
@@ -104,24 +104,41 @@ apply_fedora_tweaks() {
     echo "zswap.enabled = $zswap_enabled"
     echo "Checking zswap status"
     if [ "$zswap_enabled" = "Y" ]; then
+        echo
         echo "Zswap is active."
     else
+        echo
         echo "Zswap is not active."
     fi
 
-    # Detect whether BIOS or UEFI is used, old RHEL trick
-    if [ -d /sys/firmware/efi ]; then
-        # UEFI
-        grub_command="grub-mkconfig"
-    else
-        # BIOS
-        grub_command="grub2-mkconfig"
-    fi
+    echo
+
+    # Check if UEFI is enabled
+    uefi_enabled=$(test -d /sys/firmware/efi && echo "UEFI" || echo "BIOS/Legacy")
+
+    # Display information about GRUB configuration
+    display_message "[${GREEN}✔${NC}]  Current GRUB configuration:"
+    echo "  - GRUB_TIMEOUT_STYLE: $(grep '^GRUB_TIMEOUT_STYLE' /etc/default/grub | cut -d '=' -f2)"
+    echo "  - System firmware: $uefi_enabled"
+
+    # Prompt user to proceed
+    read -p "Do you want to proceed with updating GRUB? (yes/no): " choice
+    case "$choice" in
+    [Yy] | [Yy][Ee][Ss]) ;;
+    *)
+        echo "GRUB update aborted."
+        return
+        ;;
+    esac
 
     # Update GRUB configuration
-    sudo $grub_command -o /boot/grub2/grub.cfg 
+    sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+    sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 
+    echo "GRUB updated successfully."
+    echo
     echo "Fedora configuration files created and changes applied. You may need to reboot for the changes to take effect."
+    sleep 2
 }
 
 # Main script
@@ -162,5 +179,3 @@ esac
 #   /usr/lib/sysctl.d/70-zram.conf
 #   /etc/sysctl.d/99-custom.conf
 #   /etc/sysctl.conf
-
-

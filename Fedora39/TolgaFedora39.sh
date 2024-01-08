@@ -498,7 +498,7 @@ install_gpu_drivers() {
 
 		display_message "Enabling nvidia-modeset..."
 
-		# Enable nvidia-modeset
+		# Enable nvidia-modesetpath
 		sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"
 
 		display_message "[${GREEN}✔${NC}]  nvidia-modeset enabled successfully."
