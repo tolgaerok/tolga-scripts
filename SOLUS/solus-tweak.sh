@@ -40,7 +40,7 @@ apply_solus_tweaks() {
     sudo sysctl -w kernel.sched_bore=1
     sudo mkdir -p /etc/sysctl.d
     echo "kernel.sched_bore=1" | sudo tee /etc/sysctl.d/85-bore.conf
-    
+
     # Check zram
     if [ -e /dev/zram0 ]; then
         echo
@@ -183,3 +183,8 @@ esac
 #   /usr/lib/sysctl.d/70-zram.conf
 #   /etc/sysctl.d/99-custom.conf
 #   /etc/sysctl.conf
+
+# IO schedulers located here
+# echo kyber > /sys/block/sda/queue/scheduler
+# echo kyber > /sys/block/nvme0n1/queue/scheduler
+# With F2FS let kernel decide with the io

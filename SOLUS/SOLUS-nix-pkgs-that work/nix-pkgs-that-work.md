@@ -7,6 +7,8 @@
 ### ------------------------------------------------ ###
 
     export NIXPKGS_ALLOW_UNFREE=1 && nix-env -iA nixpkgs.wpsoffice
+    export NIXPKGS_ALLOW_UNFREE=1 && nix-env -iA nixpkgs.anydesk
+
 
 ### ------------------------------------------------ ###
 ### Akonadi for calender and etc to work on solus
