@@ -11,7 +11,7 @@
 ### ------------------------------------------------ ###
 ### Akonadi for calender and etc to work on solus
 ### ------------------------------------------------ ###
-```bash   
+  
     nix-env -iA nixpkgs.libsForQt5.akonadi
     nix-env -iA nixpkgs.libsForQt5.akonadi
     nix-env -iA nixpkgs.libsForQt5.akonadi-calendar
@@ -19,11 +19,11 @@
     nix-env -iA nixpkgs.libsForQt5.akonadi-calendar-tools
     nix-env -iA nixpkgs.libsForQt5.akonadi-contacts
     nix-env -iA nixpkgs.libsForQt5.akonadi-import-wizard
-    nix-env -iA nixpkgs.libsForQt5.akonadi-mime
     nix-env -iA nixpkgs.libsForQt5.akonadi-notes
     nix-env -iA nixpkgs.libsForQt5.akonadi-search
-    nix-env -iA nixpkgs.libsForQt5.merkuro
-```
+  # nix-env -iA nixpkgs.libsForQt5.akonadi-mime
+  # nix-env -iA nixpkgs.libsForQt5.merkuro
+
 ### ------------------------------------------------ ###
 ### Fortune and DUF
 ### ------------------------------------------------ ###
