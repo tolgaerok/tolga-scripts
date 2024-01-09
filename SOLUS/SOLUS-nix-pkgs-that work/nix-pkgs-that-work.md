@@ -6,9 +6,10 @@
 ### Various nix packages to work on solus
 ### ------------------------------------------------ ###
 
-    export NIXPKGS_ALLOW_UNFREE=1 && nix-env -iA nixpkgs.wpsoffice
     export NIXPKGS_ALLOW_UNFREE=1 && nix-env -iA nixpkgs.anydesk
-
+    export NIXPKGS_ALLOW_UNFREE=1 && nix-env -iA nixpkgs.megasync 
+    export NIXPKGS_ALLOW_UNFREE=1 && nix-env -iA nixpkgs.wpsoffice
+    nix-env -iA nixpkgs.fortune
 
 ### ------------------------------------------------ ###
 ### Akonadi for calender and etc to work on solus
@@ -24,14 +25,7 @@
     nix-env -iA nixpkgs.libsForQt5.akonadi-notes
     nix-env -iA nixpkgs.libsForQt5.akonadi-search
   # nix-env -iA nixpkgs.libsForQt5.akonadi-mime
-  # nix-env -iA nixpkgs.libsForQt5.merkuro
-
-### ------------------------------------------------ ###
-### Fortune and DUF
-### ------------------------------------------------ ###
-    
-    nix-env -iA nixpkgs.fortune
-    export NIXPKGS_ALLOW_UNFREE=1 && nix-env -iA nixpkgs.megasync 
+  # nix-env -iA nixpkgs.libsForQt5.merkuro    
 
 ### ------------------------------------------------ ###
 ### BASHRC, must add in order for fortune to work
@@ -73,3 +67,8 @@
     Categories=Network;System;
     StartupNotify=false
     X-GNOME-Autostart-Delay=60
+
+
+### ------------------------------------------------ ###
+### Fortune and DUF
+### ------------------------------------------------ ###
