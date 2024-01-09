@@ -37,6 +37,10 @@ apply_solus_tweaks() {
     sudo eopkg up
     sudo eopkg it lsd
 
+    sudo sysctl -w kernel.sched_bore=1
+    sudo mkdir -p /etc/sysctl.d
+    echo "kernel.sched_bore=1" | sudo tee /etc/sysctl.d/85-bore.conf
+    
     # Check zram
     if [ -e /dev/zram0 ]; then
         echo
