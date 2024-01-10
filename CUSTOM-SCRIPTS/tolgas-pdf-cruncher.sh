@@ -3,7 +3,7 @@
 # pdf size reducer
 
 # Remote:
-# bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgaFedora39.sh)"
+# bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/main/CUSTOM-SCRIPTS/tolgas-pdf-cruncher.sh)"
 
 # Current PWD of script
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
