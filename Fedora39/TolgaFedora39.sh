@@ -183,7 +183,7 @@ done
 
 
 echo ""
-gum spin --spinner dot --title "These are your available CPU scheduling goveners..." -- sleep 2
+gum spin --spinner dot --title "These are your available CPU scheduling goveners..." -- sleep 2.5
 
 # Turn on NumLock in SDDM login screen
 # Check if the SDDM configuration file exists
