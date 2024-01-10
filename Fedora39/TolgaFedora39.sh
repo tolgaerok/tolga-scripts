@@ -122,12 +122,57 @@ gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
 sudo yum install gum -y
 clear
 
+# Function to set I/O scheduler
+set_io_scheduler() {
+    local device_path=$1
+    local scheduler=$2
+	echo ""
+    echo "Setting I/O scheduler for $device_path to $scheduler..."
+    echo "$scheduler" > "$device_path/queue/scheduler"
+	gum spin --spinner dot --title "Stand-by..." -- sleep .5
+
+}
+
+# Determine the device type (you may need to customize this based on your system)
+if [[ -e "/sys/block/sda" ]]; then
+    DEVICE_PATH="/sys/block/sda"
+elif [[ -e "/sys/class/nvme/" ]]; then
+    DEVICE_PATH="/sys/block/nvme0n1"
+else
+    echo "Unknown device type. Exiting."
+    exit 1
+fi
+
+# Determine the I/O scheduler based on user's choice
+echo -e "\nChoose an I/O scheduler:"
+echo "1. kyber - A scheduler designed for low-latency and mixed workloads."
+echo "2. none  - Allows the kernel to use the underlying storage device's native scheduler."
+echo "3. mq    - Multi-Queue framework that can work well with SSDs."
+echo "4. noop  - A simple scheduler that performs minimal I/O scheduling."
+
+read -p "Enter your choice (1/2/3/4): " IO_SCHEDULER_CHOICE
+
+# Determine the I/O scheduler based on user's choice
+case $IO_SCHEDULER_CHOICE in
+    1) SELECTED_IO_SCHEDULER="kyber" ;;
+    2) SELECTED_IO_SCHEDULER="none" ;;
+    3) SELECTED_IO_SCHEDULER="mq" ;;
+    4) SELECTED_IO_SCHEDULER="noop" ;;
+    *) echo "Invalid choice. Exiting."; exit 1 ;;
+esac
+
+# Set the chosen I/O scheduler
+set_io_scheduler "$DEVICE_PATH" "$SELECTED_IO_SCHEDULER"
+
+echo "I/O scheduler configurations has been updated."
+
 # none [mq-deadline] kyber bfq
 # Super tweak I/O scheduler
-echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
-echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
-printf "\n${YELLOW}I/O Scheduler has been set to ==>  ${NC}"
-cat /sys/block/sda/queue/scheduler
+#echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
+#echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler
+#printf "\n${YELLOW}I/O Scheduler has been set to ==>  ${NC}"
+#cat /sys/block/sda/queue/scheduler
+
 echo ""
 gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
