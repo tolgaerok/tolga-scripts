@@ -124,23 +124,23 @@ clear
 
 # Function to set I/O scheduler
 set_io_scheduler() {
-    local device_path=$1
-    local scheduler=$2
+	local device_path=$1
+	local scheduler=$2
 	echo ""
-    echo "Setting I/O scheduler for $device_path to $scheduler..."
-    echo "$scheduler" > "$device_path/queue/scheduler"
+	echo "Setting I/O scheduler for $device_path to $scheduler..."
+	echo "$scheduler" >"$device_path/queue/scheduler"
 	gum spin --spinner dot --title "Stand-by..." -- sleep .5
 
 }
 
 # Determine the device type (you may need to customize this based on your system)
 if [[ -e "/sys/block/sda" ]]; then
-    DEVICE_PATH="/sys/block/sda"
+	DEVICE_PATH="/sys/block/sda"
 elif [[ -e "/sys/class/nvme/" ]]; then
-    DEVICE_PATH="/sys/block/nvme0n1"
+	DEVICE_PATH="/sys/block/nvme0n1"
 else
-    echo "Unknown device type. Exiting."
-    exit 1
+	echo "Unknown device type. Exiting."
+	exit 1
 fi
 
 # Determine the I/O scheduler based on user's choice
@@ -154,11 +154,14 @@ read -p "Enter your choice (1/2/3/4): " IO_SCHEDULER_CHOICE
 
 # Determine the I/O scheduler based on user's choice
 case $IO_SCHEDULER_CHOICE in
-    1) SELECTED_IO_SCHEDULER="kyber" ;;
-    2) SELECTED_IO_SCHEDULER="none" ;;
-    3) SELECTED_IO_SCHEDULER="mq" ;;
-    4) SELECTED_IO_SCHEDULER="noop" ;;
-    *) echo "Invalid choice. Exiting."; exit 1 ;;
+1) SELECTED_IO_SCHEDULER="kyber" ;;
+2) SELECTED_IO_SCHEDULER="none" ;;
+3) SELECTED_IO_SCHEDULER="mq" ;;
+4) SELECTED_IO_SCHEDULER="noop" ;;
+*)
+	echo "Invalid choice. Exiting."
+	exit 1
+	;;
 esac
 
 # Set the chosen I/O scheduler
@@ -1830,8 +1833,8 @@ kde_crap() {
 	# List of KDE applications to check..
 	apps=("akregator" "ksysguard" "kmag" "kmail"
 		"kaddressbook" "konversation" "elisa-player"
-		"kcolorchooser" "kmouth" "korganizer" "kmousetool" "kmahjongg" 
-  		"kpat" "kmines" "dragonplayer" "kamoso"
+		"kcolorchooser" "kmouth" "korganizer" "kmousetool" "kmahjongg"
+		"kpat" "kmines" "dragonplayer" "kamoso"
 		"kolourpaint" "krdc" "krfb" "kmail-account-wizard"
 		"pim-data-exporter" "pim-sieve-editor" "elisa*" "kdeconnectd")
 
