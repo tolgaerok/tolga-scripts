@@ -195,7 +195,7 @@ available_algorithms=$(cat /proc/sys/net/ipv4/tcp_available_congestion_control)
 echo -e "${YELLOW}Available TCP Congestion Control Algorithms for your current KERNEL:${NC}"
 printf "${BLUE}%s${NC}\n" "$available_algorithms"
 
-# Explain each algorithm with colors and formatting
+# Explain each algorithm with colors 
 echo -e "\n${YELLOW}Explanations:${NC}"
 for algorithm in $available_algorithms; do
     printf "${GREEN}%-9s:${NC} " "$algorithm"
