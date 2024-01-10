@@ -156,7 +156,7 @@ read -p "Enter your choice (1/2/3/4): " IO_SCHEDULER_CHOICE
 case $IO_SCHEDULER_CHOICE in
 1) SELECTED_IO_SCHEDULER="kyber" ;;
 2) SELECTED_IO_SCHEDULER="none" ;;
-3) SELECTED_IO_SCHEDULER="mq" ;;
+3) SELECTED_IO_SCHEDULER="mq-deadline" ;;
 4) SELECTED_IO_SCHEDULER="noop" ;;
 *)
 	echo "Invalid choice. Exiting."
