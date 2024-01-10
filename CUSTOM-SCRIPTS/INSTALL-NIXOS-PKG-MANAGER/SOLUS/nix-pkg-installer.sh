@@ -3,7 +3,7 @@
 # tolga erok
 # 25 Dec 2023
 # Use remote location below;
-# bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/CUSTOM-SCRIPTS/INSTALL-NIXOS-PKG-MANAGER/nix-pkg-installer.sh)"
+# bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/CUSTOM-SCRIPTS/INSTALL-NIXOS-PKG-MANAGER/SOLUS/nix-pkg-installer.sh)"
 
 clear
 # Assign a color variable based on the RANDOM number
