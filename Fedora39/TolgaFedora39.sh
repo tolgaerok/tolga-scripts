@@ -70,6 +70,7 @@ NC='\e[0m'
 YELLOW='\e[1;33m'
 NC='\e[0m'
 
+
 # Green, Yellow & Red Messages.
 green_msg() {
 	tput setaf 2
@@ -184,6 +185,55 @@ done
 
 echo ""
 gum spin --spinner dot --title "These are your available CPU scheduling goveners..." -- sleep 2.5
+
+echo ""
+
+# Get available TCP congestion control algorithms
+available_algorithms=$(cat /proc/sys/net/ipv4/tcp_available_congestion_control)
+
+# Display available algorithms
+echo -e "${YELLOW}Available TCP Congestion Control Algorithms for your current KERNEL:${NC}"
+printf "${BLUE}%s${NC}\n" "$available_algorithms"
+
+# Explain each algorithm with colors and formatting
+echo -e "\n${YELLOW}Explanations:${NC}"
+for algorithm in $available_algorithms; do
+    printf "${GREEN}%-9s:${NC} " "$algorithm"
+    case $algorithm in
+        cubic)
+            echo -e "${BLUE}CUBIC is a widely used congestion control algorithm designed for high-speed networks.${NC}"
+            ;;
+        reno)
+            echo -e "${BLUE}Reno is a classic congestion control algorithm and a variant of Tahoe.${NC}"
+            ;;
+        bic)
+            echo -e "${BLUE}BIC (Binary Increase Control) is a variant of TCP congestion control.${NC}"
+            ;;
+        htcp)
+            echo -e "${BLUE}HTCP (H-TCP) is a delay-based congestion control algorithm.${NC}"
+            ;;
+        vegas)
+            echo -e "${BLUE}Vegas is a delay-based congestion control algorithm designed to avoid queue buildup.${NC}"
+            ;;
+        westwood)
+            echo -e "${BLUE}Westwood is a TCP congestion control algorithm optimized for wireless networks.${NC}"
+            ;;
+        bbr)
+            echo -e "${BLUE}BBR (Bottleneck Bandwidth and Round-trip propagation time) is a congestion control algorithm developed by Google, focusing on bandwidth and delay estimation.${NC}"
+            ;;
+        bbr2 | bbrv2)
+            echo -e "${BLUE}BBRv2 is an enhanced version of BBR with improvements for better performance in various network conditions.${NC}"
+            ;;
+        bbr3 | bbrv3)
+            echo -e "${BLUE}BBRv3 is another iteration of the BBR algorithm with further enhancements and optimizations.${NC}"
+            ;;
+        *)
+            echo -e "${BLUE}Description not available.${NC}"
+            ;;
+    esac
+done
+
+gum spin --spinner dot --title "Stand-by..." -- sleep 2.6
 
 # Turn on NumLock in SDDM login screen
 # Check if the SDDM configuration file exists
