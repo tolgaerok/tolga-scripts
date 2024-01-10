@@ -233,7 +233,9 @@ for algorithm in $available_algorithms; do
     esac
 done
 
-gum spin --spinner dot --title "Stand-by..." -- sleep 5
+echo ""
+read -p "Press Enter to continus...."
+gum spin --spinner dot --title "Stand-by..." -- sleep 1
 
 # Turn on NumLock in SDDM login screen
 # Check if the SDDM configuration file exists
