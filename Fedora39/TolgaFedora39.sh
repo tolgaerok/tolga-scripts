@@ -168,7 +168,7 @@ esac
 set_io_scheduler "$DEVICE_PATH" "$SELECTED_IO_SCHEDULER"
 
 echo "I/O scheduler configurations has been updated."
-
+echo "" 
 # none [mq-deadline] kyber bfq
 # Super tweak I/O scheduler
 #echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
@@ -176,8 +176,14 @@ echo "I/O scheduler configurations has been updated."
 #printf "\n${YELLOW}I/O Scheduler has been set to ==>  ${NC}"
 #cat /sys/block/sda/queue/scheduler
 
+# Check your cpu schedule goveners 
+for cpu in $(seq 0 $(($(nproc) - 1))); do
+    echo "CPU $cpu: $(cat /sys/devices/system/cpu/cpu$cpu/cpufreq/scaling_available_governors)"
+done
+
+
 echo ""
-gum spin --spinner dot --title "Stand-by..." -- sleep 2
+gum spin --spinner dot --title "These are your available CPU scheduling goveners..." -- sleep 2
 
 # Turn on NumLock in SDDM login screen
 # Check if the SDDM configuration file exists
