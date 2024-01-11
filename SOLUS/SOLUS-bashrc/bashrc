@@ -120,6 +120,9 @@ fi
 # Display a fortune message when opening a new Bash session
 echo "" && $FORTUNE_COMMAND && echo ""
 
+# ---------- For pip --------------- #
+export PATH="$HOME/.local/bin:$PATH"
+
 # export PATH="/home/tolga/.nix-profile/bin:$PATH"
 # Display a fortune message when opening a new Bash session
 # echo "" && /home/tolga/.nix-profile/bin/fortune && echo ""

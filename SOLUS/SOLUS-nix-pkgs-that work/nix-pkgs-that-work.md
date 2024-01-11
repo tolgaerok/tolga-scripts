@@ -1,6 +1,6 @@
 # ----------      Solus related       ------------ ###
  - Tolga Erok
- - 8/1/2024
+ - 8/1/2024 
 
 ### ------------------------------------------------ ###
 ### Various nix packages to work on solus
@@ -8,7 +8,17 @@
 
     export NIXPKGS_ALLOW_UNFREE=1 && nix-env -iA nixpkgs.anydesk
     export NIXPKGS_ALLOW_UNFREE=1 && nix-env -iA nixpkgs.megasync 
-    export NIXPKGS_ALLOW_UNFREE=1 && nix-env -iA nixpkgs.wpsoffice
+    
+    export NIXPKGS_ALLOW_UNFREE=1 && nix-env -iA nixpkgs.wpsoffice      
+        
+        find /nix/store -name wps
+        chmod +x /nix/store/j9f454i692r0ig275akp2ifnzn0nlclw-user-environment/bin/wps
+        chmod +x /nix/store/mvpx974v9sn0vklxzcd5pkdrsi0yy66z-user-environment/bin/wps
+        chmod +x /nix/store/pc3c6yqzfhvinnzql36634q85a24477m-wpsoffice-11.1.0.11711/bin/wps
+        chmod +x /nix/store/pc3c6yqzfhvinnzql36634q85a24477m-wpsoffice-11.1.0.11711/opt/kingsoft/wps-office/office6/wps
+
+        find /nix/store -name '*wps*desktop'
+        
     nix-env -iA nixpkgs.fortune
 
 ### ------------------------------------------------ ###
@@ -70,5 +80,18 @@
 
 
 ### ------------------------------------------------ ###
-### Fortune and DUF
+### default.nix
 ### ------------------------------------------------ ###
+
+    { pkgs ? import <nixpkgs> {} }:
+
+    pkgs.mkShell {
+    buildInputs = [
+        # List your desired pkgs in here
+    ];
+
+    shellHook = ''
+        export NIX_EXPERIMENTAL_FEATURES="auto-allocate-uids configurable-impure-env"
+    '';
+    }
+
