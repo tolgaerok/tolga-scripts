@@ -202,10 +202,7 @@ flatpak_apps=(
     "com.sindresorhus.Caprine"
     "org.gnome.Shotwell"
     "com.transmissionbt.Transmission"
-    "com.anydesk.Anydesk"
-    "me.kozec.syncthingtk"
-    "com.github.zocker_160.SyncThingy"
-    "com.microsoft.EdgeDev"
+    "com.anydesk.Anydesk"    
 )
 
 # Install applications
