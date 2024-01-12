@@ -145,6 +145,11 @@ else
 fi
 
 # Determine the I/O scheduler based on user's choice
+echo ""
+echo "Current I/O scheduler is:"
+echo ""
+cat /sys/block/sda/queue/scheduler
+echo ""
 echo -e "\nChoose an I/O scheduler:"
 echo "1. kyber - A scheduler designed for low-latency and mixed workloads."
 echo "2. none  - Allows the kernel to use the underlying storage device's native scheduler."
@@ -590,17 +595,17 @@ install_gpu_drivers() {
 		#sudo dnf versionlock delete nvidia-xconfig-3:535.129.03-1.fc39
 
 		########################## Alternative block ##########################
-		# sudo dnf update --exclude="akmod-nvidia*3:545.29.06-1.fc39*" \
-		#          --exclude="nvidia-modprobe*3:545.29.06-1.fc39*" \
-		#          --exclude="nvidia-persistenced*3:545.29.06-1.fc39*" \
-		#          --exclude="nvidia-settings*3:545.29.06-1.fc39*" \
-		#          --exclude="nvidia-xconfig*3:545.29.06-1.fc39*" \
-		#          --exclude="xorg-x11-drv-nvidia-cuda-libs*3:545.29.06-1.fc39*" \
-		#          --exclude="xorg-x11-drv-nvidia-cuda*3:545.29.06-1.fc39*" \
-		#          --exclude="xorg-x11-drv-nvidia-kmodsrc*3:545.29.06-1.fc39*" \
-		#          --exclude="xorg-x11-drv-nvidia-libs*3:545.29.06-1.fc39*" \
-		#          --exclude="xorg-x11-drv-nvidia-power*3:545.29.06-1.fc39*" \
-		#          --exclude="xorg-x11-drv-nvidia*3:545.29.06-1.fc39*"
+		 sudo dnf update --exclude="akmod-nvidia*3:545.29.06-1.fc39*" \
+		          --exclude="nvidia-modprobe*3:545.29.06-1.fc39*" \
+		          --exclude="nvidia-persistenced*3:545.29.06-1.fc39*" \
+		         --exclude="nvidia-settings*3:545.29.06-1.fc39*" \
+		          --exclude="nvidia-xconfig*3:545.29.06-1.fc39*" \
+		          --exclude="xorg-x11-drv-nvidia-cuda-libs*3:545.29.06-1.fc39*" \
+		          --exclude="xorg-x11-drv-nvidia-cuda*3:545.29.06-1.fc39*" \
+		          --exclude="xorg-x11-drv-nvidia-kmodsrc*3:545.29.06-1.fc39*" \
+		          --exclude="xorg-x11-drv-nvidia-libs*3:545.29.06-1.fc39*" \
+		          --exclude="xorg-x11-drv-nvidia-power*3:545.29.06-1.fc39*" \
+		          --exclude="xorg-x11-drv-nvidia*3:545.29.06-1.fc39*"
 
 		display_message "Enabling nvidia-modeset..."
 
