@@ -70,7 +70,6 @@ NC='\e[0m'
 YELLOW='\e[1;33m'
 NC='\e[0m'
 
-
 # Green, Yellow & Red Messages.
 green_msg() {
 	tput setaf 2
@@ -174,7 +173,7 @@ esac
 set_io_scheduler "$DEVICE_PATH" "$SELECTED_IO_SCHEDULER"
 
 echo "I/O scheduler configurations has been updated."
-echo "" 
+echo ""
 # none [mq-deadline] kyber bfq
 # Super tweak I/O scheduler
 #echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
@@ -182,11 +181,10 @@ echo ""
 #printf "\n${YELLOW}I/O Scheduler has been set to ==>  ${NC}"
 #cat /sys/block/sda/queue/scheduler
 
-# Check your cpu schedule goveners 
+# Check your cpu schedule goveners
 for cpu in $(seq 0 $(($(nproc) - 1))); do
-    echo "CPU $cpu: $(cat /sys/devices/system/cpu/cpu$cpu/cpufreq/scaling_available_governors)"
+	echo "CPU $cpu: $(cat /sys/devices/system/cpu/cpu$cpu/cpufreq/scaling_available_governors)"
 done
-
 
 echo ""
 gum spin --spinner dot --title "These are your available CPU scheduling goveners..." -- sleep 2.5
@@ -200,42 +198,42 @@ available_algorithms=$(cat /proc/sys/net/ipv4/tcp_available_congestion_control)
 echo -e "${YELLOW}Available TCP Congestion Control Algorithms for your current KERNEL:${NC}"
 printf "${BLUE}%s${NC}\n" "$available_algorithms"
 
-# Explain each algorithm with colors 
+# Explain each algorithm with colors
 echo -e "\n${YELLOW}Explanations:${NC}"
 for algorithm in $available_algorithms; do
-    printf "${GREEN}%-9s:${NC} " "$algorithm"
-    case $algorithm in
-        cubic)
-            echo -e "${BLUE}CUBIC is a widely used congestion control algorithm designed for high-speed networks.${NC}"
-            ;;
-        reno)
-            echo -e "${BLUE}Reno is a classic congestion control algorithm and a variant of Tahoe.${NC}"
-            ;;
-        bic)
-            echo -e "${BLUE}BIC (Binary Increase Control) is a variant of TCP congestion control.${NC}"
-            ;;
-        htcp)
-            echo -e "${BLUE}HTCP (H-TCP) is a delay-based congestion control algorithm.${NC}"
-            ;;
-        vegas)
-            echo -e "${BLUE}Vegas is a delay-based congestion control algorithm designed to avoid queue buildup.${NC}"
-            ;;
-        westwood)
-            echo -e "${BLUE}Westwood is a TCP congestion control algorithm optimized for wireless networks.${NC}"
-            ;;
-        bbr)
-            echo -e "${BLUE}BBR (Bottleneck Bandwidth and Round-trip propagation time) is a congestion control algorithm developed by Google, focusing on bandwidth and delay estimation.${NC}"
-            ;;
-        bbr2 | bbrv2)
-            echo -e "${BLUE}BBRv2 is an enhanced version of BBR with improvements for better performance in various network conditions.${NC}"
-            ;;
-        bbr3 | bbrv3)
-            echo -e "${BLUE}BBRv3 is another iteration of the BBR algorithm with further enhancements and optimizations.${NC}"
-            ;;
-        *)
-            echo -e "${BLUE}Description not available.${NC}"
-            ;;
-    esac
+	printf "${GREEN}%-9s:${NC} " "$algorithm"
+	case $algorithm in
+	cubic)
+		echo -e "${BLUE}CUBIC is a widely used congestion control algorithm designed for high-speed networks.${NC}"
+		;;
+	reno)
+		echo -e "${BLUE}Reno is a classic congestion control algorithm and a variant of Tahoe.${NC}"
+		;;
+	bic)
+		echo -e "${BLUE}BIC (Binary Increase Control) is a variant of TCP congestion control.${NC}"
+		;;
+	htcp)
+		echo -e "${BLUE}HTCP (H-TCP) is a delay-based congestion control algorithm.${NC}"
+		;;
+	vegas)
+		echo -e "${BLUE}Vegas is a delay-based congestion control algorithm designed to avoid queue buildup.${NC}"
+		;;
+	westwood)
+		echo -e "${BLUE}Westwood is a TCP congestion control algorithm optimized for wireless networks.${NC}"
+		;;
+	bbr)
+		echo -e "${BLUE}BBR (Bottleneck Bandwidth and Round-trip propagation time) is a congestion control algorithm developed by Google, focusing on bandwidth and delay estimation.${NC}"
+		;;
+	bbr2 | bbrv2)
+		echo -e "${BLUE}BBRv2 is an enhanced version of BBR with improvements for better performance in various network conditions.${NC}"
+		;;
+	bbr3 | bbrv3)
+		echo -e "${BLUE}BBRv3 is another iteration of the BBR algorithm with further enhancements and optimizations.${NC}"
+		;;
+	*)
+		echo -e "${BLUE}Description not available.${NC}"
+		;;
+	esac
 done
 
 echo ""
@@ -595,17 +593,17 @@ install_gpu_drivers() {
 		#sudo dnf versionlock delete nvidia-xconfig-3:535.129.03-1.fc39
 
 		########################## Alternative block ##########################
-		 sudo dnf update --exclude="akmod-nvidia*3:545.29.06-1.fc39*" \
-		          --exclude="nvidia-modprobe*3:545.29.06-1.fc39*" \
-		          --exclude="nvidia-persistenced*3:545.29.06-1.fc39*" \
-		         --exclude="nvidia-settings*3:545.29.06-1.fc39*" \
-		          --exclude="nvidia-xconfig*3:545.29.06-1.fc39*" \
-		          --exclude="xorg-x11-drv-nvidia-cuda-libs*3:545.29.06-1.fc39*" \
-		          --exclude="xorg-x11-drv-nvidia-cuda*3:545.29.06-1.fc39*" \
-		          --exclude="xorg-x11-drv-nvidia-kmodsrc*3:545.29.06-1.fc39*" \
-		          --exclude="xorg-x11-drv-nvidia-libs*3:545.29.06-1.fc39*" \
-		          --exclude="xorg-x11-drv-nvidia-power*3:545.29.06-1.fc39*" \
-		          --exclude="xorg-x11-drv-nvidia*3:545.29.06-1.fc39*"
+		sudo dnf update --exclude="akmod-nvidia*3:545.29.06-1.fc39*" \
+			--exclude="nvidia-modprobe*3:545.29.06-1.fc39*" \
+			--exclude="nvidia-persistenced*3:545.29.06-1.fc39*" \
+			--exclude="nvidia-settings*3:545.29.06-1.fc39*" \
+			--exclude="nvidia-xconfig*3:545.29.06-1.fc39*" \
+			--exclude="xorg-x11-drv-nvidia-cuda-libs*3:545.29.06-1.fc39*" \
+			--exclude="xorg-x11-drv-nvidia-cuda*3:545.29.06-1.fc39*" \
+			--exclude="xorg-x11-drv-nvidia-kmodsrc*3:545.29.06-1.fc39*" \
+			--exclude="xorg-x11-drv-nvidia-libs*3:545.29.06-1.fc39*" \
+			--exclude="xorg-x11-drv-nvidia-power*3:545.29.06-1.fc39*" \
+			--exclude="xorg-x11-drv-nvidia*3:545.29.06-1.fc39*"
 
 		display_message "Enabling nvidia-modeset..."
 
@@ -1384,7 +1382,7 @@ EOF
 	display_message "[${GREEN}✔${NC}]  Checking SSh port"
 	gum spin --spinner dot --title "Stand-by..." -- sleep 2
 	check_port22
-	sudo systemctl status sshd
+	# sudo systemctl status sshd
 
 	display_message "[${GREEN}✔${NC}]  Setup Web Service Discovery host daemon"
 
@@ -1429,7 +1427,7 @@ EOF
 		sudo systemctl enable wsdd.service
 		sudo systemctl restart wsdd.service
 		display_message "[${GREEN}✔${NC}]  WSDD setup complete"
-		systemctl status wsdd.service
+		# systemctl status wsdd.service
 
 		sleep 1
 
@@ -1452,7 +1450,7 @@ EOF
 			sudo systemctl enable wsdd.service
 			sudo systemctl restart wsdd.service
 			display_message "[${GREEN}✔${NC}]  WSDD setup complete"
-			systemctl status wsdd.service
+			# systemctl status wsdd.service
 
 			sleep 1
 
