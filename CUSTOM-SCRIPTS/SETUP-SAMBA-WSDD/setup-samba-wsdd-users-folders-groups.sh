@@ -225,7 +225,6 @@ if grep -q "EnvironmentFile=$OLD_SYSCONFIG_FILE" "$SERVICE_FILE"; then
     sudo systemctl daemon-reload
 
     # Restart the wsdd service
-
     gum spin --spinner dot --title " Standby, restarting , reloading and getting wsdd status" -- sleep 2
     sudo systemctl enable wsdd.service
     sudo systemctl restart wsdd.service
@@ -320,10 +319,10 @@ sudo iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-
 
 # Reload the firewall for changes to take effect
 sudo firewall-cmd --reload
-gum spin --spinner dot --title "Reloading firewall" -- sleep 0.5
+gum spin --spinner dot --title "Reloading firewall" -- sleep 1.5
 
-display_message "[${GREEN}✔${NC}] Firewall rules applied successfully."
-gum spin --spinner dot --title "Reloading MainMenu" -- sleep 1.5
+display_message "[${GREEN}✔${NC}] Firewall rules applied successfully, reloading system services."
+gum spin --spinner dot --title "Reloading all services" -- sleep 1.5
 
 # Start Samba manually
 sudo systemctl start smb
