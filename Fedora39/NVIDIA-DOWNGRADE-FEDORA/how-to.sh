@@ -4,24 +4,35 @@
 # - Tolga Erok
 # - 13/1/2024
 
+
 # ------------------------------------------|       Instruction             |------------------------------------------------------ ###
-#
-# Install nvidia drivers from my online script. This will create 2 desktop shortcuts.
+
+# Install my online post installer that includes Nvidia drivers. This will create 2 desktop shortcuts.
 
 # Copy & paste into knosole.
 # bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/setup.sh)"
 
-# Let it do its thing to set up all the dependencies to execute the script. Once done, make sure you run the following:
+# Find 2 desktop icons, double click on the GREEN square icon and follow the prompts
 
-# - Option 3, Update the system
+# Allow it do its thing to set up all the dependencies required to execute my script.
+# Once done, make sure you run the following in this order:
+
 # - Option 1, configure faster dnf updates
+# - Option 3, Update the system
 # - Option 2, Install RPM Fusion repositories
 # - Option 8, Install H/W Video Acceleration for AMD or Intel
 # - Option 5, Install Nvidia / AMD GPU drivers
-# - sudo systemctl enable --now akmods --force && sudo dracut --force && echo && echo \"Force akmods and Dracut on nvidia done\" && echo
-# - Wait for 3 mins then Reboot ( Allow the kernel to compile the new drivers )
+
+# This will take some time as it will install the required libaries and CUDA dependencies. Once complete, execute the following:
+
+# sudo systemctl enable --now akmods --force && sudo dracut --force && echo && echo "Force akmods and Dracut on nvidia done" && echo
+
+# Wait for 3 mins ( This allow's the kernel to compile the new drivers ) then [ Reboot ]
+
+
 
 # ------------------------------------------|       DOWNGRADE 545x to 535x    |------------------------------------------------------ ###
+
 
 sudo dnf remove \*nvidia\* --exclude nvidia-gpu-firmware
 sudo dnf install akmod-nvidia-535.129.03\* xorg-x11-drv-nvidia-cuda-535.129.03\* nvidia\*535.129.03\*
