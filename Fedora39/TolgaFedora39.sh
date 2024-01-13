@@ -593,17 +593,17 @@ install_gpu_drivers() {
 		#sudo dnf versionlock delete nvidia-xconfig-3:535.129.03-1.fc39
 
 		########################## Alternative block ##########################
-		sudo dnf update --exclude="akmod-nvidia*3:545.29.06-1.fc39*" \
-			--exclude="nvidia-modprobe*3:545.29.06-1.fc39*" \
-			--exclude="nvidia-persistenced*3:545.29.06-1.fc39*" \
-			--exclude="nvidia-settings*3:545.29.06-1.fc39*" \
-			--exclude="nvidia-xconfig*3:545.29.06-1.fc39*" \
-			--exclude="xorg-x11-drv-nvidia-cuda-libs*3:545.29.06-1.fc39*" \
-			--exclude="xorg-x11-drv-nvidia-cuda*3:545.29.06-1.fc39*" \
-			--exclude="xorg-x11-drv-nvidia-kmodsrc*3:545.29.06-1.fc39*" \
-			--exclude="xorg-x11-drv-nvidia-libs*3:545.29.06-1.fc39*" \
-			--exclude="xorg-x11-drv-nvidia-power*3:545.29.06-1.fc39*" \
-			--exclude="xorg-x11-drv-nvidia*3:545.29.06-1.fc39*"
+		#sudo dnf update --exclude="akmod-nvidia*3:545.29.06-1.fc39*" \
+		#	--exclude="nvidia-modprobe*3:545.29.06-1.fc39*" \
+		#	--exclude="nvidia-persistenced*3:545.29.06-1.fc39*" \
+		#	--exclude="nvidia-settings*3:545.29.06-1.fc39*" \
+		#	--exclude="nvidia-xconfig*3:545.29.06-1.fc39*" \
+		#	--exclude="xorg-x11-drv-nvidia-cuda-libs*3:545.29.06-1.fc39*" \
+		#	--exclude="xorg-x11-drv-nvidia-cuda*3:545.29.06-1.fc39*" \
+		#	--exclude="xorg-x11-drv-nvidia-kmodsrc*3:545.29.06-1.fc39*" \
+		#	--exclude="xorg-x11-drv-nvidia-libs*3:545.29.06-1.fc39*" \
+		#	--exclude="xorg-x11-drv-nvidia-power*3:545.29.06-1.fc39*" \
+		#	--exclude="xorg-x11-drv-nvidia*3:545.29.06-1.fc39*"
 
 		display_message "Enabling nvidia-modeset..."
 
