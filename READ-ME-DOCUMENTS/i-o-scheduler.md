@@ -95,8 +95,34 @@ Cons:
    ```
 
 2. Add the following content to the `io-scheduler.service` file:
-- Change to sda or nvme01 for `cat /sys/block/sda/queue/scheduler`
 
+Change to sda or nvme01:
+  
+- sda is    :  `cat /sys/block/sda/queue/scheduler`
+- nvme is   :  `cat /sys/class/nvme/nvme0/scheduler`
+
+In Fedora, you can check the scheduler for your NVMe drive using the following command:
+
+``bash
+cat /sys/class/nvme/nvme0/scheduler
+``
+This assumes that your NVMe drive is represented by `/dev/nvme0n1`. If you have multiple NVMe drives, you might see nvme0n1, nvme1n1, and so on.
+
+If the above command doesn't work, you can explore the `/sys/class/nvme/` directory to find the correct path. You can use the `ls` command to list the available NVMe devices:
+
+```bash
+ls /sys/class/nvme/
+```
+
+Then, navigate to the appropriate directory and check the scheduler:
+
+```bash
+cat /sys/class/nvme/nvmeXn1/scheduler
+```
+
+Replace nvmeX with the appropriate identifier for your NVMe drive.
+
+# 
    ```ini
    [Unit]
    Description=Set I/O Scheduler on boot
