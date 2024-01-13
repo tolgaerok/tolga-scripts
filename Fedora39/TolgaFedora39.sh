@@ -1407,7 +1407,13 @@ EOF
 	#block.{sd,mmc,nvme,0}*/queue/iosched/slice_idle=0
 
 	display_message "[${GREEN}✔${NC}]  Adding New network settings"
+
+	# Apply sysctl changes
+    sudo udevadm control --reload-rules
+    sudo udevadm trigger
+    sudo sysctl --system
 	sudo sysctl -p
+	
 	sudo systemctl restart systemd-sysctl
 	echo ""
 	gum spin --spinner dot --title "Restarting systemd custom settings.." -- sleep 4
