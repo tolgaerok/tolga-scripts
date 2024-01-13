@@ -193,6 +193,7 @@ sudo firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="udp" port="
 sudo firewall-cmd --add-rich-rule='rule family="ipv6" port protocol="udp" port="3702" accept'
 sudo firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="tcp" port="5357" accept'
 sudo firewall-cmd --add-rich-rule='rule family="ipv6" port protocol="tcp" port="5357" accept'
+sudo iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns
 
 # Define the path to the wsdd service file
 SERVICE_FILE="/usr/lib/systemd/system/wsdd.service"
