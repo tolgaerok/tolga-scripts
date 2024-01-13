@@ -137,6 +137,11 @@ Replace nvmeX with the appropriate identifier for your NVMe drive.
 
    Plase note that this assumes your disk is `/dev/sda`. If yourr disk is different, replace `/dev/sda` with the appropriate device path.
 
+   For nvme0n1:
+   ```ini
+   ExecStart=/bin/bash -c 'echo -e "Configuring I/O Scheduler to: "; echo "kyber" | sudo tee /sys/class/nvme/nvme0n1/scheduler; printf "I/O Scheduler has been set to ==>  "; cat /sys/class/nvme/nvme0n1/scheduler; echo ""'
+   ```
+
 4. Save the file and exit the text editor.
 
 5. Reload the systemd manager to pick up the changes:
