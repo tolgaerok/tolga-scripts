@@ -12,9 +12,42 @@ Tolga Erok
 
 # IMPORTANT
 Choose a new I/O scheduler:
-- kyber - Suited for both SSDs and NVMe, provides good performance.
-- none - Disables I/O scheduling, suitable for SSDs and NVMe with their own internal algorithms.
-- mq-deadline - Multiqueue variant of the deadline scheduler, generally suitable for SSDs.
+- `kyber`         - Suited for both SSDs and NVMe, provides good performance.
+- `none`          - Disables I/O scheduling, suitable for SSDs and NVMe with their own internal algorithms.
+- `mq-deadline`   - Multiqueue variant of the deadline scheduler, generally suitable for SSDs.
+
+## Best Settings for HDD:
+I/O Scheduler: `cfq` (Completely Fair Queueing) or `deadline`
+
+These schedulers are generally well-suited for HDDs. `cfq` provides fairness, while `deadline` focuses on meeting deadlines for I/O requests.
+
+- Read-Ahead Buffer:
+- Setting: Moderate value (e.g., 128 KB to 256 KB)
+- Helps in optimizing sequential read access on HDDs.
+
+## Best Settings for SSD:
+- I/O Scheduler: `deadline` or `bfq`
+
+Both schedulers work well with SSDs. `deadline` can be a good balance, while `bfq` provides fairness, which can be beneficial for SSDs in certain scenarios.
+
+- Read-Ahead Buffer:
+- Setting: Smaller value (e.g., 32 KB to 64 KB)
+- SSDs benefit less from larger read-ahead buffers due to their fast random access times.
+- Trim Support:
+- Setting: Enable TRIM
+   TRIM helps in maintaining SSD performance over time by informing the drive which blocks are no longer in use.
+
+## Best Settings for NVMe (M.2/PCIe SSD):
+- I/O Scheduler: `none` or `mq-deadline`
+
+NVMe drives often perform best without a specific I/O scheduler. `mq-deadline` can be used for systems where a scheduler is required.
+
+- Read-Ahead Buffer:
+- Setting: Not critical; can be left at default
+- NVMe drives have fast random access times, so read-ahead settings are less critical.
+- Trim Support:
+- Setting: Enable TRIM
+   TRIM is important for maintaining the longevity and performance of NVMe drives.
 
 # Steps
 
