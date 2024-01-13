@@ -99,7 +99,7 @@ Cons:
 Change to sda or nvme01:
   
 - sda is    :  `cat /sys/block/sda/queue/scheduler`
-- nvme is   :  `cat /sys/class/nvme/nvme0/scheduler`
+- nvme is   :  `cat /sys/class/nvme/nvme0/scheduler` or `cat /sys/block/nvme0n1/queue/scheduler`
 
 In Fedora, you can check the scheduler for your NVMe drive using the following command:
 
@@ -175,7 +175,7 @@ Replace nvmeX with the appropriate identifier for your NVMe drive.
    NVME ==>    cat /sys/block/nvme01/queue/scheduler
    ```
 
-10. Edit grub, sudo nano `/etc/default/grub` and change to preference 'kyber', `none' and so forth 
+10. Edit grub, sudo nano `/etc/default/grub` and change to preference `kyber' or `none` and so forth 
   
    ```bash
    Find       ==>    GRUB_CMDLINE_LINUX="rhgb quiet mitigations=off"
