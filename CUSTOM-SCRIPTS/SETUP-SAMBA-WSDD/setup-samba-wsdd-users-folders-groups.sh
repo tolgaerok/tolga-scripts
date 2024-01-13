@@ -71,7 +71,6 @@ check_error() {
 sudo dnf -y install iptables iptables-services nftables
 sudo dnf -y install wsdd
 
-
 ## System utilities
 sudo dnf -y install bash-completion busybox crontabs ca-certificates curl dnf-plugins-core dnf-utils gnupg2 nano screen ufw unzip vim wget zip
 
@@ -193,7 +192,6 @@ sudo firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="udp" port="
 sudo firewall-cmd --add-rich-rule='rule family="ipv6" port protocol="udp" port="3702" accept'
 sudo firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="tcp" port="5357" accept'
 sudo firewall-cmd --add-rich-rule='rule family="ipv6" port protocol="tcp" port="5357" accept'
-sudo iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns
 
 # Define the path to the wsdd service file
 SERVICE_FILE="/usr/lib/systemd/system/wsdd.service"
@@ -253,6 +251,62 @@ else
         sleep 2
     fi
 fi
+
+# Old NixOS TCP & UDP port settings
+allowedTCPPorts=(
+    21    # FTP
+    53    # DNS
+    80    # HTTP
+    443   # HTTPS
+    143   # IMAP
+    389   # LDAP
+    139   # Samba
+    445   # Samba
+    25    # SMTP
+    22    # SSH
+    5432  # PostgreSQL
+    3306  # MySQL/MariaDB
+    3307  # MySQL/MariaDB
+    111   # NFS
+    2049  # NFS
+    2375  # Docker
+    22000 # Syncthing
+    9091  # Transmission
+    60450 # Transmission
+    80    # Gnomecast server
+    8010  # Gnomecast server
+    8888  # Gnomecast server
+    5357  # wsdd: Samba
+    1714  # Open KDE Connect
+    1764  # Open KDE Connect
+    8200  # Teamviewer
+)
+
+allowedUDPPorts=(
+    53    # DNS
+    137   # NetBIOS Name Service
+    138   # NetBIOS Datagram Service
+    3702  # wsdd: Samba
+    5353  # Device discovery
+    21027 # Syncthing
+    22000 # Syncthing
+    8200  # Teamviewer
+    1714  # Open KDE Connect
+    1764  # Open KDE Connect
+)
+
+for port in "${allowedTCPPorts[@]}"; do
+    echo "Setting up TCPorts: $port"
+    sudo firewall-cmd --permanent --add-port=$port/tcp
+done
+
+for port in "${allowedUDPPorts[@]}"; do
+    echo "Setting up UDPPorts: $port"
+    sudo firewall-cmd --permanent --add-port=$port/udp
+done
+
+echo "[${GREEN}✔${NC}] Adding NetBIOS name resolution traffic on UDP port 137"
+sudo iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns
 
 # Start Samba manually
 sudo systemctl start smb
