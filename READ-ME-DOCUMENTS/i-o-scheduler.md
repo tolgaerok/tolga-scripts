@@ -1,4 +1,4 @@
-## How create a systemd service to run mq-deadline I/O scheduler on Fedora, Solus or Mint
+## How create a systemd service to run user choice of I/O scheduler on Fedora, Solus or Mint
 
 
 
@@ -10,6 +10,12 @@ Tolga Erok
 
 ![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/e62aae39-2b2c-4458-8a4a-7d6eddf898a7)
 
+# IMPORTANT
+Choose a new I/O scheduler:
+- kyber - Suited for both SSDs and NVMe, provides good performance.
+- none - Disables I/O scheduling, suitable for SSDs and NVMe with their own internal algorithms.
+- mq-deadline - Multiqueue variant of the deadline scheduler, generally suitable for SSDs.
+
 # Steps
 
 1. Open a terminal and create a new systemd service file:
@@ -19,6 +25,7 @@ Tolga Erok
    ```
 
 2. Add the following content to the `io-scheduler.service` file:
+- Change to sda or nvme01 for `cat /sys/block/sda/queue/scheduler`
 
    ```ini
    [Unit]
@@ -26,7 +33,7 @@ Tolga Erok
 
    [Service]
    Type=simple
-   ExecStart=/bin/bash -c 'echo -e "Configuring I/O Scheduler to: "; echo "mq-deadline" | sudo tee /sys/block/sda/queue/scheduler; printf "I/O Scheduler has been set to ==>  "; cat /sys/block/sda/queue/scheduler; echo ""'
+   ExecStart=/bin/bash -c 'echo -e "Configuring I/O Scheduler to: "; echo "kyber" | sudo tee /sys/block/sda/queue/scheduler; printf "I/O Scheduler has been set to ==>  "; cat /sys/block/sda/queue/scheduler; echo ""'
 
    [Install]
    WantedBy=default.target
@@ -34,36 +41,37 @@ Tolga Erok
 
    Plase note that this assumes your disk is `/dev/sda`. If yourr disk is different, replace `/dev/sda` with the appropriate device path.
 
-3. Save the file and exit the text editor.
+4. Save the file and exit the text editor.
 
-4. Reload the systemd manager to pick up the changes:
+5. Reload the systemd manager to pick up the changes:
 
    ```bash
    sudo systemctl daemon-reload
    ```
 
-5. Enable the service to start on boot:
+6. Enable the service to start on boot:
 
    ```bash
    sudo systemctl enable io-scheduler.service
    ```
 
-6. Optionally, you can start the service immediately:
+7. Optionally, you can start the service immediately:
 
    ```bash
    sudo systemctl start io-scheduler.service
    ```
 
-7. Check status
+8. Check status
    
    ```bash
    sudo systemctl status io-scheduler.service
    ```
 
-8. Check i/o assignment 
+9. Check i/o assignment 
    
    ```bash
-   cat /sys/block/sda/queue/scheduler
+   SSD  ==>    cat /sys/block/sda/queue/scheduler
+   NVME ==>    cat /sys/block/nvme01/queue/scheduler
    ```
  
 
