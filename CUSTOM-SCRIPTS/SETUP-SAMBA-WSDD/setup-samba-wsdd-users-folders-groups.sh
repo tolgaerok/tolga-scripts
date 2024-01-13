@@ -42,6 +42,16 @@ NC='\e[0m'
 YELLOW='\e[1;33m'
 NC='\e[0m'
 
+echo '[charm]
+name=Charm
+baseurl=https://repo.charm.sh/yum/
+enabled=1
+gpgcheck=1
+gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
+
+sudo yum install gum -y
+clear
+
 # Function to display messages
 display_message() {
     clear
@@ -307,6 +317,13 @@ done
 
 echo "[${GREEN}✔${NC}] Adding NetBIOS name resolution traffic on UDP port 137"
 sudo iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns
+
+# Reload the firewall for changes to take effect
+sudo firewall-cmd --reload
+gum spin --spinner dot --title "Reloading firewall" -- sleep 0.5
+
+display_message "[${GREEN}✔${NC}] Firewall rules applied successfully."
+gum spin --spinner dot --title "Reloading MainMenu" -- sleep 1.5
 
 # Start Samba manually
 sudo systemctl start smb
