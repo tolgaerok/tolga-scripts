@@ -69,6 +69,8 @@ check_error() {
 
 ## Networking packages
 sudo dnf -y install iptables iptables-services nftables
+sudo dnf -y install wsdd
+
 
 ## System utilities
 sudo dnf -y install bash-completion busybox crontabs ca-certificates curl dnf-plugins-core dnf-utils gnupg2 nano screen ufw unzip vim wget zip
