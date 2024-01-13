@@ -26,7 +26,7 @@
 sudo dnf remove \*nvidia\* --exclude nvidia-gpu-firmware
 sudo dnf install akmod-nvidia-535.129.03\* xorg-x11-drv-nvidia-cuda-535.129.03\* nvidia\*535.129.03\*
 sudo systemctl enable nvidia-{suspend,resume,hibernate}
-sudo systemctl enable --now akmods --force && sudo dracut --force && echo && echo \"Force akmods and Dracut on nvidia done\" && echo
+sudo systemctl enable --now akmods --force && sudo dracut --force && echo && echo "Force akmods and Dracut on nvidia done" && echo
 
 sudo dnf update --exclude="akmod-nvidia*3:545.29.06-1.fc39*" \
     --exclude="nvidia-modprobe*3:545.29.06-1.fc39*" \
@@ -49,7 +49,7 @@ sudo nvautoinstall vulkan
 sudo nvautoinstall vidacc
 sudo nvautoinstall compat
 
-sudo systemctl enable --now akmods --force && sudo dracut --force && echo && echo \"Force akmods and Dracut on nvidia done\" && echo
+sudo systemctl enable --now akmods --force && sudo dracut --force && echo && echo "Force akmods and Dracut on nvidia done" && echo
 sudo nano /etc/dnf/dnf.conf
 
 # Copy and paste into dnf.conf but REMOVE the # in front of the exclude=akmod-nvidia* ........
