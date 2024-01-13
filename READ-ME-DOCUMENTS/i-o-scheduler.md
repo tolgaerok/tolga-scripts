@@ -73,7 +73,19 @@ Choose a new I/O scheduler:
    SSD  ==>    cat /sys/block/sda/queue/scheduler
    NVME ==>    cat /sys/block/nvme01/queue/scheduler
    ```
- 
+
+10. Edit grub, sudo nano /etc/default/grub 
+  
+   ```bash
+   Find       ==>    GRUB_CMDLINE_LINUX="rhgb quiet mitigations=off"
+   Change to: ==>    GRUB_CMDLINE_LINUX="rhgb quiet elevator=none mitigations=off"
+   ```
+
+11. Update grub 
+  
+   ```bash
+   sudo grub2-mkconfig -o /boot/grub2/grub.cfg && sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+   ```
 
 This systemd service will run the specified commands during system boot.
 
