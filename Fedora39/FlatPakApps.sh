@@ -241,7 +241,7 @@ sudo flatpak override --env=gfx.webrender.all=true \
     --env=widget.dmabuf.force-enabled=true \
     org.mozilla.firefox
 
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+# export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 # Check if the directory exists before attempting to remove it
 if [ -d "/var/tmp/flatpak-cache-*" ]; then
     echo -e "\e[1;32m[✔]\e[0m Removing Old Flatpak Cruft...\n"
@@ -264,7 +264,7 @@ sudo rm -rfv /var/tmp/flatpak-cache-*
 sleep 1
 
 # systemctl status dbus
-sudo systemctl start dbus
+# sudo systemctl start dbus
 
 # Display all platpaks installed on system
 flatpak --columns=app,name,size,installation list
