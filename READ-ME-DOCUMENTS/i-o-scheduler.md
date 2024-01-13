@@ -175,7 +175,7 @@ Replace nvmeX with the appropriate identifier for your NVMe drive.
    NVME ==>    cat /sys/block/nvme01/queue/scheduler
    ```
 
-10. Edit grub, sudo nano /etc/default/grub 
+10. Edit grub, sudo nano `/etc/default/grub` and change to preference 'kyber', `none' and so forth 
   
    ```bash
    Find       ==>    GRUB_CMDLINE_LINUX="rhgb quiet mitigations=off"
