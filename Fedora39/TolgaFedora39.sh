@@ -1154,7 +1154,10 @@ install_apps() {
 	sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
 	sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
 	sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune-mod
-	sudo dnf install -y sshfs fuse-sshfs rsync openssh-server openssh-clients wsdd
+ 
+ 	# NOT SURE ABOUT THIS sudo dnf install -y sshfs fuse-sshfs 
+ 
+	sudo dnf install -y rsync openssh-server openssh-clients wsdd
 	sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel
 	sudo dnf install dnf5 dnf5-plugins
 
@@ -1271,82 +1274,120 @@ gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
 	## Add new parameteres. Read More: https://github.com/hawshemi/Linux-Optimizer/blob/main/files/sysctl.conf
 
 	cat <<EOF >>"$SYS_PATH"
+# System Reload Command
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#   Old Nixos Tweaks, to suit (28GB system)
+# Command to reload system configurations:
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-kernel.sysrq = 1                         # Enable SysRQ for rebooting the machine properly if it freezes. [Source](https://oglo.dev/tutorials/sysrq/index.html)
-vm.dirty_background_bytes = 474217728    # 128 MB + 300 MB + 400 MB = 828 MB (rounded to 474217728)
-vm.dirty_bytes = 742653184               # 384 MB + 300 MB + 400 MB = 1084 MB (rounded to 742653184)
+
+# alias tolga-sysctl-reload="sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system && sysctl -p"
+
+# About These Settings
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# These configurations aim to optimize various aspects of the Linux system, including network performance, file systems, and kernel behavior. The tweaks are inspired by configurations from RHEL,
+# Fedora, Solus, Mint, and Windows Server. Adjustments have been made based on personal experimentation and preferences.
+# Keep in mind that before applying these tweaks, it's recommended to test in a controlled environment and monitor system behavior.
+#
+# Tolga Erok
+
+# Linux System Optimization
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Network
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#-net.ipv4.conf.all.rp_filter = 0                          # Disable source route verification for all interfaces
+#-vm.unprivileged_userfaultfd = 1                          # Enable unprivileged userfaultfd
+fs.aio-max-nr = 1048576                                   # Defines the maximum number of asynchronous I/O requests that can be in progress at a given time.
+fs.file-max = 67108864                                    # Maximum number of file handles the kernel can allocate. Default: 67108864
+fs.inotify.max_user_watches = 524288                      # Sets the maximum number of file system watches, enhancing file system monitoring capabilities. Default: 8192, Tweaked: 524288
+fs.suid_dumpable=2                                        # Set SUID_DUMPABLE flag. 0 means not core dump, 1 means core dump, and 2 means core dump with setuid
+kernel.core_pattern=|/usr/lib/systemd/systemd-coredump %P %u %g %s %t %c %h
+kernel.core_uses_pid = 1                                  # Append the PID to the core filename
+kernel.nmi_watchdog = 0                                   # Disable NMI watchdog
+kernel.panic = 5                                          # Reboot after 5 seconds on kernel panic. Default: 0
+kernel.pid_max = 4194304                                  # Allows a large number of processes and threads to be managed. Default: 32768, Tweaked: 4194304
+kernel.pty.max = 24000                                    # Maximum number of pseudo-terminals (PTYs) in the system
+kernel.sched_autogroup_enabled = 0                        # Disable automatic task grouping for better server performance
+kernel.sysrq = 1                                          # Enable SysRQ for rebooting the machine properly if it freezes. [Source](https://oglo.dev/tutorials/sysrq/index.html)
+kernel.unprivileged_bpf_disabled = 1                      # Disable unprivileged BPF
+net.core.default_qdisc = fq_codel
+net.core.netdev_max_backlog = 32768                       # Maximum length of the input queue of a network device
+net.core.optmem_max = 65536                               # Maximum ancillary buffer size allowed per socket
+net.core.rmem_default = 1048576                           # Default socket receive buffer size
+net.core.rmem_max = 16777216                              # Maximum socket receive buffer size
+net.core.somaxconn = 65536                                # Maximum listen queue backlog
+net.core.wmem_default = 1048576                           # Default socket send buffer size
+net.core.wmem_max = 16777216                              # Maximum socket send buffer size
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#   Nobara Tweaks
+# IPv4 Network Configuration
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-fs.aio-max-nr = 1000000                  # Defines the maximum number of asynchronous I/O requests that can be in progress at a given time. 1048576
-fs.inotify.max_user_watches = 524288     # Sets the maximum number of file system watches, enhancing file system monitoring capabilities. Default: 8192  TWEAKED: 524288
-kernel.panic = 5                         # Reboot after 5 seconds on kernel panic Default: 0
-kernel.pid_max = 32768                   # Allows a large number of processes and threads to be managed Default: 32768 TWEAKED: 4194304
+
+net.ipv4.conf.*.promote_secondaries = 1                   # Promote secondary addresses when the primary address is removed
+net.ipv4.conf.*.rp_filter = 2                             # Enable source route verification
+net.ipv4.conf.all.secure_redirects = 0                    # Disable acceptance of secure ICMP redirected packets
+net.ipv4.conf.all.send_redirects = 0                      # Disable sending of all IPv4 ICMP redirected packets
+net.ipv4.conf.default.accept_redirects = 0                # Disable acceptance of all ICMP redirected packets (default)
+net.ipv4.conf.default.promote_secondaries = 1             # Promote secondary addresses when the primary address is removed
+net.ipv4.conf.default.rp_filter = 2                       # Enable source route verification
+net.ipv4.conf.default.secure_redirects = 0                # Disable acceptance of secure ICMP redirected packets (default)
+net.ipv4.conf.default.send_redirects = 0                  # Disable sending of all IPv4 ICMP redirected packets (default)
+net.ipv4.ip_forward = 1                                   # Enable IP forwarding
+net.ipv4.tcp_congestion_control = westwood
+net.ipv4.tcp_dsack = 1                                    # Enable Delayed SACK
+net.ipv4.tcp_ecn = 1                                      # Enable Explicit Congestion Notification (ECN)
+net.ipv4.tcp_fastopen = 3                                 # Enable TCP Fast Open with a queue of 3
+net.ipv4.tcp_fin_timeout = 25                             # Time to hold socket in FIN-WAIT-2 state (seconds)
+net.ipv4.tcp_keepalive_intvl = 30                         # Time between individual TCP keepalive probes (seconds)
+net.ipv4.tcp_keepalive_probes = 5                         # Number of TCP keepalive probes
+net.ipv4.tcp_keepalive_time = 300                         # Time before sending TCP keepalive probes (seconds)
+net.ipv4.tcp_max_orphans = 819200                         # Maximum number of TCP sockets not attached to any user file handle
+net.ipv4.tcp_max_syn_backlog = 20480                      # Maximum length of the listen queue for accepting new TCP connections
+net.ipv4.tcp_max_tw_buckets = 1440000                     # Maximum number of TIME-WAIT sockets
+net.ipv4.tcp_mem = 65536 1048576 16777216                 # TCP memory allocation limits
+net.ipv4.tcp_mtu_probing = 1                              # Enable Path MTU Discovery
+net.ipv4.tcp_notsent_lowat = 16384                        # Minimum amount of data in the send queue below which TCP will send more data
+net.ipv4.tcp_retries2 = 8                                 # Number of times TCP retransmits unacknowledged data segments for the second SYN on a connection initiation
+net.ipv4.tcp_rmem = 8192 1048576 16777216                 # TCP read memory allocation for network sockets
+net.ipv4.tcp_sack = 1                                     # Enable Selective Acknowledgment (SACK)
+net.ipv4.tcp_slow_start_after_idle = 0                    # Disable TCP slow start after idle
+net.ipv4.tcp_window_scaling = 1                           # Enable TCP window scaling
+net.ipv4.tcp_wmem = 8192 1048576 16777216                 # TCP write memory allocation for network sockets
+net.ipv4.udp_mem = 65536 1048576 16777216                 # UDP memory allocation limits
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#   SSD tweaks: Adjust settings for an SSD to optimize performance.
+# IPv6 Network Configuration
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-vm.dirty_expire_centisecs = 3000         # Set the time at which dirty data is old enough to be eligible for writeout (6000 centiseconds). Adjusted for SSD.
-vm.dirty_ratio = 80                      # Set the ratio of dirty memory at which a process is forced to write out dirty data (10%). Adjusted for SSD.
-vm.dirty_writeback_centisecs = 300       # Set the interval between two consecutive background writeback passes (500 centiseconds).
 
-fs.file-max = 67108864                        # Maximum number of file handles the kernel can allocate (Default: 67108864)
-kernel.nmi_watchdog = 0                       # Disable NMI watchdog
-kernel.pty.max = 24000                        # Maximum number of pseudo-terminals (PTYs) in the system
-kernel.sched_autogroup_enabled = 0            # Disable automatic task grouping for better server performance
-kernel.unprivileged_bpf_disabled = 1          # Disable unprivileged BPF
-net.core.default_qdisc = fq_codel              
-net.core.netdev_max_backlog = 32768            # Maximum length of the input queue of a network device
-net.core.optmem_max = 65536                    # Maximum ancillary buffer size allowed per socket
-net.core.rmem_default = 1048576                # Default socket receive buffer size
-net.core.rmem_max = 16777216                   # Maximum socket receive buffer size
-net.core.somaxconn = 65536                     # Maximum listen queue backlog
-net.core.wmem_default = 1048576                # Default socket send buffer size
-net.core.wmem_max = 16777216                   # Maximum socket send buffer size
-net.ipv4.conf.all.accept_redirects = 0        # Disable acceptance of all ICMP redirected packets
-net.ipv4.conf.all.secure_redirects = 0        # Disable acceptance of secure ICMP redirected packets
-net.ipv4.conf.all.send_redirects = 0          # Disable sending of all IPv4 ICMP redirected packets
-net.ipv4.conf.default.accept_redirects = 0    # Disable acceptance of all ICMP redirected packets (default)
-net.ipv4.conf.default.secure_redirects = 0    # Disable acceptance of secure ICMP redirected packets (default)
-net.ipv4.conf.default.send_redirects = 0      # Disable sending of all IPv4 ICMP redirected packets (default)
-net.ipv4.ip_forward = 1                       # Enable IP forwarding
-net.ipv4.tcp_congestion_control = westwood     
-net.ipv4.tcp_dsack = 1                         # Enable Delayed SACK
-net.ipv4.tcp_ecn = 1                           # Enable Explicit Congestion Notification (ECN)
-net.ipv4.tcp_fastopen = 3                      # Enable TCP Fast Open with a queue of 3
-net.ipv4.tcp_fin_timeout = 25                  # Time to hold socket in FIN-WAIT-2 state (seconds)
-net.ipv4.tcp_keepalive_intvl = 30              # Time between individual TCP keepalive probes (seconds)
-net.ipv4.tcp_keepalive_probes = 7              # Number of TCP keepalive probes
-net.ipv4.tcp_keepalive_time = 1200             # Time before sending TCP keepalive probes (seconds)
-net.ipv4.tcp_max_orphans = 819200              # Maximum number of TCP sockets not attached to any user file handle
-net.ipv4.tcp_max_syn_backlog = 20480           # Maximum length of the listen queue for accepting new TCP connections
-net.ipv4.tcp_max_tw_buckets = 1440000          # Maximum number of TIME-WAIT sockets
-net.ipv4.tcp_mem = 65536 1048576 16777216      # TCP memory allocation limits
-net.ipv4.tcp_mtu_probing = 1                   # Enable Path MTU Discovery
-net.ipv4.tcp_notsent_lowat = 16384             # Minimum amount of data in the send queue below which TCP will send more data
-net.ipv4.tcp_retries2 = 8                      # Number of times TCP retransmits unacknowledged data segments for the second SYN on a connection initiation
-net.ipv4.tcp_rmem = 8192 1048576 16777216      # TCP read memory allocation for network sockets
-net.ipv4.tcp_sack = 1                          # Enable Selective Acknowledgment (SACK)
-net.ipv4.tcp_slow_start_after_idle = 0         # Disable slow start after idle
-net.ipv4.tcp_slow_start_after_idle = 0         # Disable TCP slow start after idle
-net.ipv4.tcp_window_scaling = 1                # Enable TCP window scaling
-net.ipv4.tcp_wmem = 8192 1048576 16777216      # TCP write memory allocation for network sockets
-net.ipv4.udp_mem = 65536 1048576 16777216      # UDP memory allocation limits
-net.ipv6.conf.all.accept_redirects = 0         # Disable acceptance of all ICMP redirected packets for IPv6
-net.ipv6.conf.all.disable_ipv6 = 0             # Enable IPv6
-net.ipv6.conf.all.forwarding = 1               # Enable IPv6 packet forwarding
-net.ipv6.conf.default.accept_redirects = 0     # Disable acceptance of all ICMP redirected packets for IPv6 (default)
-net.ipv6.conf.default.disable_ipv6 = 0         # Enable IPv6
-net.unix.max_dgram_qlen = 50                   # Maximum length of the UNIX domain socket datagram queue
-vm.dirty_background_ratio = 5                  # Percentage of system memory at which background writeback starts
-vm.extfrag_threshold = 100                     # Fragmentation threshold for the kernel
-vm.min_free_kbytes = 65536                     # Minimum free kilobytes
-vm.mmap_min_addr = 65536                       # Minimum address allowed for a user-space mmap
-vm.swappiness = 10                             # Swappiness parameter (tendency to swap out unused pages)
-vm.vfs_cache_pressure = 50                     # Controls the tendency of the kernel to reclaim the memory used for caching of directory and inode objects
+net.ipv6.conf.all.accept_redirects = 0                    # Disable acceptance of all ICMP redirected packets for IPv6
+net.ipv6.conf.all.disable_ipv6 = 0                        # Enable IPv6
+net.ipv6.conf.all.forwarding = 1                          # Enable IPv6 packet forwarding
+net.ipv6.conf.default.accept_redirects = 0                # Disable acceptance of all ICMP redirected packets for IPv6 (default)
+net.ipv6.conf.default.disable_ipv6 = 0                    # Enable IPv6
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# UNIX Domain Socket
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+net.unix.max_dgram_qlen = 50                              # Maximum length of the UNIX domain socket datagram queue
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Virtual Memory Management
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+vm.dirty_background_bytes = 474217728                     # Set dirty background bytes for optimized performance (adjusted for SSD).
+vm.dirty_background_ratio = 5                             # Percentage of system memory at which background writeback starts
+vm.dirty_bytes = 742653184                                # Set dirty bytes for optimized performance (adjusted for SSD).
+vm.dirty_expire_centisecs = 3000                          # Set the time at which dirty data is old enough to be eligible for writeout (6000 centiseconds). Adjusted for SSD.
+vm.dirty_ratio = 80                                       # Set the ratio of dirty memory at which a process is forced to write out dirty data (10%). Adjusted for SSD.
+vm.dirty_writeback_centisecs = 300                        # Set the interval between two consecutive background writeback passes (500 centiseconds).
+vm.extfrag_threshold = 100                                # Fragmentation threshold for the kernel
+vm.max_map_count=2147483642                               # Define the maximum number of memory map areas a process may have
+vm.min_free_kbytes = 65536                                # Minimum free kilobytes
+vm.mmap_min_addr = 65536                                  # Minimum address allowed for a user-space mmap
+vm.page-cluster = 0                                       # Disable page clustering for filesystems
+vm.swappiness = 10                                        # Swappiness parameter (tendency to swap out unused pages)
+vm.vfs_cache_pressure = 50                                # Controls the tendency of the kernel to reclaim the memory used for caching of directory and inode objects
+fs.file-max = 67108864                                    # Maximum number of file handles the kernel can allocate (Default: 67108864)
 EOF
 
 	# To Do For NVME ssd
