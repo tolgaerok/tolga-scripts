@@ -104,7 +104,7 @@ Change to sda or nvme01:
 In Fedora, you can check the scheduler for your NVMe drive using the following command:
 
 ``bash
-cat /sys/class/nvme/nvme0/scheduler
+cat /sys/block/nvme0n1/queue/scheduler
 ``
 This assumes that your NVMe drive is represented by `/dev/nvme0n1`. If you have multiple NVMe drives, you might see nvme0n1, nvme1n1, and so on.
 
@@ -139,7 +139,7 @@ Replace nvmeX with the appropriate identifier for your NVMe drive.
 
    For nvme0n1:
    ```ini
-   ExecStart=/bin/bash -c 'echo -e "Configuring I/O Scheduler to: "; echo "kyber" | sudo tee /sys/class/nvme/nvme0n1/scheduler; printf "I/O Scheduler has been set to ==>  "; cat /sys/class/nvme/nvme0n1/scheduler; echo ""'
+   ExecStart=/bin/bash -c 'echo -e "Configuring I/O Scheduler to: "; echo "kyber" | sudo tee /sys/block/nvme0n1/queue/scheduler; printf "I/O Scheduler has been set to ==>  "; cat /sys/block/nvme0n1/queue/scheduler; echo ""'
    ```
 
 4. Save the file and exit the text editor.
