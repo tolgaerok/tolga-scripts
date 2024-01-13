@@ -49,6 +49,43 @@ NVMe drives often perform best without a specific I/O scheduler. `mq-deadline` c
 - Setting: Enable TRIM
    TRIM is important for maintaining the longevity and performance of NVMe drives.
 
+## Kyber I/O scheduler 
+Is designed to be suitable for various storage devices, including SSDs, HDDs, and NVMe drives. Its design focuses on adaptability to different workloads and aims for low-latency and high-throughput performance. 
+
+Kyber's suitability for different types of storage devices:
+
+### Kyber for SSDs:
+Pros:
+
+- Adaptable to varying workloads.
+- Designed for low-latency, beneficial for SSDs.
+- Queue-based design for improved responsiveness.
+
+Cons:
+
+- The effectiveness may vary based on specific workload characteristics.
+
+### Kyber for HDDs:
+Pros:
+
+- Adaptable to varying workloads.
+- Queue-based design for improved responsiveness.
+
+Cons:
+
+- The effectiveness may vary based on specific workload characteristics.
+
+### Kyber for NVMe Drives:
+Pros:
+
+- Adaptable to varying workloads.
+- Designed for low-latency, suitable for NVMe drives.
+- Queue-based design for improved responsiveness.
+
+Cons:
+
+- The effectiveness may vary based on specific workload characteristics.
+
 # Steps
 
 1. Open a terminal and create a new systemd service file:
