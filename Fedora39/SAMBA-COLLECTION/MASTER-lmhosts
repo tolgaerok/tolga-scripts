@@ -1,28 +1,14 @@
-# LMHOSTS file for Fedora 39 KDE
-
-# sudo systemctl start smb.service nmb.service
-# sudo systemctl restart smb.service nmb.service
-
 # Additional entries
-127.0.0.1   LOCALHOST    # localhost
-127.0.0.1   FEDORA39     # Main Rig
+127.0.0.1   localhost
+127.0.0.1   fedora39-G1-800
 
 # Custom entries
-192.168.0.2     DIGA                # DIGA              d4:7b:b0:91:35:ff
-192.168.0.6     IPHONE              # iPhone            a4:5e:60:7a:08:bd
-192.168.0.8     LMDESERVER          # lmdeServer        54:04:a6:71:91:36
-192.168.0.9     UNKNOWN             # Unknown           4c:66:41:46:84:80
-192.168.0.10    TUNCAY-W11-ENT      # TUNCAY-W11-ENT    00:1e:2a:3e:12:04
-192.168.0.11    LMDESERVER          # lmdeServer        74:2f:68:71:9c:89
-192.168.0.13    FEDORA39            # fedora39          f0:b6:1e:93:68:6d
-192.168.0.14    MIN21THIN           # min21THIN         ac:b5:7d:39:9b:4f
-192.168.0.15    KINGTOLGA           # KingTolga         a8:db:03:ba:04:e8
-192.168.0.20    W11-SERVER          # W11-SERVER        08:60:6e:ca:69:41
-
-# The following lines are desirable for IPv6 capable hosts
-::1     localhost ip6-localhost ip6-loopback
-fe00::0     ip6-localnet
-ff00::0     ip6-mcastprefix
-ff02::1     ip6-allnodes
-ff02::2     ip6-allrouters
-ff02::3     ip6-allhosts
+192.168.0.2  DIGA
+192.168.0.6  iPhone
+192.168.0.8  LMDE6CASAOS
+192.168.0.9  UNKNOWN
+192.168.0.10 TUNCAY-W11-ENT
+192.168.0.11 lmdeServer
+192.168.0.13 fedora39-G1-800
+192.168.0.15 KingTolga
+192.168.0.20 W11-SERVER
