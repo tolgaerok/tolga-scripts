@@ -811,45 +811,48 @@ Continuing..." -t 1 -n 1 -s
 		display_message "[${RED}✘${NC}] Error: Unable to install Apps."
 		gum spin --spinner dot --title "Standby.." -- sleep 2
 	fi
+
+	# Template
+	# display_message "[${GREEN}✔${NC}]
+	# display_message "[${RED}✘${NC}]
+
+	# Reload the firewall for changes to take effect
+	sudo firewall-cmd --reload
+	gum spin --spinner dot --title "Reloading firewall" -- sleep 1.5
+
+	display_message "[${GREEN}✔${NC}] Firewall rules applied successfully, reloading system services."
+	gum spin --spinner dot --title "Reloading all services" -- sleep 1.5
+
+	# Start Samba manually
+	sudo systemctl start smb
+
+	# Configure Samba to start automatically on each boot and immediately start the service
+	sudo systemctl enable --now smb
+
+	# Check whether Samba is running
+	sudo systemctl status smb
+
+	# Restart Samba manually
+	sudo systemctl restart smb
+
+	# Start wsdd manually (depends on the smb service)
+	sudo systemctl start wsdd
+
+	# Configure wsdd to start automatically on each boot and immediately start the service
+	sudo systemctl enable --now wsdd
+
+	# Check whether wsdd is running
+	sudo systemctl status wsdd
+
+	# Restart wsdd and Samba
+	sudo systemctl restart wsdd smb
+
+	# Apply sysctl changes
+	sudo udevadm control --reload-rules
+	sudo udevadm trigger
+	sudo sysctl --system
+	sudo sysctl -p
+
 }
 
-# Template
-# display_message "[${GREEN}✔${NC}]
-# display_message "[${RED}✘${NC}]
-
-# Reload the firewall for changes to take effect
-sudo firewall-cmd --reload
-gum spin --spinner dot --title "Reloading firewall" -- sleep 1.5
-
-display_message "[${GREEN}✔${NC}] Firewall rules applied successfully, reloading system services."
-gum spin --spinner dot --title "Reloading all services" -- sleep 1.5
-
-# Start Samba manually
-sudo systemctl start smb
-
-# Configure Samba to start automatically on each boot and immediately start the service
-sudo systemctl enable --now smb
-
-# Check whether Samba is running
-sudo systemctl status smb
-
-# Restart Samba manually
-sudo systemctl restart smb
-
-# Start wsdd manually (depends on the smb service)
-sudo systemctl start wsdd
-
-# Configure wsdd to start automatically on each boot and immediately start the service
-sudo systemctl enable --now wsdd
-
-# Check whether wsdd is running
-sudo systemctl status wsdd
-
-# Restart wsdd and Samba
-sudo systemctl restart wsdd smb
-
-# Apply sysctl changes
-sudo udevadm control --reload-rules
-sudo udevadm trigger
-sudo sysctl --system
-sudo sysctl -p
+install_apps
