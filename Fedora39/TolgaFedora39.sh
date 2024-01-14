@@ -1179,6 +1179,29 @@ install_apps() {
 		sudo dnf install "$package" -y
 	done
 
+	packages=(
+		cjson-1.7.15-2.fc39.x86_64
+		codec2-1.2.0-2.fc39.x86_64
+		dbus-glib-0.112-6.fc39.x86_64
+		gtk2-immodule-xim-2.24.33-15.fc39.x86_64
+		gtk3-immodule-xim-3.24.39-1.fc39.x86_64
+		ibus-gtk4-1.5.29~rc2-6.fc39.x86_64
+		libXext-1.3.5-3.fc39.i686
+		libfreeaptx-0.1.1-5.fc39.x86_64
+		libgcab1-1.6-2.fc39.x86_64
+		librabbitmq-0.13.0-3.fc39.x86_64
+		librist-0.2.7-2.fc39.x86_64
+		libvdpau-1.5-4.fc39.i686
+		llvm16-libs-16.0.6-5.fc39.x86_64
+		lpcnetfreedv-0.5-3.fc39.x86_64
+		mbedtls-2.28.5-1.fc39.x86_64
+		ostree-2023.8-2.fc39.x86_64
+		pipewire-codec-aptx-1.0.0-1.fc39.x86_64
+		xorg-x11-fonts-ISO8859-1-100dpi-7.5-36.fc39.noarch
+	)
+
+	sudo dnf install "${packages[@]}"
+
 	# Essential Packages
 	if [ -f /usr/bin/nala ]; then
 		sudo nala install --assume-yes \
