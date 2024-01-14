@@ -345,3 +345,34 @@ sudo udevadm control --reload-rules
 sudo udevadm trigger
 sudo sysctl --system
 sudo sysctl -p
+
+sleep 1.5
+
+display_message "[${GREEN}✔${NC}] Seek NETWORKED netbios names"
+gum spin --spinner dot --title "Stand-by ..." -- sleep 1.5
+
+workgroup="WORKGROUP"
+
+BRIGHT_BLUE='\033[1;34m'
+BRIGHT_GREEN='\033[1;32m'
+BRIGHT_YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+echo -e "${BRIGHT_BLUE}Querying NetBIOS names for:${NC} ${BRIGHT_GREEN}$workgroup${NC}"
+
+# Perform NetBIOS name lookup for the specified workgroup and variations of case's
+for name in "$workgroup" "samba" "Samba" "SAMBA" "WORKGROUP" "workgroup"; do
+    echo -e "${BRIGHT_YELLOW}NetBIOS Name:${NC} ${BRIGHT_GREEN}$name${NC}"
+    nmblookup -S "$name"
+    echo "----------------------------------------"
+done
+
+echo -e "${BRIGHT_BLUE}Script completed.${NC}"
+echo ""
+
+sleep 2
+
+display_message "[${GREEN}✔${NC}] Seek which pc's are acting as SERVERS"
+gum spin --spinner dot --title "Stand-by ..." -- sleep 1.5
+
+nmblookup -S '*'

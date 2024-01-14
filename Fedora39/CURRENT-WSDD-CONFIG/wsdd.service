@@ -1,0 +1,30 @@
+# sudo nano /usr/lib/systemd/system/wsdd.service
+
+[Unit]
+Description=Web Services Dynamic Discovery host daemon
+Documentation=man:wsdd(8)
+; Start after the network has been configured
+After=network-online.target
+Wants=network-online.target
+; It makes sense to have Samba running when wsdd starts, but is not required.
+; Thus, the next to lines are disabled and use BindsTo only.
+; One may also add any of these services to After for stronger binding.
+BindsTo=smb.service
+;BindsTo=samba.service
+
+[Service]
+Type=simple  
+EnvironmentFile=/etc/sysconfig/wsdd
+# Environment=PYTHONWARNINGS="ignore:DeprecationWarning"
+; The service is put into an empty runtime directory chroot,
+; i.e. the runtime directory which usually resides under /run
+ExecStart=/usr/bin/wsdd --shortlog --chroot=/run/wsdd $WSDD_PARAMS
+# ExecStart=/usr/sbin/wsdd --shortlog --chroot=/run/wsdd --interface=wlp3s0
+DynamicUser=yes
+User=wsdd
+Group=wsdd
+RuntimeDirectory=wsdd
+AmbientCapabilities=CAP_SYS_CHROOT
+
+[Install]
+WantedBy=multi-user.target
