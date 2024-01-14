@@ -77,7 +77,7 @@ check_error() {
 # display_message "[${GREEN}✔${NC}]
 # display_message "[${RED}✘${NC}]
 
-install_apps() {
+install_network_tweaks() {
 	display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
 
 	sudo dnf -y up
@@ -369,7 +369,7 @@ EOF
 
 # Main loop for the menu
 while true; do
-	install_apps
+	install_network_tweaks
 done
 
-install_apps
+install_network_tweaks
