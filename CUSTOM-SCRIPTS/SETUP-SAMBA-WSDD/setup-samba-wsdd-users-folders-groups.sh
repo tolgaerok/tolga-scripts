@@ -324,24 +324,24 @@ gum spin --spinner dot --title "Reloading firewall" -- sleep 1.5
 display_message "[${GREEN}✔${NC}] Firewall rules applied successfully, reloading system services."
 gum spin --spinner dot --title "Reloading all services" -- sleep 1.5
 
-	# Start Samba manually
-	sudo systemctl start smb nmb wsdd
+# Start Samba manually
+sudo systemctl start smb nmb wsdd
 
-	# Configure Samba to start automatically on each boot and immediately start the service
-	sudo systemctl enable --now smb nmb wsdd
+# Configure Samba to start automatically on each boot and immediately start the service
+sudo systemctl enable --now smb nmb wsdd
 
-	# Check whether Samba is running
-	sudo systemctl --no-pager status smb nmb wsdd
+# Check whether Samba is running
+sudo systemctl --no-pager status smb nmb wsdd
 
-	# Restart wsdd and Samba
-	sudo systemctl restart wsdd smb nmb
+# Restart wsdd and Samba
+sudo systemctl restart wsdd smb nmb
 
-	# Enable and start the services
-	sudo systemctl enable smb.service nmb.service wsdd.service
-	sudo systemctl start smb.service nmb.service wsdd.service
+# Enable and start the services
+sudo systemctl enable smb.service nmb.service wsdd.service
+sudo systemctl start smb.service nmb.service wsdd.service
 
-	# Apply sysctl changes
-	sudo udevadm control --reload-rules
-	sudo udevadm trigger
-	sudo sysctl --system
-	sudo sysctl -p
+# Apply sysctl changes
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+sudo sysctl --system
+sudo sysctl -p

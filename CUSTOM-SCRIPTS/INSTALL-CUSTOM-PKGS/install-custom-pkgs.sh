@@ -846,7 +846,7 @@ Continuing..." -t 1 -n 1 -s
 	sudo sysctl -p
 
 	check_error
-	
+
 }
 
 install_apps
