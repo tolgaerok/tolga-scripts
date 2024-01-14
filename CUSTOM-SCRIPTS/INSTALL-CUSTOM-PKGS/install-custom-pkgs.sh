@@ -824,28 +824,20 @@ Continuing..." -t 1 -n 1 -s
 	gum spin --spinner dot --title "Reloading all services" -- sleep 1.5
 
 	# Start Samba manually
-	sudo systemctl start smb
+	sudo systemctl start smb nmb wsdd
 
 	# Configure Samba to start automatically on each boot and immediately start the service
-	sudo systemctl enable --now smb
+	sudo systemctl enable --now smb nmb wsdd
 
 	# Check whether Samba is running
-	sudo systemctl status smb
-
-	# Restart Samba manually
-	sudo systemctl restart smb
-
-	# Start wsdd manually (depends on the smb service)
-	sudo systemctl start wsdd
-
-	# Configure wsdd to start automatically on each boot and immediately start the service
-	sudo systemctl enable --now wsdd
-
-	# Check whether wsdd is running
-	sudo systemctl status wsdd
+	sudo systemctl --no-pager status smb nmb wsdd
 
 	# Restart wsdd and Samba
-	sudo systemctl restart wsdd smb
+	sudo systemctl restart wsdd smb nmb
+
+	# Enable and start the services
+	sudo systemctl enable smb.service nmb.service wsdd.service
+	sudo systemctl start smb.service nmb.service wsdd.service
 
 	# Apply sysctl changes
 	sudo udevadm control --reload-rules
