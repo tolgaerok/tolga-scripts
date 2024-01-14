@@ -130,7 +130,7 @@ install_apps() {
 	display_message "[${GREEN}✔${NC}]  Tweaking network settings"
 
 	SYS_PATH="/etc/sysctl.conf"
-	
+
 	cp $SYS_PATH /etc/sysctl.conf.bak
 
 	echo
@@ -337,7 +337,7 @@ EOF
 	sudo systemctl start sshd
 	sudo systemctl enable sshd
 	display_message "[${GREEN}✔${NC}]  Checking SSh port"
-	gum spin --spinner dot --title "Stand-by..." -- sleep 2	
+	gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
 	# Use the KDE Wallet to store ssh key passphrases
 	# https://wiki.archlinux.org/title/KDE_Wallet#Using_the_KDE_Wallet_to_store_ssh_key_passphrases
@@ -353,13 +353,23 @@ SSH_ASKPASS='/usr/bin/ksshaskpass'
 GIT_ASKPASS=ksshaskpass
 SSH_ASKPASS=ksshaskpass
 SSH_ASKPASS_REQUIRE=prefer
-EOF	
+EOF
 
-display_message "[${GREEN}✔${NC}] Networking rules applied successfully, reloading system services."
-gum spin --spinner dot --title "Reloading all services" -- sleep 1.5
+	display_message "[${GREEN}✔${NC}] Networking rules applied successfully, reloading system services."
+	gum spin --spinner dot --title "Reloading all services" -- sleep 1.5
 
-# Apply sysctl changes
-sudo udevadm control --reload-rules
-sudo udevadm trigger
-sudo sysctl --system
-sudo sysctl -p
+	# Apply sysctl changes
+	sudo udevadm control --reload-rules
+	sudo udevadm trigger
+	sudo sysctl --system
+	sudo sysctl -p
+
+	check_error
+}
+
+# Main loop for the menu
+while true; do
+	install_apps
+done
+
+install_apps
