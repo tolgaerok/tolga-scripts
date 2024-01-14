@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Tolga Erok
-# My personal Fedora 39 KDE tweaker
+# My personal Fedora 39 KDE networking tweaker
 # 18/11/2023
 
 # Run from remote location:
@@ -24,8 +24,8 @@ clear
 
 # Check if the script is run as root
 if [ "$EUID" -ne 0 ]; then
-    echo "Please run this script as root or using sudo."
-    exit 1
+	echo "Please run this script as root or using sudo."
+	exit 1
 fi
 
 [ ${UID} -eq 0 ] && read -p "Username for this script: " user && export user || export user="$USER"
@@ -54,45 +54,36 @@ clear
 
 # Function to display messages
 display_message() {
-    clear
-    echo -e "\n                  Tolga's SAMBA & WSDD setup script\n"
-    echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
-    echo -e "|${YELLOW}==>${NC}  $1"
-    echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
-    echo ""
-    gum spin --spinner dot --title "Stand-by..." -- sleep 1
+	clear
+	echo -e "\n                  Tolga's Networking tweaks\n"
+	echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
+	echo -e "|${YELLOW}==>${NC}  $1"
+	echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
+	echo ""
+	gum spin --spinner dot --title "Stand-by..." -- sleep 1
 }
 
 # Function to check and display errors
 check_error() {
-    if [ $? -ne 0 ]; then
-        display_message "[${RED}✘${NC}] Error occurred !!"
-        # Print the error details
-        echo "Error details: $1"
-        gum spin --spinner dot --title "Stand-by..." -- sleep 8
-    fi
+	if [ $? -ne 0 ]; then
+		display_message "[${RED}✘${NC}] Error occurred !!"
+		# Print the error details
+		echo "Error details: $1"
+		gum spin --spinner dot --title "Stand-by..." -- sleep 8
+	fi
 }
 
 # Template
 # display_message "[${GREEN}✔${NC}]
 # display_message "[${RED}✘${NC}]
 
-
-
 install_apps() {
 	display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
 
-remove_libreoffice
-
 	sudo dnf -y up
-	
+
 	sudo dnf -y autoremove
 	sudo dnf -y clean all
-
-	# Install Apps
-	sudo dnf install rpmfusion-free-release-tainted
-	sudo dnf install rpmfusion-nonfree-release-tainted
-	sudo dnf --repo=rpmfusion-nonfree-tainted install "*-firmware"
 
 	# Essential Packages
 	if [ -f /usr/bin/nala ]; then
@@ -109,33 +100,16 @@ remove_libreoffice
 	fi
 
 	sudo dnf install -y PackageKit dconf-editor git libffi-devel lsd openssl-devel pip python3 python3-pip rygel sshpass fortune-mod
- sudo dnf install -y rsync openssh-server openssh-clients wsdd wget xclip zstd fd-find fzf gtk3 
- 	# NOT SURE ABOUT THIS sudo dnf install -y sshfs fuse-sshfs 
- 
-	
-	
-
-	# Configure fortune
-	# If you want to display a specific fortune file or category, you can use the -e option followed by the file or category name. For example:
-	# fortune -e art ascii-art bofh-excuses computers cookie definitions disclaimer drugs education fortunes humorists kernelnewbies knghtbrd law linux literature miscellaneous news people riddles science
-	# or to see a list:
-	# fortune -f
+	sudo dnf install -y rsync openssh-server openssh-clients wsdd wget xclip zstd fd-find fzf gtk3
+	# NOT SURE ABOUT THIS sudo dnf install -y sshfs fuse-sshfs
 
 	sudo dnf install --assumeyes --best --allowerasing \
 		flatpak neofetch nano htop zip un{zip,rar} tar ffmpeg ffmpegthumbnailer tumbler sassc \
 		google-noto-{cjk,emoji-color}-fonts gtk-murrine-engine gtk2-engines ntfs-3g wget curl git openssh \
 		libva-intel-driver intel-media-driver mozilla-ublock-origin easyeffects pulseeffects
 
-	sudo dnf install -y 'google-roboto*' 'mozilla-fira*' fira-code-fonts
-
 	# Execute rygel to start DLNA sharing
 	/usr/bin/rygel-preferences
-
-	# Install profile-sync: it to manage browser profile(s) in tmpfs and to periodically sync back to the physical disc (HDD/SSD)
-	sudo dnf install profile-sync-daemon
-	/usr/bin/profile-sync-daemon preview
-	# sudo dnf remove profile-sync-daemon
-	# psd profile located in $HOME/.config/psd/psd.conf
 
 	## Networking packages
 	sudo dnf -y install iptables iptables-services nftables
@@ -151,21 +125,6 @@ remove_libreoffice
 
 	## Miscellaneous
 	sudo dnf -y install dialog htop net-tools
-
-	sudo dnf swap -y libavcodec-free libavcodec-freeworld --allowerasing
-	sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing
-
-	display_message "[${GREEN}✔${NC}]  Installing GUM"
-
-	echo '[charm]
-name=Charm
-baseurl=https://repo.charm.sh/yum/
-enabled=1
-gpgcheck=1
-gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
-	sudo yum install gum -y
-
-	gum spin --spinner dot --title "GUM installed" -- sleep 2
 
 	## Make a backup of the original sysctl.conf file
 	display_message "[${GREEN}✔${NC}]  Tweaking network settings"
@@ -362,13 +321,8 @@ EOF
 
 	display_message "[${GREEN}✔${NC}]  Adding New network settings"
 
-	# Apply sysctl changes
-    sudo udevadm control --reload-rules
-    sudo udevadm trigger
-    sudo sysctl --system
-	sudo sysctl -p
-	
 	sudo systemctl restart systemd-sysctl
+
 	echo ""
 	gum spin --spinner dot --title "Restarting systemd custom settings.." -- sleep 4
 
@@ -381,95 +335,7 @@ EOF
 	sudo systemctl start sshd
 	sudo systemctl enable sshd
 	display_message "[${GREEN}✔${NC}]  Checking SSh port"
-	gum spin --spinner dot --title "Stand-by..." -- sleep 2
-	check_port22
-	# sudo systemctl status sshd
-
-	display_message "[${GREEN}✔${NC}]  Setup Web Service Discovery host daemon"
-
-	echo ""
-	echo "wsdd implements a Web Service Discovery host daemon. This enables (Samba) hosts, like your local NAS device, to be found by Web Service Discovery Clients like Windows."
-	echo "It also implements the client side of the discovery protocol which allows to search for Windows machines and other devices implementing WSD. This mode of operation is called discovery mode."
-	echo""
-
-	gum spin --spinner dot --title " Standby, traffic for the following ports, directions and addresses must be allowed" -- sleep 2
-
-	sudo firewall-cmd --add-rich-rule='rule family="ipv4" source address="239.255.255.250" port protocol="udp" port="3702" accept'
-	sudo firewall-cmd --add-rich-rule='rule family="ipv6" source address="ff02::c" port protocol="udp" port="3702" accept'
-	sudo firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="udp" port="3702" accept'
-	sudo firewall-cmd --add-rich-rule='rule family="ipv6" port protocol="udp" port="3702" accept'
-	sudo firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="tcp" port="5357" accept'
-	sudo firewall-cmd --add-rich-rule='rule family="ipv6" port protocol="tcp" port="5357" accept'
-
-	# Define the path to the wsdd service file
-	SERVICE_FILE="/usr/lib/systemd/system/wsdd.service"
-
-	# Define the path to the old sysconfig file
-	OLD_SYSCONFIG_FILE="/etc/default/wsdd"
-
-	# Define the path to the new sysconfig file
-	NEW_SYSCONFIG_FILE="/etc/sysconfig/wsdd"
-
-	# Check if EnvironmentFile line with old path exists in the service file
-	if grep -q "EnvironmentFile=$OLD_SYSCONFIG_FILE" "$SERVICE_FILE"; then
-		# Comment out the old EnvironmentFile line
-		sudo sed -i "s|EnvironmentFile=$OLD_SYSCONFIG_FILE|#&|" "$SERVICE_FILE"
-
-		# Add the new EnvironmentFile line directly under the commented old line
-		sudo sed -i "\|#EnvironmentFile=$OLD_SYSCONFIG_FILE|a EnvironmentFile=$NEW_SYSCONFIG_FILE" "$SERVICE_FILE"
-		gum spin --spinner dot --title " Standby, editind WSDD config" -- sleep 2
-
-		# Reload systemd to apply changes
-		sudo systemctl daemon-reload
-
-		# Restart the wsdd service
-
-		gum spin --spinner dot --title " Standby, restarting , reloading and getting wsdd status" -- sleep 2
-		sudo systemctl enable wsdd.service
-		sudo systemctl restart wsdd.service
-		display_message "[${GREEN}✔${NC}]  WSDD setup complete"
-		# systemctl status wsdd.service
-
-		sleep 1
-
-		echo "EnvironmentFile updated to $NEW_SYSCONFIG_FILE and service restarted."
-		sleep 2
-	else
-		# Check if EnvironmentFile line with new path exists
-		if grep -q "EnvironmentFile=$NEW_SYSCONFIG_FILE" "$SERVICE_FILE"; then
-			echo "No changes needed. EnvironmentFile is already updated."
-		else
-			# Add the new EnvironmentFile line at the end of the [Service] section
-			echo -e "\nEnvironmentFile=$NEW_SYSCONFIG_FILE" | sudo tee -a "$SERVICE_FILE" >/dev/null
-			gum spin --spinner dot --title " Standby, editind WSDD config" -- sleep 2
-
-			# Reload systemd to apply changes
-			sudo systemctl daemon-reload
-
-			# Restart the wsdd service
-			gum spin --spinner dot --title " Standby, restarting , reloading and getting wsdd status" -- sleep 2
-			sudo systemctl enable wsdd.service
-			sudo systemctl restart wsdd.service
-			display_message "[${GREEN}✔${NC}]  WSDD setup complete"
-			# systemctl status wsdd.service
-
-			sleep 1
-
-			echo "EnvironmentFile added with path $NEW_SYSCONFIG_FILE and service restarted."
-			sleep 2
-		fi
-	fi
-
-	gum spin --spinner dot --title "Standby.." -- sleep 1
-
-	display_message "[${GREEN}✔${NC}]  Setup KDE Wallet"
-	gum spin --spinner dot --title "Standby.." -- sleep 1
-	# Install Plasma related packages
-	sudo dnf install -y \
-		ksshaskpass
-
-	mkdir -p ${HOME}/.config/autostart/
-	mkdir -p ${HOME}/.config/environment.d/
+	gum spin --spinner dot --title "Stand-by..." -- sleep 2	
 
 	# Use the KDE Wallet to store ssh key passphrases
 	# https://wiki.archlinux.org/title/KDE_Wallet#Using_the_KDE_Wallet_to_store_ssh_key_passphrases
@@ -485,319 +351,10 @@ SSH_ASKPASS='/usr/bin/ksshaskpass'
 GIT_ASKPASS=ksshaskpass
 SSH_ASKPASS=ksshaskpass
 SSH_ASKPASS_REQUIRE=prefer
-EOF
+EOF	
 
-	display_message "[${GREEN}✔${NC}]  Install vitualization group and set permissions"
-	gum spin --spinner dot --title "Standby.." -- sleep 1
-	# Install virtualization group
-	sudo dnf install -y @virtualization
-
-	# Enable libvirtd service
-	sudo systemctl enable libvirtd
-
-	# Add user to libvirt group
-	sudo usermod -a -G libvirt ${USER}
-
-	# Start earlyloom services
-	display_message "[${GREEN}✔${NC}]  Starting earlyloom services"
-	sudo systemctl start earlyoom
-	sudo systemctl enable --now earlyoom
-	echo ""
-	gum spin --spinner dot --title "Restarting Earlyloom.." -- sleep 2.5
-	display_message "[${GREEN}✔${NC}]  Checking earlyloom status service"
-
-	# Check EarlyOOM status
-	earlyoom_status=$(systemctl status earlyoom | cat)
-
-	# Check if EarlyOOM is active and enabled
-	if is_service_active earlyoom; then
-		active_status="Active"
-	else
-		active_status="Inactive"
-	fi
-
-	if is_service_enabled earlyoom; then
-		enabled_status=$(print_yellow "Enabled")
-	else
-		enabled_status="Disabled"
-	fi
-
-	# Get memory information
-	mem_total=$(grep MemTotal /proc/meminfo | awk '{print $2}')
-	swap_total=$(grep SwapTotal /proc/meminfo | awk '{print $2}')
-
-	# Display information
-	echo -e "EarlyOOM Status: $active_status"
-	echo -e "Service Enablement: $enabled_status"
-	echo -e "Total Memory: $mem_total KB"
-	echo -e "Total Swap: $swap_total KB\n\n"
-	gum spin --spinner dot --title "Standby.." -- sleep 1
-	sudo journalctl -u earlyoom | grep sending
-	gum spin --spinner dot --title "Standby.." -- sleep 3
-
-	# Install fedora preload
-	display_message "[${GREEN}✔${NC}]  Install fedora preload"
-	sudo dnf copr enable atim/preload -y && sudo dnf install preload -y
-	display_message "[${GREEN}✔${NC}]  Enable fedora preload service"
-	sudo systemctl enable --now preload.service
-	gum spin --spinner dot --title "Standby.." -- sleep 1.5
-
-	# Install some fonts
-	display_message "[${GREEN}✔${NC}]  Installing some fonts"
-	sudo dnf install -y fontawesome-fonts powerline-fonts
-	sudo mkdir -p ~/.local/share/fonts
-	cd ~/.local/share/fonts && curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/DroidSansMono/DroidSansMNerdFont-Regular.otf
-	wget https://github.com/tolgaerok/fonts-tolga/raw/main/WPS-FONTS.zip
-	unzip WPS-FONTS.zip -d /usr/share/fonts
-
-	zip_file="Apple-Fonts-San-Francisco-New-York-master.zip"
-
-	# Check if the ZIP file exists
-	if [ -f "$zip_file" ]; then
-		# Remove existing ZIP file
-		sudo rm -f "$zip_file"
-		echo "Existing ZIP file removed."
-	fi
-
-	# Download the ZIP file
-	curl -LJO https://github.com/tolgaerok/Apple-Fonts-San-Francisco-New-York/archive/refs/heads/master.zip
-
-	# Check if the download was successful
-	if [ -f "$zip_file" ]; then
-		# Unzip the contents to the system-wide fonts directory
-		sudo unzip -o "$zip_file" -d /usr/share/fonts/
-
-		# Update font cache
-		sudo fc-cache -f -v
-
-		# Remove the ZIP file
-		rm "$zip_file"
-
-		display_message "[${GREEN}✔${NC}] Apple fonts installed successfully."
-		echo ""
-		gum spin --spinner dot --title "Re-thinking... 1 sec" -- sleep 2
-	else
-		display_message "[${RED}✘${NC}] Download failed. Please check the URL and try again."
-		gum spin --spinner dot --title "Stand-by..." -- sleep 2
-	fi
-
-	# Reloading Font
-	sudo fc-cache -vf
-
-	# Removing zip Files
-	rm ./WPS-FONTS.zip
-	sudo fc-cache -f -v
-
-	sudo dnf install fontconfig-font-replacements -y --skip-broken && sudo dnf install fontconfig-enhanced-defaults -y --skip-broken
-
-	sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/San-Francisco-family/San-Francisco-family.sh)"
-
-	# Install OpenRGB.
-	display_message "[${GREEN}✔${NC}]  Installing OpenRGB"
-	sudo modprobe i2c-dev && sudo modprobe i2c-piix4 && sudo dnf install openrgb -y
-
-	# Install Docker
-	display_message "[${GREEN}✔${NC}]  Installing Docker..this takes awhile"
-	echo ""
-	gum spin --spinner dot --title "If this is the first time installing docker, it usually takes VERY long" -- sleep 2
-	sudo dnf install docker -y
-
-	# Install Btrfs
-	display_message "[${GREEN}✔${NC}]  Installing btrfs assistant.."
-	package_url="https://kojipkgs.fedoraproject.org//packages/btrfs-assistant/1.8/2.fc39/x86_64/btrfs-assistant-1.8-2.fc39.x86_64.rpm"
-	package_name=$(echo "$package_url" | awk -F'/' '{print $NF}')
-
-	# Check if the package is installed
-	if rpm -q "$package_name" >/dev/null; then
-		display_message "[${RED}✘${NC}] $package_name is already installed."
-		gum spin --spinner dot --title "Standby.." -- sleep 1
-	else
-		# Package is not installed, so proceed with the installation
-		display_message "[${GREEN}✔${NC}]  $package_name is not installed. Installing..."
-		sudo dnf install -y "$package_url"
-		if [ $? -eq 0 ]; then
-			display_message "[${GREEN}✔${NC}]  $package_name has been successfully installed."
-			gum spin --spinner dot --title "Standby.." -- sleep 1
-		else
-			display_message "[${RED}✘${NC}] Failed to install $package_name."
-			gum spin --spinner dot --title "Standby.." -- sleep 1
-		fi
-	fi
-
-	# Install google
-	display_message "[${GREEN}✔${NC}]  Installing Google chrome"
-	if command -v google-chrome &>/dev/null; then
-		display_message "[${RED}✘${NC}] Google Chrome is already installed. Skipping installation."
-		gum spin --spinner dot --title "Standby.." -- sleep 1
-	else
-		# Install Google Chrome
-		display_message "[${GREEN}✔${NC}]  Installing Google Chrome browser..."
-		wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-		sudo dnf install -y ./google-chrome-stable_current_x86_64.rpm
-		rm -f google-chrome-stable_current_x86_64.rpm
-	fi
-
-	# Download and install TeamViewer
-	display_message "[${GREEN}✔${NC}]  Downloading && install TeamViewer"
-	teamviewer_url="https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm?utm_source=google&utm_medium=cpc&utm_campaign=au%7Cb%7Cpr%7C22%7Cjun%7Ctv-core-download-sn%7Cfree%7Ct0%7C0&utm_content=Download&utm_term=teamviewer+download"
-	teamviewer_location="/tmp/teamviewer.x86_64.rpm"
-	download_and_install "$teamviewer_url" "$teamviewer_location" "teamviewer"
-
-	# Download and install Visual Studio Code
-	display_message "[${GREEN}✔${NC}]  Downloading && install Vscode"
-	vscode_url="https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm-x64"
-	vscode_location="/tmp/vscode.rpm"
-	download_and_install "$vscode_url" "$vscode_location" "code"
-
-	# Install extra package
-	display_message "[${GREEN}✔${NC}]  Installing Extra RPM packages"
-	sudo dnf groupupdate -y sound-and-video
-	sudo dnf group upgrade -y --with-optional Multimedia
-	sudo dnf groupupdate -y sound-and-video --allowerasing --skip-broken
-	sudo dnf groupupdate multimedia sound-and-video
-
-	# Cleanup
-	display_message "[${GREEN}✔${NC}]  Cleaning up downloaded /tmp folder"
-	rm "$download_location"
-
-	display_message "[${GREEN}✔${NC}]  Installing SAMBA and dependencies"
-
-	# Install Samba and its dependencies
-	sudo dnf install samba samba-client samba-common cifs-utils samba-usershares -y
-
-	# Enable and start SMB and NMB services
-	display_message "[${GREEN}✔${NC}]  SMB && NMB services started"
-	sudo systemctl enable smb.service nmb.service
-	sudo systemctl start smb.service nmb.service
-
-	# Restart SMB and NMB services (optional)
-	sudo systemctl restart smb.service nmb.service
-
-	# Configure the firewall
-	display_message "[${GREEN}✔${NC}]  Firewall Configured"
-	sudo firewall-cmd --add-service=samba --permanent
-	sudo firewall-cmd --add-service=samba
-	sudo firewall-cmd --runtime-to-permanent
-	sudo firewall-cmd --reload
-
-	# Set SELinux booleans
-	display_message "[${GREEN}✔${NC}]  SELINUX parameters set "
-	sudo setsebool -P samba_enable_home_dirs on
-	sudo setsebool -P samba_export_all_rw on
-	sudo setsebool -P smbd_anon_write 1
-
-	# Create samba user/group
-	display_message "[${GREEN}✔${NC}]  Create smb user and group"
-	read -r -p "Set-up samba user & group's
-" -t 2 -n 1 -s
-
-	# Prompt for the desired username for samba
-	read -p $'\n'"Enter the USERNAME to add to Samba: " sambausername
-
-	# Prompt for the desired name for samba
-	read -p $'\n'"Enter the GROUP name to add username to Samba: " sambagroup
-
-	# Add the custom group
-	sudo groupadd $sambagroup
-
-	# ensures that a home directory is created for the user
-	sudo useradd -m $sambausername
-
-	# Add the user to the Samba user database
-	sudo smbpasswd -a $sambausername
-
-	# enable or activate the Samba user account for login
-	sudo smbpasswd -e $sambausername
-
-	# Add the user to the specified group
-	sudo usermod -aG $sambagroup $sambausername
-
-	read -r -p "
-Continuing..." -t 1 -n 1 -s
-
-	# Configure custom samba folder
-	read -r -p "Create and configure custom samba folder located at /home/fedora39
-" -t 2 -n 1 -s
-
-	sudo mkdir /home/fedora39
-	sudo chgrp samba /home/fedora39
-	sudo chmod 770 /home/fedora39
-	sudo restorecon -R /home/fedora39
-
-	# Create the sambashares group if it doesn't exist
-	sudo groupadd -r sambashares
-
-	# Create the usershares directory and set permissions
-	sudo mkdir -p /var/lib/samba/usershares
-	sudo chown $username:sambashares /var/lib/samba/usershares
-	sudo chmod 1770 /var/lib/samba/usershares
-
-	# Restore SELinux context for the usershares directory
-	display_message "[${GREEN}✔${NC}]  Restore SELinux for usershares folder"
-	sudo restorecon -R /var/lib/samba/usershares
-
-	# Add the user to the sambashares group
-	display_message "[${GREEN}✔${NC}]  Adding user to usershares"
-	sudo gpasswd sambashares -a $username
-
-	# Add the user to the sambashares group (alternative method)
-	sudo usermod -aG sambashares $username
-
-	# Restart SMB and NMB services (optional)
-	display_message "[${GREEN}✔${NC}]  Restart SMB && NMB (samba) services"
-	sudo systemctl restart smb.service nmb.service
-
-	# Set up SSH Server on Host
-	display_message "[${GREEN}✔${NC}]  Setup SSH and start service.."
-	sudo systemctl enable sshd && sudo systemctl start sshd
-
-	display_message "[${GREEN}✔${NC}]  Installation completed."
-	gum spin --spinner dot --title "Standby.." -- sleep 3
-
-	# Check for errors during installation
-	if [ $? -eq 0 ]; then
-		display_message "Apps installed successfully."
-		gum spin --spinner dot --title "Standby.." -- sleep 2
-	else
-		display_message "[${RED}✘${NC}] Error: Unable to install Apps."
-		gum spin --spinner dot --title "Standby.." -- sleep 2
-	fi
-}
-
-# Template
-# display_message "[${GREEN}✔${NC}]
-# display_message "[${RED}✘${NC}]
-
-# Reload the firewall for changes to take effect
-sudo firewall-cmd --reload
-gum spin --spinner dot --title "Reloading firewall" -- sleep 1.5
-
-display_message "[${GREEN}✔${NC}] Firewall rules applied successfully, reloading system services."
+display_message "[${GREEN}✔${NC}] Networking rules applied successfully, reloading system services."
 gum spin --spinner dot --title "Reloading all services" -- sleep 1.5
-
-# Start Samba manually
-sudo systemctl start smb
-
-# Configure Samba to start automatically on each boot and immediately start the service
-sudo systemctl enable --now smb
-
-# Check whether Samba is running
-sudo systemctl status smb
-
-# Restart Samba manually
-sudo systemctl restart smb
-
-# Start wsdd manually (depends on the smb service)
-sudo systemctl start wsdd
-
-# Configure wsdd to start automatically on each boot and immediately start the service
-sudo systemctl enable --now wsdd
-
-# Check whether wsdd is running
-sudo systemctl status wsdd
-
-# Restart wsdd and Samba
-sudo systemctl restart wsdd smb
 
 # Apply sysctl changes
 sudo udevadm control --reload-rules
