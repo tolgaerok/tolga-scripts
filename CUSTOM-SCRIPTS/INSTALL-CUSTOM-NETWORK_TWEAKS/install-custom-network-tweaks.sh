@@ -129,6 +129,8 @@ install_apps() {
 	## Make a backup of the original sysctl.conf file
 	display_message "[${GREEN}✔${NC}]  Tweaking network settings"
 
+	SYS_PATH="/etc/sysctl.conf"
+	
 	cp $SYS_PATH /etc/sysctl.conf.bak
 
 	echo
