@@ -24,8 +24,8 @@ clear
 
 # Check if the script is run as root
 if [ "$EUID" -ne 0 ]; then
-    echo "Please run this script as root or using sudo."
-    exit 1
+	echo "Please run this script as root or using sudo."
+	exit 1
 fi
 
 [ ${UID} -eq 0 ] && read -p "Username for this script: " user && export user || export user="$USER"
@@ -54,34 +54,54 @@ clear
 
 # Function to display messages
 display_message() {
-    clear
-    echo -e "\n                  Tolga's SAMBA & WSDD setup script\n"
-    echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
-    echo -e "|${YELLOW}==>${NC}  $1"
-    echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
-    echo ""
-    gum spin --spinner dot --title "Stand-by..." -- sleep 1
+	clear
+	echo -e "\n                  Tolga's SAMBA & WSDD setup script\n"
+	echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
+	echo -e "|${YELLOW}==>${NC}  $1"
+	echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
+	echo ""
+	gum spin --spinner dot --title "Stand-by..." -- sleep 1
 }
 
 # Function to check and display errors
 check_error() {
-    if [ $? -ne 0 ]; then
-        display_message "[${RED}✘${NC}] Error occurred !!"
-        # Print the error details
-        echo "Error details: $1"
-        gum spin --spinner dot --title "Stand-by..." -- sleep 8
-    fi
+	if [ $? -ne 0 ]; then
+		display_message "[${RED}✘${NC}] Error occurred !!"
+		# Print the error details
+		echo "Error details: $1"
+		gum spin --spinner dot --title "Stand-by..." -- sleep 8
+	fi
 }
 
 # Template
 # display_message "[${GREEN}✔${NC}]
 # display_message "[${RED}✘${NC}]
 
+function remove_libreoffice() {
+	echo ""
+	read -p "Do you want to remove LibreOffice and its core components? (y/n): " answer
+
+	if [ "$answer" != "y" ]; then
+		echo "Aborted by user."
+		return 1
+	fi
+
+	# Remove LibreOffice
+	sudo dnf group remove libreoffice -y
+
+	# Remove LibreOffice core
+	sudo dnf remove libreoffice-core -y
+
+	echo "LibreOffice and its core components have been removed."
+	return 0
+}
+
 install_apps() {
 	display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
 
+	remove_libreoffice
+
 	sudo dnf -y up
-	sudo dnf remove -y *libreoffice*
 	sudo dnf -y autoremove
 	sudo dnf -y clean all
 
@@ -89,6 +109,32 @@ install_apps() {
 	sudo dnf install rpmfusion-free-release-tainted
 	sudo dnf install rpmfusion-nonfree-release-tainted
 	sudo dnf --repo=rpmfusion-nonfree-tainted install "*-firmware"
+
+	# Incase removed by libreoffice purge
+	packages=(
+		cjson-1.7.15-2.fc39.x86_64
+		codec2-1.2.0-2.fc39.x86_64
+		dbus-glib-0.112-6.fc39.x86_64
+		gtk2-immodule-xim-2.24.33-15.fc39.x86_64
+		gtk3-immodule-xim-3.24.39-1.fc39.x86_64
+		ibus-gtk4-1.5.29~rc2-6.fc39.x86_64
+		libXext-1.3.5-3.fc39.i686
+		libfreeaptx-0.1.1-5.fc39.x86_64
+		libgcab1-1.6-2.fc39.x86_64
+		librabbitmq-0.13.0-3.fc39.x86_64
+		librist-0.2.7-2.fc39.x86_64
+		libvdpau-1.5-4.fc39.i686
+		llvm16-libs-16.0.6-5.fc39.x86_64
+		lpcnetfreedv-0.5-3.fc39.x86_64
+		mbedtls-2.28.5-1.fc39.x86_64
+		ostree-2023.8-2.fc39.x86_64
+		pipewire-codec-aptx-1.0.0-1.fc39.x86_64
+		xorg-x11-fonts-ISO8859-1-100dpi-7.5-36.fc39.noarch
+	)
+
+	for package in "${packages[@]}"; do
+		sudo dnf install "$package" -y
+	done
 
 	# Essential Packages
 	if [ -f /usr/bin/nala ]; then
@@ -111,9 +157,9 @@ install_apps() {
 	sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
 	sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
 	sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune-mod
- 
- 	# NOT SURE ABOUT THIS sudo dnf install -y sshfs fuse-sshfs 
- 
+
+	# NOT SURE ABOUT THIS sudo dnf install -y sshfs fuse-sshfs
+
 	sudo dnf install -y rsync openssh-server openssh-clients wsdd
 	sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel
 	sudo dnf install dnf5 dnf5-plugins
@@ -366,11 +412,11 @@ EOF
 	display_message "[${GREEN}✔${NC}]  Adding New network settings"
 
 	# Apply sysctl changes
-    sudo udevadm control --reload-rules
-    sudo udevadm trigger
-    sudo sysctl --system
+	sudo udevadm control --reload-rules
+	sudo udevadm trigger
+	sudo sysctl --system
 	sudo sysctl -p
-	
+
 	sudo systemctl restart systemd-sysctl
 	echo ""
 	gum spin --spinner dot --title "Restarting systemd custom settings.." -- sleep 4

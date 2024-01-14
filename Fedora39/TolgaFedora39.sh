@@ -1120,15 +1120,13 @@ print_yellow() {
 	echo -e "\e[93m$1\e[0m"
 }
 
-install_apps() {
-	display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
-
+function remove_libreoffice() {
 	echo ""
-	read -p "Do you want to remove LibreOffice and its core components. Do you want to proceed? (y/n): " answer
+	read -p "Do you want to remove LibreOffice and its core components? (y/n): " answer
 
 	if [ "$answer" != "y" ]; then
 		echo "Aborted by user."
-		exit 0
+		return 1
 	fi
 
 	# Remove LibreOffice
@@ -1138,6 +1136,13 @@ install_apps() {
 	sudo dnf remove libreoffice-core -y
 
 	echo "LibreOffice and its core components have been removed."
+	return 0
+}
+
+install_apps() {
+	display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
+
+	remove_libreoffice
 
 	sudo dnf -y up
 	sudo dnf -y autoremove

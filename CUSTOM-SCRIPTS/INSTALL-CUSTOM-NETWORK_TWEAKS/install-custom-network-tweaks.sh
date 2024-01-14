@@ -77,11 +77,15 @@ check_error() {
 # display_message "[${GREEN}✔${NC}]
 # display_message "[${RED}✘${NC}]
 
+
+
 install_apps() {
 	display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
 
+remove_libreoffice
+
 	sudo dnf -y up
-	sudo dnf remove -y *libreoffice*
+	
 	sudo dnf -y autoremove
 	sudo dnf -y clean all
 
