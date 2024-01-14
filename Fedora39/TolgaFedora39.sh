@@ -1124,7 +1124,8 @@ install_apps() {
 	display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
 
 	sudo dnf -y up
-	sudo dnf remove -y *libreoffice*
+	sudo dnf group remove libreoffice
+	sudo dnf remove libreoffice-core
 	sudo dnf -y autoremove
 	sudo dnf -y clean all
 
@@ -1154,9 +1155,9 @@ install_apps() {
 	sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
 	sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
 	sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune-mod
- 
- 	# NOT SURE ABOUT THIS sudo dnf install -y sshfs fuse-sshfs 
- 
+
+	# NOT SURE ABOUT THIS sudo dnf install -y sshfs fuse-sshfs
+
 	sudo dnf install -y rsync openssh-server openssh-clients wsdd
 	sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel
 	sudo dnf install dnf5 dnf5-plugins
@@ -1409,11 +1410,11 @@ EOF
 	display_message "[${GREEN}✔${NC}]  Adding New network settings"
 
 	# Apply sysctl changes
-    sudo udevadm control --reload-rules
-    sudo udevadm trigger
-    sudo sysctl --system
+	sudo udevadm control --reload-rules
+	sudo udevadm trigger
+	sudo sysctl --system
 	sudo sysctl -p
-	
+
 	sudo systemctl restart systemd-sysctl
 	echo ""
 	gum spin --spinner dot --title "Restarting systemd custom settings.." -- sleep 4
