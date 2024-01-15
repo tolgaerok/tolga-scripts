@@ -4,7 +4,6 @@
 # - Tolga Erok
 # - 13/1/2024
 
-
 # ------------------------------------------|       Instruction             |------------------------------------------------------ ###
 
 # Install my online post installer that includes Nvidia drivers. This will create 2 desktop shortcuts.
@@ -29,10 +28,7 @@
 
 # Wait for 3 mins ( This allow's the kernel to compile the new drivers ) then [ Reboot ]
 
-
-
 # ------------------------------------------|       DOWNGRADE 545x to 535x    |------------------------------------------------------ ###
-
 
 sudo dnf remove \*nvidia\* --exclude nvidia-gpu-firmware
 sudo dnf install akmod-nvidia-535.129.03\* xorg-x11-drv-nvidia-cuda-535.129.03\* nvidia\*535.129.03\*
@@ -66,7 +62,7 @@ sudo nano /etc/dnf/dnf.conf
 # Copy and paste into dnf.conf but REMOVE the # in front of the exclude=akmod-nvidia* ........
 
 # Exclude all nvidia-*, dont want anything later then 535x
-# exclude=akmod-nvidia* nvidia-modprobe* nvidia-persistenced* nvidia-settings* nvidia-xconfig* xorg-x11-drv-nvidia-cuda-libs* xorg-x11-drv-nvidia-cuda* xorg-x11-drv-nvidia-kmodsrc* xorg-x11-drv-nvidia-libs* xorg-x11-drv-nvidia-power* xorg-x11-drv-nvidia*
+# exclude=akmod-nvidia*3:545* nvidia-modprobe*3:545* nvidia-persistenced*3:545* nvidia-settings*3:545* nvidia-xconfig*3:545* xorg-x11-drv-nvidia-cuda-libs*3:545* xorg-x11-drv-nvidia-cuda*3:545* xorg-x11-drv-nvidia-kmodsrc*3:545* xorg-x11-drv-nvidia-libs*3:545* xorg-x11-drv-nvidia-power*3:545* xorg-x11-drv-nvidia*3:545*
 
 # Example:
 # -------------------------------------------------- #
@@ -86,5 +82,39 @@ sudo nano /etc/dnf/dnf.conf
 #	metadata_expire_filter=repo:base:2h
 #	metadata_expire_filter=repo:updates:12h
 
-#  # Exclude all nvidia-*, dont want anything later then 535x
-#	exclude=akmod-nvidia* nvidia-modprobe* nvidia-persistenced* nvidia-settings* nvidia-xconfig* xorg-x11-drv-nvidia-cuda-libs* xorg-x11-drv-nvidia-cuda* xorg-x11-drv-nvidia-kmodsrc* xorg-x11-drv-nvidia-libs* xorg-x11-drv-nvidia-power* xorg-x11-drv-nvidia*
+# Exclude all nvidia-*, dont want anything later then 535x
+# exclude=akmod-nvidia*3:545* nvidia-modprobe*3:545* nvidia-persistenced*3:545* nvidia-settings*3:545* nvidia-xconfig*3:545* xorg-x11-drv-nvidia-cuda-libs*3:545* xorg-x11-drv-nvidia-cuda*3:545* xorg-x11-drv-nvidia-kmodsrc*3:545* xorg-x11-drv-nvidia-libs*3:545* xorg-x11-drv-nvidia-power*3:545* xorg-x11-drv-nvidia*3:545*
+
+# Or copy and paste into termainal after fresh install of Fedora then reun update
+
+# Define the path to the DNF configuration file
+# DNF_CONF_PATH="/etc/dnf/dnf.conf"
+
+# display_message "[${GREEN}✔${NC}]  Configuring faster updates in DNF..."
+
+# Check if the file exists before attempting to edit it
+# if [ -e "$DNF_CONF_PATH" ]; then
+# Backup the original configuration file
+# sudo cp "$DNF_CONF_PATH" "$DNF_CONF_PATH.bak"
+
+# Use sudo to edit the DNF configuration file with nano
+# sudo nano "$DNF_CONF_PATH" <<EOL
+# [main]
+# gpgcheck=True
+# installonly_limit=3
+# clean_requirements_on_remove=True
+# best=False
+# skip_if_unavailable=True
+# fastestmirror=True
+# max_parallel_downloads=10
+# color=always
+# deltarpm=True
+# keepcache=True
+# metadata_timer_sync=0
+# metadata_expire=6h
+# metadata_expire_filter=repo:base:2h
+# metadata_expire_filter=repo:updates:12h
+
+# Exclude all nvidia-*, dont want anything later then 535x
+# exclude=akmod-nvidia*3:545* nvidia-modprobe*3:545* nvidia-persistenced*3:545* nvidia-settings*3:545* nvidia-xconfig*3:545* xorg-x11-drv-nvidia-cuda-libs*3:545* xorg-x11-drv-nvidia-cuda*3:545* xorg-x11-drv-nvidia-kmodsrc*3:545* xorg-x11-drv-nvidia-libs*3:545* xorg-x11-drv-nvidia-power*3:545* xorg-x11-drv-nvidia*3:545*
+# EOL
