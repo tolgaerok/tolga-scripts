@@ -118,3 +118,23 @@ sudo nano /etc/dnf/dnf.conf
 # Exclude all nvidia-*, dont want anything later then 535x
 # exclude=akmod-nvidia*3:545* nvidia-modprobe*3:545* nvidia-persistenced*3:545* nvidia-settings*3:545* nvidia-xconfig*3:545* xorg-x11-drv-nvidia-cuda-libs*3:545* xorg-x11-drv-nvidia-cuda*3:545* xorg-x11-drv-nvidia-kmodsrc*3:545* xorg-x11-drv-nvidia-libs*3:545* xorg-x11-drv-nvidia-power*3:545* xorg-x11-drv-nvidia*3:545*
 # EOL
+
+# Disable kernel update - optional
+# --------------------------------------------------------------------
+# Disable kernel updates from [fedora] and [updates] repos
+# ---------------------------------------------------------------------
+
+# --- First step ------- #
+# sudo nano /etc/yum.repos.d/fedora.repo file. 
+# Add exclude=kernel* at the bottom of this section
+# [fedora]
+#name=Fedora $releasever - $basearch
+# .... 
+# exclude=kernel*
+
+# --- Second step ------- #
+#  sudo nano /etc/yum.repos.d/fedora-updates.repo
+# Add exclude=kernel* at the bottom of this section
+# [updates]
+# ... 
+# exclude=kernel*
