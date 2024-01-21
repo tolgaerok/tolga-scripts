@@ -1229,7 +1229,7 @@ install_apps() {
 
 	sudo dnf install -y rsync openssh-server openssh-clients wsdd
 	sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel
-	sudo dnf install dnf5 dnf5-plugins
+	sudo dnf install dnf5 dnf5-plugins dnfdragora 
 
 	# Configure fortune
 	# If you want to display a specific fortune file or category, you can use the -e option followed by the file or category name. For example:
