@@ -210,6 +210,8 @@ for app in "${flatpak_apps[@]}"; do
     flatpak install flathub "$app"
 done
 
+flatpak install flathub io.github.aandrew_me.ytdn
+
 echo -e "\e[1;32m[✔]\e[0m Checking updates for installed flatpak programs...\n"
 flatpak update -y
 sleep 1
