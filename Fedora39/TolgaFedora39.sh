@@ -295,20 +295,22 @@ configure_dnf() {
 		# Use sudo to edit the DNF configuration file with nano
 		sudo nano "$DNF_CONF_PATH" <<EOL
 [main]
-gpgcheck=True
-installonly_limit=3
-clean_requirements_on_remove=True
 best=False
-skip_if_unavailable=True
-fastestmirror=True
-max_parallel_downloads=10
+clean_requirements_on_remove=True
 color=always
-deltarpm=True
+countme=False
+deltarpm=true
+fastestmirror=True
+gpgcheck=True
+install_weak_deps=False
+installonly_limit=5
 keepcache=True
-metadata_timer_sync=0
+max_parallel_downloads=10
 metadata_expire=6h
 metadata_expire_filter=repo:base:2h
 metadata_expire_filter=repo:updates:12h
+metadata_timer_sync=0
+skip_if_unavailable=True
 
 # Exclude all nvidia-*, dont want anything later then 535x
 exclude=akmod-nvidia*3:545* nvidia-modprobe*3:545* nvidia-persistenced*3:545* nvidia-settings*3:545* nvidia-xconfig*3:545* xorg-x11-drv-nvidia-cuda-libs*3:545* xorg-x11-drv-nvidia-cuda*3:545* xorg-x11-drv-nvidia-kmodsrc*3:545* xorg-x11-drv-nvidia-libs*3:545* xorg-x11-drv-nvidia-power*3:545* xorg-x11-drv-nvidia*3:545*
@@ -1148,6 +1150,9 @@ install_apps() {
 	sudo dnf -y up
 	sudo dnf -y autoremove
 	sudo dnf -y clean all
+
+	# Enable trim support
+	sudo systemctl enable fstrim.timer
 
 	# Install Apps
 	sudo dnf install rpmfusion-free-release-tainted
