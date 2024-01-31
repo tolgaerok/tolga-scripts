@@ -235,20 +235,26 @@ for algorithm in $available_algorithms; do
 		;;
 	esac
 done
+echo""
+echo -e "${BLUE}Your current TCP congestion setting is:${NC}"
+echo""
+sysctl net.ipv4.tcp_congestion_control
 
 echo ""
 read -p "Press Enter to continus...."
 gum spin --spinner dot --title "Stand-by..." -- sleep 1
 
 # Turn on NumLock in SDDM login screen
+echo "$(cat /etc/sddm.conf | sed -E s/'^\#?Numlock\=.*$'/'Numlock=on'/)" | sudo tee /etc/sddm.conf && sudo systemctl daemon-reload
+
 # Check if the SDDM configuration file exists
-if [ ! -f "$SDDM_CONF" ]; then
-	# If not, create the file and echo the configuration content into it
-	echo -e "$CONFIG_CONTENT" | sudo tee "$SDDM_CONF" >/dev/null
-else
-	# If the file exists, append the configuration content
-	echo -e "$CONFIG_CONTENT" | sudo tee -a "$SDDM_CONF" >/dev/null
-fi
+#if [ ! -f "$SDDM_CONF" ]; then
+# If not, create the file and echo the configuration content into it
+#	echo -e "$CONFIG_CONTENT" | sudo tee "$SDDM_CONF" >/dev/null
+#else
+# If the file exists, append the configuration content
+#	echo -e "$CONFIG_CONTENT" | sudo tee -a "$SDDM_CONF" >/dev/null
+#fi
 
 echo""
 # for_exit "figlet"
@@ -1235,7 +1241,7 @@ install_apps() {
 
 	sudo dnf install -y rsync openssh-server openssh-clients wsdd
 	sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel
-	sudo dnf install dnf5 dnf5-plugins dnfdragora 
+	sudo dnf install dnf5 dnf5-plugins dnfdragora
 
 	# Configure fortune
 	# If you want to display a specific fortune file or category, you can use the -e option followed by the file or category name. For example:
