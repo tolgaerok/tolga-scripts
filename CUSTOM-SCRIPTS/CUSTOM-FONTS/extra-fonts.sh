@@ -1,6 +1,7 @@
+#!/bin/bash
+
 # Tolga Erok
 # 24/2/24
-#!/bin/bash
 
 sudo dnf install ibm-plex-mono-fonts ibm-plex-sans-fonts ibm-plex-serif-fonts \
     redhat-display-fonts redhat-text-fonts \
