@@ -38,5 +38,8 @@ WantedBy=timers.target
 
 ### Enable and start services
 ```bash
-systemctl enable flatpak-update.service &&  systemctl enable flatpak-update.timer
+systemctl enable flatpak-update.service && systemctl enable flatpak-update.timer
+systemctl start flatpak-update.service && systemctl start flatpak-update.timer
+systemctl status flatpak-update.service
+systemctl status flatpak-update.timer
 ```
