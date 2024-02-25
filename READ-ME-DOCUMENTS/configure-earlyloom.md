@@ -90,6 +90,10 @@
 
    ```bash
    sudo systemctl enable --now earlyoom
+   sudo systemctl daemon-reload 
+   sudo systemctl stop earlyoom.service && sudo systemctl start earlyoom.service && sudo systemctl restart earlyoom.service && sudo systemctl enable earlyoom.service && sudo systemctl status earlyoom.service
+   sudo systemctl enable earlyoom.service   # Enable the service to start at boot
+   sudo systemctl start earlyoom.service    # Start the service immediately
    ```
 
 That's it! The EarlyOOM configuration file has been edited to adjust the memory limit. Make sure the value matches the one you've set in the systemd service file.
