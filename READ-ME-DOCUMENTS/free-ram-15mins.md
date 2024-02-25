@@ -26,7 +26,7 @@
     Explanation:
     - `Description`: A description of what the service does.
     - `Type`: Specifies that this is a one-shot service, meaning it's expected to execute and then exit.
-    - `ExecStart`: Commands to be executed to free up RAM. `sync` flushes file system buffers, and `sysctl -w vm.drop_caches=3` frees up page cache, dentries, and inodes.
+    - `ExecStart`: Commands to be executed to free up RAM. `sync` flushes file system buffers, and `sysctl -w vm.drop_caches=3` frees up page cache, remove unnecessary files and data.
     - `WantedBy`: Specifies the target that this service should be associated with.
 
 2. **Create a Timer File to Trigger the Service Periodically:**
@@ -68,4 +68,4 @@
     systemctl status ram-free.timer
     ```
 
-This setup will periodically trigger the `ram-free.service` to free up RAM every 15 minutes. It uses the `sync` command to flush file system buffers and `sysctl -w vm.drop_caches=3` to free up page cache, dentries, and inodes.
+This setup will periodically trigger the `ram-free.service` to free up RAM every 15 minutes. It uses the `sync` command to flush file system buffers and `sysctl -w vm.drop_caches=3` to free up page cache, remove unnecessary files and data.
