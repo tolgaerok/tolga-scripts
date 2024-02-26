@@ -16,7 +16,9 @@ sudo systemctl enable dbus.socket
 
 `dbus-broker` is an alternative message bus system to the traditional D-Bus daemon (`dbus-daemon`). The `dbus-broker.service` provides the D-Bus message bus functionality, facilitating inter-process communication between applications securely and efficiently.
 
-To enable and start `dbus-broker.service`, execute the command:
+#
+
+To enable and start both `dbus-broker.service` && `dbus.socket`, execute the command:
 
 ```bash
 
