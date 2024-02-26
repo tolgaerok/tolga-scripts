@@ -69,3 +69,10 @@
     ```
 
 This setup will periodically trigger the `ram-free.service` to free up RAM every 15 minutes. It uses the `sync` command to flush file system buffers and `sysctl -w vm.drop_caches=3` to free up page cache, remove unnecessary files and data.
+
+## Alias setup
+
+```bash
+alias tolga-fmem2="echo && echo 'Current mem:' && free -h && sudo /bin/sh -c '/bin/sync && /sbin/sysctl -w vm.drop_caches=3' && echo && echo 'After: ' && free -h"
+```
+
