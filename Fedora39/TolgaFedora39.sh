@@ -245,6 +245,7 @@ read -p "Press Enter to continus...."
 gum spin --spinner dot --title "Stand-by..." -- sleep 1
 
 # Turn on NumLock in SDDM login screen
+sudo dnf install numlockx
 echo "$(cat /etc/sddm.conf | sed -E s/'^\#?Numlock\=.*$'/'Numlock=on'/)" | sudo tee /etc/sddm.conf && sudo systemctl daemon-reload
 
 # Check if the SDDM configuration file exists
