@@ -2266,6 +2266,7 @@ DefaultTimeoutStopSec=3s
 EOF
 
 	sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system && sudo sysctl -p
+ 	sudo mount -a && sudo systemctl daemon-reload
  
 	display_message "${GREEN}[✔]${NC} Shutdown speed configured"
 	gum spin --spinner dot --title "Stand-by..." -- sleep 2
