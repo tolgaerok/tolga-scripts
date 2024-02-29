@@ -320,7 +320,7 @@ metadata_timer_sync=0
 skip_if_unavailable=True
 
 # Exclude all nvidia-*, dont want anything later then 535x
-exclude=akmod-nvidia*3:545* nvidia-modprobe*3:545* nvidia-persistenced*3:545* nvidia-settings*3:545* nvidia-xconfig*3:545* xorg-x11-drv-nvidia-cuda-libs*3:545* xorg-x11-drv-nvidia-cuda*3:545* xorg-x11-drv-nvidia-kmodsrc*3:545* xorg-x11-drv-nvidia-libs*3:545* xorg-x11-drv-nvidia-power*3:545* xorg-x11-drv-nvidia*3:545*
+# exclude=akmod-nvidia*3:545* nvidia-modprobe*3:545* nvidia-persistenced*3:545* nvidia-settings*3:545* nvidia-xconfig*3:545* xorg-x11-drv-nvidia-cuda-libs*3:545* xorg-x11-drv-nvidia-cuda*3:545* xorg-x11-drv-nvidia-kmodsrc*3:545* xorg-x11-drv-nvidia-libs*3:545* xorg-x11-drv-nvidia-power*3:545* xorg-x11-drv-nvidia*3:545*
 EOL
 
 		# Inform the user that the update is complete
@@ -624,7 +624,7 @@ install_gpu_drivers() {
 		gum spin --spinner dot --title "Stand-by..." -- sleep 1.5
 
 		SETTINGS_FILE="/etc/environment"
-		BASHRC_FILE="$HOME/.bashrc"
+		BASHRC_FILE="$HOME/$user/.bashrc"
 		PAM_LOGIN_FILE="/etc/pam.d/login"
 
 		# Add PAM module for environment variables to /etc/pam.d/login
