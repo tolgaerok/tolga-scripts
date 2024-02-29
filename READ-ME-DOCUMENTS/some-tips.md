@@ -1,3 +1,27 @@
+##  Create a keyboard shortcut to suspend Fedora
+
+To create a keyboard shortcut to suspend Fedora, you can use the following steps:
+
+1. **Open Keyboard Settings:**
+   - Go to "Activities" (top-left corner) and search for "Settings".
+   - In Settings, click on "Keyboard Shortcuts".
+
+2. **Add Custom Shortcut:**
+   - Scroll down to the bottom of the list of keyboard shortcuts and click on the "+" icon to add a new custom shortcut.
+
+3. **Fill in Shortcut Details:**
+   - In the "Name" field, you can enter a name for your shortcut, for example, "Suspend".
+   - In the "Command" field, enter the command `systemctl suspend`.
+   - Click on "Set Shortcut" and press the desired key combination you want to use to trigger the suspend action. For example, you might choose something like Ctrl+Alt+S.
+
+4. **Test the Shortcut:**
+   - Once you've set up the shortcut, test it out by pressing the key combination you assigned. Your Fedora system should go into suspend mode.
+
+
+```bash
+systemctl suspend
+```
+
 ## NetworkManger show connections via cli..
 ```bash
  nmcli connection show
