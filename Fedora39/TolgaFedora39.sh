@@ -2258,20 +2258,15 @@ speed-up-shutdown() {
 	display_message "${YELLOW}[*]${NC} Configure shutdown of units and services to 10s .."
 	sleep 1
 
-	# Configure default timeout to stop system units
-	sudo mkdir -p /etc/systemd/system.conf.d
-	sudo tee /etc/systemd/system.conf.d/default-timeout.conf <<EOF
-[Manager]
-DefaultTimeoutStopSec=10s
-EOF
-
 	# Configure default timeout to stop user units
 	sudo mkdir -p /etc/systemd/user.conf.d
 	sudo tee /etc/systemd/user.conf.d/default-timeout.conf <<EOF
 [Manager]
-DefaultTimeoutStopSec=10s
+DefaultTimeoutStopSec=3s
 EOF
 
+	sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system && sudo sysctl -p
+ 
 	display_message "${GREEN}[✔]${NC} Shutdown speed configured"
 	gum spin --spinner dot --title "Stand-by..." -- sleep 2
 
