@@ -289,18 +289,16 @@ check_error() {
 
 # Function to configure faster updates in DNF
 configure_dnf() {
-	# Define the path to the DNF configuration file
-	DNF_CONF_PATH="/etc/dnf/dnf.conf"
+    DNF_CONF_PATH="/etc/dnf/dnf.conf"
 
-	display_message "[${GREEN}✔${NC}]  Configuring faster updates in DNF..."
+    display_message "[${GREEN}✔${NC}]  Configuring faster updates in DNF..."
 
-	# Check if the file exists before attempting to edit it
-	if [ -e "$DNF_CONF_PATH" ]; then
-		# Backup the original configuration file
-		sudo cp "$DNF_CONF_PATH" "$DNF_CONF_PATH.bak"
-
-		# Use sudo to edit the DNF configuration file with nano
-		sudo nano "$DNF_CONF_PATH" <<EOL
+    if [ -e "$DNF_CONF_PATH" ]; then
+        sudo cp "$DNF_CONF_PATH" "$DNF_CONF_PATH.bak"
+        
+        # Use temporary file to store configuration changes
+        TEMP_FILE=$(mktemp)
+        cat <<EOL > "$TEMP_FILE"
 [main]
 best=False
 clean_requirements_on_remove=True
@@ -323,17 +321,19 @@ skip_if_unavailable=True
 # exclude=akmod-nvidia*3:545* nvidia-modprobe*3:545* nvidia-persistenced*3:545* nvidia-settings*3:545* nvidia-xconfig*3:545* xorg-x11-drv-nvidia-cuda-libs*3:545* xorg-x11-drv-nvidia-cuda*3:545* xorg-x11-drv-nvidia-kmodsrc*3:545* xorg-x11-drv-nvidia-libs*3:545* xorg-x11-drv-nvidia-power*3:545* xorg-x11-drv-nvidia*3:545*
 EOL
 
-		# Inform the user that the update is complete
-		display_message "[${GREEN}✔${NC}] DNF configuration updated for faster updates."
-		sudo dnf install -y fedora-workstation-repositories
-		sudo dnf update && sudo dnf makecache
-	else
-		# Inform the user that the configuration file doesn't exist
-		display_message "[${RED}✘${NC}] Error: DNF configuration file not found at $DNF_CONF_PATH."
-		check_error
-		gum spin --spinner dot --title "Stand-by..." -- sleep 3
-	fi
+        # Use sudo to move the temporary file to the correct location
+        sudo mv "$TEMP_FILE" "$DNF_CONF_PATH"
 
+        display_message "[${GREEN}✔${NC}] DNF configuration updated for faster updates."
+        
+        # Run the following commands with sudo separately
+        sudo dnf install -y fedora-workstation-repositories
+        sudo dnf update && sudo dnf makecache
+    else
+        display_message "[${RED}✘${NC}] Error: DNF configuration file not found at $DNF_CONF_PATH."
+        check_error
+        gum spin --spinner dot --title "Stand-by..." -- sleep 3
+    fi
 }
 
 # Install new dnf5
