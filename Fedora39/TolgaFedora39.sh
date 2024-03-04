@@ -2224,36 +2224,40 @@ btrfs_maint() {
 create-extra-dir() {
     display_message "[${GREEN}✔${NC}]  Create extra needed directories"
 
+    # Get the username of the invoking user
+    user=$(logname)
+
     # Directories to create
     directories=(
-        "~/.config/autostart"
-        "~/.config/environment.d"
-        "~/.config/systemd/user"
-        "~/.local/bin"
-        "~/.local/share/applications"
-        "~/.local/share/fonts"
-        "~/.local/share/icons"
-        "~/.local/share/themes"
-        "~/.ssh"
-        "~/.zshrc.d"
-        "~/Applications"
-        "~/src"
+        "/home/$user/.config/autostart"
+        "/home/$user/.config/environment.d"
+        "/home/$user/.config/systemd/user"
+        "/home/$user/.local/bin"
+        "/home/$user/.local/share/applications"
+        "/home/$user/.local/share/fonts"
+        "/home/$user/.local/share/icons"
+        "/home/$user/.local/share/themes"
+        "/home/$user/.ssh"
+        "/home/$user/.zshrc.d"
+        "/home/$user/Applications"
+        "/home/$user/src"
     )
 
-    # Create directories for the current user
+    # Create directories for the invoking user
     for dir in "${directories[@]}"; do
         mkdir -p "$dir"
         gum spin --spinner dot --title "[✔]  Creating: $dir" -- sleep 1
         sleep 0.5
-        chown "$USER:$USER" "$dir"
+        chown "$user:$user" "$dir"
     done
 
     # Set SSH folder permissions
-    chmod 700 ~/.ssh
+    chmod 700 "/home/$user/.ssh"
 
     display_message "[${GREEN}✔${NC}]  Extra hidden dirs created"
     gum spin --spinner dot --title "Stand-by..." -- sleep 2
 }
+
 
 
 speed-up-shutdown() {
