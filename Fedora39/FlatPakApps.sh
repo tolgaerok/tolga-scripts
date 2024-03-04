@@ -198,7 +198,11 @@ flatpak_apps=(
     "com.sindresorhus.Caprine"
     "org.gnome.Shotwell"
     "com.transmissionbt.Transmission"
-    "com.anydesk.Anydesk"    
+    "com.anydesk.Anydesk" 
+    "org.nickvision.money"
+    "io.github.flattool.Warehouse"
+    "io.missioncenter.MissionCenter"
+
 )
 
 # Install applications
