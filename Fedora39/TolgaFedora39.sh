@@ -1441,11 +1441,11 @@ net.ipv4.udp_mem = 65536 1048576 16777216                 # UDP memory allocatio
 # IPv6 Network Configuration
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-net.ipv6.conf.all.accept_redirects = 0                    # Disable acceptance of all ICMP redirected packets for IPv6
-net.ipv6.conf.all.disable_ipv6 = 0                        # Enable IPv6
-net.ipv6.conf.all.forwarding = 1                          # Enable IPv6 packet forwarding
-net.ipv6.conf.default.accept_redirects = 0                # Disable acceptance of all ICMP redirected packets for IPv6 (default)
-net.ipv6.conf.default.disable_ipv6 = 0                    # Enable IPv6
+#net.ipv6.conf.all.accept_redirects = 0                    # Disable acceptance of all ICMP redirected packets for IPv6
+#net.ipv6.conf.all.disable_ipv6 = 0                        # Enable IPv6
+#net.ipv6.conf.all.forwarding = 1                          # Enable IPv6 packet forwarding
+#net.ipv6.conf.default.accept_redirects = 0                # Disable acceptance of all ICMP redirected packets for IPv6 (default)
+#net.ipv6.conf.default.disable_ipv6 = 0                    # Enable IPv6
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # UNIX Domain Socket
@@ -1471,6 +1471,13 @@ vm.page-cluster = 0                                       # Disable page cluster
 vm.swappiness = 10                                        # Swappiness parameter (tendency to swap out unused pages)
 vm.vfs_cache_pressure = 50                                # Controls the tendency of the kernel to reclaim the memory used for caching of directory and inode objects
 fs.file-max = 67108864                                    # Maximum number of file handles the kernel can allocate (Default: 67108864)
+
+net.ipv4.tcp_congestion_control = bbr
+net.core.default_qdisc = fq
+net.core.wmem_max = 1073741824
+net.core.rmem_max = 1073741824
+net.ipv4.tcp_rmem = 4096 87380 1073741824
+net.ipv4.tcp_wmem = 4096 87380 1073741824
 EOF
 
 	# To Do For NVME ssd
