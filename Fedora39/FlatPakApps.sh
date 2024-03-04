@@ -78,6 +78,7 @@ flatpak install -y flathub org.videolan.VLC
 
 # Install Firefox from Flathub
 flatpak install -y flathub org.mozilla.firefox
+
 # If flatpak, although it may not apply to your issue, but if you have Nvidia, set all varibles to true in about:config:
 # gfx.webrender.all
 # media.ffmpeg.vaapi.enabled
@@ -92,14 +93,13 @@ flatpak override --user --socket=wayland --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.
 # Temporarily open Firefox to create profiles
 flatpak run --user org.mozilla.firefox
 
-# Run tasks as the invoking user
 if [ "$EUID" -eq 0 ]; then
     echo "Switching to the invoking user..."
-    sudo -u $(logname) bash <<'EOF'
+    sudo -u $(logname) bash <<EOF
 
     # Check if the profile directory is found
-    FIREFOX_PROFILE_PATH=$(find "${HOME}/.mozilla/firefox" -name "*.default-release")
-    if [ -z "$FIREFOX_PROFILE_PATH" ]; then
+    FIREFOX_PROFILE_PATH=\$(find "\${HOME}/.mozilla/firefox" -name "*.default-release")
+    if [ -z "\$FIREFOX_PROFILE_PATH" ]; then
         echo -e "\nError: Firefox profile directory not found.\n"
     else
         echo -e "\nAll good, Firefox profile directory found\n"
@@ -107,8 +107,8 @@ if [ "$EUID" -eq 0 ]; then
     fi
 
     # Check and set XDG_RUNTIME_DIR
-    if [ -z "$XDG_RUNTIME_DIR" ]; then
-        export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+    if [ -z "\$XDG_RUNTIME_DIR" ]; then
+        export XDG_RUNTIME_DIR="/run/user/\$(id -u)"
     fi
 
 EOF
