@@ -513,7 +513,8 @@ install_gpu_drivers() {
 		sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs
 		sudo dnf install -y gcc kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686
 		sudo dnf install -y vdpauinfo libva-vdpau-driver libva-utils vulkan akmods nvidia-vaapi-driver libva-utils vdpauinfo
-		sudo dnf install -y nvidia-settings nvidia-persistenced xorg-x11-drv-nvidia-power
+  		sudo dnf install -y kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig
+		sudo dnf install -y nvidia-settings nvidia-persistenced xorg-x11-drv-nvidia-power make 
 
 		sudo systemctl enable nvidia-{suspend,resume,hibernate}
 
@@ -814,6 +815,9 @@ install_multimedia_codecs() {
 	sudo dnf swap -y 'ffmpeg-free' 'ffmpeg' --allowerasing
 	sudo dnf install -y gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-plugin-openh264 gstreamer1-libav --exclude=gstreamer1-plugins-bad-free-devel ffmpeg gstreamer-ffmpeg
 	sudo dnf install -y lame\* --exclude=lame-devel
+ 	sudo dnf install gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-plugin-openh264 gstreamer1-libav --exclude=gstreamer1-plugins-bad-free-devel
+	sudo dnf install lame\* --exclude=lame-devel
+	sudo dnf group upgrade --with-optional Multimedia --allowerasing
 	sudo dnf group upgrade --with-optional Multimedia -y
 
 	# Enable support for Cisco OpenH264 codec
@@ -1233,16 +1237,20 @@ install_apps() {
 	[ -f /usr/bin/easyeffects ] && [ -f $HOME/.config/easyeffects/output/default.json ] && easyeffects -l default
 	[ -f /usr/bin/pulseeffects ] && [ -f $HOME/.config/PulseEffects/output/default.json ] && pulseeffects -l default
 
-	sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer
-	sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip
-	sudo dnf install -y mesa-libGL mesa-libGLw mesa-libGLU mesa-libGLU-devel mesa-filesystem mesa-va-drivers mesa-libEGL mesa-libglapi mesa-libGL-devel mesa-vulkan-drivers mesa-libd3d-devel mesa-libOpenCL mesa-libOSMesa
-	sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune-mod
-
+	sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer vlc vlc-core clementine
+	sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip gparted brasero 
+	sudo dnf install -y mesa-libGL mesa-libGLw mesa-libGLU mesa-libGLU-devel mesa-filesystem mesa-va-drivers mesa-libEGL mesa-libglapi mesa-libGL-devel 
+	sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune-mod mesa-vulkan-drivers mesa-libd3d-devel mesa-libOpenCL mesa-libOSMesa
+ 	sudo dnf install -y rsync openssh-server openssh-clients wsdd variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel dnf5 dnf5-plugins dnfdragora tlp tlp-rdw 
+ 	sudo dnf install -y liveusb-creator 		#to create a disk image
+	sudo dnf install -y k3b 			#(install .md5 and .mdf)
+	sudo dnf install -y AcetoneISO 			#(best program to mount *.bin *.mdf *.nrg *.img *.daa *.cdi *.xbx *.b5i *.bwi)
+	sudo dnf install -y ccd2iso 			#(convert *.img to *.iso)//from terminal: ccd2iso image.img image.iso
+	sudo dnf install -y bchunk 			#(convert *.bin, *.cue to *iso) // terminal: bchunk image.cue image.bin image.iso
+	sudo dnf install -y mplayer 			#(play videos and sounds on browser)
+	sudo dnf install -y xine xine-lib libdvdcss 	# quicktime video and AVI
+ 
 	# NOT SURE ABOUT THIS sudo dnf install -y sshfs fuse-sshfs
-
-	sudo dnf install -y rsync openssh-server openssh-clients wsdd
-	sudo dnf install -y variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel
-	sudo dnf install dnf5 dnf5-plugins dnfdragora
 
 	# Configure fortune
 	# If you want to display a specific fortune file or category, you can use the -e option followed by the file or category name. For example:
@@ -1727,6 +1735,17 @@ EOF
 	sudo dnf install fontconfig-font-replacements -y --skip-broken && sudo dnf install fontconfig-enhanced-defaults -y --skip-broken
 
 	sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/San-Francisco-family/San-Francisco-family.sh)"
+
+ 	sudo dnf install ibm-plex-mono-fonts ibm-plex-sans-fonts ibm-plex-serif-fonts \
+    		redhat-display-fonts redhat-text-fonts \
+    		lato-fonts \
+    		jetbrains-mono-fonts \
+    		fira-code-fonts mozilla-fira-mono-fonts mozilla-fira-sans-fonts mozilla-zilla-slab-fonts \
+    		adobe-source-serif-pro-fonts adobe-source-sans-pro-fonts \
+    		intel-clear-sans-fonts intel-one-mono-fonts
+
+	sudo dnf install curl cabextract xorg-x11-font-utils fontconfig
+	sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
 
 	# Install OpenRGB.
 	display_message "[${GREEN}✔${NC}]  Installing OpenRGB"
