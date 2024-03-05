@@ -1,0 +1,38 @@
+## How to get Intel Arc working on Fedora (A770, A750, A380)
+
+Only steps 1-3 are needed on F39+
+This is a post is to help Fedora users trying to get Intel Arc Alchemist working properly.
+
+Note that you do not need a 6.0 kernel or later to get things working, it just provides better performance. According to mailing lists and git pulls, we should be able to remove the settings detailed below after kernel 6.2. Until then Arc/Xe graphic support is thrown under i915 experimental and we need to add kernel arguments to enable it.
+
+Also a nice little feature is you can keep Secure Boot enabled! No need to turn it off or do script hackery and set up automatic kernel module signing like we STILL need to do with Nvidia...
+
+Never trust commands on the internet, read and understand the commands before you run them, don't blame me.
+
+Add RPMFusion. the intel-media-driver is open source but Fedora considers the hardware codec support to risky to ship so its in the nonfree repo. Below also provides the free repo since you'll likely use it anyway for adding codec support
+
+sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+2. sudo dnf update
+
+3. sudo dnf install intel-media-driver
+
+4. Find your <PCI ID> with:
+sudo lspci -nn | grep VGA
+which should return something like
+03:00.0 VGA compatible controller [0300]: Intel Corporation DG2 [Arc A770] [8086:56a0] (rev 08)
+You see 8086:56a0? It's <vendor ID: <PCI ID>, since my <PCI ID> is 56a0, I substituted it in the command below
+
+5. Now Fedora comes with grubby but you can do this manually or with other tools.If you only want to make the change to the current kernel use can replace ALL with DEFAULT
+
+Running the command below using the number from above to replace <PCI ID>
+
+Example sudo grubby --update-kernel=ALL --args="i915.force_probe=56a0"
+
+sudo grubby --update-kernel=ALL --args="i915.force_probe=<pci ID>"
+
+To remove the arguments:
+
+sudo grubby --update-kernel=ALL --remove-args="i915.force_probe=<pci ID>"
+
+Reboot and Enjoy
