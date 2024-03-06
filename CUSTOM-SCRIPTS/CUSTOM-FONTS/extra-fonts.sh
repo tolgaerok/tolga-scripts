@@ -54,7 +54,7 @@ clear
 display_message() {
     clear
     echo -e "\n                  Tolga's Custom font's\n"
-    echo -e "\e[34m|--------------------\e[33m Currently configuring:..\e[34m-------------------|"
+    echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
     echo -e "|${YELLOW}==>${NC}  $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
     echo ""
@@ -74,25 +74,25 @@ check_error() {
 }
 
 install_custom_fonts() {
-    display_message "[${GREEN}✔${NC}]  Installing afew custon font's..."
+    display_message "[${GREEN}✔${NC}]  ..:: Installing afew custom fonts ::.."
     
-    # Run commands and capture stderr
-    error_msg=$(sudo dnf install ibm-plex-mono-fonts ibm-plex-sans-fonts ibm-plex-serif-fonts \
+    # Install fonts
+    sudo dnf install -y ibm-plex-mono-fonts ibm-plex-sans-fonts ibm-plex-serif-fonts \
     redhat-display-fonts redhat-text-fonts \
     lato-fonts \
     jetbrains-mono-fonts \
     fira-code-fonts mozilla-fira-mono-fonts mozilla-fira-sans-fonts mozilla-zilla-slab-fonts \
     adobe-source-serif-pro-fonts adobe-source-sans-pro-fonts \
-    intel-clear-sans-fonts intel-one-mono-fonts 2>&1)
-    check_error "$error_msg"
+    intel-clear-sans-fonts intel-one-mono-fonts
 
-    # Run commands and capture stderr
-    error_msg=$(sudo dnf install curl cabextract xorg-x11-font-utils fontconfig 2>&1)
-    check_error "$error_msg"
+    # Install additional tools
+    sudo dnf install -y curl cabextract xorg-x11-font-utils fontconfig
 
-    # Run commands and capture stderr
-    error_msg=$(sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm 2>&1)
-    check_error "$error_msg"
+    # Install Microsoft Core Fonts
+    sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+    
+    # Check for errors after each installation
+    check_error ""
 }
 
 # Call the function
