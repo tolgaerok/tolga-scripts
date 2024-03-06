@@ -54,7 +54,7 @@ clear
 display_message() {
     clear
     echo -e "\n                  Tolga's Custom font's\n"
-    echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
+    echo -e "\e[34m|--------------------\e[33m Currently configuring:..\e[34m-------------------|"
     echo -e "|${YELLOW}==>${NC}  $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
     echo ""
@@ -64,7 +64,8 @@ display_message() {
 # Function to check and display errors
 check_error() {
     local error_msg="$1"
-    if [ -n "$error_msg" ]; then
+    # Check if error_msg contains actual error messages
+    if [[ "$error_msg" == *"error"* || "$error_msg" == *"Error"* ]]; then
         display_message "[${RED}✘${NC}] Error occurred !!"
         # Print the error details
         echo "Error details: $error_msg"
