@@ -68,12 +68,12 @@ check_error() {
         display_message "[${RED}✘${NC}] Error occurred !!"
         # Print the error details
         echo "Error details: $error_msg"
-        gum spin --spinner dot --title "Stand-by..." -- sleep 8
+        gum spin --spinner dot --title "Stand-by..." -- sleep 3
     fi
 }
 
 install_custom_fonts() {
-    display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
+    display_message "[${GREEN}✔${NC}]  Installing afew custon font's..."
     
     # Run commands and capture stderr
     error_msg=$(sudo dnf install ibm-plex-mono-fonts ibm-plex-sans-fonts ibm-plex-serif-fonts \
