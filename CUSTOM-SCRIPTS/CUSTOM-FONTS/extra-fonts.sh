@@ -63,31 +63,35 @@ display_message() {
 
 # Function to check and display errors
 check_error() {
-    if [ $? -ne 0 ]; then
+    local error_msg="$1"
+    if [ -n "$error_msg" ]; then
         display_message "[${RED}✘${NC}] Error occurred !!"
         # Print the error details
-        echo "Error details: $1"
-        gum spin --spinner dot --title "Stand-by..." -- sleep 2
+        echo "Error details: $error_msg"
+        gum spin --spinner dot --title "Stand-by..." -- sleep 8
     fi
 }
 
 install_custom_fonts() {
-    display_message "[${GREEN}✔${NC}]  Installing afew custom font's..."
+    display_message "[${GREEN}✔${NC}]  Installing afew personal apps..."
     
-    sudo dnf install ibm-plex-mono-fonts ibm-plex-sans-fonts ibm-plex-serif-fonts \
+    # Run commands and capture stderr
+    error_msg=$(sudo dnf install ibm-plex-mono-fonts ibm-plex-sans-fonts ibm-plex-serif-fonts \
     redhat-display-fonts redhat-text-fonts \
     lato-fonts \
     jetbrains-mono-fonts \
     fira-code-fonts mozilla-fira-mono-fonts mozilla-fira-sans-fonts mozilla-zilla-slab-fonts \
     adobe-source-serif-pro-fonts adobe-source-sans-pro-fonts \
-    intel-clear-sans-fonts intel-one-mono-fonts
-    check_error
+    intel-clear-sans-fonts intel-one-mono-fonts 2>&1)
+    check_error "$error_msg"
 
-    sudo dnf install curl cabextract xorg-x11-font-utils fontconfig
-    check_error
+    # Run commands and capture stderr
+    error_msg=$(sudo dnf install curl cabextract xorg-x11-font-utils fontconfig 2>&1)
+    check_error "$error_msg"
 
-    sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
-    check_error
+    # Run commands and capture stderr
+    error_msg=$(sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm 2>&1)
+    check_error "$error_msg"
 }
 
 # Call the function
