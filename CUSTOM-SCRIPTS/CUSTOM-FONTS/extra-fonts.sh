@@ -93,9 +93,4 @@ install_custom_fonts() {
 
 }
 
-# Main loop for the menu
-while true; do
-	install_custom_fonts
-done
-
 install_custom_fonts
