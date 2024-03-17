@@ -1,3 +1,38 @@
+## Create custom partitions 
+
+
+note: if you go for "Advanced Custom (Blivet-GUI)" then ve sure to create at least the 3 partitions:
+
+### Partition 1:
+type: Standard partition
+Filesystem: ext4
+Size: 2 Gib (good)
+Mount point:
+/boot 
+
+### Partition 2:
+type: Standard partition
+Filesystem: efisystem
+Size: 2 Gib (good)
+Mount point:
+/boot/efi
+
+### Partition 3:
+type: Btrfs volume
+Size: As much as desired. (30 Gib, 40, 100..)
+Mount point:
+/
+
+* The efi partition is only required if your device supports efi otherwise if only BIOS then don't create it.
+
+
+
+
+
+
+
+
+
 ##  Create a keyboard shortcut to suspend Fedora
 
 To create a keyboard shortcut to suspend Fedora, you can use the following steps:
