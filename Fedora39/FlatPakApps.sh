@@ -51,6 +51,8 @@ if ! command -v flatpak &>/dev/null; then
     sleep 10
 fi
 
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+
 # Add Flathub repository if not already added
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
