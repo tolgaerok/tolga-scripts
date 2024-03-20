@@ -91,6 +91,7 @@ red_msg() {
 
 # Declare Paths & Settings
 CONFIG_CONTENT="[General]\nNumlock=on"
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
 PROF_PATH="/etc/profile"
 SDDM_CONF="/etc/sddm.conf.d/sddm.conf"
 SSH_PATH="/etc/ssh/sshd_config"
