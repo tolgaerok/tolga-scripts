@@ -122,38 +122,51 @@ gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
 sudo yum install gum -y
 clear
 
-# Function to set I/O scheduler
-set_io_scheduler() {
-	local device_path=$1
-	local scheduler=$2
-	echo ""
-	echo "Setting I/O scheduler for $device_path to $scheduler..."
-	echo "$scheduler" >"$device_path/queue/scheduler"
-	gum spin --spinner dot --title "Stand-by..." -- sleep .5
+#!/bin/bash
 
+set_io_scheduler() {
+    local device_path=$1
+    local scheduler=$2
+    local scheduler_file="$device_path/queue/scheduler"
+
+    if [ ! -e "$scheduler_file" ]; then
+        echo "Error: Scheduler file $scheduler_file not found."
+        return 1
+    fi
+
+    echo ""
+    echo "Setting I/O scheduler for $device_path to $scheduler..."
+
+    if ! echo "$scheduler" > "$scheduler_file"; then
+        echo "Error: Failed to set I/O scheduler."
+        return 1
+    fi
+
+    gum spin --spinner dot --title "Stand-by..." -- sleep .5
+    echo "I/O scheduler configuration has been updated."
 }
 
 # Determine the device type (you may need to customize this based on your system)
 if [[ -e "/sys/block/sda" ]]; then
-	DEVICE_PATH="/sys/block/sda"
+    DEVICE_PATH="/sys/block/sda"
 elif [[ -e "/sys/class/nvme/" ]]; then
-	DEVICE_PATH="/sys/block/nvme0n1"
+    DEVICE_PATH="/sys/block/nvme0n1"
 else
-	echo "Unknown device type. Exiting."
-	exit 1
+    echo "Unknown device type. Exiting."
+    exit 1
 fi
 
 # Determine the I/O scheduler based on user's choice
 echo ""
 echo "Current I/O scheduler is:"
 echo ""
-cat /sys/block/sda/queue/scheduler
+cat "$DEVICE_PATH/queue/scheduler"
 echo ""
 echo -e "\nChoose an I/O scheduler:"
-echo "1. kyber - A scheduler designed for low-latency and mixed workloads."
-echo "2. none  - Allows the kernel to use the underlying storage device's native scheduler."
-echo "3. mq    - Multi-Queue framework that can work well with SSDs."
-echo "4. noop  - A simple scheduler that performs minimal I/O scheduling."
+echo "1. kyber 		- A scheduler designed for low-latency and mixed workloads."
+echo "2. none  		- Allows the kernel to use the underlying storage device's native scheduler."
+echo "3. mq-deadline		- Multi-Queue framework that can work well with SSDs."
+echo "4. bfq   		- Budget Fair Queueing scheduler, aimed at improving interactive responsiveness."
 
 read -p "Enter your choice (1/2/3/4): " IO_SCHEDULER_CHOICE
 
@@ -162,18 +175,19 @@ case $IO_SCHEDULER_CHOICE in
 1) SELECTED_IO_SCHEDULER="kyber" ;;
 2) SELECTED_IO_SCHEDULER="none" ;;
 3) SELECTED_IO_SCHEDULER="mq-deadline" ;;
-4) SELECTED_IO_SCHEDULER="noop" ;;
+4) SELECTED_IO_SCHEDULER="bfq" ;;
 *)
-	echo "Invalid choice. Exiting."
-	exit 1
-	;;
+    echo "Invalid choice. Exiting."
+    exit 1
+    ;;
 esac
 
 # Set the chosen I/O scheduler
 set_io_scheduler "$DEVICE_PATH" "$SELECTED_IO_SCHEDULER"
 
-echo "I/O scheduler configurations has been updated."
+echo "I/O scheduler configurations have been updated."
 echo ""
+
 # none [mq-deadline] kyber bfq
 # Super tweak I/O scheduler
 #echo -e "\n${BLUE}Configuring I/O Scheduler to: ${NC}\n"
