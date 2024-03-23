@@ -1264,7 +1264,11 @@ install_apps() {
 	sudo dnf install -y bchunk 			#(convert *.bin, *.cue to *iso) // terminal: bchunk image.cue image.bin image.iso
 	sudo dnf install -y mplayer 			#(play videos and sounds on browser)
 	sudo dnf install -y xine xine-lib libdvdcss 	# quicktime video and AVI
- 
+ 	sudo dnf install -y snapper python-dnf-plugin-snapper
+  	sudo snapper -c root create-config /
+   	sudo btrfs subvolume list /
+    	sleep 3
+     
 	# NOT SURE ABOUT THIS sudo dnf install -y sshfs fuse-sshfs
 
 	# Configure fortune
