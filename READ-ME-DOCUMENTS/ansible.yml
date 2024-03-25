@@ -1,0 +1,46 @@
+- name: Install ansible.builtin.dnf package
+  hosts: folio
+  become: true
+  tasks:
+    - name: Install ansible.builtin.dnf
+      ansible.builtin.dnf:
+        name: ansible
+        state: present
+      register: dnf_install_output
+
+      - debug:
+        var: dnf_install_output
+
+    - name: Run duf command
+      command: duf
+      register: duf_command_output
+      ignore_errors: true
+
+    - debug:
+        var: duf_command_output
+
+    - name: Install geary package
+      ansible.builtin.dnf:
+        name: geary
+        state: present
+      register: duf_install_output
+
+    - debug:
+        var: duf_install_output
+
+    - name: Install btop package
+      ansible.builtin.dnf:
+        name: btop
+        state: present
+      register: btop_install_output
+
+    - debug:
+        var: btop_install_output
+
+    - name: Update cache
+      ansible.builtin.dnf:
+        update_cache: true
+      register: update_cache_output
+
+    - debug:
+        var: update_cache_output
