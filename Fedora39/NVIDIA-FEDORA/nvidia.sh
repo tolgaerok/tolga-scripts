@@ -92,6 +92,22 @@ install_gpu_drivers() {
         sudo dnf upgrade --refresh
         sudo dnf install dnf-plugins-core -y
         sudo dnf install fedora-workstation-repositories
+        sudo dnf copr enable t0xic0der/nvidia-auto-installer-for-fedora -y
+        sudo dnf install nvautoinstall -y
+
+        sudo dnf install xrandr
+        sudo cp -p /usr/share/X11/xorg.conf.d/nvidia.conf /etc/X11/xorg.conf.d/nvidia.conf
+
+        sudo sudo nvautoinstall rpmadd
+        sudo nvautoinstall driver
+        sudo nvautoinstall nvrepo
+        sudo nvautoinstall plcuda
+        sudo nvautoinstall ffmpeg
+        sudo nvautoinstall vulkan
+        sudo nvautoinstall vidacc
+        sudo nvautoinstall compat
+        sleep 1
+        
         sudo dnf config-manager --set-enabled rpmfusion-nonfree-nvidia-driver
 
         # Install the tools required for auto signing to work
@@ -104,9 +120,7 @@ install_gpu_drivers() {
         # nitiate the key enrollment
         # sudo mokutil --import /etc/pki/akmods/certs/public_key.der
 
-        sudo dnf copr enable t0xic0der/nvidia-auto-installer-for-fedora -y
-        sudo dnf install nvautoinstall -y
-
+        
         # Install some dependencies
         sudo dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig
 
@@ -154,18 +168,7 @@ install_gpu_drivers() {
         # Make sure the boot image got updated as well
         sudo dracut --force
 
-        sudo dnf install xrandr
-        sudo cp -p /usr/share/X11/xorg.conf.d/nvidia.conf /etc/X11/xorg.conf.d/nvidia.conf
-
-        sudo sudo nvautoinstall rpmadd
-        sudo nvautoinstall driver
-        sudo nvautoinstall nvrepo
-        sudo nvautoinstall plcuda
-        sudo nvautoinstall ffmpeg
-        sudo nvautoinstall vulkan
-        sudo nvautoinstall vidacc
-        sudo nvautoinstall compat
-        sleep 1
+        
 
         # Latest/Beta driver
         # Install the latest drivers from Rawhide
