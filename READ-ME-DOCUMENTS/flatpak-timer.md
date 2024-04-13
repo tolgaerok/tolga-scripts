@@ -3,7 +3,7 @@
 * Tolga Erok
 * 24-2-24
 
-Overall, this systemd unit configuration defines a timer unit responsible for updating Flatpaks on the system. It specifies that the timer should trigger every 4 minutes, persists across system reboots, and is activated when the timers.target is reached during system startup or operation.
+Overall, this systemd unit configuration defines a timer unit responsible for updating Flatpaks on the system. It specifies that the timer should trigger every 6 hours, persists across system reboots, and is activated when the timers.target is reached during system startup or operation.
 
 ## Create flatpak-update.service
 
@@ -35,7 +35,7 @@ sudo nano /etc/systemd/system/flatpak-update.timer
 [Unit]
 Description=Update Flatpaks
 [Timer]
-OnCalendar=*:0/4
+OnCalendar=*:0/6
 Persistent=true
 [Install]
 WantedBy=timers.target
