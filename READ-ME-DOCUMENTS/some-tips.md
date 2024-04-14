@@ -8,7 +8,7 @@ yay -S manjaro-vaapi libva-utils
 ```bash
 sudo nano /etc/mkinitcpio.conf
 ```
-ADD:
+ADD `shutdown` to the end of the following line:
 ```bash
 HOOKS=(base udev autodetect kms modconf block keyboard keymap consolefont kms plymouth filesystems shutdown)
 ```
