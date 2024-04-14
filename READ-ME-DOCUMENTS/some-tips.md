@@ -1,3 +1,67 @@
+## Arch (BigLinux)
+- Chrome accelerator
+```bash
+yay -S manjaro-vaapi libva-utils
+```
+- Speed up systemD shut down
+
+```bash
+sudo nano /etc/mkinitcpio.conf
+```
+ADD:
+```bash
+HOOKS=(base udev autodetect kms modconf block keyboard keymap consolefont kms plymouth filesystems shutdown)
+```
+Then you must execute:
+```bash
+sudo mkinitcpio -P
+
+```
+- Stop coredumps
+```bash
+sudo mkdir /etc/systemd/coredump.conf.d/
+sudo nano /etc/systemd/coredump.conf.d/custom.conf
+```
+
+ADD:
+```bash
+[Coredump]
+Storage=none
+ProcessSizeMax=0
+```
+- Vaccume journal events
+Works good on Arch (bigLinux)
+Clear jounal cruft
+```bash
+sudo journalctl --rotate;sudo journalctl --vacuum-time=1s
+```
+- Improve journal and systemD speed
+```bash
+sudo nano /etc/systemd/journald.conf
+```
+ADD:
+```bash
+SystemMaxUse=80M
+SystemKeepFree=75M
+MaxLevelStore=warning
+MaxLevelSyslog=warning
+MaxLevelKMsg=warning
+MaxLevelConsole=notice
+MaxLevelWall=crit
+ForwardToWall=no
+```
+- Better latency
+```bash
+sudo nano /etc/tmpfiles.d/better-lattency.conf
+```
+ADD:
+```bash
+# w /sys/kernel/mm/transparent_hugepage/khugepaged/defrag - - - - 0
+w /sys/kernel/mm/transparent_hugepage/khugepaged/defrag - - - - defer+madvise
+```
+
+
+
 ## Create custom partitions 
 
 
