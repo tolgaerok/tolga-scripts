@@ -1,4 +1,12 @@
 ## Arch (BigLinux)
+- Change Fair Queue CoDel packet scheduler to fight bufferbloat from fq_codel to cake
+```bash
+tc qdisc replace dev wlp3s0 root cake bandwidth 1Gbit
+```
+Then:
+```bash
+sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system
+```
 - Chrome accelerator
 ```bash
 yay -S manjaro-vaapi libva-utils
