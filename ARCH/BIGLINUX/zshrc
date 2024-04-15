@@ -1,0 +1,62 @@
+# Use powerline
+USE_POWERLINE="true"
+# Source biglinux-zsh-configuration
+if [[ -e /usr/share/zsh/biglinux-zsh-config ]]; then
+  source /usr/share/zsh/biglinux-zsh-config
+fi
+# Use biglinux zsh prompt
+if [[ -e /usr/share/zsh/biglinux-zsh-prompt ]]; then
+  source /usr/share/zsh/biglinux-zsh-prompt
+fi
+# User aliases
+if [[ -e ~/.bash_aliases ]]; then
+  source ~/.bash_aliases
+fi
+
+
+# alias rc='source ~/.bashrc' # (update the list of aliases I just created)
+alias c='clear'
+alias cc='cd && clear'
+alias connections='netstat -natup' #(observe networks in a particular and detailed way)
+alias cp='cp -i' #(system)
+alias df='df -h' #(system)
+alias egrep='egrep --colour=auto' #(system)
+alias eip="dig @1.1.1.1 whoami.cloudflare ch txt +short"   
+alias erasable='sudo chattr -i' #(makes a file erasable if you first gave it an erasable command)
+alias fgrep='fgrep --colour=auto' #(system)
+alias free='free -m' #(system)
+alias grep='grep --colour=auto' #(system)
+alias indelible='sudo chattr +i' #(makes a file impossible to delete)
+alias lip="ip -br -c a" # Print local ip
+alias ls='ls --color=auto' #(system)
+alias more='less' #(by system)
+alias np='nano -w PKGBUILD' #(system)
+alias rc='clear && source ~/.zshrc'
+alias rce='nano ~/.zshrc' #(opens the file that contains the aliases)
+alias samba='sudo systemctl start smb.service nmb.service'
+alias tolga-cong="sysctl net.ipv4.tcp_congestion_control"
+alias tolga-fmem2="echo && echo 'Current mem:' && free -h && sudo /bin/sh -c '/bin/sync && /sbin/sysctl -w vm.drop_caches=3' && echo && echo 'After: ' && free -h"
+alias tolga-fstab="sudo mount -a && sudo systemctl daemon-reload && echo && echo \"Reloading of fstab done\" && echo"
+alias tolga-io="cat /sys/block/sda/queue/scheduler"
+alias tolga-sys="echo && tolga-io && echo && tolga-cong && echo && echo 'ZSWAP status: ( Y = ON )' && cat /sys/module/zswap/parameters/enabled && systemctl restart earlyoom && systemctl status earlyoom --no-pager"
+alias tolga-sysctl-reload="sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system"
+alias tolga-trim="sudo fstrim -av"
+alias update='sudo pacman -Syyu'  #(updates the operating system)
+alias ysupdate='yay -Syyu'
+
+###---------- Nvidia session ----------###
+export LIBVA_DRIVER_NAME=nvidia
+export WLR_NO_HARDWARE_CURSORS=1
+export __GLX_VENDOR_LIBRARY_NAME=nvidia
+export __GL_SHADER_CACHE=1
+export __GL_THREADED_OPTIMIZATION=1
+
+
+### --- BTRFS TOOLS
+alias tolga-balance-home="sudo btrfs balance start /home && sudo btrfs balance status /home"
+alias tolga-balance-root="sudo btrfs balance start / && sudo btrfs balance status /"
+alias tolga-scrub-home="sudo btrfs scrub start /home && sudo btrfs scrub status /home"
+alias tolga-scrub-root="sudo btrfs scrub start / && sudo btrfs scrub status /"
+
+
+echo "" && fortune | lolcat  && echo ""
