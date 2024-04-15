@@ -1,7 +1,15 @@
-## Arch (BigLinux)
-- Change Fair Queue CoDel packet scheduler to fight bufferbloat from fq_codel to cake
+# Arch (BigLinux)
+- Change ParallelDownloads amount: default = 5 or 7
+  
+```bash
+sudo nano /etc/pacman.conf
+```
+Find: `ParallelDownloads = 7`
+change to `12`
+
+- Change `Fair Queue CoDel packet` scheduler to fight bufferbloat from `fq_codel` to `cake`
 - LOCATION: /usr/lib/sysctl.d/50-default.conf
-- ADD:
+ADD:
 
 ```bash
 net.core.default_qdisc = cake
