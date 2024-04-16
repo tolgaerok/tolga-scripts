@@ -41,7 +41,7 @@ alias tolga-io="cat /sys/block/sda/queue/scheduler"
 alias tolga-sys="echo && tolga-io && echo && tolga-cong && echo && echo 'ZSWAP status: ( Y = ON )' && cat /sys/module/zswap/parameters/enabled && systemctl restart earlyoom && systemctl status earlyoom --no-pager"
 alias tolga-sysctl-reload="sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system"
 alias tolga-trim="sudo fstrim -av"
-alias update='sudo pacman -Syyu'  #(updates the operating system)
+alias update='sudo pacman -Syyu && flatpak update -y && flatpak uninstall --unused && flatpak uninstall --delete-data && [ -f /usr/bin/flatpak ] && flatpak uninstall --unused --delete-data --assumeyes'  #(updates the operating system)
 alias ysupdate='yay -Syyu'
 
 ###---------- Nvidia session ----------###
