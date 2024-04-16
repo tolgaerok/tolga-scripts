@@ -13,6 +13,9 @@ ADD:
 
 - Change `Fair Queue CoDel packet` scheduler to fight bufferbloat from `fq_codel` to `cake`
 - LOCATION: /usr/lib/sysctl.d/50-default.conf
+- If this location dosnt exist then
+`sudo nano /etc/sysctl.d/13-extra-tweak.conf`
+
 ADD:
 
 ```bash
