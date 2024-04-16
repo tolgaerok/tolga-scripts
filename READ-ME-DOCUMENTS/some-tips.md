@@ -1,11 +1,15 @@
-# Arch (BigLinux)
-- Change ParallelDownloads amount: default = 5 or 7
+# Arch (BigLinux, Manjaro)
+- Change ParallelDownloads amount: `default = 5 or 7` and add `ILoveCandy`
   
 ```bash
 sudo nano /etc/pacman.conf
 ```
 Find: `ParallelDownloads = 7`
 change to `12`
+
+ADD:
+`IloveCandy`
+#
 
 - Change `Fair Queue CoDel packet` scheduler to fight bufferbloat from `fq_codel` to `cake`
 - LOCATION: /usr/lib/sysctl.d/50-default.conf
@@ -30,12 +34,12 @@ Then:
 ```bash
 sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system
 ```
-
+#
 - Chrome accelerator
 ```bash
 yay -S manjaro-vaapi libva-utils
 ```
-
+#
 - Speed up systemD shut down
 
 ```bash
@@ -50,6 +54,7 @@ Then you must execute:
 sudo mkinitcpio -P
 
 ```
+#
 - Stop coredumps
 ```bash
 sudo mkdir /etc/systemd/coredump.conf.d/
@@ -62,12 +67,14 @@ ADD:
 Storage=none
 ProcessSizeMax=0
 ```
-- Vaccume journal events
+#
+- Vaccum journal events
 Works good on Arch (bigLinux)
 Clear jounal cruft
 ```bash
 sudo journalctl --rotate;sudo journalctl --vacuum-time=1s
 ```
+#
 - Improve journal and systemD speed
 ```bash
 sudo nano /etc/systemd/journald.conf
@@ -83,6 +90,7 @@ MaxLevelConsole=notice
 MaxLevelWall=crit
 ForwardToWall=no
 ```
+#
 - Better latency
 ```bash
 sudo nano /etc/tmpfiles.d/better-lattency.conf
