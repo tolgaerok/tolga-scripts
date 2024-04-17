@@ -1,6 +1,6 @@
 # Arch (BigLinux, Manjaro)
 
-Add `Nvidia` gloabal environment parameters
+## Add `Nvidia` gloabal environment parameters
 ```bash
 sudo nano /etc/environment
 ```
@@ -28,7 +28,7 @@ __GL_THREADED_OPTIMIZATION=1
 
 #
 
-Custom `kernel` parameters for Biglinux 
+## Custom `kernel` parameters for Biglinux 
 - (Part A)
 
 ```bash
@@ -114,7 +114,7 @@ fs.inotify.max_user_watches = 524288
 vm.max_map_count=1048576
 ```
 
-Custom `kernel` parameters for Biglinux 
+## Custom `kernel` parameters for Biglinux 
 - (Part B)
 
 
@@ -157,7 +157,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --sys
 ```
 
 #
-Change ParallelDownloads amount: `default = 5 or 7` and add `ILoveCandy`
+## Change ParallelDownloads amount: `default = 5 or 7` and add `ILoveCandy`
   
 ```bash
 sudo nano /etc/pacman.conf
@@ -169,7 +169,7 @@ ADD:
 `IloveCandy`
 #
 
-Change `Fair Queue CoDel packet` scheduler to fight bufferbloat from `fq_codel` to `cake`
+## Change `Fair Queue CoDel packet` scheduler to fight bufferbloat from `fq_codel` to `cake`
 - LOCATION: /usr/lib/sysctl.d/50-default.conf
 - If this location dosnt exist then
 `sudo nano /etc/sysctl.d/13-extra-tweak.conf`
@@ -196,12 +196,41 @@ Then:
 sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system
 ```
 #
-Chrome accelerator
+## Chrome accelerator
 ```bash
 yay -S manjaro-vaapi libva-utils
 ```
 #
-Speed up systemD shut down
+## Systemd cannot shutdown properly
+
+Adding to HOOKS array `shutdown` hook and refresh kernels. 
+
+* https://www.reddit.com/r/archlinux/comments/8su99e/my_laptop_isnt_shutting_down_what_can_i_try/
+* https://bbs.archlinux.org/viewtopic.php?id=233820
+* https://github.com/systemd/systemd/issues/8155
+
+
+The work-around for now appears to edit  `/etc/mkinitcpio.conf`  and look for the following line:
+
+ ```
+ HOOKS="base udev autodetect modconf block keyboard keymap filesystems"
+ ```
+ Add the  `shutdown`  hook like so:
+
+ ```
+ HOOKS="base udev autodetect modconf block keyboard keymap filesystems shutdown"
+ ```
+ Afterwards, regenerate the initramfs as follows:
+
+ ```
+ sudo mkinitcpio -P
+ ```
+
+ Upon reboot and a 2nd shutdown, the problem seems to go away. The developers (either archlinux or systemd) might want to check to ensure this is a regression or intended behavior.
+
+#
+
+## Speed up systemD shut down
 
 ```bash
 sudo nano /etc/mkinitcpio.conf
@@ -216,7 +245,7 @@ sudo mkinitcpio -P
 
 ```
 #
-Stop coredumps
+## Stop coredumps
 ```bash
 sudo mkdir /etc/systemd/coredump.conf.d/
 sudo nano /etc/systemd/coredump.conf.d/custom.conf
@@ -229,14 +258,14 @@ Storage=none
 ProcessSizeMax=0
 ```
 #
-- Vaccum journal events
+## Cleanup journal / Vaccum journal events
 Works good on Arch (bigLinux)
 Clear jounal cruft
 ```bash
 sudo journalctl --rotate;sudo journalctl --vacuum-time=1s
 ```
 #
-Improve journal and systemD speed
+## Improve journal and systemD speed
 ```bash
 sudo nano /etc/systemd/journald.conf
 ```
@@ -252,7 +281,7 @@ MaxLevelWall=crit
 ForwardToWall=no
 ```
 #
-Better latency
+## Better latency
 ```bash
 sudo nano /etc/tmpfiles.d/better-lattency.conf
 ```
