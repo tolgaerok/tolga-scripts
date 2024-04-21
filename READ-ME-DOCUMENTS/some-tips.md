@@ -1,5 +1,43 @@
 # Arch (BigLinux, Manjaro)
 
+## auto-cpufreq
+
+`DOC`: github page as it explains it better: 
+```bash
+https://github.com/AdnanHodzic/auto-cpufreq
+```
+
+- Disable the service `tlp`:
+```bash
+sudo systemctl stop tlp.service
+sudo systemctl disable tlp service
+```
+
+- Install `auto-cpufreq`
+  
+Can install via BigLinux Store or via the terminal
+
+```bash
+sudo pacman -S auto-cpufreq
+```
+
+- Activate and start the service:
+```bash
+sudo systemctl enable auto-cpufreq.service
+sudo systemctl start auto-cpufreq.service
+```
+
+- Enable and start the service thermald(recommended)
+```bash
+sudo systemctl enable thermald.service
+sudo systemctl start thermald.service
+```
+Restart the notebook/laptop
+
+#
+
+
+
 ## Disable `ipv6` for faster browsing
 
 - Create a file called `40-ipv6.conf` inside `/etc/sysctl.d`
