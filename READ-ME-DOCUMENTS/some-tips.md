@@ -2,6 +2,19 @@
 
 ## Enable `numlock` on kde
 ```bash
+sudo nano /etc/sddm.conf
+```
+
+```bash
+[General]
+InputMethod=qtvirtualkeyboard
+Numlock=on
+
+```
+
+Or
+
+```bash
 sudo kwriteconfig5 --file /etc/sddm.conf --group General --key Numlock on
 ```
 
