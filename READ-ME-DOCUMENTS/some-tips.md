@@ -1,5 +1,10 @@
 # Arch (BigLinux, Manjaro)
 
+## Enable `numlock` on kde
+```bash
+sudo kwriteconfig5 --file /etc/sddm.conf --group General --key Numlock on
+```
+
 ## auto-cpufreq
 
 `DOC`: github page as it explains it better: 
