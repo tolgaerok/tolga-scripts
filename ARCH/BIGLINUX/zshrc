@@ -13,7 +13,54 @@ if [[ -e ~/.bash_aliases ]]; then
   source ~/.bash_aliases
 fi
 
+###---------- ALIASES ----------###
+# source ~/.bashrc
 
+###---------- my tools ----------###
+alias tolga-htos="sudo ~/.config/MY-TOOLS/assets/scripts/Zysnc-Options/ZYSNC-HOME-TO-SERVER.sh"
+alias tolga-mount="sudo ~/.config/MY-TOOLS/assets/scripts/Mounting-Options/MOUNT-ALL.sh"
+alias tolga-mse="sudo ~/scripts/MYTOOLS/mse.sh"
+alias tolga-stoh="sudo ~/.config/MY-TOOLS/assets/scripts/Zysnc-Options/ZYSNC-SERVER-TO-HOME.sh"
+alias tolga-umount="sudo ~/.config/MY-TOOLS/assets/scripts/Mounting-Options/UMOUNT-ALL.sh"
+
+###---------- fun stuff ----------###
+alias tolga-pics="sxiv -t $HOME/Pictures/CUSTOM-WALLPAPERS/EXPORTS"
+alias tolga-wp="sxiv -t $HOME/Pictures/Wallpaper/"
+
+###---------- navigate files and directories ----------###
+alias ..="cd .."
+alias cl="clear"
+alias copy="rsync -P"
+alias la="lsd -a"
+alias ll="lsd -l"
+alias Ls="lsd"
+alias ls="ls --color=auto"
+alias dir="dir --color=auto"
+alias lsla="lsd -la"
+
+# alias chmod commands
+alias tolga-000='sudo chmod -R 000'
+alias tolga-644='sudo chmod -R 644'
+alias tolga-666='sudo chmod -R 666'
+alias tolga-755='sudo chmod -R 755'
+alias tolga-777='sudo chmod -R 777'
+alias tolga-mx='sudo chmod a+x'
+
+# Search command line history
+alias tolga-h="history | grep "
+
+# Search running processes
+alias tolga-p="ps aux | grep "
+alias tolga-topcpu="/bin/ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10"
+
+# Search files in the current folder
+alias tolga-f="find . | grep "
+
+# Alias's for safe and forced reboots
+alias tolga-rebootforce='sudo shutdown -r -n now'
+alias tolga-rebootsafe='sudo shutdown -r now'
+
+###---------- Tools ----------###
 # alias rc='source ~/.bashrc' # (update the list of aliases I just created)
 alias c='clear'
 alias cc='cd && clear'
@@ -34,9 +81,11 @@ alias np='nano -w PKGBUILD' #(system)
 alias rc='clear && source ~/.zshrc'
 alias rce='nano ~/.zshrc' #(opens the file that contains the aliases)
 alias samba='sudo systemctl start smb.service nmb.service'
+alias tolga-batt="clear && echo Status: && acpi -b | gawk -F ',' -P '{ print $1 }' | gawk -P '{ print $3 }' && echo '' && echo Current Battery: && acpi -b | gawk -F ',' -P '{ print $2 }' | gawk -P '{ print $1 }' && echo '' && echo Remaining Time: && acpi -b | gawk -P '{ print $5 }'"
 alias tolga-cong="sysctl net.ipv4.tcp_congestion_control"
 alias tolga-fmem2="echo && echo 'Current mem:' && free -h && sudo /bin/sh -c '/bin/sync && /sbin/sysctl -w vm.drop_caches=3' && echo && echo 'After: ' && free -h"
 alias tolga-fstab="sudo mount -a && sudo systemctl daemon-reload && echo && echo \"Reloading of fstab done\" && echo"
+alias tolga-grub="sudo update-grub"
 alias tolga-io="cat /sys/block/sda/queue/scheduler"
 alias tolga-sys="echo && tolga-io && echo && tolga-cong && echo && echo 'ZSWAP status: ( Y = ON )' && cat /sys/module/zswap/parameters/enabled && systemctl restart earlyoom && systemctl status earlyoom --no-pager"
 alias tolga-sysctl-reload="sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system"
@@ -51,8 +100,7 @@ export __GLX_VENDOR_LIBRARY_NAME=nvidia
 export __GL_SHADER_CACHE=1
 export __GL_THREADED_OPTIMIZATION=1
 
-
-### --- BTRFS TOOLS
+###---------- BTRFS TOOLS ----------###
 alias tolga-balance-home="sudo btrfs balance start /home && sudo btrfs balance status /home"
 alias tolga-balance-root="sudo btrfs balance start / && sudo btrfs balance status /"
 alias tolga-scrub-home="sudo btrfs scrub start /home && sudo btrfs scrub status /home"
