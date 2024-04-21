@@ -18,6 +18,12 @@ Or
 sudo kwriteconfig5 --file /etc/sddm.conf --group General --key Numlock on
 ```
 
+Or
+
+```bash
+sudo kwriteconfig5 --file /etc/sddm.conf --group General --key numlock true
+```
+
 ## auto-cpufreq
 
 `DOC`: github page as it explains it better: 
