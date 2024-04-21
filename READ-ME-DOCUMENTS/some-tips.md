@@ -262,6 +262,15 @@ change to `12`
 
 ADD:
 `IloveCandy`
+
+RESULT:
+```bash
+[options]
+ParallelDownloads = 12
+ILoveCandy
+```
+
+
 #
 
 ## Change `Fair Queue CoDel packet` scheduler to fight bufferbloat from `fq_codel` to `cake`
