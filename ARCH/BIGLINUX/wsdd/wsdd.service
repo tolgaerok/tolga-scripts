@@ -1,0 +1,16 @@
+[Unit]
+Description=Web Services Dynamic Discovery host daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+DynamicUser=yes
+Type=simple
+EnvironmentFile=/etc/sysconfig/wsdd
+ExecStart=/usr/bin/wsdd
+
+
+[Install]
+WantedBy=multi-user.target
+
+# /usr/lib/systemd/system/wsdd.service
