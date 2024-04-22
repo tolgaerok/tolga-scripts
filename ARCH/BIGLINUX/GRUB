@@ -3,7 +3,8 @@ GRUB_CMDLINE_LINUX_DEFAULT="rd.driver.blacklist=nouveau modprobe.blacklist=nouve
 GRUB_CMDLINE_LINUX="io_delay=none rootdelay=0 init_on_alloc=0 init_on_free=0 zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=10 zswap.zpool=z3fold mitigations=off"
 
 #### -------  FOLIO ------ ###
-
+### BETA
+GRUB_CMDLINE_LINUX_DEFAULT="rd.driver.blacklist=nouveau modprobe.blacklist=nouveau i915.modeset=1 radeon.modeset=1 amdgpu.modeset=1 nowatchdog tsc=nowatchdog cryptomgr.notests no_timer_check rcupdate.rcu_expedited=1 bgrt_disable video=efifb:off video=simplefb:off video=vesafb:off rw nosoftlockup audit=0 nomce skew_tick=1 intremap=off intel_pstate=active amd_pstate=passive cpuidle.governor=teo split_lock_detect=off clearcpuid=514 transparent_hugepage=never loglevel=3 systemd.show_status=auto rd.udev.log_level=3 quiet splash apparmor=1 security=apparmor io_delay=none rootdelay=0 threadirqs irqaffinity=0 noirqdebug iomem=relaxed zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=20 zswap.zpool=zsmalloc workqueue.power_efficient=1 elevator=noop noatime pci=pcie_bus_perf,noaer selinux=0 enforcing=0 mce=0 mds=full,nosmt vsyscall=none nohz=on rcu_nocb_poll irqpoll sched_policy=1 idle=nomwait noreplace-smp"
 
 
 
