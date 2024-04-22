@@ -1,3 +1,14 @@
+#### -------  G1800 ------ ###
+GRUB_CMDLINE_LINUX_DEFAULT="rd.driver.blacklist=nouveau modprobe.blacklist=nouveau i915.modeset=1 radeon.modeset=1 amdgpu.modeset=1 nowatchdog tsc=nowatchdog cryptomgr.notests no_timer_check rcupdate.rcu_expedited=1 bgrt_disable video=efifb:off video=simplefb:off video=vesafb:off rw nosoftlockup audit=0 nomce skew_tick=1 intremap=off intel_pstate=active amd_pstate=passive cpuidle.governor=teo split_lock_detect=off clearcpuid=514 transparent_hugepage=never loglevel=3 systemd.show_status=auto rd.udev.log_level=3 quiet splash apparmor=1 security=apparmor mitigations=off noatime"
+GRUB_CMDLINE_LINUX="io_delay=none rootdelay=0 init_on_alloc=0 init_on_free=0 zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=10 zswap.zpool=z3fold mitigations=off"
+
+#### -------  FOLIO ------ ###
+
+
+
+
+
+
 GRUB_DEFAULT=saved
 GRUB_TIMEOUT=5
 GRUB_TIMEOUT_STYLE=menu
