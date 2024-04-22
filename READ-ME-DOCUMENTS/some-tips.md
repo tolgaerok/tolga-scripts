@@ -76,7 +76,6 @@ sudo nano /etc/sysctl.d/40-ipv6.conf
 # Disable IPv6
 net.ipv6.conf.all.disable_ipv6 = 1 
 net.ipv6.conf.interface0.disable_ipv6 = 1
-...
 net.ipv6.conf.interfaceN.disable_ipv6 = 1
 ```
 #
