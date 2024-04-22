@@ -64,6 +64,7 @@ alias tolga-rebootsafe='sudo shutdown -r now'
 # alias rc='source ~/.bashrc' # (update the list of aliases I just created)
 alias c='clear'
 alias cc='cd && clear'
+alias cj="sudo journalctl --rotate; sudo journalctl --vacuum-time=1s"
 alias connections='netstat -natup' #(observe networks in a particular and detailed way)
 alias cp='cp -i' #(system)
 alias df='df -h' #(system)
@@ -81,10 +82,8 @@ alias np='nano -w PKGBUILD' #(system)
 alias rc='clear && source ~/.zshrc'
 alias rce='nano ~/.zshrc' #(opens the file that contains the aliases)
 alias samba='sudo systemctl start smb.service nmb.service'
-
-alias tolga-batt='clear && echo "Battery: $(acpi -b | awk '\''{print $3}'\'')" && echo '' && echo "Battery Percentage: $(acpi -b | awk '\''{print $4}'\'')" && echo '' && echo "Remaining Time: $(acpi -b | awk '\''{print $5,$6,$7 == "until" ? "until fully charged" : $7}'\'')"'
-
 alias tolga-batt-upower="clear && echo Battery Status: && upower -i /org/freedesktop/UPower/devices/battery_BAT1 | grep -e 'state' -e 'percentage' -e 'time to'"
+alias tolga-batt='clear && echo "Battery: $(acpi -b | awk '\''{print $3}'\'')" && echo '' && echo "Battery Percentage: $(acpi -b | awk '\''{print $4}'\'')" && echo '' && echo "Remaining Time: $(acpi -b | awk '\''{print $5,$6,$7 == "until" ? "until fully charged" : $7}'\'')"'
 alias tolga-cong="sysctl net.ipv4.tcp_congestion_control"
 alias tolga-fmem2="echo && echo 'Current mem:' && free -h && sudo /bin/sh -c '/bin/sync && /sbin/sysctl -w vm.drop_caches=3' && echo && echo 'After: ' && free -h"
 alias tolga-fstab="sudo mount -a && sudo systemctl daemon-reload && echo && echo \"Reloading of fstab done\" && echo"
@@ -94,6 +93,7 @@ alias tolga-sys="echo && tolga-io && echo && tolga-cong && echo && echo 'ZSWAP s
 alias tolga-sysctl-reload="sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system"
 alias tolga-trim="sudo fstrim -av"
 alias update='sudo pacman -Syyu && flatpak update -y && flatpak uninstall --unused && flatpak uninstall --delete-data && [ -f /usr/bin/flatpak ] && flatpak uninstall --unused --delete-data --assumeyes'  #(updates the operating system)
+alias ws='watch sensors'
 alias ysupdate='yay -Syyu'
 
 ###---------- BTRFS TOOLS ----------######
@@ -102,4 +102,12 @@ alias tolga-balance-root="sudo btrfs balance start / && sudo btrfs balance statu
 alias tolga-scrub-home="sudo btrfs scrub start /home && sudo btrfs scrub status /home"
 alias tolga-scrub-root="sudo btrfs scrub start / && sudo btrfs scrub status /"
 
-echo "" && fortune | lolcat  && echo ""
+###---------- Nvidia session ----------###
+export LIBVA_DRIVER_NAME=nvidia
+export WLR_NO_HARDWARE_CURSORS=1
+export __GLX_VENDOR_LIBRARY_NAME=nvidia
+export __GL_SHADER_CACHE=1
+export __GL_THREADED_OPTIMIZATION=1
+
+
+lip && echo "" && fortune | lolcat  && echo "" 
