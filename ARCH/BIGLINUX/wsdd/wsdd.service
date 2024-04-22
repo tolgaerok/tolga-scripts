@@ -1,3 +1,8 @@
+#######################################################
+# OLD ONE THAT WORKED ON FOLIO                        #
+# LOCATION:  /usr/lib/systemd/system/wsdd.service     #
+#######################################################
+
 [Unit]
 Description=Web Services Dynamic Discovery host daemon
 After=network-online.target
@@ -13,4 +18,44 @@ ExecStart=/usr/bin/wsdd
 [Install]
 WantedBy=multi-user.target
 
-# LOCATION:  /usr/lib/systemd/system/wsdd.service
+# ________  MUST DO IN CLI  ___________ #
+ sudo systemctl enable nmb smb
+ sudo systemctl restart nmb smb
+ sudo systemctl enable wsdd.service
+ sudo systemctl restart wsdd.service
+ sudo systemctl daemon-reload
+ sudo systemctl status wsdd.service
+
+
+
+
+#######################################################
+# NEW ONE THAT WORKED ON G1-800                       #
+# LOCATION:  /usr/lib/systemd/system/wsdd.service     #
+#######################################################
+
+ [Unit]
+ Description=Web Services Dynamic Discovery host daemon
+# Start after the network has been configured
+ After=network-online.target
+ Wants=network-online.target
+# It makes sense to have Samba running when wsdd starts, but is not required
+ Wants=smb.service
+
+ [Service]
+ DynamicUser=yes
+ Type=simple
+ Daemon parameters (including e.g. workgroup) are now set via config file:
+ EnvironmentFile=/etc/conf.d/wsdd
+ ExecStart=/usr/bin/wsdd $PARAMS
+
+ [Install]
+ WantedBy=multi-user.target
+
+# ________  MUST DO IN CLI  ___________ #
+ sudo systemctl enable nmb smb
+ sudo systemctl restart nmb smb
+ sudo systemctl enable wsdd.service
+ sudo systemctl restart wsdd.service
+ sudo systemctl daemon-reload
+ sudo systemctl status wsdd.service
