@@ -1,5 +1,6 @@
 # Use powerline
 USE_POWERLINE="true"
+
 # Source biglinux-zsh-configuration
 if [[ -e /usr/share/zsh/biglinux-zsh-config ]]; then
   source /usr/share/zsh/biglinux-zsh-config
@@ -12,6 +13,36 @@ fi
 if [[ -e ~/.bash_aliases ]]; then
   source ~/.bash_aliases
 fi
+
+# Function to install missing packages
+# Tolga Erok
+
+install_package() {
+    local package="$1"
+    echo "The command '$package' was not found."
+    read "answer?Do you want to install it? [Y/n] "
+    case ${answer:0:1} in
+        y|Y )
+            sudo pacman -S "$package"
+            ;;
+        * )
+            return 1
+            ;;
+    esac
+}
+
+# Function to intercept command not found errors
+command_not_found_handler() {
+    local command="$1"
+    if install_package "$command"; then
+        # Retry the command after installation
+        "$command"
+    else
+        # If the user chooses not to install, return error status
+        return 127
+    fi
+}
+
 
 ###---------- ALIASES ----------###
 # source ~/.bashrc
@@ -92,7 +123,8 @@ alias tolga-io="cat /sys/block/sda/queue/scheduler"
 alias tolga-sys="echo && tolga-io && echo && tolga-cong && echo && echo 'ZSWAP status: ( Y = ON )' && cat /sys/module/zswap/parameters/enabled && systemctl restart earlyoom && systemctl status earlyoom --no-pager"
 alias tolga-sysctl-reload="sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system"
 alias tolga-trim="sudo fstrim -av"
-alias update='sudo pacman -Syyu && flatpak update -y && flatpak uninstall --unused && flatpak uninstall --delete-data && [ -f /usr/bin/flatpak ] && flatpak uninstall --unused --delete-data --assumeyes'  #(updates the operating system)
+alias update='sudo pacman -Syyu && flatpak update -y && flatpak uninstall --unused && flatpak uninstall --delete-data && [ -f /usr/bin/flatpak ] && flatpak uninstall --unused --delete-data -y'
+
 alias ws='watch sensors'
 alias ysupdate='yay -Syyu'
 
@@ -109,5 +141,15 @@ export __GLX_VENDOR_LIBRARY_NAME=nvidia
 export __GL_SHADER_CACHE=1
 export __GL_THREADED_OPTIMIZATION=1
 
+XDG_DESKTOP_DIR="$HOME/"
+XDG_DOWNLOAD_DIR="$HOME/"
+XDG_DOCUMENTS_DIR="$HOME/"
+XDG_MUSIC_DIR="$HOME/"
+XDG_PICTURES_DIR="$HOME/"
+XDG_VIDEOS_DIR="$HOME/"
+XDG_TEMPLATES_DIR="$HOME/Templates"
+XDG_PUBLICSHARE_DIR="$HOME/Public"
+
+plugins=(git zsh-autosuggestions)
 
 lip && echo "" && fortune | lolcat  && echo "" 
