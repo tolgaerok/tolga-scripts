@@ -291,7 +291,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --sys
 
 Then:
 ```bash
-tc qdisc replace dev wlp3s0 root cake bandwidth 1Gbit
+sudo tc qdisc replace dev wlp3s0 root cake bandwidth 1Gbit
 ```
 
 Then:
