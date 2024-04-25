@@ -12,7 +12,7 @@ Numlock=on
 
 ```
 
-Or
+Or (This Works on Solus)
 
 ```bash
 sudo kwriteconfig5 --file /etc/sddm.conf --group General --key Numlock on
@@ -21,7 +21,7 @@ sudo kwriteconfig5 --file /etc/sddm.conf --group General --key Numlock on
 Or
 
 ```bash
-sudo kwriteconfig5 --file /etc/sddm.conf --group General --key numlock true
+sudo kwriteconfig5 --file /etc/sddm.conf --group General --key Numlock true
 ```
 
 ## auto-cpufreq
