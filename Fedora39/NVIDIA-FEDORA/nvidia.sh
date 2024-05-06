@@ -83,7 +83,8 @@ check_error() {
 install_gpu_drivers() {
     display_message "[${GREEN}✔${NC}]  Checking GPU and installing drivers..."
     sudo dnf install -y mesa-vdpau-drivers zenity
-
+    sudo dnf install plasma-workspace-x11.x86_64 && sudo dnf install kwin-x11
+    
     # Check for NVIDIA GPU
     if lspci | grep -i nvidia &>/dev/null; then
         display_message "[${GREEN}✔${NC}]  NVIDIA GPU detected. Installing NVIDIA drivers..."
