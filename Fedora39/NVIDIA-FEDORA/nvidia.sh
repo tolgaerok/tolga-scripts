@@ -412,3 +412,6 @@ install_gpu_drivers() {
         ;;
     esac
 }
+
+# Execute
+install_gpu_drivers
