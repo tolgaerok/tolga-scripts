@@ -92,7 +92,9 @@ install_gpu_drivers() {
         sudo dnf update
         sudo dnf upgrade --refresh
         sudo dnf install dnf-plugins-core -y
-        sudo dnf install fedora-workstation-repositories
+        sudo dnf install -y fedora-workstation-repositories
+        sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+        sudo dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/fedora39/x86_64/cuda-fedora39.repo
         sudo dnf copr enable t0xic0der/nvidia-auto-installer-for-fedora -y
         sudo dnf install nvautoinstall -y
 
@@ -119,12 +121,8 @@ install_gpu_drivers() {
         # sudo kmodgenca -a
 
         # nitiate the key enrollment
-        # sudo mokutil --import /etc/pki/akmods/certs/public_key.der
-
+        # sudo mokutil --import /etc/pki/akmods/certs/public_key.der        
         
-        # Install some dependencies
-        sudo dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig
-
         # Blacklist some modules
         echo "blacklist nouveau" >>/etc/modprobe.d/blacklist.conf
         echo "blacklist iTCO_wdt" >>/etc/modprobe.d/blacklist.conf
@@ -151,11 +149,17 @@ install_gpu_drivers() {
         sudo dnf config-manager --set-enabled rpmfusion-free rpmfusion-free-updates rpmfusion-nonfree rpmfusion-nonfree-updates
 
         #  sudo bash -c "dnf remove -y nvidia*; dnf remove -y akmod-nvidia; dnf remove -y dkms-nvidia; rm -rf /var/lib/dkms/nvidia*; dnf install -y akmod-nvidia nvidia-driver nvidia-driver-NVML nvidia-driver-NVML.i686 nvidia-driver-NvFBCOpenGL nvidia-driver-cuda nvidia-driver-cuda-libs nvidia-driver-cuda-libs.i686 nvidia-driver-libs nvidia-driver-libs.i686 nvidia-kmod-common nvidia-libXNVCtrl nvidia-modprobe nvidia-persistenced nvidia-settings nvidia-xconfig nvidia-vaapi-driver nvidia-gpu-firmware --refresh; systemctl enable --now akmods; dracut -f"
+        # Install some dependencies
 
         sudo dnf install -y kernel-devel akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs
         sudo dnf install -y gcc kernel-headers kernel-devel akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs xorg-x11-drv-nvidia-libs.i686
         sudo dnf install -y vdpauinfo libva-vdpau-driver libva-utils vulkan akmods nvidia-vaapi-driver libva-utils vdpauinfo
+        sudo dnf install -y kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig
+        sudo dnf install -y kernel-headers kernel-devel tar bzip2 make automake gcc gcc-c++ pciutils elfutils-libelf-devel libglvnd-opengl libglvnd-glx libglvnd-devel acpid pkgconfig dkms
         sudo dnf install -y nvidia-settings nvidia-persistenced xorg-x11-drv-nvidia-power
+        sudo dnf module install -y nvidia-driver:latest-dkms
+        sudo dnf install -y akmod-nvidia
+        sudo dnf install -y xorg-x11-drv-nvidia-cuda
 
         sudo systemctl enable nvidia-{suspend,resume,hibernate}
 
@@ -168,8 +172,6 @@ install_gpu_drivers() {
 
         # Make sure the boot image got updated as well
         sudo dracut --force
-
-        
 
         # Latest/Beta driver
         # Install the latest drivers from Rawhide
@@ -253,6 +255,8 @@ install_gpu_drivers() {
 
         display_message "[${GREEN}✔${NC}]  nvidia-modeset enabled successfully."
 
+        sudo dnf module list nvidia-driver
+        
         SETTINGS_FILE="/etc/environment"
         BASHRC_FILE="$HOME/.bashrc"
         PAM_LOGIN_FILE="/etc/pam.d/login"
