@@ -1078,6 +1078,7 @@ install_apps() {
 	sudo dnf install -y mesa-libGL mesa-libGLw mesa-libGLU mesa-libGLU-devel mesa-filesystem mesa-va-drivers mesa-libEGL mesa-libglapi mesa-libGL-devel 
 	sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune-mod mesa-vulkan-drivers mesa-libd3d-devel mesa-libOpenCL mesa-libOSMesa
  	sudo dnf install -y rsync openssh-server openssh-clients wsdd variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel dnf5 dnf5-plugins dnfdragora tlp tlp-rdw 
+  	sudo dnf install -y libyui-mga-qt libyui-qt
  	sudo dnf install -y liveusb-creator 		#to create a disk image
 	sudo dnf install -y k3b 			#(install .md5 and .mdf)
 	sudo dnf install -y AcetoneISO 			#(best program to mount *.bin *.mdf *.nrg *.img *.daa *.cdi *.xbx *.b5i *.bwi)
