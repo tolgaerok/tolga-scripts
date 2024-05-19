@@ -1,3 +1,12 @@
+# Ultramarine Upgrade from UM39 - UM40
+
+```script
+sudo dnf upgrade --refresh
+sudo dnf install dnf-plugins-core
+sudo dnf system-upgrade download --releasever=40
+sudo dnf system-upgrade reboot
+```
+
 # Arch (BigLinux, Manjaro)
 
 ## Enable `numlock` on kde
