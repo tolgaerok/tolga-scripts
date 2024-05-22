@@ -7,6 +7,12 @@ sudo dnf system-upgrade download --releasever=40
 sudo dnf system-upgrade reboot
 ```
 
+# Ultramarine Nvidia
+```script
+sudo dnf update # Update the system first, the drivers may not work right if you don't.
+sudo dnf install akmod-nvidia # Install the NVIDIA kernel module.
+```
+
 # Arch (BigLinux, Manjaro)
 
 ## Enable `numlock` on kde
