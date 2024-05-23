@@ -1,3 +1,50 @@
+# Detect USB Device Versions Plugged in
+
+```script
+#!/bin/bash
+# Tolga erok
+# 22/5/24
+
+# Function to detect USB version of a port
+detect_usb_version() {
+    local usb_version=$(lsusb -v -d "$1" 2>/dev/null | grep "bcdUSB" | awk '{print $2}')
+    if [[ "$usb_version" == "3.00" ]]; then
+        echo "USB 3.0"
+    elif [[ "$usb_version" == "2.00" ]]; then
+        echo "USB 2.0"
+    elif [[ "$usb_version" == "1.10" || "$usb_version" == "1.00" ]]; then
+        echo "USB 1.x"
+    else
+        echo "Unknown USB version"
+    fi
+}
+
+# Main function
+main() {
+    echo "Detecting USB versions:"
+    echo "-----------------------"
+    lsusb | while read -r line; do
+        usb_vendor=$(echo "$line" | awk '{print $6}')
+        usb_product=$(echo "$line" | awk '{print $7}')
+        usb_version=$(detect_usb_version "$usb_vendor:$usb_product")
+        echo "USB device: $usb_vendor:$usb_product, Version: $usb_version"
+    done
+}
+
+# Run the main function
+main
+```
+- Make script executable
+```bash
+chmod +x detect_usb_version.sh
+```
+
+- To run:
+```bash
+./detect_usb_version.sh
+
+```  
+
 # Detect Package Manger on any system
 
 ```script
