@@ -1,3 +1,40 @@
+# Detect Package Manger on any system
+
+```script
+#!/bin/bash
+
+# Function to detect the package manager
+detect_package_manager() {
+    for _PM in apt-get dnf eopkg pacman pkgtool ppm swupd yum xbps-install zypper unknown; do
+        if command -v "$_PM" &> /dev/null; then
+            if [ "$_PM" = "apt-get" ] && ! command -v dpkg &> /dev/null && command -v rpm &> /dev/null; then
+                _PM=apt-rpm
+            fi
+            echo "$_PM"
+            break
+        fi
+    done
+}
+
+# Main function
+main() {
+    package_manager=$(detect_package_manager)
+    echo "Package manager is: $package_manager"
+}
+
+# Run the main function
+main
+
+```
+- make the script executable
+```script
+chmod +x detect_package_manager.sh
+```
+- Run the script
+```bash
+./detect_package_manager.sh
+```
+
 # Ultramarine Upgrade from UM39 - UM40
 
 ```script
