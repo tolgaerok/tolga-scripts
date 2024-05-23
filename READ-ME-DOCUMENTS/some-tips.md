@@ -1,4 +1,5 @@
 # Detect USB Device Versions Plugged in
+![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/a7ab8daa-3c34-4e83-9112-0a8da606d615)
 
 ```script
 #!/bin/bash
@@ -46,6 +47,7 @@ chmod +x detect_usb_version.sh
 ```  
 
 # Detect Package Manger on any system
+![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/afe621c1-8336-45a5-a07b-41da91203c68)
 
 ```script
 #!/bin/bash
