@@ -1,3 +1,34 @@
+# Install Nvidia on F40 GNOME
+```script
+sudo dnf install akmod-nvidia                                 # rhel/centos users can use kmod-nvidia instead
+sudo dnf install xorg-x11-drv-nvidia-cuda                     # optional for cuda/nvdec/nvenc support
+sudo dnf install xorg-x11-drv-nvidia-cuda-libs                # RPM Fusion support ffmpeg compiled with NVENC/NVDEC with Fedora 25 and later
+sudo dnf install nvidia-vaapi-driver libva-utils vdpauinfo    # enable video acceleration support for your player and if your NVIDIA card is recent enough (Geforce 8 and later is needed)
+sudo dnf install xorg-x11-drv-nvidia-power
+sudo systemctl enable nvidia-{suspend,resume,hibernate}
+sudo grubby --update-kernel=ALL --args='nvidia-drm.modeset=1'
+```
+- Optional: tweak `nvidia options NVreg_TemporaryFilePath=/var/tmp` from `/etc/modprobe.d/nvidia.conf` as needed if you have issue with `/tmp` as `tmpfs` with nvidia suspend )
+
+
+
+# Nvidia suspend issue work around
+The configuration line `options nvidia NVreg_TemporaryFilePath=/tmp` adjusts the NVIDIA driver's temporary file path to `/tmp`. This change is particularly useful when encountering issues with NVIDIA suspend due to `/tmp` being mounted as `tmpfs`.
+
+- Edit the NVIDIA Configuration File:
+```script
+sudo nano /etc/modprobe.d/nvidia.conf
+```
+
+- Modify the NVreg_TemporaryFilePath Parameter by adding:
+```script
+options nvidia NVreg_TemporaryFilePath=/tmp
+```
+
+- Save `control+x` and `reboot`
+
+
+
 # Detect USB Device Versions Plugged in
 ![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/a7ab8daa-3c34-4e83-9112-0a8da606d615)
 
