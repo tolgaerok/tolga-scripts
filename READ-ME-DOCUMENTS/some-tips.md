@@ -1,3 +1,62 @@
+# F40 GNOME Rygel issues
+```script
+#!/bin/bash
+# Tolga Erok
+# 25/5/24
+
+# Variables
+SERVICE_FILE="/etc/systemd/system/rygel.service"
+USERNAME=$(whoami)
+GROUP=$(id -gn)
+
+# Check if Rygel is installed
+if ! dpkg -l | grep -q rygel; then
+  echo "Rygel is not installed. Installing Rygel..."
+  sudo apt-get update
+  sudo apt-get install -y rygel
+else
+  echo "Rygel is already installed."
+fi
+
+# Create systemd service file
+echo "Creating systemd service file for Rygel..."
+sudo tee $SERVICE_FILE > /dev/null <<EOL
+[Unit]
+Description=Rygel DLNA/UPnP server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/rygel
+Restart=on-failure
+User=$USERNAME
+Group=$GROUP
+
+[Install]
+WantedBy=multi-user.target
+EOL
+
+# Reload systemd daemon to recognize the new service
+echo "Reloading systemd daemon..."
+sudo systemctl daemon-reload
+
+# Start the Rygel service
+echo "Starting Rygel service..."
+sudo systemctl start rygel
+
+# Enable Rygel service to start on boot
+echo "Enabling Rygel service to start on boot..."
+sudo systemctl enable rygel
+
+# Check the status of the Rygel service
+echo "Checking the status of Rygel service..."
+sudo systemctl status rygel
+
+echo "Rygel setup completed."
+
+
+```
+
+
 # Install Nvidia on F40 GNOME
 ```script
 sudo dnf install akmod-nvidia                                 # rhel/centos users can use kmod-nvidia instead
