@@ -12,8 +12,8 @@ GROUP=$(id -gn)
 # Check if Rygel is installed
 if ! dpkg -l | grep -q rygel; then
   echo "Rygel is not installed. Installing Rygel..."
-  sudo apt-get update
-  sudo apt-get install -y rygel
+  sudo dnf update
+  sudo dnf install -y rygel
 else
   echo "Rygel is already installed."
 fi
@@ -46,6 +46,7 @@ sudo systemctl start rygel
 # Enable Rygel service to start on boot
 echo "Enabling Rygel service to start on boot..."
 sudo systemctl enable rygel
+sudo systemctl restart rygel
 
 # Check the status of the Rygel service
 echo "Checking the status of Rygel service..."
