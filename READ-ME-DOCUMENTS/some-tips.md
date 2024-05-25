@@ -1,4 +1,5 @@
 # F40 GNOME Rygel issues
+
 ```script
 #!/bin/bash
 # Tolga Erok
@@ -53,10 +54,7 @@ echo "Checking the status of Rygel service..."
 sudo systemctl status rygel
 
 echo "Rygel setup completed."
-
-
 ```
-
 
 # Install Nvidia on F40 GNOME
 ```script
