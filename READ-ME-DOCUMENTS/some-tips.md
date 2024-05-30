@@ -29,8 +29,8 @@ After=network.target
 [Service]
 ExecStart=/usr/bin/rygel
 Restart=on-failure
-User=$USERNAME
-Group=$GROUP
+#User=$USERNAME
+#Group=$GROUP
 
 [Install]
 WantedBy=multi-user.target
@@ -67,8 +67,11 @@ sudo systemctl enable nvidia-{suspend,resume,hibernate}
 sudo grubby --update-kernel=ALL --args='nvidia-drm.modeset=1'
 ```
 - Optional: tweak `nvidia options NVreg_TemporaryFilePath=/var/tmp` from `/etc/modprobe.d/nvidia.conf` as needed if you have issue with `/tmp` as `tmpfs` with nvidia suspend )
+- To uninstall the package, use the following command:
 
-
+```script
+sudo yum remove xorg-x11-drv-nvidia\* kmod-nvidia\* 
+```
 
 # Nvidia suspend issue work around
 The configuration line `options nvidia NVreg_TemporaryFilePath=/tmp` adjusts the NVIDIA driver's temporary file path to `/tmp`. This change is particularly useful when encountering issues with NVIDIA suspend due to `/tmp` being mounted as `tmpfs`.
