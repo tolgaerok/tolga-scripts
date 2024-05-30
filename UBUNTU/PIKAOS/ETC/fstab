@@ -1,0 +1,11 @@
+# /dev/sda3
+UUID=88f3fa3e-a016-4b51-9b39-4258ef883b5b	/         	btrfs     	noatime,rw,relatime,ssd,discard=async,space_cache=v2,subvolid=256,subvol=/@	0 0
+
+# /dev/sda2
+UUID=91ece07f-8aa6-47e4-a810-9e5d33c72cc7	/boot     	ext4      	rw,relatime	0 2
+
+# /dev/sda1
+UUID=99C9-5E0A      	                    /boot/efi 	vfat      	rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro	0 2
+
+# /dev/sda4
+UUID=f8dba717-0b46-438f-b0ba-56e4d805c068	/home     	btrfs     	noatime,rw,relatime,ssd,discard=async,space_cache=v2,subvolid=256,subvol=/@	0 0
