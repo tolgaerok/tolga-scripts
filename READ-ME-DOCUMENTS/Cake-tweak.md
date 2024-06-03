@@ -1,6 +1,9 @@
 # Cake qdisc tweak
 My script applies the CAKE qdisc with a bandwidth limit of 1 Gbit/s to both wlo1 and wlp3s0 interfaces
 
+![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/78b10e56-6b0c-44cc-9f50-6731201fabd3)
+
+
 Why Use CAKE Qdisc?
 
 - Reduces Latency (Bufferbloat)
