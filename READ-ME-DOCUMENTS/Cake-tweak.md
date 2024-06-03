@@ -30,27 +30,33 @@ Summary
 # Tolga Erok
 # 2-6-24
 
-# Define the interfaces on the system (wifi)
-interfaces=("wlo1" "wlp3s0")
-
 # Colors for output
 YELLOW="\033[1;33m"
 BLUE="\033[0;34m"
 RED="\033[0;31m"
 NC="\033[0m" # No Color
 
-# Apply CAKE qdisc to each interface
-for interface in "${interfaces[@]}"; do
+# Function to apply CAKE qdisc to an interface
+apply_cake_qdisc() {
+    local interface=$1
     echo -e "${BLUE}Configuring interface ${interface}...${NC}"
     if sudo tc qdisc replace dev "$interface" root cake bandwidth 1Gbit; then
         echo -e "${YELLOW}Successfully configured CAKE qdisc on ${interface}.${NC}"
     else
         echo -e "${RED}Failed to configure CAKE qdisc on ${interface}.${NC}"
     fi
+}
+
+# Get a list of all network interfaces (excluding irrelevant ones)
+interfaces=$(ip link show | awk -F: '$0 !~ "lo|virbr|docker|^[^0-9]"{print $2;getline}')
+
+# Apply CAKE qdisc to each interface
+for interface in $interfaces; do
+    apply_cake_qdisc "$interface"
 done
 
 # Display the configured qdiscs
-for interface in "${interfaces[@]}"; do
+for interface in $interfaces; do
     echo -e "${BLUE}Qdisc configuration for ${interface}:${NC}"
     sudo tc qdisc show dev "$interface"
 done
@@ -75,7 +81,7 @@ echo -e "${YELLOW}Traffic control settings applied successfully.${NC}"
 echo -e "${YELLOW}net.core.default_qdisc set to cake in /etc/sysctl.conf.${NC}"
 
 # Verification Step
-for interface in "${interfaces[@]}"; do
+for interface in $interfaces; do
     echo -e "${BLUE}Verifying qdisc configuration for ${interface}:${NC}"
     qdisc_output=$(sudo tc qdisc show dev "$interface")
     if echo "$qdisc_output" | grep -q 'cake'; then
@@ -85,7 +91,6 @@ for interface in "${interfaces[@]}"; do
     fi
     echo "$qdisc_output"
 done
-
 
 ```
 Usage:
