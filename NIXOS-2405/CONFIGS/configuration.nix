@@ -9,6 +9,7 @@ with lib;
 let
 
   country = "Australia/Perth";
+  hostname = "Folio-Nixos";
   kernel = pkgs.linuxPackages_zen;
   locale = "en_AU.UTF-8";
   name = "tolga";
@@ -50,7 +51,9 @@ in {
   boot.kernelPackages = kernel;
 
   boot.kernelParams = [
-    "elevator=kyber" # Change to kyber scheduler
+    "elevator=kyber"          # Change to kyber scheduler
+    "mitigations=off"         # Disables certain security mitigations, potentially improving performance but reducing security.
+    "quiet"                   # Suppresses verbose kernel messages during boot, providing a quieter boot process.
   ];
 
   boot.supportedFilesystems = [ "ntfs" ]; # USB Drives might have this format
@@ -78,6 +81,20 @@ in {
   fileSystems."/tmp" = {
     device = "tmpfs";
     options = [ "size=5G" ]; # Adjust based on your preferences and needs
+  };
+
+  # Add a file system entry for the "DLNA" directory bind mount
+  fileSystems."/mnt/DLNA" = {
+    device = "/home/"${name}"/DLNA";
+    fsType = "none";
+    options = [ "bind" "rw" ];  # Read-write access
+  };
+
+  # Add a file system entry for the "MyGit" directory bind mount
+  fileSystems."/mnt/MyGit" = {
+    device = "/home/"${name}"/MyGit";
+    fsType = "none";
+    options = [ "bind" "rw" ];  # Read-write access
   };
 
 
@@ -250,7 +267,7 @@ in {
   #---------------------------------------------------------------------
   # Networking
   #---------------------------------------------------------------------
-  networking.hostName = "folio-nixos"; # Define your hostname.
+  networking.hostName = "${hostname}"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   networking.networkmanager.enable = true;
