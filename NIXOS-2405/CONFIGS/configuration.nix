@@ -12,32 +12,34 @@ let
   kernel = pkgs.linuxPackages_zen;
 
 in {
-  imports = [ # Include the results of the hardware scan.
-     ./DE/gnome.nix
+
+  imports = [
+
+    # ./DE/kde.nix
+    # ./core
     # ./core/modules
     # ./core/modules/system-tweaks/kernel-tweaks/8GB-SYSTEM/8GB-SYSTEM.nix
     # ./core/modules/system-tweaks/kernel-upgrades/latest-standard.nix
     # ./core/modules/system-tweaks/storage-tweaks/SSD/SSD-tweak.nix
-    # ./core
-    # ./DE/kde.nix
+
+    ./DE/gnome.nix
     ./hardware-configuration.nix
     ./network
     ./user/tolga/home-network/mnt-samba.nix
   ];
 
+
   #---------------------------------------------------------------------
-  # Bootloader - EFI
+  # Bootloader configuration - EFI, plymouth, tmpfs
   #---------------------------------------------------------------------
   boot = {
     loader = {
-      efi.canTouchEfiVariables =
-        true; # Enables the ability to modify EFI variables.
+      efi.canTouchEfiVariables = true; # Enables the ability to modify EFI variables.
       systemd-boot.enable = true; # Activates the systemd-boot bootloader.
       systemd-boot.consoleMode = "max";
     };
 
-    initrd.systemd.enable =
-      true; # Enables systemd services in the initial ramdisk (initrd).
+    initrd.systemd.enable = true; # Enables systemd services in the initial ramdisk (initrd).
     initrd.verbose = false; # silent boot
     plymouth.enable = true; # Activates the Plymouth boot splash screen.
     plymouth.theme = "breeze"; # Sets the Plymouth theme to "breeze."
@@ -45,33 +47,11 @@ in {
 
   boot.kernelPackages = kernel;
 
+  boot.kernelParams = [
+    "elevator=kyber" # Change to kyber scheduler
+  ];
+
   boot.supportedFilesystems = [ "ntfs" ]; # USB Drives might have this format
-
-  nixpkgs.config.joypixels.acceptLicense = true;
-
-  services = { envfs = { enable = true; }; };
-
-  services.timesyncd.enable = true;
-
-  # Enable the D-Bus service, which is a message bus system that allows
-  # communication between applications.
-  # Thanks Chris Titus!
-  services = {
-    dbus = {
-      enable = true;
-      packages = with pkgs; [
-
-        dconf
-        gcr
-        udisks2
-
-      ];
-    };
-  };
-
-  # Enables simultaneous use of processor threads.
-  # ---------------------------------------------
-  security.allowSimultaneousMultithreading = true;
 
   # silence ACPI "errors" at boot shown before NixOS stage 1 output (default is 4)
   boot.consoleLogLevel = 3;
@@ -98,176 +78,10 @@ in {
     options = [ "size=5G" ]; # Adjust based on your preferences and needs
   };
 
-  networking.hostName = "folio-nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # --------------------------------------------------------------------
-  # Permit Insecure Packages
-  # --------------------------------------------------------------------
-  nixpkgs.config.permittedInsecurePackages =
-    [ "openssl-1.1.1u" "openssl-1.1.1v" "electron-12.2.3" ];
 
   #---------------------------------------------------------------------
-  # Enable networking
+  # System optimisations
   #---------------------------------------------------------------------
-  networking.networkmanager.enable = true;
-
-  networking.networkmanager.connectionConfig = {
-    "ethernet.mtu" = 1462;
-    "wifi.mtu" = 1462;
-  };
-
-  # Set your time zone.
-  time.timeZone = "Australia/Perth";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_AU.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_AU.UTF-8";
-    LC_IDENTIFICATION = "en_AU.UTF-8";
-    LC_MEASUREMENT = "en_AU.UTF-8";
-    LC_MONETARY = "en_AU.UTF-8";
-    LC_NAME = "en_AU.UTF-8";
-    LC_NUMERIC = "en_AU.UTF-8";
-    LC_PAPER = "en_AU.UTF-8";
-    LC_TELEPHONE = "en_AU.UTF-8";
-    LC_TIME = "en_AU.UTF-8";
-  };
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the KDE Plasma Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-
-  # Configure keymap in X11
-  services.xserver = {
-    xkb.layout = "au";
-    xkb.variant = "";
-  };
-
-  #---------------------------------------------------------------------
-  # Enable CUPS to print documents.
-  #---------------------------------------------------------------------
-  services.printing.enable = true;
-
-  # Enable sound with pipewire.
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.tolga = {
-    isNormalUser = true;
-    description = "tolga erok";
-    extraGroups = [
-      "adbusers"
-      "audio"
-      "corectrl"
-      "disk"
-      "docker"
-      "input"
-      "libvirtd"
-      "lp"
-      "minidlna"
-      "mongodb"
-      "mysql"
-      "network"
-      "networkmanager"
-      "postgres"
-      "power"
-      "samba"
-      "scanner"
-      "smb"
-      "sound"
-      "storage"
-      "systemd-journal"
-      "udev"
-      "users"
-      "video"
-      "wheel" # Enable ‘sudo’ for the user.
-    ];
-
-    packages = with pkgs; [
-      caprine-bin
-      firefox
-      gnome-extension-manager
-      gnome.gnome-tweaks
-      kate
-      mesa
-
-      #  thunderbird
-    ];
-  };
-
-  #---------------------------------------------------------------------
-  # Allow unfree packages
-  #---------------------------------------------------------------------
-  environment.sessionVariables.NIXPKGS_ALLOW_UNFREE = "1";
-  nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs;
-    [
-      #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-      #  wget
-    ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  #---------------------------------------------------------------------
-  # Enable the OpenSSH daemon.
-  #---------------------------------------------------------------------
-  services.openssh.enable = true;
-
-  #---------------------------------------------------------------------
-  # Automatic system upgrades, automatically reboot after an upgrade if
-  # necessary
-  #---------------------------------------------------------------------
-  # system.autoUpgrade.allowReboot = true;  # Very annoying .
-  system.autoUpgrade.enable = true;
-  system.copySystemConfiguration = true;
-  system.stateVersion = "23.05";
-  systemd.extraConfig = "DefaultTimeoutStopSec=10s";
-
     nix = {
     settings = {
       allowed-users = [ "@wheel" "${name}" ];
@@ -314,26 +128,280 @@ in {
     };
   };
 
-  boot.kernelParams = [
-    "elevator=kyber" # Change to kyber scheduler
-  ];
 
-  services.fstrim.enable = true;
+  # -----------------------------------------------
+  # Services
+  # -----------------------------------------------
 
-  hardware.opengl.enable = true;
-  hardware.opengl.driSupport = true;
-  hardware.opengl.driSupport32Bit = true;
+  #---------------------------------------------------------------------
+  # Enable the OpenSSH daemon.
+  #---------------------------------------------------------------------
+  services.openssh.enable = true;
 
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  #---------------------------------------------------------------------
+  # Enable CUPS to print documents.
+  #---------------------------------------------------------------------
+  services.printing.enable = true;
 
-  systemd.services.io-scheduler = {
-    description = "Set I/O Scheduler on boot - Tolga Erok";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c 'echo -e \"Configuring I/O Scheduler to: \"; echo \"kyber\" | ${pkgs.coreutils}/bin/tee /sys/block/sda/queue/scheduler; printf \"I/O Scheduler has been set to ==>  \"; cat /sys/block/sda/queue/scheduler; echo \"\"'";
+  # Enable the D-Bus service, which is a message bus system that allows
+  # communication between applications.
+  # Thanks Chris Titus!
+  services = {
+    dbus = {
+      enable = true;
+      packages = with pkgs; [
+
+        dconf
+        gcr
+        udisks2
+
+      ];
     };
-    enable = true;
   };
+
+  services = {
+    envfs = {
+      enable = true;
+      };
+    };
+
+  services.timesyncd.enable = true;
+
+
+  #---------------------------------------------------------------------
+  # SystemD settings
+  #---------------------------------------------------------------------
+  systemd = {
+    services = {
+      "io-scheduler" = {
+        description = "Set I/O Scheduler on boot - Tolga Erok";
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.bash}/bin/bash -c 'echo -e \"Configuring I/O Scheduler to: \"; echo \"kyber\" | ${pkgs.coreutils}/bin/tee /sys/block/sda/queue/scheduler; printf \"I/O Scheduler has been set to ==>  \"; cat /sys/block/sda/queue/scheduler; echo \"\"'";
+        };
+        enable = true;
+      };
+      "NetworkManager-wait-online".enable = false;
+      "systemd-udev-settle".enable = false;
+      "getty@tty1".enable = false;
+      "autovt@tty1".enable = false;
+    };
+
+    tmpfiles.rules = [
+      "D! /tmp 1777 root root 0"
+      "d /var/spool/samba 1777 root root -"
+      "r! /tmp/**/*"
+    ];
+
+    # extraConfig = "DefaultTimeoutStopSec=10s";
+    coredump.enable = true;
+    slices."nix-daemon".sliceConfig = {
+      ManagedOOMMemoryPressure = "kill";
+      ManagedOOMMemoryPressureLimit = "95%";
+    };
+    services."nix-daemon".serviceConfig.Slice = "nix-daemon.slice";
+    services."nix-daemon".serviceConfig.OOMScoreAdjust = 1000;
+  };
+
+
+  #---------------------------------------------------------------------
+  # MISC settings
+  #---------------------------------------------------------------------
+  nixpkgs.config.joypixels.acceptLicense = true;
+
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs;
+    [
+      #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+      #  wget
+    ];
+
+  #---------------------------------------------------------------------
+  # Allow unfree packages
+  #---------------------------------------------------------------------
+  environment.sessionVariables.NIXPKGS_ALLOW_UNFREE = "1";
+  nixpkgs.config.allowUnfree = true;
+
+  # -----------------------------------------------
+  # Enables simultaneous use of processor threads.
+  # -----------------------------------------------
+  security.allowSimultaneousMultithreading = true;
+
+
+  #---------------------------------------------------------------------
+  # Networking
+  #---------------------------------------------------------------------
+  networking.hostName = "folio-nixos"; # Define your hostname.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  networking.networkmanager.enable = true;
+  networking.networkmanager.connectionConfig = {
+    "ethernet.mtu" = 1462;
+    "wifi.mtu" = 1462;
+  };
+
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  # --------------------------------------------------------------------
+  # Permit Insecure Packages
+  # --------------------------------------------------------------------
+  nixpkgs.config.permittedInsecurePackages =
+    [ "openssl-1.1.1u" "openssl-1.1.1v" "electron-12.2.3" ];
+
+
+  # -----------------------------------------------
+  # Locale settings
+  # -----------------------------------------------
+
+  # Set your time zone.
+  time.timeZone = "Australia/Perth";
+
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_AU.UTF-8";
+
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "en_AU.UTF-8";
+    LC_IDENTIFICATION = "en_AU.UTF-8";
+    LC_MEASUREMENT = "en_AU.UTF-8";
+    LC_MONETARY = "en_AU.UTF-8";
+    LC_NAME = "en_AU.UTF-8";
+    LC_NUMERIC = "en_AU.UTF-8";
+    LC_PAPER = "en_AU.UTF-8";
+    LC_TELEPHONE = "en_AU.UTF-8";
+    LC_TIME = "en_AU.UTF-8";
+  };
+
+
+  # -----------------------------------------------
+  # X11 settings
+  # -----------------------------------------------
+
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+
+  # Enable the KDE Plasma Desktop Environment.
+  # services.xserver.displayManager.sddm.enable = true;
+
+  # Configure keymap in X11
+  services.xserver = {
+    xkb.layout = "au";
+    xkb.variant = "";
+  };
+
+
+  #---------------------------------------------------------------------
+  # Audio settings
+  #---------------------------------------------------------------------
+
+  # Enable sound with pipewire.
+  sound.enable = true;
+  hardware.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
+
+    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # no need to redefine it in your config for now)
+    #media-session.enable = true;
+  };
+
+  # Enable touchpad support (enabled default in most desktopManager).
+  # services.xserver.libinput.enable = true;
+
+
+  #---------------------------------------------------------------------
+  # User account settings
+  #---------------------------------------------------------------------
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.tolga = {
+    isNormalUser = true;
+    description = "tolga erok";
+    extraGroups = [
+      "adbusers"
+      "audio"
+      "corectrl"
+      "disk"
+      "docker"
+      "input"
+      "libvirtd"
+      "lp"
+      "minidlna"
+      "mongodb"
+      "mysql"
+      "network"
+      "networkmanager"
+      "postgres"
+      "power"
+      "samba"
+      "scanner"
+      "smb"
+      "sound"
+      "storage"
+      "systemd-journal"
+      "udev"
+      "users"
+      "video"
+      "wheel" # Enable ‘sudo’ for the user.
+    ];
+
+    packages = with pkgs; [
+      # Gnome extensions
+      caprine-bin
+      firefox
+      gnome-extension-manager
+      gnome.dconf-editor
+      gnome.gnome-tweaks
+      gnomeExtensions.blur-my-shell
+      gnomeExtensions.dash-to-dock
+      gnomeExtensions.forge
+      gnomeExtensions.logo-menu
+      kate
+      mesa
+      neofetch
+
+      #  thunderbird
+    ];
+  };
+
+  ###################################################################################################
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
+
+  # List services that you want to enable:
+
+  # Enable the OpenSSH daemon.
+  # services.openssh.enable = true;
+
+  # Open ports in the firewall.
+  # networking.firewall.allowedTCPPorts = [ ... ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
+  # Or disable the firewall altogether.
+  # networking.firewall.enable = false;
+
+
+  #---------------------------------------------------------------------
+  # Automatic system upgrades, automatically reboot after an upgrade if
+  # necessary
+  #---------------------------------------------------------------------
+  # system.autoUpgrade.allowReboot = true;  # Very annoying .
+  system.autoUpgrade.enable = true;
+  system.copySystemConfiguration = true;
+  system.stateVersion = "23.05";
+  systemd.extraConfig = "DefaultTimeoutStopSec=10s";
 
 }
