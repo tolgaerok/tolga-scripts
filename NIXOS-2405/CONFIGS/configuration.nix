@@ -8,8 +8,10 @@ with lib;
 
 let
 
-  name = "tolga";
+  country = "Australia/Perth";
   kernel = pkgs.linuxPackages_zen;
+  locale = "en_AU.UTF-8";
+  name = "tolga";
 
 in {
 
@@ -273,21 +275,21 @@ in {
   # -----------------------------------------------
 
   # Set your time zone.
-  time.timeZone = "Australia/Perth";
+  time.timeZone = "${country}";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_AU.UTF-8";
+  i18n.defaultLocale = "${locale}";
 
   i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_AU.UTF-8";
-    LC_IDENTIFICATION = "en_AU.UTF-8";
-    LC_MEASUREMENT = "en_AU.UTF-8";
-    LC_MONETARY = "en_AU.UTF-8";
-    LC_NAME = "en_AU.UTF-8";
-    LC_NUMERIC = "en_AU.UTF-8";
-    LC_PAPER = "en_AU.UTF-8";
-    LC_TELEPHONE = "en_AU.UTF-8";
-    LC_TIME = "en_AU.UTF-8";
+    LC_ADDRESS  = "${locale}";
+    LC_IDENTIFICATION = "${locale}";
+    LC_MEASUREMENT = "${locale}";
+    LC_MONETARY  = "${locale}";
+    LC_NAME = "${locale}";
+    LC_NUMERIC = "${locale}";
+    LC_PAPER = "${locale}";
+    LC_TELEPHONE = "${locale}";
+    LC_TIME  = "${locale}";
   };
 
 
@@ -338,9 +340,9 @@ in {
   #---------------------------------------------------------------------
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.tolga = {
+  users.users."${name}"  = {
     isNormalUser = true;
-    description = "tolga erok";
+    description = "${name}";
     extraGroups = [
       "adbusers"
       "audio"
