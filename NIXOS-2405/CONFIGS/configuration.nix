@@ -85,14 +85,14 @@ in {
 
   # Add a file system entry for the "DLNA" directory bind mount
   fileSystems."/mnt/DLNA" = {
-    device = "/home/"${name}"/DLNA";
+    device = "/home/${name}/DLNA";
     fsType = "none";
     options = [ "bind" "rw" ];  # Read-write access
   };
 
   # Add a file system entry for the "MyGit" directory bind mount
   fileSystems."/mnt/MyGit" = {
-    device = "/home/"${name}"/MyGit";
+    device = "/home/${name}/MyGit";
     fsType = "none";
     options = [ "bind" "rw" ];  # Read-write access
   };
