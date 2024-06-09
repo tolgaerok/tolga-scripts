@@ -2,6 +2,25 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
+# Tolga Erok
+# 10-6-2024
+# My personal NIXOS 24-05 GNOME configuration
+#
+#              ¯\_(ツ)_/¯
+#   ███▄    █     ██▓   ▒██   ██▒    ▒█████       ██████
+#   ██ ▀█   █    ▓██▒   ▒▒ █ █ ▒░   ▒██▒  ██▒   ▒██    ▒
+#  ▓██  ▀█ ██▒   ▒██▒   ░░  █   ░   ▒██░  ██▒   ░ ▓██▄
+#  ▓██▒  ▐▌██▒   ░██░    ░ █ █ ▒    ▒██   ██░     ▒   ██▒
+#  ▒██░   ▓██░   ░██░   ▒██▒ ▒██▒   ░ ████▓▒░   ▒██████▒▒
+#  ░ ▒░   ▒ ▒    ░▓     ▒▒ ░ ░▓ ░   ░ ▒░▒░▒░    ▒ ▒▓▒ ▒ ░
+#  ░ ░░   ░ ▒░    ▒ ░   ░░   ░▒ ░     ░ ▒ ▒░    ░ ░▒  ░ ░
+#     ░   ░ ░     ▒ ░    ░    ░     ░ ░ ░ ▒     ░  ░  ░
+#           ░     ░      ░    ░         ░ ░           ░
+
+#-------------- Hewlett-Packard HP EliteBook Folio 9470m ------------------
+#------------------ Intel® Core™ i7-3667U × 4 8GB  ------------------------
+#---------------- Intel® HD Graphics 4000 (IVB GT2) -----------------------
+
 { config, pkgs, lib, ... }:
 
 with lib;
