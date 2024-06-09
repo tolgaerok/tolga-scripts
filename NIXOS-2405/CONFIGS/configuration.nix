@@ -116,6 +116,10 @@ in {
     options = [ "bind" "rw" ];  # Read-write access
   };
 
+  fileSystems."/home/${name}/Universal" =
+    { device = "/Universal";
+      options = [ "bind" "rw" ];  # Read-write access
+    };
 
   #---------------------------------------------------------------------
   # System optimisations
@@ -244,6 +248,18 @@ in {
         wantedBy = [ "multi-user.target" ];
       };
 
+      # Ensure correct ownership to my /Universal directory and chown to the user
+      chown-universal-directory = {
+        description = "Ensure correct ownership of /Universal";
+        after = [ "local-fs.target" "nss-user-lookup.target" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.bash}/bin/bash -c 'if id -u ${name} >/dev/null 2>&1 && id -g ${name} >/dev/null 2>&1; then mkdir -p /Universal && chown ${name}:${name} /Universal; fi'";
+          RemainAfterExit = true;
+        };
+      };
+
       "io-scheduler" = {
         description = "Set I/O Scheduler on boot - Tolga Erok";
         wantedBy = [ "multi-user.target" ];
@@ -261,6 +277,7 @@ in {
     };
 
     tmpfiles.rules = [
+      "d /Universal 0755 ${name} ${name} -"
       "D! /tmp 1777 root root 0"
       "d /var/spool/samba 1777 root root -"
       "r! /tmp/**/*"
@@ -401,11 +418,15 @@ in {
   # User account settings
   #---------------------------------------------------------------------
 
+  # Add user into user groups
+  users.groups.${name} = {};
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."${name}"  = {
     isNormalUser = true;
     description = "${name}";
     extraGroups = [
+      "${name}"
       "adbusers"
       "audio"
       "corectrl"
