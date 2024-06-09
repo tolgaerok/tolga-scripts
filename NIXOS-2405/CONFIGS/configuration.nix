@@ -180,8 +180,8 @@ in {
   # -------------------------------------------------------------------
   services.udev.extraRules = ''
     KERNEL=="ttyS[1-3]", SUBSYSTEM=="tty", ACTION=="add", ATTR{enabled}="0"
-    ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="auto"     # autosuspend USB devices
-    ACTION=="add", SUBSYSTEM=="pci", TEST=="power/control", ATTR{power/control}="auto"     # autosuspend PCI devices
+    ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="auto"                  # autosuspend USB devices
+    ACTION=="add", SUBSYSTEM=="pci", TEST=="power/control", ATTR{power/control}="auto"                  # autosuspend PCI devices
     ACTION=="add", SUBSYSTEM=="net", NAME=="enp*", RUN+="${pkgs.ethtool}/sbin/ethtool -s $name wol d"   # disable Ethernet Wake-on-LAN
   '';
 
