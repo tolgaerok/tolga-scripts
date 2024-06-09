@@ -205,11 +205,18 @@ in {
     coredump.enable = true;
 
     slices."nix-daemon".sliceConfig = {
+      MemoryHigh = "2G";
+      MemoryMax = "3G";
+      CPUQuota = "50%";
       ManagedOOMMemoryPressure = "kill";
       ManagedOOMMemoryPressureLimit = "95%";
     };
-    services."nix-daemon".serviceConfig.Slice = "nix-daemon.slice";
-    services."nix-daemon".serviceConfig.OOMScoreAdjust = 1000;
+
+    services."nix-daemon".serviceConfig = {
+      Slice = "nix-daemon.slice";
+      OOMScoreAdjust = 1000;
+    };
+
   };
 
 
