@@ -172,10 +172,13 @@ in {
   # -----------------------------------------------
 
   # -------------------------------------------------------------------
-  # Disable unused serial device's at boot
+  # Disable unused serial device's at boot && extra powersave options
   # -------------------------------------------------------------------
   services.udev.extraRules = ''
     KERNEL=="ttyS[1-3]", SUBSYSTEM=="tty", ACTION=="add", ATTR{enabled}="0"
+    ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="auto"     # autosuspend USB devices
+    ACTION=="add", SUBSYSTEM=="pci", TEST=="power/control", ATTR{power/control}="auto"     # autosuspend PCI devices
+    ACTION=="add", SUBSYSTEM=="net", NAME=="enp*", RUN+="${pkgs.ethtool}/sbin/ethtool -s $name wol d"   # disable Ethernet Wake-on-LAN
   '';
 
   #---------------------------------------------------------------------
@@ -433,11 +436,13 @@ in {
     packages = with pkgs; [
       # Gnome extensions
       caprine-bin
+      ethtool
       firefox
+      gimp-with-plugins
       gnome-extension-manager
       gnome.dconf-editor
-      gnome.gnome-tweaks
       gnome.gnome-disk-utility
+      gnome.gnome-tweaks
       gnomeExtensions.blur-my-shell
       gnomeExtensions.dash-to-dock
       gnomeExtensions.forge
