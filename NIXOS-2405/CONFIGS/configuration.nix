@@ -133,6 +133,14 @@ in {
   # Services
   # -----------------------------------------------
 
+
+  # -------------------------------------------------------------------
+  # Disable unused serial device's at boot
+  # -------------------------------------------------------------------
+  services.udev.extraRules = ''
+    KERNEL=="ttyS[1-3]", SUBSYSTEM=="tty", ACTION=="add", ATTR{enabled}="0"
+  '';
+
   #---------------------------------------------------------------------
   # Enable the OpenSSH daemon.
   #---------------------------------------------------------------------
@@ -194,8 +202,8 @@ in {
       "r! /tmp/**/*"
     ];
 
-    # extraConfig = "DefaultTimeoutStopSec=10s";
     coredump.enable = true;
+
     slices."nix-daemon".sliceConfig = {
       ManagedOOMMemoryPressure = "kill";
       ManagedOOMMemoryPressureLimit = "95%";
