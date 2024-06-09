@@ -152,7 +152,6 @@ in {
   # Services
   # -----------------------------------------------
 
-
   # -------------------------------------------------------------------
   # Disable unused serial device's at boot
   # -------------------------------------------------------------------
@@ -200,6 +199,29 @@ in {
   #---------------------------------------------------------------------
   systemd = {
     services = {
+
+      bind-mount-DLNA = {
+        description = "Bind mount /home/${name}/DLNA to /mnt/DLNA";
+        after = [ "network.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.util-linux}/bin/mount --bind /home/${name}/DLNA /mnt/DLNA";
+          RemainAfterExit = true;
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
+
+      bind-mount-MyGit = {
+        description = "Bind mount /home/${name}/DLNA to /mnt/MyGit";
+        after = [ "network.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.util-linux}/bin/mount --bind /home/${name}/MyGit /mnt/MyGit";
+          RemainAfterExit = true;
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
+
       "io-scheduler" = {
         description = "Set I/O Scheduler on boot - Tolga Erok";
         wantedBy = [ "multi-user.target" ];
@@ -209,6 +231,7 @@ in {
         };
         enable = true;
       };
+
       "NetworkManager-wait-online".enable = false;
       "systemd-udev-settle".enable = false;
       "getty@tty1".enable = false;
@@ -395,6 +418,7 @@ in {
       gnome-extension-manager
       gnome.dconf-editor
       gnome.gnome-tweaks
+      gnome.gnome-disk-utility
       gnomeExtensions.blur-my-shell
       gnomeExtensions.dash-to-dock
       gnomeExtensions.forge
