@@ -1,5 +1,5 @@
 # Make chrome and mozzilla system perform better (user and system wide varibles) under Wayland && Nvidia
-
+### Fedora 40 KDE
 - User `./bashrc`
 
 ```bash
