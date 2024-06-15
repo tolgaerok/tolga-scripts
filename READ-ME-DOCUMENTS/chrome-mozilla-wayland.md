@@ -1,4 +1,4 @@
-# Make chrome and mozzilla system perform better (user and system wide varibles) under Wayland && Nvidia
+# Make chrome, mozzilla, Caprine and system perform better (user and system wide varibles) under Wayland && Nvidia
 ### Fedora 40 KDE
 - User `./bashrc`
 
@@ -71,6 +71,12 @@ Exec=/usr/bin/google-chrome-stable --enable-features=UseOzonePlatform --ozone-pl
 sudo update-desktop-database
 ```
 
+### Enable Experimental Wayland Support in Flatpak:
+- Flatpak has experimental support for running applications on the Wayland display server. To enable this experimental support, you need to set an environment variable for Flatpak.
+
+```bash
+sudo flatpak override --env=QT_QPA_PLATFORM=wayland com.sindresorhus.caprine
+```
 
 
 
