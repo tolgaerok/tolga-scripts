@@ -98,6 +98,28 @@ install_nvidia_drivers() {
     sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
     sudo dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
     sudo dnf config-manager --set-enabled rpmfusion-free rpmfusion-free-updates rpmfusion-nonfree rpmfusion-nonfree-updates
+            sudo dnf upgrade --refresh
+        sudo dnf install dnf-plugins-core -y
+        sudo dnf install -y fedora-workstation-repositories
+        sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm 
+        sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+        sudo dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/fedora39/x86_64/cuda-fedora39.repo
+        sudo dnf copr enable t0xic0der/nvidia-auto-installer-for-fedora -y
+        sudo dnf install nvautoinstall -y
+
+    sudo cp -p /usr/share/X11/xorg.conf.d/nvidia.conf /etc/X11/xorg.conf.d/nvidia.conf
+
+        sudo sudo nvautoinstall rpmadd
+        sudo nvautoinstall driver
+        sudo nvautoinstall nvrepo
+        sudo nvautoinstall plcuda
+        sudo nvautoinstall ffmpeg
+        sudo nvautoinstall vulkan
+        sudo nvautoinstall vidacc
+        sudo nvautoinstall compat
+        sleep 1
+        
+        sudo dnf config-manager --set-enabled rpmfusion-nonfree-nvidia-driver
 
     # Additional packages with --allowerasing
     display_message "[${GREEN}✔${NC}]  Installing Additional packages with --allowerasing..."
