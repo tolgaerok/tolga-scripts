@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Tolga Erok
-# My personal Fedora 39 KDE Nvidia installer
+# My personal Fedora Nvidia installer
 # 5/1/2024
 
 # Run from remote location:
@@ -41,7 +41,7 @@ NC='\e[0m'
 # Function to display messages
 display_message() {
     clear
-    echo -e "\n                  Tolga's online NVIDIA installer\n"
+    echo -e "\n               Tolga's online Fedora NVIDIA installer\n"
     echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
     echo -e "|${YELLOW}==>${NC}  $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
