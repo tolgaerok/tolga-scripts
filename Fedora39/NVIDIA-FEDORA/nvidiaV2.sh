@@ -5,7 +5,7 @@
 # 5/1/2024
 
 # Run from remote location:
-# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/NVIDIA-FEDORA/nvidia.sh)"
+# sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/NVIDIA-FEDORA/nvidiaV2.sh)"
 
 #  ¯\_(ツ)_/¯
 #    █████▒▓█████ ▓█████▄  ▒█████   ██▀███   ▄▄▄
@@ -86,19 +86,9 @@ install_nvidia_drivers() {
     sudo dnf update --refresh -y --allowerasing
 
     # Enable RPM Fusion repositories
-    sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm 
+    sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
     sudo dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
     sudo dnf config-manager --set-enabled rpmfusion-free rpmfusion-free-updates rpmfusion-nonfree rpmfusion-nonfree-updates
-
-    # Install NVIDIA drivers and tools
-    sudo dnf install -y akmod-nvidia nvidia-modprobe nvidia-persistenced nvidia-settings nvidia-gpu-firmware --allowerasing
-
-    # Reset and enable NVIDIA module if needed
-    sudo dnf module reset nvidia-driver
-    sudo dnf module enable nvidia-driver
-
-    # Install specific packages with --allowerasing
-    sudo dnf install -y nvidia-libXNVCtrl nvidia-xconfig --allowerasing
 
     # Additional packages with --allowerasing
     sudo dnf install -y kernel-devel xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs gcc kernel-headers xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs
@@ -123,43 +113,51 @@ install_nvidia_drivers() {
     sudo dnf update -y kernel
     sudo dnf install -y kernel-headers kernel-devel
 
+    # Reset and enable NVIDIA module if needed
+    sudo dnf module reset nvidia-driver
+    sudo dnf module enable nvidia-driver
+
+    # Install NVIDIA drivers and tools
+    sudo dnf install -y akmod-nvidia nvidia-modprobe nvidia-persistenced nvidia-settings nvidia-gpu-firmware --allowerasing
+
+    # Install specific packages with --allowerasing
+    sudo dnf install -y nvidia-libXNVCtrl nvidia-xconfig --allowerasing
+
     # Enable NVIDIA services
     sudo systemctl enable nvidia-suspend nvidia-resume nvidia-hibernate
 
     # Update kernel arguments for NVIDIA
     sudo grubby --update-kernel=ALL --args='nvidia-drm.modeset=1'
-      sudo dnf install xrandr
-        sudo cp -p /usr/share/X11/xorg.conf.d/nvidia.conf /etc/X11/xorg.conf.d/nvidia.conf
-sudo dnf config-manager --set-enabled rpmfusion-nonfree-nvidia-driver
-     # Blacklist some modules
-        echo "blacklist nouveau" >>/etc/modprobe.d/blacklist.conf
-        echo "blacklist iTCO_wdt" >>/etc/modprobe.d/blacklist.conf
+    sudo dnf install xrandr
+    sudo cp -p /usr/share/X11/xorg.conf.d/nvidia.conf /etc/X11/xorg.conf.d/nvidia.conf
+    sudo dnf config-manager --set-enabled rpmfusion-nonfree-nvidia-driver
 
-        # KMS stands for "Kernel Mode Setting" which is the opposite of "Userland Mode Setting". This feature allows to set the screen resolution
-        # on the kernel side once (at boot), instead of after login from the display manager.
-        sudo sed -i '/GRUB_CMDLINE_LINUX/ s/"$/ rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
+    # Blacklist some modules
+    echo "blacklist nouveau" >>/etc/modprobe.d/blacklist.conf
+    echo "blacklist iTCO_wdt" >>/etc/modprobe.d/blacklist.conf
 
-        # remove nouveau
-        sudo dnf remove -y xorg-x11-drv-nouveau
+    # KMS stands for "Kernel Mode Setting" which is the opposite of "Userland Mode Setting". This feature allows to set the screen resolution
+    # on the kernel side once (at boot), instead of after login from the display manager.
+    sudo sed -i '/GRUB_CMDLINE_LINUX/ s/"$/ rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"/' /etc/default/grub
 
-        # Backup old initramfs nouveau image #
-        sudo mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img
+    # remove nouveau
+    sudo dnf remove -y xorg-x11-drv-nouveau
 
-        # Create new initramfs image #
-        sudo dracut /boot/initramfs-$(uname -r).img $(uname -r)
+    # Backup old initramfs nouveau image #
+    sudo mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img
 
-         sudo systemctl enable nvidia-{suspend,resume,hibernate}
+    # Create new initramfs image #
+    sudo dracut /boot/initramfs-$(uname -r).img $(uname -r)
 
- 
-        sudo akmods --force
+    sudo systemctl enable nvidia-{suspend,resume,hibernate}
 
-        # Make sure the boot image got updated as well
-        sudo dracut --force
+    sudo akmods --force
 
- 
+    # Make sure the boot image got updated as well
+    sudo dracut --force
 
     # Nvidia suspend issue workaround
-    echo "options nvidia NVreg_TemporaryFilePath=/tmp" | sudo tee /etc/modprobe.d/nvidia.conf > /dev/null
+    echo "options nvidia NVreg_TemporaryFilePath=/tmp" | sudo tee /etc/modprobe.d/nvidia.conf >/dev/null
 
     display_message "[${GREEN}✔${NC}]  NVIDIA drivers installed successfully."
     sleep 1
