@@ -19,6 +19,8 @@ EOF
 #
 
 ### Add custom kernel boot paramaters, i.e: mitigations to off
+![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/7f330030-22d0-4eb1-bd42-a4edcee0c9a0)
+
 
 ```bash
 sudo gedit /etc/kernel/cmdline.d/mitigations.conf
