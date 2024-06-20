@@ -1,5 +1,8 @@
 ### I used nix package manager to install git
 
+![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/77825bda-3b37-4d14-9ef4-9818ca756785)
+
+
 ```bash
 nix-env -iA nixpkgs.gitFull
 ```
