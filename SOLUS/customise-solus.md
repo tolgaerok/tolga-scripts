@@ -22,6 +22,14 @@ EOF
 ![image](https://github.com/tolgaerok/tolga-scripts/assets/110285959/7f330030-22d0-4eb1-bd42-a4edcee0c9a0)
 
 
+- Custom clr linux kernel paramaters
+
+```bash
+https://www.kernel.org/doc/Documentation/admin-guide/kernel-parameters.txt
+```
+
+- Decide what you want then
+
 ```bash
 sudo gedit /etc/kernel/cmdline.d/mitigations.conf
 ```
