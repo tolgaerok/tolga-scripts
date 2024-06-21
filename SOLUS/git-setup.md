@@ -226,7 +226,7 @@ xdg-open https://github.com/tolgaerok/solus.git
 
 
 ```bash
-   #!/usr/bin/env bash
+    #!/usr/bin/env bash
     # Tolga Erok
     # 10/6/2024
     # git uploader version #2
@@ -315,10 +315,10 @@ xdg-open https://github.com/tolgaerok/solus.git
         # Push changes to the main branch
         echo "Pushing changes to remote repository..."
         git push origin main
-        figlet files && figlet uploaded
+        echo "Files uploaded"
     else
         echo "No changes to commit."
-        figlet Nothing to && figlet Upload
+        echo "Nothing to Upload"
     fi        
 
     end_time=$(date +%s)
@@ -335,17 +335,3 @@ xdg-open https://github.com/tolgaerok/solus.git
 ```
 
 #
-
-#### Short-cut
-
-```bash
-nix-env -iA nixpkgs.gitFull
-git config --global user.email "Tolga Erok"
-git config --global user.name "kingtolga@gmail.com"
-mkdir -p MyGit
-cd MyGit/
-git init
-git config --global init.defaultBranch main
-git add -A
-git commit -m "Initial commit, and i still cant get it to work"
-```
