@@ -1,3 +1,18 @@
+# f2fs
+
+UUID=5e9d6370-58a7-41f6-a69b-9673d3de3a13 / f2fs defaults,noatime,discard,lazytime,flush_merge,nobarrier,active_logs=6 0 1
+UUID=54884b28-941e-42e7-9447-46def7e79ff1 swap swap defaults,noatime 0 0
+tmpfs /tmp tmpfs defaults,noatime,mode=1777,lazytime 0 0
+
+
+
+
+
+
+
+
+
+
 # /etc/fstab: static file system information.
 #
 # <fs>      <mountpoint> <type> <opts>      <dump/pass>
