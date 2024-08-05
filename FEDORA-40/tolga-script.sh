@@ -522,6 +522,14 @@ vscode_url="https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm
 vscode_location="/tmp/vscode.rpm"
 download_and_install "$vscode_url" "$vscode_location" "code"
 
+if test "$(id -u)" -gt "0" && test -d "$HOME"; then
+    # Add default settings when there are no settings
+    if test ! -e "$HOME"/.config/Code/User/settings.json; then
+        mkdir -p "$HOME"/.config/Code/User
+        cp -f /etc/skel/.config/Code/User/settings.json "$HOME"/.config/Code/User/settings.json
+    fi
+fi
+
 # Install extra package
 display_message "[${GREEN}✔${NC}]  Installing Extra RPM packages"
 sudo dnf groupupdate -y sound-and-video
