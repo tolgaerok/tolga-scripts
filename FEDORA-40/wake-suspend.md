@@ -21,6 +21,7 @@ Steps:
 
 1. **Create the script**:  `sudo nano /usr/local/bin/wake_monitors.sh`
 
+- EXAMPLE (1)
    ```bash
    #!/bin/bash
    # Tolga Erok
@@ -33,6 +34,36 @@ Steps:
    xrandr --output DP-0 --auto --right-of HDMI-0
    ```
 
+- EXAMPLE (2)
+   ```bash
+   #!/bin/bash
+   # Tolga Erok
+   # Aug 6 2024
+   
+   if [ "$XDG_SESSION_TYPE" = "x11" ]; then
+     export DISPLAY=:0   
+     # X11
+     xrandr --output HDMI-0 --auto --primary
+     xrandr --output DP-0 --auto --right-of HDMI-0
+   
+   elif [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+     if [ "$XDG_CURRENT_DESKTOP" = "GNOME" ]; then
+       # GNOME on Wayland
+       gsettings set org.gnome.desktop.interface enable-animations false
+       sleep 0.5
+       gsettings set org.gnome.desktop.interface enable-animations true
+   
+   elif [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
+       # KDE on Wayland
+       kscreen-doctor output.HDMI-0.enable
+       kscreen-doctor output.HDMI-0.position.0,0
+       kscreen-doctor output.HDMI-0.primary
+       kscreen-doctor output.DP-0.enable
+       kscreen-doctor output.DP-0.position.1920,0
+     fi
+   fi
+   ```
+  
    Make the script executable:
 
    ```bash
