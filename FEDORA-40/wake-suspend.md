@@ -50,7 +50,7 @@ Steps:
      if [ "$XDG_CURRENT_DESKTOP" = "GNOME" ]; then
        # GNOME on Wayland
        gsettings set org.gnome.desktop.interface enable-animations false
-       sleep 0.5
+       sleep 0.1
        gsettings set org.gnome.desktop.interface enable-animations true
        # Restart GNOME Shell
        gnome-shell --replace &
