@@ -41,6 +41,12 @@ Steps:
 
 2. **Create the systemd service file**:
 - New service systemd service file in `sudo nano /etc/systemd/system/wake_monitors.service` :
+- Change to suite:
+  
+   ```ini
+   User=tolga
+   ```
+   ### SYSTEMD service
 
    ```ini
    [Unit]
