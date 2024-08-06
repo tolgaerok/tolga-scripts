@@ -29,7 +29,7 @@ Steps:
    
    export DISPLAY=:0
 
-   # Set the displays with the correct configuration
+   # X11 on GNOME
    xrandr --output HDMI-0 --auto --primary
    xrandr --output DP-0 --auto --right-of HDMI-0
    ```
@@ -42,7 +42,7 @@ Steps:
    
    if [ "$XDG_SESSION_TYPE" = "x11" ]; then
      export DISPLAY=:0   
-     # X11
+     # X11 on GNOME
      xrandr --output HDMI-0 --auto --primary
      xrandr --output DP-0 --auto --right-of HDMI-0
    
