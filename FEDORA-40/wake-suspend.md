@@ -52,6 +52,8 @@ Steps:
        gsettings set org.gnome.desktop.interface enable-animations false
        sleep 0.5
        gsettings set org.gnome.desktop.interface enable-animations true
+       # Restart GNOME Shell
+       gnome-shell --replace &
    
    elif [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
        # KDE on Wayland
