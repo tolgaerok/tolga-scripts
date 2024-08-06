@@ -10,16 +10,16 @@ Setting the display configurations directly is to first find out your monitor se
 xrandr | grep ' connected'
 
 ```
-- Mine is
+Mine is
 ```bash
 HDMI-0 connected primary 1920x1080+0+0 (normal left inverted right x axis y axis) 598mm x 336mm
 DP-0 connected 1920x1080+1920+0 (normal left inverted right x axis y axis) 598mm x 336mm
 ```
+#
 
 Steps:
 
-1. **Create the script**:
-- Create the following script  `sudo nano /usr/local/bin/wake_monitors.sh`:
+1. **Create the script**:  `sudo nano /usr/local/bin/wake_monitors.sh`
 
    ```bash
    #!/bin/bash
@@ -39,13 +39,9 @@ Steps:
    sudo chmod +x /usr/local/bin/wake_monitors.sh
    ```
 
-2. **Create the systemd service file**:
-- New service systemd service file in `sudo nano /etc/systemd/system/wake_monitors.service` :
-- Change to suite:
-  
-   ```ini
-   User=tolga
-   ```
+2. **Create the systemd service file**:  `sudo nano /etc/systemd/system/wake_monitors.service` 
+- Change `User` to suite: `User=tolga`
+   
    ### SYSTEMD service
 
    ```ini
@@ -64,7 +60,7 @@ Steps:
    ```
 
 3. **Enable and Start the Service**:
-   Enable and start the service:
+   
 
    ```bash
    sudo systemctl daemon-reload
