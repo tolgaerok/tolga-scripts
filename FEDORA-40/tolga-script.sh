@@ -950,6 +950,8 @@ fi
 if lspci | grep -i nvidia > /dev/null; then
   echo "Nvidia GPU detected."
   sudo chmod 1777 /var/tmp
+  sudo dnf install libva-nvidia-driver nvidia-persistenced 
+  systemctl enable nvidia-persistenced.service
   
   # Check if Nvidia driver is installed
   if lsmod | grep -wq nvidia; then
