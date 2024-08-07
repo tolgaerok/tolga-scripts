@@ -949,6 +949,7 @@ fi
 # Check if Nvidia GPU 
 if lspci | grep -i nvidia > /dev/null; then
   echo "Nvidia GPU detected."
+  sudo chmod 1777 /var/tmp
   
   # Check if Nvidia driver is installed
   if lsmod | grep -wq nvidia; then
