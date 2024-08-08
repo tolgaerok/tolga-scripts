@@ -95,36 +95,64 @@ sudo dnf5 install dnf5 dnf5-plugins
 sudo dnf5 update && sudo dnf5 makecache
 
 # List of personal packages to install by category
+# --------------------------------------------------
+
 # Utilities
 utilities=(
-    "bpftop"
-    "iotop"
-    "powertop"
-    "stress-ng"
+    "neofetch"
+    "nano"
+    "htop"
+    "zip"
+    "unzip"
+    "unrar"
+    "tar"
+    "ffmpeg"
+    "ffmpegthumbnailer"
+    "tumbler"
+    "sassc"
+    "wget"
+    "curl"
+    "git"
+    "easyeffects"
+    "pulseeffects"
+    "dconf-editor"
+    "direnv"
+    "duf"
+    "earlyoom"
+    "figlet"
+    "lsd"
+    "mpg123"
     "p7zip"
     "p7zip-plugins"
-    "genisoimage"
-    "fastfetch"
-    "glow"
-    "gum"
-    "xprop"
-    "wl-clipboard"
-    "playerctl"
-    "evtest"
-    "ifuse"
-    "input-leap"
-    "input-remapper"
-    "solaar"
-    "tmux"
-    "rclone"
-    "restic"
-    "rclone"
+    "pip"
+    "python3"
     "python3-pip"
+    "gparted"
+    "brasero"
+    "fd-find"
+    "fzf"
+    "cowsay"
+    "fortune-mod"
+    "rsync"
+    "variety"
+    "wget"
+    "xclip"
+    "zstd"
+    "dnfdragora"
+    "snapper"
+    "python-dnf-plugin-snapper"
+    "xprop"
+    "tmux"
 )
 
 # Networking
 networking=(
-    "android-tools"
+    "openssh"
+    "openssh-server"
+    "openssh-clients"
+    "sshpass"
+    "wsdd"
+    "virt-manager"
     "cockpit-networkmanager"
     "firewall-config"
     "tailscale"
@@ -134,17 +162,12 @@ networking=(
     "samba-ldb-ldap-modules"
     "samba-winbind-clients"
     "samba-winbind-modules"
-    "samba"
-    "podman-compose"
-    "podman-tui"
-    "podmansh"
     "docker-ce"
     "docker-ce-cli"
     "docker-buildx-plugin"
     "docker-compose-plugin"
     "containerd.io"
     "kcli"
-    "virt-manager"
     "virt-viewer"
     "libvirt"
     "lxc"
@@ -156,6 +179,8 @@ networking=(
 
 # Fonts
 fonts=(
+    "google-noto-cjk-fonts"
+    "google-noto-emoji-color-fonts"
     "adobe-source-code-pro-fonts"
     "cascadia-code-fonts"
     "google-droid-sans-mono-fonts"
@@ -170,17 +195,21 @@ fonts=(
 
 # Development Tools
 dev_tools=(
+    "git"
     "gcc"
     "make"
+    "libffi-devel"
+    "openssl-devel"
+    "libxcrypt-compat"
+    "libimobiledevice"
     "python3-pip"
-    "libxcrypt-compat"
-    "libimobiledevice"
-    "libxcrypt-compat"
-    "libimobiledevice"
 )
 
 # Virtualization
 virtualization=(
+    "virt-manager"
+    "virt-viewer"
+    "libvirt"
     "qemu-char-spice"
     "qemu-device-display-virtio-gpu"
     "qemu-device-display-virtio-vga"
@@ -194,19 +223,39 @@ virtualization=(
 
 # System Tools
 system_tools=(
-    "adobe-source-code-pro-fonts"
+    "flatpak"
+    "ntfs-3g"
+    "gtk-murrine-engine"
+    "gtk2-engines"
+    "libva-intel-driver"
+    "intel-media-driver"
+    "mozilla-ublock-origin"
+    "vlc"
+    "vlc-core"
+    "clementine"
+    "grub-customizer"
+    "kate"
+    "mesa-libGL"
+    "mesa-libGLw"
+    "mesa-libGLU"
+    "mesa-libGLU-devel"
+    "mesa-filesystem"
+    "mesa-va-drivers"
+    "mesa-libEGL"
+    "mesa-libglapi"
+    "mesa-libGL-devel"
+    "mplayer"
+    "xine"
+    "xine-lib"
+    "libdvdcss"
+    "mesa-libGLU"
     "dbus-x11"
     "flatpak-builder"
     "hplip"
     "krb5-workstation"
     "lm_sensors"
-    "mesa-libGLU"
-    "make"
-    "p7zip"
     "printer-driver-brlaser"
     "pulseaudio-utils"
-    "restic"
-    "samba"
     "solaar"
     "stress-ng"
     "tmux"
@@ -215,15 +264,58 @@ system_tools=(
     "xprop"
     "wl-clipboard"
     "zsh"
+    "fd-find"
+    "fzf"
+    "dnf5"
+    "dnf5-plugins"
+    "dnfdragora"
+    "tlp"
+    "tlp-rdw"
+    "libyui-mga-qt"
+    "libyui-qt"
+    "liveusb-creator"
+    "k3b"
+    "AcetoneISO"
+    "ccd2iso"
+    "bchunk"
+    "qt5ct"
+    "snapper"
+    "python-dnf-plugin-snapper"
 )
 
 # Printer & Scanner
 printer_scanner=(
+    "hplip"
+    "printer-driver-brlaser"
     "epson-inkjet-printer-escpr"
     "epson-inkjet-printer-escpr2"
     "foo2zjs"
-    "hplip"
-    "printer-driver-brlaser"
+)
+
+# Multi-media
+multimedia=(
+    "mplayer"
+    "xine"
+    "xine-lib"
+    "libdvdcss"
+    "ffmpeg-libs"
+    "rhythmbox"
+    "shotwell"
+    "clementine"
+    "vlc"
+    "vlc-core"
+    "easyeffects"
+    "pulseeffects"
+)
+
+# Graphics
+graphics_design=(
+    "gimp"
+    "gimp-devel"
+    "digikam"
+    "gnome-font-viewer"
+    "variety"
+    "sxiv"
 )
 
 # Package Installation
@@ -250,6 +342,9 @@ install_packages "Development Tools" "${dev_tools[@]}"
 install_packages "Virtualization" "${virtualization[@]}"
 install_packages "System Tools" "${system_tools[@]}"
 install_packages "Printer & Scanner" "${printer_scanner[@]}"
+install_packages "MultiMedia" "${multimedia[@]}"
+install_packages "Graphics" "${graphics_design[@]}"
+
 
 wget https://mega.nz/linux/repo/Fedora_40/x86_64/megasync-Fedora_40.x86_64.rpm && sudo dnf install "$PWD/megasync-Fedora_40.x86_64.rpm"
 
@@ -260,21 +355,22 @@ sudo dnf install --assumeyes --best --allowerasing \
     google-noto-{cjk,emoji-color}-fonts gtk-murrine-engine gtk2-engines ntfs-3g wget curl git openssh \
     libva-intel-driver intel-media-driver mozilla-ublock-origin easyeffects pulseeffects
 
-sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer vlc vlc-core clementine
-sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip gparted brasero
-sudo dnf install -y mesa-libGL mesa-libGLw mesa-libGLU mesa-libGLU-devel mesa-filesystem mesa-va-drivers mesa-libEGL mesa-libglapi mesa-libGL-devel
-sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune-mod
+#sudo dnf install -y PackageKit dconf-editor digikam direnv duf earlyoom espeak ffmpeg-libs figlet gedit gimp gimp-devel git gnome-font-viewer vlc vlc-core clementine
+#sudo dnf install -y grub-customizer kate libdvdcss libffi-devel lsd mpg123 neofetch openssl-devel p7zip p7zip-plugins pip python3 python3-pip gparted brasero
+#sudo dnf install -y mesa-libGL mesa-libGLw mesa-libGLU mesa-libGLU-devel mesa-filesystem mesa-va-drivers mesa-libEGL mesa-libglapi mesa-libGL-devel
+#sudo dnf install -y rhythmbox rygel shotwell sshpass sxiv timeshift unrar unzip cowsay fortune-mod
 
-sudo dnf install -y rsync openssh-server openssh-clients wsdd variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel dnf5 dnf5-plugins dnfdragora tlp tlp-rdw
-sudo dnf install -y libyui-mga-qt libyui-qt
-sudo dnf install -y liveusb-creator         #to create a disk image
-sudo dnf install -y k3b                     #(install .md5 and .mdf)
-sudo dnf install -y AcetoneISO              #(best program to mount *.bin *.mdf *.nrg *.img *.daa *.cdi *.xbx *.b5i *.bwi)
-sudo dnf install -y ccd2iso                 #(convert *.img to *.iso)//from terminal: ccd2iso image.img image.iso
-sudo dnf install -y bchunk                  #(convert *.bin, *.cue to *iso) // terminal: bchunk image.cue image.bin image.iso
-sudo dnf install -y mplayer                 #(play videos and sounds on browser)
-sudo dnf install -y xine xine-lib libdvdcss # quicktime video and AVI
-sudo dnf install -y qt5ct
+#sudo dnf install -y rsync openssh-server openssh-clients wsdd variety virt-manager wget xclip zstd fd-find fzf gtk3 rygel dnf5 dnf5-plugins dnfdragora tlp tlp-rdw
+#sudo dnf install -y libyui-mga-qt libyui-qt
+#sudo dnf install -y liveusb-creator         #to create a disk image
+#sudo dnf install -y k3b                     #(install .md5 and .mdf)
+#sudo dnf install -y AcetoneISO              #(best program to mount *.bin *.mdf *.nrg *.img *.daa *.cdi *.xbx *.b5i *.bwi)
+#sudo dnf install -y ccd2iso                 #(convert *.img to *.iso)//from terminal: ccd2iso image.img image.iso
+#sudo dnf install -y bchunk                  #(convert *.bin, *.cue to *iso) // terminal: bchunk image.cue image.bin image.iso
+#sudo dnf install -y mplayer                 #(play videos and sounds on browser)
+#sudo dnf install -y xine xine-lib libdvdcss # quicktime video and AVI
+#sudo dnf install -y qt5ct
+
 sudo dnf install -y snapper python-dnf-plugin-snapper
 sudo snapper -c root create-config /
 sudo btrfs subvolume list /
