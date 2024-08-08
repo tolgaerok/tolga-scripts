@@ -234,10 +234,8 @@ system_tools=(
     "mesa-libEGL"
     "mesa-libglapi"
     "mesa-libGL-devel"
-    "mplayer"
-    "xine"
-    "xine-lib"
-    "libdvdcss"
+    "mplayer"   
+    "xine-lib"    
     "mesa-libGLU"
     "dbus-x11"
     "flatpak-builder"
@@ -284,10 +282,8 @@ printer_scanner=(
 
 # Multi-media
 multimedia=(
-    "mplayer"
-    "xine"
-    "xine-lib"
-    "libdvdcss"
+    "mplayer"   
+    "xine-lib"   
     "ffmpeg-libs"
     "rhythmbox"
     "shotwell"
