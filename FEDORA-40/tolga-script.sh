@@ -976,21 +976,25 @@ elif [ "$XDG_SESSION_TYPE" = "wayland" ]; then
 fi
 ' | sudo tee /usr/local/bin/wake_monitors.sh > /dev/null && sudo chmod +x /usr/local/bin/wake_monitors.sh
 
-echo '[Unit]
+# get the username
+user=$(logname)
+
+# Use the captured username in the service file 
+echo "[Unit]
 Description=Wake monitor(s) after login or suspend
 After=graphical.target suspend.target
 
 [Service]
 Type=oneshot
 ExecStart=/usr/local/bin/wake_monitors.sh
-User=tolga
-Environment="DISPLAY=:0"
-Environment="XDG_SESSION_TYPE=wayland"
-Environment="XDG_CURRENT_DESKTOP=GNOME"
+User=$user
+Environment=\"DISPLAY=:0\"
+Environment=\"XDG_SESSION_TYPE=wayland\"
+Environment=\"XDG_CURRENT_DESKTOP=GNOME\"
 
 [Install]
 WantedBy=graphical.target suspend.target
-' | sudo tee /etc/systemd/system/wake_monitors.service > /dev/null
+" | sudo tee /etc/systemd/system/wake_monitors.service > /dev/null
 
 sudo systemctl daemon-reload
 sudo systemctl enable wake_monitors.service
