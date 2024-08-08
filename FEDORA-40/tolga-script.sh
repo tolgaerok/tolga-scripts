@@ -162,19 +162,9 @@ networking=(
     "samba-ldb-ldap-modules"
     "samba-winbind-clients"
     "samba-winbind-modules"
-    "docker-ce"
-    "docker-ce-cli"
-    "docker-buildx-plugin"
-    "docker-compose-plugin"
-    "containerd.io"
-    "kcli"
     "virt-viewer"
     "libvirt"
     "lxc"
-    "lxd"
-    "lxd-agent"
-    "incus"
-    "incus-agent"
 )
 
 # Fonts
@@ -324,11 +314,23 @@ install_packages() {
     shift
     local packages=("$@")
 
-    echo "Installing $category packages..."
-    for package in "${packages[@]}"; do
-        sudo dnf install -y "$package"
-    done
-    echo "$category packages installed successfully."
+    # Define color codes
+    local yellow='\033[1;33m'
+    local green='\033[1;32m'
+    local reset='\033[0m'
+
+    # Print a separator line for clarity
+    echo -e "${yellow}========================================${reset}"
+    echo -e "${yellow}Installing $category packages...${reset}"
+    echo -e "${yellow}========================================${reset}"
+    echo ""
+    # Install packages
+    sudo dnf install --assumeyes "${packages[@]}"
+    
+    # Print a completion message
+    echo ""
+    echo -e "${green}Finished installing $category packages.${reset}"
+    echo
 }
 
 # Update package list
