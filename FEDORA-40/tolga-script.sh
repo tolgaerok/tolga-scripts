@@ -838,61 +838,61 @@ sudo sysctl -p && sudo mount -a && sudo systemctl daemon-reload && sudo udevadm 
 sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 sudo dnf config-manager --enable fedora-cisco-openh264
 sudo dnf update @core
-sudo dnf install akmod-nvidia # rhel/centos users can use kmod-nvidia instead
+sudo dnf install akmod-nvidia             # rhel/centos users can use kmod-nvidia instead
 sudo dnf install xorg-x11-drv-nvidia-cuda #optional for cuda/nvdec/nvenc support
 sudo systemctl enable --now akmods --force && sudo dracut --force && echo && echo "Force akmods and Dracut on NVIDIA done" && echo ""
 
 # Check if the Nvidia is loaded
 if lsmod | grep -wq "nvidia"; then
-  echo -e "\e[1;32m[✔]\e[0m Nvidia module is loaded."
+    echo -e "\e[1;32m[✔]\e[0m Nvidia module is loaded."
 
-  # Check if Firefox Flatpak is installed
-  if flatpak list | grep -q org.mozilla.firefox; then
-    echo -e "\e[1;32m[✔]\e[0m Enabling VAAPI in Firefox Flatpak..."
-    flatpak override \
-      --user \
-      --filesystem=host-os \
-      --env=LIBVA_DRIVER_NAME=nvidia \
-      --env=LIBVA_DRIVERS_PATH=/run/host/usr/lib64/dri \
-      --env=LIBVA_MESSAGING_LEVEL=1 \
-      --env=MOZ_DISABLE_RDD_SANDBOX=1 \
-      --env=NVD_BACKEND=direct \
-      --env=MOZ_ENABLE_WAYLAND=1 \
-      org.mozilla.firefox
-    echo -e "\e[1;32m[✔]\e[0m VAAPI has been enabled in Firefox Flatpak."
-  else
-    echo -e "\e[1;33m[!]\e[0m Firefox Flatpak is not installed. Enabling VAAPI in local Firefox installation..."
+    # Check if Firefox Flatpak is installed
+    if flatpak list | grep -q org.mozilla.firefox; then
+        echo -e "\e[1;32m[✔]\e[0m Enabling VAAPI in Firefox Flatpak..."
+        flatpak override \
+            --user \
+            --filesystem=host-os \
+            --env=LIBVA_DRIVER_NAME=nvidia \
+            --env=LIBVA_DRIVERS_PATH=/run/host/usr/lib64/dri \
+            --env=LIBVA_MESSAGING_LEVEL=1 \
+            --env=MOZ_DISABLE_RDD_SANDBOX=1 \
+            --env=NVD_BACKEND=direct \
+            --env=MOZ_ENABLE_WAYLAND=1 \
+            org.mozilla.firefox
+        echo -e "\e[1;32m[✔]\e[0m VAAPI has been enabled in Firefox Flatpak."
+    else
+        echo -e "\e[1;33m[!]\e[0m Firefox Flatpak is not installed. Enabling VAAPI in local Firefox installation..."
 
-    # environment variables for VAAPI
-    export LIBVA_DRIVER_NAME=nvidia
-    export LIBVA_DRIVERS_PATH=/usr/lib64/dri
-    export LIBVA_MESSAGING_LEVEL=1
-    export MOZ_DISABLE_RDD_SANDBOX=1
-    export NVD_BACKEND=direct
-    export MOZ_ENABLE_WAYLAND=1
+        # environment variables for VAAPI
+        export LIBVA_DRIVER_NAME=nvidia
+        export LIBVA_DRIVERS_PATH=/usr/lib64/dri
+        export LIBVA_MESSAGING_LEVEL=1
+        export MOZ_DISABLE_RDD_SANDBOX=1
+        export NVD_BACKEND=direct
+        export MOZ_ENABLE_WAYLAND=1
 
-    # Launch Firefox with the environment variables
-    echo -e "\e[1;32m[✔]\e[0m Launching local Firefox with VAAPI enabled..."
-    firefox &
-  fi
+        # Launch Firefox with the environment variables
+        echo -e "\e[1;32m[✔]\e[0m Launching local Firefox with VAAPI enabled..."
+        firefox &
+    fi
 else
-  echo -e "\e[1;31m[✘]\e[0m Nvidia module is not loaded. Please ensure you have Nvidia drivers installed."
+    echo -e "\e[1;31m[✘]\e[0m Nvidia module is not loaded. Please ensure you have Nvidia drivers installed."
 fi
 
-# Check if Nvidia GPU 
-if lspci | grep -i nvidia > /dev/null; then
-  echo "Nvidia GPU detected."
-  sudo chmod 1777 /var/tmp
-  sudo dnf install libva-nvidia-driver nvidia-persistenced 
-  systemctl enable nvidia-persistenced.service
-  
-  # Check if Nvidia driver is installed
-  if lsmod | grep -wq nvidia; then
-    echo "Nvidia driver is installed."
-    
-    # Append Nvidia options to /etc/modprobe.d/nvidia.conf
-    echo "Appending Nvidia options to /etc/modprobe.d/nvidia.conf..."
-    echo "options nvidia NVreg_UsePageAttributeTable=1
+# Check if Nvidia GPU
+if lspci | grep -i nvidia >/dev/null; then
+    echo "Nvidia GPU detected."
+    sudo chmod 1777 /var/tmp
+    sudo dnf install libva-nvidia-driver nvidia-persistenced
+    systemctl enable nvidia-persistenced.service
+
+    # Check if Nvidia driver is installed
+    if lsmod | grep -wq nvidia; then
+        echo "Nvidia driver is installed."
+
+        # Append Nvidia options to /etc/modprobe.d/nvidia.conf
+        echo "Appending Nvidia options to /etc/modprobe.d/nvidia.conf..."
+        echo "options nvidia NVreg_UsePageAttributeTable=1
 options nvidia NVreg_EnablePCIeGen3=1
 options nvidia NVreg_RegistryDwords=RMI2cSpeed=100
 options nvidia NVreg_PreserveVideoMemoryAllocations=1
@@ -902,17 +902,17 @@ options nvidia NVreg_EnableStreamMemOPs=1
 options nvidia NVreg_DynamicPowerManagement=0x02
 options nvidia NVreg_RegistryDwords=__REGISTRYDWORDS
 options nvidia_drm modeset=1 fbdev=1" | sudo tee -a /etc/modprobe.d/nvidia.conf
-    
-    # Update initramfs
-    echo "Updating initramfs..."
-    sudo dracut --force
-    
-    echo "Changes applied. Please reboot your system to take effect."
-  else
-    echo "Nvidia driver is not installed. Please install the Nvidia driver first."
-  fi
+
+        # Update initramfs
+        echo "Updating initramfs..."
+        sudo dracut --force
+
+        echo "Changes applied. Please reboot your system to take effect."
+    else
+        echo "Nvidia driver is not installed. Please install the Nvidia driver first."
+    fi
 else
-  echo "No Nvidia GPU detected."
+    echo "No Nvidia GPU detected."
 fi
 
 # Add Flathub remote repository if it doesn't already exist
@@ -974,12 +974,12 @@ if [ "$XDG_SESSION_TYPE" = "x11" ]; then
 elif [ "$XDG_SESSION_TYPE" = "wayland" ]; then
   handle_wayland
 fi
-' | sudo tee /usr/local/bin/wake_monitors.sh > /dev/null && sudo chmod +x /usr/local/bin/wake_monitors.sh
+' | sudo tee /usr/local/bin/wake_monitors.sh >/dev/null && sudo chmod +x /usr/local/bin/wake_monitors.sh
 
 # get the username
 user=$(logname)
 
-# Use the captured username in the service file 
+# Use the captured username in the service file
 echo "[Unit]
 Description=Wake monitor(s) after login or suspend
 After=graphical.target suspend.target
@@ -994,13 +994,11 @@ Environment=\"XDG_CURRENT_DESKTOP=GNOME\"
 
 [Install]
 WantedBy=graphical.target suspend.target
-" | sudo tee /etc/systemd/system/wake_monitors.service > /dev/null
+" | sudo tee /etc/systemd/system/wake_monitors.service >/dev/null
 
 sudo systemctl daemon-reload
 sudo systemctl enable wake_monitors.service
 sudo systemctl start wake_monitors.service
-
-
 
 sudo journalctl --rotate
 sudo journalctl --vacuum-time=1s
