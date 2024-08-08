@@ -537,39 +537,6 @@ sudo dnf group upgrade -y --with-optional Multimedia
 sudo dnf groupupdate -y sound-and-video --allowerasing --skip-broken
 sudo dnf groupupdate multimedia sound-and-video
 
-# Cleanup
-display_message "[${GREEN}✔${NC}]  Cleaning up downloaded /tmp folder"
-rm "$download_location"
-
-sudo dnf clean all
-
-# Remove unnecessary dependencies
-sudo dnf autoremove -y
-
-# Sort the lists of installed packages and packages to keep
-display_message "[${GREEN}✔${NC}]  Sorting out list of installed packages and packages to keep..."
-comm -23 <(sudo dnf repoquery --installonly --latest-limit=-1 -q | sort) <(sudo dnf list installed | awk '{print $1}' | sort) >/tmp/orphaned-pkgs
-
-if [ -s /tmp/orphaned-pkgs ]; then
-    sudo dnf remove $(cat /tmp/orphaned-pkgs) -y --skip-broken
-else
-    display_message "[${GREEN}✔${NC}]  Congratulations, no orphaned packages found."
-fi
-
-# Clean up temporary files
-display_message "[${GREEN}✔${NC}]  Clean up temporary files ..."
-sudo rm -rf /tmp/orphaned-pkgs
-
-display_message "[${GREEN}✔${NC}]  Trimming all mount points on SSD"
-sudo fstrim -av
-
-echo -e "\e[1;32m[✔]\e[0m Restarting kernel tweaks...\n"
-gum spin --spinner dot --title "Stand-by..." -- sleep 2
-sudo sysctl -p
-
-display_message "[${GREEN}✔${NC}]  Cleanup complete, ENJOY!"
-gum spin --spinner dot --title "Stand-by..." -- sleep 2
-
 # Update GRUB configuration
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
@@ -771,24 +738,6 @@ for interface in $interfaces; do
     echo "$qdisc_output"
 done
 
-# Add Flathub remote repository if it doesn't already exist
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-
-# Install specified Flatpak applications from Flathub
-flatpak install flathub com.wps.Office -y
-flatpak install flathub com.mattjakeman.ExtensionManager -y
-flatpak install flathub com.sindresorhus.Caprine -y
-flatpak install flathub com.github.tchx84.Flatseal -y
-flatpak install flathub io.github.flattool.Warehouse -y
-flatpak install flathub org.flameshot.Flameshot -y
-
-sudo journalctl --rotate
-sudo journalctl --vacuum-time=1s
-
-sleep 2
-
-clear
-
 # Function to detect USB version of a port
 detect_usb_version() {
     local usb_version=$(lsusb -v -d "$1" 2>/dev/null | grep "bcdUSB" | awk '{print $2}')
@@ -842,46 +791,32 @@ main
 
 # Define the template directory
 TEMPLATE_DIR="$HOME/Templates"
-
 # Create the template directory if it doesn't exist
 mkdir -p "$TEMPLATE_DIR"
-
 # Create blank text document
 touch "$TEMPLATE_DIR/Document.txt"
-
 # Create blank Word document
 touch "$TEMPLATE_DIR/Document.docx"
-
 # Create blank Excel spreadsheet
 touch "$TEMPLATE_DIR/Spreadsheet.xlsx"
-
 # Create blank configuration file
 touch "$TEMPLATE_DIR/Config.conf"
-
 # Create blank markdown file
 touch "$TEMPLATE_DIR/Document.md"
-
 # Create blank shell script
 touch "$TEMPLATE_DIR/Script.sh"
-
 # Create blank Python script
 touch "$TEMPLATE_DIR/Script.py"
-
 # Create blank JSON file
 touch "$TEMPLATE_DIR/Document.json"
-
 # Create blank YAML file
 touch "$TEMPLATE_DIR/Document.yaml"
-
 # Create blank HTML file
 touch "$TEMPLATE_DIR/Document.html"
-
 # Create blank CSS file
 touch "$TEMPLATE_DIR/Document.css"
-
 # Create blank JavaScript file
 touch "$TEMPLATE_DIR/Document.js"
-
 # Print a message indicating completion
 echo "Template documents created in $TEMPLATE_DIR"
 echo "" && sleep 1
@@ -896,18 +831,16 @@ for mount_point in $btrfs_mounts; do
 done
 
 echo "Defragmentation complete for all Btrfs volumes."
-
-export CHROME_ENABLE_WAYLAND=1
-export MOZ_ENABLE_WAYLAND=1
-
-sudo sh -c 'echo 176 > /proc/sys/kernel/sysrq'
-
-echo "All specified Flatpak applications have been installed successfully."
-echo "All packages installed successfully."
-
 sleep 2
 
 sudo sysctl -p && sudo mount -a && sudo systemctl daemon-reload && sudo udevadm control --reload-rules && sudo udevadm trigger && sudo sysctl --system
+
+sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+sudo dnf config-manager --enable fedora-cisco-openh264
+sudo dnf update @core
+sudo dnf install akmod-nvidia # rhel/centos users can use kmod-nvidia instead
+sudo dnf install xorg-x11-drv-nvidia-cuda #optional for cuda/nvdec/nvenc support
+sudo systemctl enable --now akmods --force && sudo dracut --force && echo && echo "Force akmods and Dracut on NVIDIA done" && echo ""
 
 # Check if the Nvidia is loaded
 if lsmod | grep -wq "nvidia"; then
@@ -982,5 +915,139 @@ else
   echo "No Nvidia GPU detected."
 fi
 
+# Add Flathub remote repository if it doesn't already exist
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+# Install specified Flatpak applications from Flathub
+# flatpak install flathub com.wps.Office -y
+flatpak install -y flathub com.mattjakeman.ExtensionManager com.sindresorhus.Caprine com.github.tchx84.Flatseal io.github.flattool.Warehouse org.flameshot.Flameshot
+
+sudo journalctl --rotate
+sudo journalctl --vacuum-time=1s
+
+sleep 2
+clear
+
+echo '
+#!/bin/bash
+# Tolga Erok
+# Aug 6 2024
+
+# Handle X11 display settings
+handle_x11() {
+  export DISPLAY=:0
+  if [ "$XDG_CURRENT_DESKTOP" = "GNOME" ]; then
+    # X11 on GNOME
+    xrandr --output HDMI-0 --auto --primary
+    xrandr --output DP-0 --auto --right-of HDMI-0
+
+  elif [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
+    # X11 on KDE
+    xrandr --output HDMI-0 --auto --primary
+    xrandr --output DP-0 --auto --right-of HDMI-0
+  fi
+}
+
+# Handle Wayland display settings
+handle_wayland() {
+  if [ "$XDG_CURRENT_DESKTOP" = "GNOME" ]; then
+    # GNOME on Wayland
+    gsettings set org.gnome.desktop.interface enable-animations false
+    sleep 0.1
+    gsettings set org.gnome.desktop.interface enable-animations true
+    # Restart GNOME Shell
+    gnome-shell --replace &
+
+  elif [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
+    # KDE on Wayland
+    kscreen-doctor output.HDMI-0.enable
+    kscreen-doctor output.HDMI-0.position.0,0
+    kscreen-doctor output.HDMI-0.primary
+    kscreen-doctor output.DP-0.enable
+    kscreen-doctor output.DP-0.position.1920,0
+  fi
+}   
+
+# Main execution
+if [ "$XDG_SESSION_TYPE" = "x11" ]; then
+  handle_x11
+elif [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+  handle_wayland
+fi
+' | sudo tee /usr/local/bin/wake_monitors.sh > /dev/null && sudo chmod +x /usr/local/bin/wake_monitors.sh
+
+echo '[Unit]
+Description=Wake monitor(s) after login or suspend
+After=graphical.target suspend.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/wake_monitors.sh
+User=tolga
+Environment="DISPLAY=:0"
+Environment="XDG_SESSION_TYPE=wayland"
+Environment="XDG_CURRENT_DESKTOP=GNOME"
+
+[Install]
+WantedBy=graphical.target suspend.target
+' | sudo tee /etc/systemd/system/wake_monitors.service > /dev/null
+
+sudo systemctl daemon-reload
+sudo systemctl enable wake_monitors.service
+sudo systemctl start wake_monitors.service
+
+
+
+sudo journalctl --rotate
+sudo journalctl --vacuum-time=1s
+
+gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
+sudo dnf update gnome-shell mutter
+
+# Remove unnecessary dependencies
+sudo dnf clean all
+sudo dnf autoremove -y
+
+# Sort the lists of installed packages and packages to keep
+display_message "[${GREEN}✔${NC}]  Sorting out list of installed packages and packages to keep..."
+comm -23 <(sudo dnf repoquery --installonly --latest-limit=-1 -q | sort) <(sudo dnf list installed | awk '{print $1}' | sort) >/tmp/orphaned-pkgs
+
+if [ -s /tmp/orphaned-pkgs ]; then
+    sudo dnf remove $(cat /tmp/orphaned-pkgs) -y --skip-broken
+else
+    display_message "[${GREEN}✔${NC}]  Congratulations, no orphaned packages found."
+fi
+
+# Clean up temporary files
+display_message "[${GREEN}✔${NC}]  Clean up temporary files ..."
+sudo rm -rf /tmp/orphaned-pkgs
+
+display_message "[${GREEN}✔${NC}]  Trimming all mount points on SSD"
+sudo fstrim -av
+
+echo -e "\e[1;32m[✔]\e[0m Restarting kernel tweaks...\n"
+gum spin --spinner dot --title "Stand-by..." -- sleep 2
+sudo sysctl -p
+
+# Cleanup
+display_message "[${GREEN}✔${NC}]  Cleaning up downloaded /tmp folder"
+rm "$download_location"
+gum spin --spinner dot --title "Stand-by..." -- sleep 1
+
+display_message "[${GREEN}✔${NC}]  Cleanup complete, ENJOY!"
+gum spin --spinner dot --title "Stand-by..." -- sleep 1
+
+export CHROME_ENABLE_WAYLAND=1
+export MOZ_ENABLE_WAYLAND=1
+
+sudo sh -c 'echo 176 > /proc/sys/kernel/sysrq'
+
+echo "All specified Flatpak applications have been installed successfully."
+echo "All packages installed successfully."
+
 nmcli -t -f NAME connection show
 nmcli -t -f NAME,UUID,TYPE connection show
+
+display_message "[${GREEN}✔${NC}]  Standby, loading main script"
+gum spin --spinner dot --title "Stand-by..." -- sleep 1
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/Fedora39/TolgaFedora39.sh)"
