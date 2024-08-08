@@ -3,6 +3,12 @@
 ### 6 Aug 2024
 
 #
+
+A collection of scripts designed by `Tolga Erok` to address various system tasks, including a specific script to `wake monitors` after a system `suspend`. The script handles both `X11` and `Wayland` sessions, and is integrated with a `systemd service` to ensure it runs after login or suspend on Fedora 40.
+
+Currently, I'm using Example `4` from `wake_monitor.sh` and Example `2` from the `systemd` service section. I hope these scripts and systemd configurations help others experiencing blank screen issues after suspend, especially with Nvidia setups like mine on Nvidia drivers 555xx.
+
+#
 Setting the display configurations directly is to first find out your monitor setup:
 
 
@@ -114,6 +120,80 @@ elif [ "$XDG_SESSION_TYPE" = "wayland" ]; then
   handle_wayland
 fi
 ```
+
+- EXAMPLE (4)
+```bash
+#!/bin/bash
+# Tolga Erok
+# Aug 6 2024
+
+log_file="/tmp/display_settings.log"
+
+log() {
+    echo "$(date) - $1" >> $log_file
+}
+
+# X11 display settings
+handle_x11() {
+    log "Setting X11 display settings"
+    export DISPLAY=:0
+    
+    if [ "$XDG_CURRENT_DESKTOP" = "GNOME" ]; then
+        xrandr --output HDMI-0 --auto --primary
+        xrandr --output DP-0 --auto --right-of HDMI-0
+        log "X11 on GNOME: HDMI-0 set as primary, DP-0 set right-of HDMI-0"
+
+    elif [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
+        xrandr --output HDMI-0 --auto --primary
+        xrandr --output DP-0 --auto --right-of HDMI-0
+        log "X11 on KDE: HDMI-0 set as primary, DP-0 set right-of HDMI-0"
+    fi
+}
+
+# Wayland display settings
+handle_wayland() {
+    log "Setting Wayland display settings"
+    
+    if [ "$XDG_CURRENT_DESKTOP" = "GNOME" ]; then
+        gsettings set org.gnome.desktop.interface enable-animations false
+        sleep 0.5
+        gsettings set org.gnome.desktop.interface enable-animations true
+        log "Wayland on GNOME: Animations disabled then enabled"
+        gnome-shell --replace &
+        log "Wayland on GNOME: GNOME Shell restarted"
+
+    elif [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
+        kscreen-doctor output.HDMI-0.enable
+        sleep 0.5
+        kscreen-doctor output.HDMI-0.position.0,0
+        sleep 0.5
+        kscreen-doctor output.HDMI-0.primary
+        sleep 0.5
+        kscreen-doctor output.DP-0.enable
+        sleep 0.5
+        kscreen-doctor output.DP-0.position.1920,0
+        log "Wayland on KDE: HDMI-0 and DP-0 configured"
+    fi
+}
+
+# Main execution
+log "Script execution started"
+if [ "$XDG_SESSION_TYPE" = "x11" ]; then
+    handle_x11
+elif [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+    handle_wayland
+else
+    log "Unknown session type: $XDG_SESSION_TYPE"
+fi
+log "Script execution finished"
+```
+#
+
+- Log ouput:
+
+![image](https://github.com/user-attachments/assets/e4f3cea4-1ea6-4133-afdf-680547a0c06c)
+
+#
 
 Make the script executable:
 
