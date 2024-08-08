@@ -311,9 +311,9 @@ configure_dnf() {
     if [ -e "$DNF_CONF_PATH" ]; then
         sudo cp "$DNF_CONF_PATH" "$DNF_CONF_PATH.bak"
         
-        # Use temporary file to store configuration changes
-        TEMP_FILE=$(mktemp)
-        cat <<EOL > "$TEMP_FILE"
+        # Use a temporary file to store configuration changes
+TEMP_FILE=$(mktemp)
+cat <<EOL > "$TEMP_FILE"
 [main]
 best=False
 clean_requirements_on_remove=True
@@ -332,9 +332,10 @@ metadata_expire_filter=repo:updates:12h
 metadata_timer_sync=0
 skip_if_unavailable=True
 
-# Exclude all nvidia-*, dont want anything later then 535x
+# Exclude all nvidia-*, don't want anything later than 535x
 # exclude=akmod-nvidia*3:545* nvidia-modprobe*3:545* nvidia-persistenced*3:545* nvidia-settings*3:545* nvidia-xconfig*3:545* xorg-x11-drv-nvidia-cuda-libs*3:545* xorg-x11-drv-nvidia-cuda*3:545* xorg-x11-drv-nvidia-kmodsrc*3:545* xorg-x11-drv-nvidia-libs*3:545* xorg-x11-drv-nvidia-power*3:545* xorg-x11-drv-nvidia*3:545*
 EOL
+
 
         # Use sudo to move the temporary file to the correct location
         sudo mv "$TEMP_FILE" "$DNF_CONF_PATH"
@@ -360,8 +361,8 @@ dnf5() {
 		sudo dnf install dnf5 -y
 		sudo dnf5 install dnf5 dnf5-plugins
 		sudo dnf5 update && sudo dnf5 makecache
-		sudo dnf5 distro-sync --releasever=39 --refresh --disablerepo rawhide \
-			--enablerepo fedora --allowerasing --best
+		#sudo dnf5 distro-sync --releasever=39 --refresh --disablerepo rawhide \
+		#	--enablerepo fedora --allowerasing --best
 		display_message "${GREEN}=>${NC} Beta: DNF5 installed"
 		echo -e "In order to use dnf5, you need to use ${YELLOW}==>${NC} ${GREEN} sudo dnf5 update${NC}"
 		gum spin --spinner dot --title "Stand-by..." -- sleep 5
