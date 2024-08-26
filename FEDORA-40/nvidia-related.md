@@ -1,3 +1,4 @@
+```
 sudo dnf config-manager --add-repo=https://negativo17.org/repos/fedora-nvidia.repo
 
 sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
@@ -14,3 +15,4 @@ sudo dnf5 update && sudo dnf5 makecache
 
 https://negativo17.org/nvidia-driver/
 
+```
