@@ -6,7 +6,7 @@
 
 A collection of scripts designed by `Tolga Erok` to address various system tasks, including a specific script to `wake monitors` after a system `suspend`. The script handles both `X11` and `Wayland` sessions, and is integrated with a `systemd service` to ensure it runs after login or suspend on Fedora 40.
 
-Currently, I'm using Example `4` from `wake_monitor.sh` and Example `2` from the `systemd` service section. I hope these scripts and systemd configurations help others experiencing blank screen issues after suspend, especially with Nvidia setups like mine on Nvidia drivers 555xx.
+Currently, I'm using Example `4` from `wake_monitor.sh` and Example `3` from the `systemd` service section. I hope these scripts and systemd configurations help others experiencing blank screen issues after suspend, especially with Nvidia setups like mine on Nvidia drivers 555xx.
 
 #
 Setting the display configurations directly is to first find out your monitor setup:
@@ -127,42 +127,28 @@ fi
 # Tolga Erok
 # Aug 6 2024
 
+export XAUTHORITY=$HOME/.Xauthority
 log_file="/tmp/display_settings.log"
 
 log() {
     echo "$(date) - $1" >> $log_file
 }
 
-# X11 display settings
 handle_x11() {
     log "Setting X11 display settings"
     export DISPLAY=:0
-    
-    if [ "$XDG_CURRENT_DESKTOP" = "GNOME" ]; then
-        xrandr --output HDMI-0 --auto --primary
-        xrandr --output DP-0 --auto --right-of HDMI-0
-        log "X11 on GNOME: HDMI-0 set as primary, DP-0 set right-of HDMI-0"
 
-    elif [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
+    if [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
         xrandr --output HDMI-0 --auto --primary
         xrandr --output DP-0 --auto --right-of HDMI-0
         log "X11 on KDE: HDMI-0 set as primary, DP-0 set right-of HDMI-0"
     fi
 }
 
-# Wayland display settings
 handle_wayland() {
     log "Setting Wayland display settings"
-    
-    if [ "$XDG_CURRENT_DESKTOP" = "GNOME" ]; then
-        gsettings set org.gnome.desktop.interface enable-animations false
-        sleep 0.5
-        gsettings set org.gnome.desktop.interface enable-animations true
-        log "Wayland on GNOME: Animations disabled then enabled"
-        gnome-shell --replace &
-        log "Wayland on GNOME: GNOME Shell restarted"
 
-    elif [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
+    if [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
         kscreen-doctor output.HDMI-0.enable
         sleep 0.5
         kscreen-doctor output.HDMI-0.position.0,0
@@ -176,7 +162,6 @@ handle_wayland() {
     fi
 }
 
-# Main execution
 log "Script execution started"
 if [ "$XDG_SESSION_TYPE" = "x11" ]; then
     handle_x11
@@ -238,6 +223,31 @@ sudo chmod +x /usr/local/bin/wake_monitors.sh
    [Install]
    WantedBy=graphical.target suspend.target
    ```
+
+   - EXAMPLE (3)
+   ```bash
+   mkdir -p ~/.config/systemd/user/
+   nano ~/.config/systemd/user/wake_monitors.service
+   ```
+   
+   ```ini
+   [Unit]
+   Description=Wake monitor(s) after login
+   After=graphical-session.target
+
+   [Service]
+   Type=oneshot
+   ExecStartPre=/bin/sleep 5
+   # ExecStart=/usr/bin/sudo -u $USER /usr/local/bin/wake_monitors.sh
+   ExecStart=/usr/local/bin/wake_monitors.sh
+
+   #Environment="DISPLAY=:0"
+   #Environment="XDG_SESSION_TYPE=wayland"
+   #Environment="XDG_CURRENT_DESKTOP=KDE" 
+
+   [Install]
+   WantedBy=default.target
+   ```
    
 3. **Enable and Start the Service**:
    
@@ -246,6 +256,7 @@ sudo chmod +x /usr/local/bin/wake_monitors.sh
    sudo systemctl daemon-reload
    sudo systemctl enable wake_monitors.service
    sudo systemctl start wake_monitors.service
+   systemctl --user status wake_monitors.service
    ```
 
 # 
