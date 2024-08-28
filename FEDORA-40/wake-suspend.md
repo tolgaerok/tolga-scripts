@@ -130,6 +130,14 @@ fi
 export XAUTHORITY=$HOME/.Xauthority
 log_file="/tmp/display_settings.log"
 
+# create the log file and set correct permissions
+setup_log_file() {
+    if [ ! -f "$log_file" ]; then
+        touch "$log_file"
+        chmod 666 "$log_file"
+    fi
+}
+
 log() {
     echo "$(date) - $1" >> $log_file
 }
@@ -163,6 +171,8 @@ handle_wayland() {
 }
 
 log "Script execution started"
+setup_log_file
+
 if [ "$XDG_SESSION_TYPE" = "x11" ]; then
     handle_x11
 elif [ "$XDG_SESSION_TYPE" = "wayland" ]; then
