@@ -269,6 +269,9 @@ sudo chmod +x /usr/local/bin/wake_monitors.sh
    systemctl --user status wake_monitors.service
    ```
 
+   ![image](https://github.com/user-attachments/assets/4c5e0b7a-b7a9-43ae-8545-67b633339aa5)
+
+
 # 
 Technically, this systemd service file should run the script after logging in and after resuming from suspend.
 
