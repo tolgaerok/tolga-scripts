@@ -4,7 +4,7 @@
 
 #
 
-A collection of scripts designed by `Tolga Erok` to address various system tasks, including a specific script to `wake monitors` after a system `suspend`. The script handles both `X11` and `Wayland` sessions, and is integrated with a `systemd service` to ensure it runs after login or suspend on Fedora 40.
+Scripts designed by me, `Tolga Erok` to address various system tasks, including a specific script to `wake monitors` after a system `suspend`. My script handles both `X11` and `Wayland` sessions, and is integrated with a `systemd service` to ensure it runs after login or suspend on Fedora 40.
 
 Currently, I'm using Example `4` from `wake_monitor.sh` and Example `3` from the `systemd` service section. I hope these scripts and systemd configurations help others experiencing blank screen issues after suspend, especially with Nvidia setups like mine on Nvidia drivers 555xx.
 
