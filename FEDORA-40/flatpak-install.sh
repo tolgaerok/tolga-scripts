@@ -50,61 +50,70 @@ is_firefox_flatpak_installed() {
     flatpak list | grep -q 'org.mozilla.firefox'
 }
 
-# apply the overrides to Firefox
-apply_firefox_overrides() {
-    echo "Applying overrides for Firefox..."
+# apply Wayland and other overrides to Firefox Flatpak
+apply_firefox_flatpak_overrides() {
+    echo "Applying Flatpak overrides for Firefox..."
     flatpak override --user --socket=wayland --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.firefox
     flatpak override --user --env=gfx.webrender.all=true \
-                      --env=media.ffmpeg.vaapi.enabled=true \
-                      --env=widget.dmabuf.force-enabled=true \
-                      org.mozilla.firefox
-    echo "Overrides applied."
+        --env=media.ffmpeg.vaapi.enabled=true \
+        --env=widget.dmabuf.force-enabled=true \
+        org.mozilla.firefox
+    echo "Flatpak overrides applied."
 }
 
-if is_firefox_flatpak_installed; then
-    apply_firefox_overrides
+# apply VAAPI configuration for NVIDIA
+apply_nvidia_vaapi() {
+    echo "Applying VAAPI configuration for Firefox with NVIDIA..."
+    flatpak override --user --filesystem=host-os \
+        --env=LIBVA_DRIVER_NAME=nvidia \
+        --env=LIBVA_DRIVERS_PATH=/run/host/usr/lib64/dri \
+        --env=LIBVA_MESSAGING_LEVEL=1 \
+        --env=MOZ_DISABLE_RDD_SANDBOX=1 \
+        --env=NVD_BACKEND=direct \
+        --env=MOZ_ENABLE_WAYLAND=1 \
+        org.mozilla.firefox
+    echo "VAAPI configuration for NVIDIA applied."
+}
+
+# apply VAAPI configuration for local Firefox with Intel
+apply_intel_vaapi() {
+    echo "Applying VAAPI configuration for local Firefox with Intel..."
+    export LIBVA_DRIVER_NAME=i965
+    export LIBVA_DRIVERS_PATH=/usr/lib64/dri
+    export LIBVA_MESSAGING_LEVEL=1
+    export MOZ_DISABLE_RDD_SANDBOX=1
+    export MOZ_ENABLE_WAYLAND=1
+
+    echo "Launching local Firefox with VAAPI enabled..."
+    firefox &
+}
+
+# Main script execution
+if lsmod | grep -wq "nvidia"; then
+    echo -e "${GREEN}[✔]${NC} Nvidia module is loaded."
+
+    if is_firefox_flatpak_installed; then
+        echo -e "${GREEN}[✔]${NC} Firefox Flatpak is installed. Enabling VAAPI in Firefox Flatpak..."
+        apply_nvidia_vaapi
+    else
+        echo -e "${YELLOW}[!]${NC} Firefox Flatpak is not installed. Enabling VAAPI in local Firefox installation..."
+        apply_intel_vaapi
+    fi
+elif lsmod | grep -wq "i915"; then
+    echo -e "${GREEN}[✔]${NC} Intel module is loaded."
+
+    if is_firefox_flatpak_installed; then
+        echo -e "${GREEN}[✔]${NC} Firefox Flatpak is installed. Applying Wayland and other overrides..."
+        apply_firefox_flatpak_overrides
+    else
+        echo -e "${YELLOW}[!]${NC} Firefox Flatpak is not installed. Enabling VAAPI in local Firefox installation..."
+        apply_intel_vaapi
+    fi
 else
-    echo "Firefox Flatpak is not installed."
+    echo -e "${RED}[✘]${NC} No supported GPU module is loaded. Please check your hardware and drivers."
 fi
 
-# Flatpak packages for type of gpu on device
-gpu_related_flatpaks() {
-    local gpu_type="$1"
-    
-    case "$gpu_type" in
-        intel)
-            echo -e "${GREEN}[$TICK] Detected Intel GPU. Installing Intel VAAPI runtime and multimedia packages ${NC}\n"
-            flatpak install -y flathub org.freedesktop.Platform.VAAPI.Intel/x86_64/22.08
-            flatpak install -y flathub org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
-            flatpak install -y flathub org.freedesktop.Platform.GStreamer.gstreamer-vaapi/x86_64/23.08
-        ;;
-        nvidia)
-            echo -e "${GREEN}[$TICK] Detected NVIDIA GPU. Installing multimedia packages ${NC}\n"
-            flatpak install -y flathub org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
-        ;;
-        *)
-            echo -e "${RED}✘ Unknown GPU type. No packages will be installed ${NC}\n"
-        ;;
-    esac
-}
-
-# Detect GPU type
-detect_gpu() {
-    if lspci | grep -i "VGA" | grep -i "Intel" >/dev/null; then
-        echo "intel"
-        elif lspci | grep -i "VGA" | grep -i "NVIDIA" >/dev/null; then
-        echo "nvidia"
-    else
-        echo "unknown"
-    fi
-}
-
-# gpu_related_flatpaks execute
-gpu_type=$(detect_gpu)
-gpu_related_flatpaks "$gpu_type"
-
-# Enable the flathub remote (which is disabled by default)
+# Enable the Flathub remote (which is disabled by default)
 flatpak remote-modify --enable flathub
 
 echo -e "${GREEN}All operations completed.${NC}\n"
-
