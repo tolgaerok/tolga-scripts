@@ -116,4 +116,28 @@ fi
 # Enable the Flathub remote (which is disabled by default)
 flatpak remote-modify --enable flathub
 
+# give it screenshot permissions
+flatpak permission-set screenshot screenshot org.flameshot.Flameshot yes
+
+# create flameshot desktop icon to run in wayland
+DESKTOP_FILE=~/Desktop/flameshot-gui.desktop
+
+# Create the .desktop file
+cat <<EOF > $DESKTOP_FILE
+[Desktop Entry]
+Version=1.0
+Name=Flameshot GUI
+Comment=Launch Flameshot GUI for taking screenshots
+Exec=flatpak run --command=flameshot -u org.flameshot.Flameshot gui
+Icon=flameshot
+Terminal=false
+Type=Application
+Categories=Utility;Graphics;
+EOF
+
+# Make the .desktop file executable
+chmod +x $DESKTOP_FILE
+
+echo "Flameshot desktop icon created successfully at $DESKTOP_FILE"
+
 echo -e "${GREEN}All operations completed.${NC}\n"
