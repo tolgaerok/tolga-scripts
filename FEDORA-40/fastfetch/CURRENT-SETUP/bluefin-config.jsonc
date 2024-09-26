@@ -62,7 +62,7 @@
     "break",
     {
       "type": "custom", // SoftwareStart
-      "format": "┌─────────── \u001b[1mUptime Information\u001b[0m   ───────────┐"
+      "format": "┌─────────── \u001b[1mHardware Information\u001b[0m ───────────┐"
     },
     {
       "type": "host",
