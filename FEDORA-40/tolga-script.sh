@@ -74,6 +74,13 @@ sudo dnf update -y
 display_message "Checking for extra dependencies..."
 sudo dnf install -y rpmconf
 
+display_message "Extra fonts for VSCODE terminal..."
+mkdir -p ~/.local/share/fonts
+ln -s ~/.local/share/fonts/ ~/.fonts
+cd ~/.fonts 
+curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.tar.xz
+tar -xvf Hack.tar.xz
+
 # Install DNF plugins core (if not already installed)
 sudo dnf install -y dnf-plugins-core
 
