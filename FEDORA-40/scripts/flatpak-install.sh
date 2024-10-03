@@ -1,6 +1,6 @@
 #!/bin/bash
 # Tolga Erok
-# 16 Sep 2024
+# 16 Sep 2024....0333
 
 # Define colors and symbols
 GREEN='\033[0;32m'
