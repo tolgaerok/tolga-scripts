@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Tolga Erok
 # 28 Sep 2024
-# git uploader version #3.1001
+# git uploader version #3.1
 
 set -e
 
