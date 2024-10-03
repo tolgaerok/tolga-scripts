@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 # Tolga Erok
 # 28 Sep 2024
+<<<<<<< HEAD
 # git uploader version #300
 
+=======
+# git uploader version #3.
+>>>>>>> 4c6d1b0 ((ツ)_/¯ Edited with NixOS: 03-10-2024 09:27:03 PM)
 
 set -e
 
