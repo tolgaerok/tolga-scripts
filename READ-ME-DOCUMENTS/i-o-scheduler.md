@@ -194,7 +194,36 @@ This systemd service will run the specified commands during system boot.
 
 Keep in mind that modifying system settings during boot requires elevated privileges, so the service will be executed with sudo.
 
+#
+### Summary:
+The following for sda
 
+for nvme, `cat /sys/block/nvme0n1/queue/scheduler`
+
+![image](https://github.com/user-attachments/assets/3211d845-8640-460f-a382-afb521df1dbf)
+
+
+```bash
+#!/bin/bash
+# tolga erok
+
+# Create the systemd service file for setting the I/O scheduler
+echo "[Unit]
+Description=Set I/O Scheduler on boot
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'echo mq-deadline | sudo tee /sys/block/sda/queue/scheduler; printf \"I/O Scheduler set to: \"; cat /sys/block/sda/queue/scheduler'
+
+[Install]
+WantedBy=default.target" | sudo tee /etc/systemd/system/io-scheduler.service
+
+# Reload systemd, enable, and start the service
+sudo systemctl daemon-reload
+sudo systemctl enable io-scheduler.service
+sudo systemctl start io-scheduler.service
+sudo systemctl status io-scheduler.service
+```
 
 
 
