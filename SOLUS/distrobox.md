@@ -1,6 +1,10 @@
+#
+
 <h1 align="center">
    The Ultimate Distrobox / Docker / BoxBuddy Cheat Sheet 
 </h1>
+
+
 
 Distrobox is a program that lets you run almost any Linux distro in a terminal. This means you can install apps from Fedora, Ubuntu, and Arch without a dual boot or a VM, and run them as if they were running natively! I tested it to run MegaSync and SublimeText, and it works pretty well, if a bit finicky to set up. 
 
