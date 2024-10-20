@@ -1,6 +1,6 @@
 #!/bin/bash
 # Tolga Erok
-# systemd to force CAKE onto active wireless interface
+# systemd to force CAKE onto active wireless interface.
 # 19 Oct 2024
 
 YELLOW="\033[1;33m"
@@ -22,9 +22,11 @@ SERVICE_NAME="apply-cake-qdisc.service"
 SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME"
 
 echo -e "${BLUE}Creating systemd service file at ${SERVICE_FILE}...${NC}"
-sudo bash -c "cat > $SERVICE_FILE" << EOF
+sudo bash -c "cat > $SERVICE_FILE" <<EOF
 [Unit]
 Description=Apply CAKE qdisc to $interface
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=oneshot
@@ -49,5 +51,8 @@ sudo tc qdisc show dev "$interface"
 
 echo -e "${YELLOW}CAKE qdisc should be applied to ${interface} now.${NC}"
 
-sudo tc -s qdisc show dev wlp3s0
+# Show detailed qdisc status for the interface
+sudo tc -s qdisc show dev "$interface"
+
+# Check the status of the systemd service
 sudo systemctl status apply-cake-qdisc.service
