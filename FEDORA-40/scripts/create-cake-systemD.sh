@@ -1,22 +1,24 @@
 #!/bin/bash
 # Tolga Erok
-# systemd to force CAKE onto active wireless interface.
+# systemd to force CAKE onto any active network interface.
 # 19 Oct 2024
+
+# curl -sL https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/NETWORK-RELATED/make-cake-systemD-V2.sh | sudo bash
 
 YELLOW="\033[1;33m"
 BLUE="\033[0;34m"
 RED="\033[0;31m"
 NC="\033[0m"
 
-# Detect active wireless interface and trim any leading/trailing spaces
-interface=$(ip link show | awk -F: '$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; getline}')
+# Detect any active network interface (uplink or wireless) and trim leading/trailing spaces
+interface=$(ip link show | awk -F: '$0 ~ "^[2-9]:|^[1-9][0-9]: " && $0 ~ "UP" && $0 !~ "LOOPBACK|NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; getline}')
 
 if [ -z "$interface" ]; then
-    echo -e "${RED}No active wireless interface found. Exiting.${NC}"
+    echo -e "${RED}No active network interface found. Exiting.${NC}"
     exit 1
 fi
 
-echo -e "${BLUE}Detected active wireless interface: ${interface}${NC}"
+echo -e "${BLUE}Detected active network interface: ${interface}${NC}"
 
 SERVICE_NAME="apply-cake-qdisc.service"
 SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME"
@@ -56,3 +58,5 @@ sudo tc -s qdisc show dev "$interface"
 
 # Check the status of the systemd service
 sudo systemctl status apply-cake-qdisc.service
+
+echo "alias cake2='interface=\$(ip link show | awk -F: '\''\$0 ~ \"wlp|wlo|wlx\" && \$0 \\\!~ \"NO-CARRIER\" {gsub(/^[ \\t]+|[ \\t]+$/, \"\", \$2); print \$2; getline}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo tc -s qdisc show dev \$interface && sudo systemctl status apply-cake-qdisc.service'" >> ~/.bashrc
