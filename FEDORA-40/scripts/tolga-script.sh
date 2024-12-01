@@ -81,7 +81,7 @@ cd ~/.fonts
 curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.tar.xz
 tar -xvf Hack.tar.xz
 
-# 'Cascadia Code', 'Droid Sans Mono', 'monospace','Hack Nerd Font',monospace
+# ....  'Cascadia Code', 'Droid Sans Mono', 'monospace','Hack Nerd Font',monospace
 
 # Install DNF plugins core (if not already installed)
 sudo dnf install -y dnf-plugins-core
