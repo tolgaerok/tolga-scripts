@@ -77,7 +77,7 @@ sudo dnf install -y rpmconf
 display_message "Extra fonts for VSCODE terminal..."
 mkdir -p ~/.local/share/fonts
 ln -s ~/.local/share/fonts/ ~/.fonts
-cd ~/.fonts 
+cd ~/.fonts
 curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.tar.xz
 tar -xvf Hack.tar.xz
 
@@ -341,7 +341,7 @@ install_packages() {
     echo ""
     # Install packages
     sudo dnf install --assumeyes "${packages[@]}"
-    
+
     # Print a completion message
     echo ""
     echo -e "${green}Finished installing $category packages.${reset}"
@@ -362,7 +362,6 @@ install_packages "System Tools" "${system_tools[@]}"
 install_packages "Printer & Scanner" "${printer_scanner[@]}"
 install_packages "MultiMedia" "${multimedia[@]}"
 install_packages "Graphics" "${graphics_design[@]}"
-
 
 wget https://mega.nz/linux/repo/Fedora_40/x86_64/megasync-Fedora_40.x86_64.rpm && sudo dnf install "$PWD/megasync-Fedora_40.x86_64.rpm"
 
