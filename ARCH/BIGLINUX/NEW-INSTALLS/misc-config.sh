@@ -1,3 +1,9 @@
+
+#!/usr/bin/env bash
+# Tolga Erok
+# 10/6/2024
+# misc
+
 flatpak install flathub io.github.aandrew_me.ytdn
 flatpak run io.github.aandrew_me.ytdn
 
