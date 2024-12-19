@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Tolga Erok
-# 10/6/2024
-# git uploader version #2
+# 19/12/2024
+# git uploader version #4
 
 set -e
 

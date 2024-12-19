@@ -1,9 +1,3 @@
-
-#!/usr/bin/env bash
-# Tolga Erok
-# 19/12/2024
-# 
-
 # Create a directory for my Git repository
 mkdir -p /home/tolga/MyGit
 cd /home/tolga/MyGit/
