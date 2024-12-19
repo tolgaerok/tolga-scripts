@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Tolga Erok
+# Tolga Erok .............
 # 12/1/2024
 # Image converter using ImageMagick
 
