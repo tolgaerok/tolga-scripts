@@ -4,7 +4,7 @@
 # 19/12/2024
 
 # Configuration File Details
-CONFIG_FILE="/etc/sysctl.d/optimizations.conf"
+CONFIG_FILE="/etc/sysctl.d/11-optimizations.conf"
 CONFIG_CONTENTS="
 # Enable BBR congestion control
 net.ipv4.tcp_congestion_control = bbr
@@ -63,8 +63,10 @@ fi
 echo "Applying sysctl configurations..."
 sudo sysctl -p "$CONFIG_FILE"
 echo "Configurations applied. Verifying..."
+echo ""
 
 # Verify Selected Configurations
+echo ""
 echo "Verification:"
 sudo sysctl net.ipv4.tcp_congestion_control vm.swappiness kernel.unprivileged_bpf_disabled
 

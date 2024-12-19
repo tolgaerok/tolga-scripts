@@ -1,5 +1,6 @@
 #!/bin/bash
-
+# Tolga Erok
+# 19/12/2024
 # **Setup Git Repository and GitHub SSH Authentication**
 
 ### **Configuration**
