@@ -25,7 +25,7 @@ convert_images() {
     mkdir -p "$output_folder"
 
     # Get a list of image files in the current directory (PWD)
-    image_files=(*.{png,jpg,jpeg,gif,bmp,tiff,avif})
+    image_files=(*.{png,jpg,jpeg,gif,bmp,tiff,avif,heic})
 
     # Check if there are any images to convert
     if [ "${#image_files[@]}" -eq 0 ]; then
@@ -52,7 +52,7 @@ convert_images() {
 check_imagick
 
 # Prompt user for chosen output format
-read -p "Enter the desired output format (e.g., jpg, png, avif): " output_format
+read -p "Enter the desired output format (e.g., jpg, png, avif, heic): " output_format
 
 # Start tp convert images
 convert_images "$output_format"
