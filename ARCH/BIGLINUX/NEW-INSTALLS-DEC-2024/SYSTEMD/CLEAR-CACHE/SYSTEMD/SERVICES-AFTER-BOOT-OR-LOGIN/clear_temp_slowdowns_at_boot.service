@@ -1,0 +1,24 @@
+[Unit]
+Description=Clear Temporary Slowdowns at Boot
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/path/to/your/clear_temp_slowdowns.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+
+
+# Metadata
+# ----------------------------------------------------------------------------
+# AUTHOR="Tolga Erok"
+# VERSION="1"
+# DATE_CREATED="21/12/2024"
+
+# Setup
+# ----------------------------------------------------------------------------
+# sudo nano /etc/systemd/system/clear_temp_slowdowns_at_boot.service
+# sudo systemctl enable clear_temp_slowdowns_at_boot.service
+# sudo systemctl start clear_temp_slowdowns_at_boot.service

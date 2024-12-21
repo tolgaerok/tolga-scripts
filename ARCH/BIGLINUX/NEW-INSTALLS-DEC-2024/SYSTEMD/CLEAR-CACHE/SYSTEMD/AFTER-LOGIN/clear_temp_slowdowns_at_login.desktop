@@ -1,0 +1,21 @@
+[Desktop Entry]
+Type=Application
+Exec=/path/to/your/clear_temp_slowdowns.sh
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name=Clear Temporary Slowdowns at Login
+Comment=Clears temporary slowdowns on user login
+
+
+
+# Metadata
+# ----------------------------------------------------------------------------
+# AUTHOR="Tolga Erok"
+# VERSION="1"
+# DATE_CREATED="21/12/2024"
+
+# Setup
+# ----------------------------------------------------------------------------
+# mkdir -p ~/.config/autostart/
+# nano ~/.config/autostart/clear_temp_slowdowns_at_login.desktop
