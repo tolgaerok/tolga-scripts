@@ -6,24 +6,24 @@ AUTHOR="Tolga Erok"
 VERSION="1"
 DATE_CREATED="21/12/2024"
 DISTRO="Manjaro (Arch Linux)"
-UPDATE_REASON="Implemented more aggressive systemd journal management"
+UPDATE_REASON="Implemented more aggressive systemd journal management and automated user input"
 
 # Configuration
 # ----------------------------------------------------------------------------
 
-# Clear pacman cache (Manjaro's package manager)
-sudo pacman -Scc
+# Clear pacman cache (Manjaro's package manager) without prompting
+sudo pacman -Scc --noconfirm
 
-# Clear systemd journal to free up disk space
+# Clear systemd journal to free up disk space without prompting
 sudo journalctl --rotate
-sudo journalctl --vacuum-time=1s
+sudo journalctl --vacuum-time=1s --vacuum-size=1
 sleep 1
 
 # Drop Linux file system caches
 sudo sync
 sudo tee /proc/sys/vm/drop_caches <<<3
 
-# Optionally, clear thumbnail cache (can get large)
+# Optionally, clear thumbnail cache (can get large) without prompting
 sudo rm -rf ~/.thumbnails/*
 
 # Restart some services to free up resources
