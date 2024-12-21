@@ -18,7 +18,7 @@ Before=shutdown.target
 
 [Service]
 Type=oneshot
-ExecStart=/path/to/your/clear_temp_slowdowns.sh
+ExecStart=~/clear_temp_slowdowns.sh
 RemainAfterExit=yes
 
 [Install]

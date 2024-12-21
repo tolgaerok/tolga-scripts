@@ -17,4 +17,4 @@ To run the script every day at 3 AM, for example:
 
 Add the Following Line:
 
-0 3 * * * /path/to/your/clear_temp_slowdowns.sh
+0 3 * * * ~/clear_temp_slowdowns.sh

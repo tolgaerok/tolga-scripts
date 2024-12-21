@@ -13,9 +13,10 @@
 # ----------------------------------------------------------------------------
 [Desktop Entry]
 Type=Application
-Exec=/path/to/your/clear_temp_slowdowns.sh
+Exec=~/clear-temp.sh
 Hidden=false
 NoDisplay=false
-X-GNOME-Autostart-enabled=true
+X-KDE-Autostart-enabled=true
 Name=Clear Temporary Slowdowns at Login
 Comment=Clears temporary slowdowns on user login
+
