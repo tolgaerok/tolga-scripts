@@ -3,7 +3,7 @@
 # Metadata
 # ----------------------------------------------------------------------------
 AUTHOR="Tolga Erok"
-VERSION="5"
+VERSION="1"
 DATE_CREATED="21/12/2024"
 DISTRO="Manjaro (Arch Linux)"
 UPDATE_REASON="Implemented more aggressive systemd journal management"
