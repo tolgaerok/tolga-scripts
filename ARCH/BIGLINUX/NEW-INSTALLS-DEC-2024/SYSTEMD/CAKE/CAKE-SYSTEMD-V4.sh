@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-# Author: Tolga Erok
-# Date: 2024-10-19
+# Metadata
+# ----------------------------------------------------------------------------
+# AUTHOR="Tolga Erok"
+# VERSION="4"
+# DATE_CREATED="21/12/2024"
 # Description: Systemd script to force CAKE onto any active network interface.
 
 # curl -sL https://raw.githubusercontent.com/tolgaerok/solus/main/PERSONAL-SCRIPTS/NETWORK-RELATED/make-cake-systemD-V3-LAPTOP.sh | sudo bash
