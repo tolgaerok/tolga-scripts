@@ -1,3 +1,16 @@
+# Metadata
+# ----------------------------------------------------------------------------
+# AUTHOR="Tolga Erok"
+# VERSION="1"
+# DATE_CREATED="21/12/2024"
+
+# Setup
+# ----------------------------------------------------------------------------
+# sudo nano /etc/systemd/system/clear_temp_slowdowns_after_sleep.service
+# sudo systemctl enable clear_temp_slowdowns_after_sleep.service
+
+# Configuration
+# ----------------------------------------------------------------------------
 [Unit]
 Description=Clear Temporary Slowdowns After Sleep
 After=suspend.target
@@ -13,13 +26,4 @@ WantedBy=suspend.target
 
 
 
-# Metadata
-# ----------------------------------------------------------------------------
-# AUTHOR="Tolga Erok"
-# VERSION="1"
-# DATE_CREATED="21/12/2024"
 
-# Setup
-# ----------------------------------------------------------------------------
-# sudo nano /etc/systemd/system/clear_temp_slowdowns_after_sleep.service
-# sudo systemctl enable clear_temp_slowdowns_after_sleep.service

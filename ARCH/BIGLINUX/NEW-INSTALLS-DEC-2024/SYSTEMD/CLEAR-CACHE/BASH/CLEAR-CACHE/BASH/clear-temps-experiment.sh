@@ -14,19 +14,19 @@ UPDATE_REASON="Implemented more aggressive systemd journal management"
 # Clear pacman cache (Manjaro's package manager)
 sudo pacman -Scc
 
-# Clear systemd journal to free up disk space 
+# Clear systemd journal to free up disk space
 sudo journalctl --rotate
 sudo journalctl --vacuum-time=1s
-sleep 1 
+sleep 1
 
 # Drop Linux file system caches
 sudo sync
-sudo tee /proc/sys/vm/drop_caches <<< 3
+sudo tee /proc/sys/vm/drop_caches <<<3
 
 # Optionally, clear thumbnail cache (can get large)
 sudo rm -rf ~/.thumbnails/*
 
-# Restart some services to free up resources 
+# Restart some services to free up resources
 sudo systemctl restart NetworkManager
 
 echo "Temporary slowdowns cleared. System might feel more responsive now."
