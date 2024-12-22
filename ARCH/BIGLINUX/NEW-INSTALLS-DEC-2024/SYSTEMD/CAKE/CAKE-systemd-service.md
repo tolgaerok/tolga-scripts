@@ -6,6 +6,7 @@
 
 #
 
+```bash
 [Unit]
 Description=Apply CAKE Qdisc
 After=network.target
@@ -22,3 +23,4 @@ RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
+```
