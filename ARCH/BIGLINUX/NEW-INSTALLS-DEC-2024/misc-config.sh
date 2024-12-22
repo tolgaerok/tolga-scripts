@@ -36,3 +36,18 @@ sudo pacman -S ttf-jetbrains-mono
 sudo pacman -S ttf-fira-code
 sudo pacman -S ttf-hack
 sudo pacman -S adobe-source-code-pro-fonts
+
+# HP PRinter
+sudo pacman -S hplip
+
+# input drivers even if you dont use then, just have them there
+sudo pacman -S xf86-input-synaptics xf86-input-libinput xf86-input-evdev
+
+# Graphics Driver
+# Mesa
+# This is useful for all GPUs
+sudo pacman -S mesa lib32-mesa
+
+# Vulkan
+# This is useful for all GPUs
+sudo pacman -S vulkan-icd-loader lib32-vulkan-icd-loader

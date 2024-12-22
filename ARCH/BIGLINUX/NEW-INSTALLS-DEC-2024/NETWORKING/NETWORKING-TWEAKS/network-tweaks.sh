@@ -50,12 +50,12 @@ kernel.randomize_va_space = 2
 # Create Configuration File if it doesn't existt
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "Creating $CONFIG_FILE..."
-    echo "$CONFIG_CONTENTS" | sudo tee "$CONFIG_FILE" > /dev/null
+    echo "$CONFIG_CONTENTS" | sudo tee "$CONFIG_FILE" >/dev/null
     echo "File created and populated successfully."
 else
     echo "$CONFIG_FILE already exists. Backing up the original and overwriting with new configurations..."
     sudo mv "$CONFIG_FILE" "${CONFIG_FILE}.backup"
-    echo "$CONFIG_CONTENTS" | sudo tee "$CONFIG_FILE" > /dev/null
+    echo "$CONFIG_CONTENTS" | sudo tee "$CONFIG_FILE" >/dev/null
     echo "Configurations updated."
 fi
 
@@ -69,4 +69,3 @@ echo ""
 echo ""
 echo "Verification:"
 sudo sysctl net.ipv4.tcp_congestion_control vm.swappiness kernel.unprivileged_bpf_disabled
-
