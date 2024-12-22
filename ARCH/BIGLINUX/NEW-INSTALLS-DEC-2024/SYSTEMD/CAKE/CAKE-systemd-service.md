@@ -3,12 +3,9 @@
     - 22/12/2024
 
 
-## Settings
+## Create service
     sudo nano /etc/systemd/system/apply-cake-qdisc.service
-    sudo systemctl daemon-reload
-    sudo systemctl start apply-cake-qdisc.service
-    sudo systemctl enable apply-cake-qdisc.service
-    sudo systemctl status apply-cake-qdisc.service --no-pager
+
 
 # Configuration File Details
 
@@ -30,3 +27,9 @@ RemainAfterExit=yes
 [Install]
 WantedBy=multi-user.target
 ```
+
+# Enable and start service  
+    sudo systemctl daemon-reload
+    sudo systemctl start apply-cake-qdisc.service
+    sudo systemctl enable apply-cake-qdisc.service
+    sudo systemctl status apply-cake-qdisc.service --no-pager
