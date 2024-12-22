@@ -7,21 +7,17 @@
     sudo nano /etc/systemd/system/apply-cake-qdisc.service
 
 
-# Configuration File Details
+# Configuration for DYNAMIC CAKE systemd service
 
 ```bash
 [Unit]
-Description=Apply CAKE Qdisc
-After=network.target
+Description=Apply CAKE qdisc to a dynamic network interface
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash -c "interface=\$(ip link show | awk -F: '\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \\t]+|[ \\t]+$/, \"\", \$2); print \$2; exit}'); \
-    tc qdisc add dev \$interface root cake; \
-    tc -s qdisc show dev \$interface"
-ExecReload=/bin/bash -c "interface=\$(ip link show | awk -F: '\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \\t]+|[ \\t]+$/, \"\", \$2); print \$2; exit}'); \
-    tc qdisc replace dev \$interface root cake; \
-    tc -s qdisc show dev \$interface"
+ExecStart=/bin/bash -c 'interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); if [ -n "$interface" ]; then sudo tc qdisc replace dev $interface root cake bandwidth 1Gbit; fi'
 RemainAfterExit=yes
 
 [Install]
@@ -33,3 +29,19 @@ WantedBy=multi-user.target
     sudo systemctl start apply-cake-qdisc.service
     sudo systemctl enable apply-cake-qdisc.service
     sudo systemctl status apply-cake-qdisc.service --no-pager
+
+# Original
+```bash
+[Unit]
+Description=KingTolga says: Apply CAKE qdisc to wlp4s0
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/tc qdisc replace dev wlp4s0 root cake bandwidth 1Gbit
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+```
