@@ -1,10 +1,16 @@
+### Tolga Erok
+### network tweaks v2
+### 22/12/2024
+
+
+## Settings
     sudo nano /etc/systemd/system/apply-cake-qdisc.service
     sudo systemctl daemon-reload
     sudo systemctl start apply-cake-qdisc.service
     sudo systemctl enable apply-cake-qdisc.service
     sudo systemctl status apply-cake-qdisc.service --no-pager
 
-#
+# Configuration File Details
 
 ```bash
 [Unit]
