@@ -50,7 +50,7 @@ install_custom_fonts() {
     sudo pacman -S --noconfirm --needed curl cabextract fontconfig
 
     # Install Microsoft Core Fonts (assuming ttf-ms-win10-auto provides it)
-    sudo pacman -S --noconfirm --needed cachyos/ttf-ms-win10-auto
+    sudo pacman -S --noconfirm --needed ttf-ms-win10-auto
 
     # Check for errors after each installation
     check_error ""

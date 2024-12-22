@@ -21,4 +21,5 @@ Reload the systemd configuration and enable the service:
 
 Verify the Service
 Confirm the service is running:
-    sudo systemctl status wsdd
+    sudo systemctl --no-pager status wsdd
+
