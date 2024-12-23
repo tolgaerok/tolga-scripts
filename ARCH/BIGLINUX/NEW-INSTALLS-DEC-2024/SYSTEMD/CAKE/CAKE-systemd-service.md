@@ -11,7 +11,7 @@
 
 ```bash
 [Unit]
-Description=Apply CAKE qdisc to a dynamic network interface
+Description=Tolga's V2 of applying CAKE qdisc to a dynamic network interface - Version 2
 After=network-online.target
 Wants=network-online.target
 
@@ -33,7 +33,7 @@ WantedBy=multi-user.target
 # Original
 ```bash
 [Unit]
-Description=KingTolga says: Apply CAKE qdisc to wlp4s0
+Description=KingTolga says: Apply CAKE qdisc to wlp4s0 - Version 1
 After=network-online.target
 Wants=network-online.target
 
