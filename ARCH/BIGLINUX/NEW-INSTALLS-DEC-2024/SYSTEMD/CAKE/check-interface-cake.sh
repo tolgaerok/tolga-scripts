@@ -3,7 +3,7 @@
 # Metadata
 # ----------------------------------------------------------------------------
 # AUTHOR="Tolga Erok"
-# VERSION=""
+# VERSION="1"
 # DATE_CREATED="23/12/2024"
 # Description: Create script, make executable and echo into user bashrc.
 # Purpose: to check CAKE works after suspend.
