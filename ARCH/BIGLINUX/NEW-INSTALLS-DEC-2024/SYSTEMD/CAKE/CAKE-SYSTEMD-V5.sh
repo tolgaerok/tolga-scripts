@@ -26,6 +26,8 @@ echo -e "${BLUE}Detected active network interface: ${interface}${NC}"
 
 SERVICE_NAME="apply-cake-qdisc.service"
 SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME"
+SERVICE_NAME2="apply-cake-qdisc-wake.service"
+SERVICE_FILE2="/etc/systemd/system/$SERVICE_NAME2"
 
 echo -e "${BLUE}Creating systemd service file at ${SERVICE_FILE}...${NC}"
 sudo bash -c "cat > $SERVICE_FILE" <<EOF
@@ -36,11 +38,25 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash -c 'interface=$(ip link show | awk -F: '\''\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'\''); if [ -n \"\$interface\" ]; then sudo tc qdisc replace dev \$interface root cake bandwidth 1Gbit; fi'
+ExecStart=/bin/bash -c 'interface=\$(ip link show | awk -F: '\''\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'\''); if [ -n \"\$interface\" ]; then sudo tc qdisc replace dev \$interface root cake bandwidth 1Gbit; fi'
 RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
+EOF
+
+echo -e "${BLUE}Creating systemd service file at ${SERVICE_FILE2}...${NC}"
+sudo bash -c "cat > $SERVICE_FILE2" <<EOF
+[Unit]
+Description=Reapply CAKE qdisc when network interface is reinitialized (suspend/wake)
+After=suspend.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'interface=\$(ip link show | awk -F: '\''\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'\''); if [ -n \"\$interface\" ]; then sudo tc qdisc replace dev \$interface root cake bandwidth 1Gbit; fi'
+
+[Install]
+WantedBy=suspend.target
 EOF
 
 echo -e "${BLUE}Reloading systemd daemon...${NC}"
@@ -64,6 +80,17 @@ sudo tc -s qdisc show dev "$interface"
 sudo systemctl status apply-cake-qdisc.service --no-pager
 
 # Add alias to .bashrc for easier access
-echo "alias cake2='interface=\$(ip link show | awk -F: '\''\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo tc -s qdisc show dev \$interface && sudo systemctl status apply-cake-qdisc.service --no-pager'" >>~/.bashrc
+echo "alias cake2='interface=\$(ip link show | awk -F: '\''\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo tc -s qdisc show dev \$interface && sudo systemctl status apply-cake-qdisc.service --no-pager && sudo systemctl status apply-cake-qdisc-wake.service --no-pager'" >>~/.bashrc
 
 echo -e "${YELLOW}Alias 'cake2' added to .bashrc. You can use it to quickly apply CAKE settings.${NC}"
+
+# Reload systemd daemon and enable services
+sudo systemctl daemon-reload
+sudo systemctl start apply-cake-qdisc.service
+sudo systemctl start apply-cake-qdisc-wake.service
+sudo systemctl enable apply-cake-qdisc.service
+sudo systemctl enable apply-cake-qdisc-wake.service
+
+# Check the status of the systemd services
+sudo systemctl status apply-cake-qdisc.service --no-pager
+sudo systemctl status apply-cake-qdisc-wake.service --no-pager

@@ -7,7 +7,7 @@
     sudo nano /etc/systemd/system/apply-cake-qdisc.service
 
 
-# Configuration for DYNAMIC CAKE systemd service
+# Configuration for DYNAMIC CAKE systemd service on BOOT!
 
 ```bash
 [Unit]
@@ -24,11 +24,32 @@ RemainAfterExit=yes
 WantedBy=multi-user.target
 ```
 
+# Configuration for DYNAMIC CAKE systemd service after WAKE or SUSPEND!
+
+    sudo nano /etc/systemd/system/apply-cake-qdisc-wake.service
+
+
+```bash
+[Unit]
+Description=Reapply CAKE qdisc when network interface is reinitialized (suspend/wake)
+After=suspend.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); if [ -n "$interface" ]; then sudo tc qdisc replace dev $interface root cake bandwidth 1Gbit; fi'
+
+[Install]
+WantedBy=suspend.target
+```
+
 # Enable and start service  
     sudo systemctl daemon-reload
     sudo systemctl start apply-cake-qdisc.service
+    sudo systemctl start apply-cake-qdisc-wake.service
     sudo systemctl enable apply-cake-qdisc.service
+    sudo systemctl enable apply-cake-qdisc-wake.service
     sudo systemctl status apply-cake-qdisc.service --no-pager
+    sudo systemctl status apply-cake-qdisc-wake.service --no-pager
 
 # Original
 ```bash
