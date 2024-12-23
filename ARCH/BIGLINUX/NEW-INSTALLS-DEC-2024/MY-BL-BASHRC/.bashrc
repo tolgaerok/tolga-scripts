@@ -246,6 +246,34 @@ alias btrfsMaintInfrequent='
     fi
 '
 
+alias btrfsMaint='
+    echo "### Btrfs Maintenance: Trim, Scrub, Balance ###";
+    
+    # Step 1: Trim (inform SSD which blocks are free)
+    sudo fstrim -v /;
+    echo "--- Trim Completed ---";
+    
+    # Step 2: Start Scrub
+    echo "Starting Scrub...";
+    sudo btrfs scrub start -B /;
+    echo "Scrub started in background.";
+
+    # Step 3: Start Balance (if not already running)
+    echo "Checking if Balance is already running...";
+    if sudo btrfs balance status / | grep -q "No balance found"; then
+        echo "Starting Balance...";
+        sudo btrfs balance start -dusage=5 -musage=5 /;
+        # Check if balance started successfully
+        if [[ $? -eq 0 ]]; then
+            echo "--- Balance Started (this may take some time, balancing data and metadata usage) ---";
+        else
+            echo "--- Failed to start Balance. Please check the system logs for more details. ---";
+        fi
+    else
+        echo "--- Balance is already in progress, skipping... ---";
+    fi
+'
+
 # -------------------------------------------------------
 # Custom alias
 # -------------------------------------------------------
