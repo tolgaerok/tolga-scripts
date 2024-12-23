@@ -2,6 +2,7 @@
     - network tweaks v5
     - 23/12/2024
 
+![alt text](image.png)
 
 ## Create service
     sudo nano /etc/systemd/system/apply-cake-qdisc.service
@@ -11,7 +12,7 @@
 
 ```bash
 [Unit]
-Description=Tolga's V2 of applying CAKE qdisc to a dynamic network interface - Version 2
+Description=Reapply CAKE qdisc to a dynamic network interface AFTER REBOOT - Version 3
 After=network-online.target
 Wants=network-online.target
 
@@ -31,7 +32,7 @@ WantedBy=multi-user.target
 
 ```bash
 [Unit]
-Description=Reapply CAKE qdisc when network interface is reinitialized (suspend/wake)
+Description=Reapply CAKE qdisc AFTER SUSPEND: VERSION 3 TOLGA EROK
 After=suspend.target
 
 [Service]
@@ -50,6 +51,8 @@ WantedBy=suspend.target
     sudo systemctl enable apply-cake-qdisc-wake.service
     sudo systemctl status apply-cake-qdisc.service --no-pager
     sudo systemctl status apply-cake-qdisc-wake.service --no-pager
+    echo "alias cake2='interface=\$(ip link show | awk -F: '\''\$0 ~ /wlp|wlo|wlx/ && \$0 !~ /NO-CARRIER/ {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo systemctl restart apply-cake-qdisc-wake.service && sudo tc -s qdisc show dev \$interface && sudo systemctl status apply-cake-qdisc.service --no-pager && sudo systemctl status apply-cake-qdisc-wake.service --no-pager'" >> ~/.bashrc
+
 
 # Original
 ```bash
