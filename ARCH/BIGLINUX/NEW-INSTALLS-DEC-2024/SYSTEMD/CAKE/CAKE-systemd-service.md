@@ -2,7 +2,17 @@
     - network tweaks v5
     - 23/12/2024
 
+## OVERVIEW
 ![alt text](image.png)
+
+## ALIAS
+
+![alt text](image-1.png)
+
+## AFTER REBOOT AND SUSPEND
+
+![alt text](image-2.png)
+
 
 ## Create service
     sudo nano /etc/systemd/system/apply-cake-qdisc.service
