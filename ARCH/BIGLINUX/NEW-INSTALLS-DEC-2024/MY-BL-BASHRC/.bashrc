@@ -210,7 +210,7 @@ export __GL_THREADED_OPTIMIZATION=1
 alias cl="clear"
 alias gitup="$HOME/gitup.sh"
 alias clear-temp="$HOME/clear-temp.sh"
-alias his="history | grep "
+alias find="history | grep "
 alias rc='source ~/.bashrc && cl && echo "" && fortune | lolcat && echo "" && echo ""'
 alias tolga-io="cat /sys/block/sda/queue/scheduler"
 alias tolga-trim="sudo fstrim -av"
@@ -246,7 +246,15 @@ alias btrfsMaintInfrequent='
     fi
 '
 
+# -------------------------------------------------------
+# Custom alias
+# -------------------------------------------------------
 
+alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ /wlp|wlo|wlx/ && $0 !~ /NO-CARRIER/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo systemctl restart apply-cake-qdisc-wake.service && sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service --no-pager && sudo systemctl status apply-cake-qdisc-wake.service --no-pager'
+alias check1="interface=\$(ip link show | awk -F: '\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'); sudo tc qdisc show dev \"\$interface\""
+alias check2="~/check-interface.sh"
+alias tolga-cong="sysctl net.ipv4.tcp_congestion_control"
+alias tolga-io="cat /sys/block/sda/queue/scheduler"
+alias tolga-sys="echo && tolga-io && echo && tolga-cong && echo && echo 'ZSWAP status: ( Y = ON )' && cat /sys/module/zswap/parameters/enabled"
 
 cl && echo "" && fortune | lolcat && echo "" && echo ""
-alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service'

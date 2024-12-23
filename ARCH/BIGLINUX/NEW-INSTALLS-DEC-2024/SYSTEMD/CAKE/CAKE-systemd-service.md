@@ -62,6 +62,7 @@ WantedBy=suspend.target
     sudo systemctl status apply-cake-qdisc.service --no-pager
     sudo systemctl status apply-cake-qdisc-wake.service --no-pager
     echo "alias cake2='interface=\$(ip link show | awk -F: '\''\$0 ~ /wlp|wlo|wlx/ && \$0 !~ /NO-CARRIER/ {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo systemctl restart apply-cake-qdisc-wake.service && sudo tc -s qdisc show dev \$interface && sudo systemctl status apply-cake-qdisc.service --no-pager && sudo systemctl status apply-cake-qdisc-wake.service --no-pager'" >> ~/.bashrc
+    echo "alias check='sudo systemctl status apply-cake-qdisc-wake.service --no-pager'" >> ~/.bashrc
 
 
 # Original
