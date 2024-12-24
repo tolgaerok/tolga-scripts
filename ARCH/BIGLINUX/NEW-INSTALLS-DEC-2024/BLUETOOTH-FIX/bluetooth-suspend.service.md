@@ -1,7 +1,7 @@
 # Turn bluetooth off when system suspends and turn back on after suspend
 
-### Tolga Erok
-### 24/12/2024
+- Tolga Erok
+- 24/12/2024
 
 # Pre-Suspend Service
 
