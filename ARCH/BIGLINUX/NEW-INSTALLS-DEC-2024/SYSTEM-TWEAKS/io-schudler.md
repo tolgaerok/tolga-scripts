@@ -16,3 +16,17 @@ ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue
 ```
 
 If you would like to run something like `mq-deadline` on your NVMe Drives by default then on the second like at the end in quotations where it says “none” replace none with `mq-deadline` and keep the quotations around it then we can save this file by pressing Control + X then y and enter.
+
+# Trim timer
+
+What the `fstrim.timer` Does
+
+- The `fstrim.timer` automatically runs the fstrim command periodically (default is weekly).
+- This helps to optimize SSD performance by freeing up unused blocks, allowing the SSD's controller to manage space more efficiently.
+
+With this setup, your SSD will be regularly trimmed without manual intervention.
+
+    sudo systemctl enable fstrim.timer
+    sudo systemctl start fstrim.timer
+    systemctl status fstrim.timer
+    sudo fstrim -v /
