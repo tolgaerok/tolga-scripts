@@ -31,7 +31,7 @@ Verify the Scheduler: Check if the scheduler was applied to your devices:
 
 Replace sdX with your device name `(e.g., sda, nvme0n1)`.
 
-
+![alt text](image.png)
 
 If you would like to run something like `mq-deadline` on your NVMe Drives by default then on the second like at the end in quotations where it says “none” replace none with `mq-deadline` and keep the quotations around it then we can save this file by pressing Control + X then y and enter.
 
