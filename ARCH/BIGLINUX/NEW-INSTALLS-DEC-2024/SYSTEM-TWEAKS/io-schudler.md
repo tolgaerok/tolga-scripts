@@ -15,6 +15,24 @@ ACTION=="add|change", KERNEL=="sd[a-z]|mmcblk[0-9]*", ATTR{queue/rotational}=="0
 ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"
 ```
 
+Apply Changes Without Rebooting
+
+Reload Udev Rules:
+
+    sudo udevadm control --reload-rules
+
+Trigger Udev Events:
+
+    sudo udevadm trigger
+
+Verify the Scheduler: Check if the scheduler was applied to your devices:
+
+    cat /sys/block/sda/queue/scheduler
+
+Replace sdX with your device name `(e.g., sda, nvme0n1)`.
+
+
+
 If you would like to run something like `mq-deadline` on your NVMe Drives by default then on the second like at the end in quotations where it says “none” replace none with `mq-deadline` and keep the quotations around it then we can save this file by pressing Control + X then y and enter.
 
 # Trim timer
