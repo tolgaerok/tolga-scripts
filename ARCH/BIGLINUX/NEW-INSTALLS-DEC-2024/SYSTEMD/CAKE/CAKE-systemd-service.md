@@ -107,7 +107,7 @@ sudo systemctl status apply-cake-qdisc-wake.service --no-pager
 chmod +x ~/check-interface.sh
 
 # Add alias to .bashrc
-# echo 'alias check2="~/check-interface.sh"' >> ~/.bashrc
+echo 'alias check2="~/check-interface.sh"' >> ~/.bashrc
 ```
 
 # Original
