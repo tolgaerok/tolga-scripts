@@ -1,7 +1,3 @@
-![alt text](image.png)
-
-![alt text](image-1.png)
-
 # Pre-Suspend Service
 
 - Create /etc/systemd/system/disable-bluetooth-before-sleep.service
@@ -60,39 +56,11 @@ Inspect the logs for each service to ensure they are triggered appropriately:
     journalctl -u disable-bluetooth-before-sleep.service --no-pager
     journalctl -u enable-bluetooth-after-resume.service --no-pager
 
+![alt text](image.png)
+
 ## Verify status
 
     sudo systemctl status disable-bluetooth-before-sleep.service --no-pager
     sudo systemctl status enable-bluetooth-after-resume.service --no-pager
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-[Unit]
-Description=Disable Bluetooth before going to sleep
-Before=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
-StopWhenUnneeded=yes
-
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-
-ExecStart=/usr/bin/rfkill block bluetooth
-ExecStop=/usr/bin/rfkill unblock bluetooth
-
-[Install]
-WantedBy=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
-
-# sudo nano /etc/systemd/system/disable-bluetooth-before-sleep.service
+![alt text](image-1.png)
