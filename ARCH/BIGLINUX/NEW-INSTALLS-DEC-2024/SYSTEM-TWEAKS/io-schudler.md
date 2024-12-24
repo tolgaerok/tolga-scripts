@@ -19,15 +19,15 @@ Apply Changes Without Rebooting
 
 - Reload Udev Rules:
 
-    sudo udevadm control --reload-rules
+        sudo udevadm control --reload-rules
 
 - Trigger Udev Events:
 
-    sudo udevadm trigger
+        sudo udevadm trigger
 
 - Verify the Scheduler: Check if the scheduler was applied to your devices:
 
-    cat /sys/block/sda/queue/scheduler
+        cat /sys/block/sda/queue/scheduler
 
 Replace sdX with your device name `(e.g., sda, nvme0n1)`.
 
