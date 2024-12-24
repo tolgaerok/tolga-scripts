@@ -61,8 +61,43 @@ WantedBy=suspend.target
     sudo systemctl enable apply-cake-qdisc-wake.service
     sudo systemctl status apply-cake-qdisc.service --no-pager
     sudo systemctl status apply-cake-qdisc-wake.service --no-pager
-    echo "alias cake2='interface=\$(ip link show | awk -F: '\''\$0 ~ /wlp|wlo|wlx/ && \$0 !~ /NO-CARRIER/ {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo systemctl restart apply-cake-qdisc-wake.service && sudo tc -s qdisc show dev \$interface && sudo systemctl status apply-cake-qdisc.service --no-pager && sudo systemctl status apply-cake-qdisc-wake.service --no-pager'" >> ~/.bashrc
-    echo "alias check='sudo systemctl status apply-cake-qdisc-wake.service --no-pager'" >> ~/.bashrc
+    echo "alias cake2='interface=\$(ip link show | awk -F: '\''\$0 ~ /wlp|wlo|wlx/ && \$0 !~ /NO-CARRIER/ {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo systemctl restart apply-cake-qdisc-wake.service && sudo tc -s qdisc show dev \$interface && sudo systemctl status apply-cake-qdisc.service --no-pager && sudo systemctl status apply-cake-qdisc-wake.service --no-pager'" >> ~/.bashrc    
+    echo "alias check1='interface=\$(ip link show | awk -F: \"\$0 ~ /wlp|wlo|wlx/ && \$0 !~ /NO-CARRIER/ {gsub(/^[ \\t]+|[ \\t]+$/, \"\", \$2); print \$2; exit}\"); sudo tc qdisc show dev \"\$interface\"'" >> ~/.bashrc
+    echo "alias check2='~/check-interface.sh'" >> ~/.bashrc
+   
+# Make check-interface script
+```bash
+#!/usr/bin/env bash
+
+# Metadata
+# ----------------------------------------------------------------------------
+# AUTHOR="Tolga Erok"
+# VERSION="1"
+# DATE_CREATED="23/12/2024"
+# Description: Create script, make executable and echo into user bashrc.
+# Purpose: to check CAKE works after suspend.
+
+# Configuration
+# ----------------------------------------------------------------------------
+
+echo "#!/bin/bash
+
+interface=\$(ip link show | awk -F: '\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}')
+output=\$(sudo tc qdisc show dev \$interface)
+
+if echo \"\$output\" | grep -q 'cake'; then
+    echo \"Interface \$interface is working after suspend\"
+else
+    echo \"Interface \$interface did NOT work after suspend\"
+fi
+sudo systemctl status apply-cake-qdisc-wake.service --no-pager
+" >~/check-interface.sh
+
+# Make it executable
+chmod +x ~/check-interface.sh
+echo 'alias check2="~/check-interface.sh"' >>~/.bashrc
+```
+
 
 
 # Original
