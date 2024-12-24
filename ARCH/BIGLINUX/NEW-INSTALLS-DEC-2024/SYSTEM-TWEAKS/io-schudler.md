@@ -17,15 +17,15 @@ ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue
 
 Apply Changes Without Rebooting
 
-Reload Udev Rules:
+- Reload Udev Rules:
 
     sudo udevadm control --reload-rules
 
-Trigger Udev Events:
+- Trigger Udev Events:
 
     sudo udevadm trigger
 
-Verify the Scheduler: Check if the scheduler was applied to your devices:
+- Verify the Scheduler: Check if the scheduler was applied to your devices:
 
     cat /sys/block/sda/queue/scheduler
 
