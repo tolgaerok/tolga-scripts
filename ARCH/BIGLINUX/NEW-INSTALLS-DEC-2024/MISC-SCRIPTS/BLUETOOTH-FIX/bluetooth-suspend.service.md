@@ -33,7 +33,7 @@ ExecStart=/usr/bin/rfkill unblock bluetooth
 WantedBy=sleep.target
 ```
 
-2. Enable the Services
+## Enable the Services
 
 Run the following commands:
 
@@ -43,13 +43,13 @@ Run the following commands:
     sudo systemctl start enable-bluetooth-after-resume.service
     sudo systemctl daemon-reload
 
-3. Test Suspend and Resume
+## Test Suspend and Resume
 
 After enabling the services, suspend your system and resume it. Verify the status of Bluetooth with:
 
     rfkill list bluetooth
 
-4. Verify Logs
+## Verify Logs
 
 Inspect the logs for each service to ensure they are triggered appropriately:
 
