@@ -17,3 +17,10 @@ You may not need all of these like BTRFS, JFS or ZFS maybe even the Apple HFS an
 These are just extra fonts for some apps that manually set there own and also includes apple-fonts which gives you the SF Pro Fonts which I have set as my default font in Firefox and My Desktop.
 
     yay -S noto-fonts noto-fonts-cjk ttf-dejavu ttf-liberation ttf-opensans apple-fonts
+
+# Some GTK applications running via XWayland, and some Java applications need an XSettings daemon running in order to pick up the themes and font settings.
+    sudo paru -S xsettingsd
+
+# Compression tools
+    sudo paru -S zip unzip unrar p7zip lzop file-roller
+
