@@ -23,14 +23,15 @@ WantedBy=sleep.target
 ```bash
 [Unit]
 Description=Enable Bluetooth after resume - TOLGA EROK
-After=sleep.target
+After=suspend.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/rfkill unblock bluetooth
+ExecStartPre=/bin/sleep 5
+ExecStart=/usr/sbin/rfkill unblock bluetooth
 
 [Install]
-WantedBy=sleep.target
+WantedBy=suspend.target
 ```
 
 ## Enable the Services
@@ -55,6 +56,12 @@ Inspect the logs for each service to ensure they are triggered appropriately:
 
     journalctl -u disable-bluetooth-before-sleep.service --no-pager
     journalctl -u enable-bluetooth-after-resume.service --no-pager
+
+## Verify status
+
+    sudo systemctl status disable-bluetooth-before-sleep.service --no-pager
+    sudo systemctl status enable-bluetooth-after-resume.service --no-pager
+
 
 
 
