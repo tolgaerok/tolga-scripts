@@ -52,7 +52,7 @@ Now this next option is option but we can scroll down to the next section called
     PKGEXT='.pkg.tar'
 
 ### My copy of Makepkg Tweaks 
-    system: HP G4 800 SFF i7 8th gen
+    system: HP G4 800 SFF i7 8th gen 12 CORES
 
 ```bash
 #!/hint/bash
