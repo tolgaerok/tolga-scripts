@@ -5,7 +5,7 @@
 
 ```bash
 [Unit]
-Description=Disable Bluetooth before suspend
+Description=Disable Bluetooth before suspend - TOLGA EROK
 Before=sleep.target
 
 [Service]
@@ -22,7 +22,7 @@ WantedBy=sleep.target
 
 ```bash
 [Unit]
-Description=Enable Bluetooth after resume
+Description=Enable Bluetooth after resume - TOLGA EROK
 After=sleep.target
 
 [Service]
