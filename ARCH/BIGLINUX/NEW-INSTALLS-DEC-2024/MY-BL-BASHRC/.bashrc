@@ -199,20 +199,40 @@ else
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 fi
 
-###---------- Nvidia session ----------###
+# ┌───────────────────────────────────────────────────────────────────────────────────────────────┐
+# |                                          Nvidia session                                       |
+# └───────────────────────────────────────────────────────────────────────────────────────────────┘
 export LIBVA_DRIVER_NAME=nvidia
 export WLR_NO_HARDWARE_CURSORS=1
 export __GLX_VENDOR_LIBRARY_NAME=nvidia
 export __GL_SHADER_CACHE=1
 export __GL_THREADED_OPTIMIZATION=1
 
-###---------- session ----------###
+# ┌───────────────────────────────────────────────────────────────────────────────────────────────┐
+# |                                          Custom alias                                         |
+# └───────────────────────────────────────────────────────────────────────────────────────────────┘
+
+# Define color codes
+GREEN="\033[1;32m"
+RED="\033[1;31m"
+RESET="\033[0m"
+
+alias tline='echo -e "\n${GREEN}┌───────────────────────────────────────────────────────────────────────────────────────────────┐ ${RESET}\n"'
+alias bline='echo -e "\n${GREEN}└───────────────────────────────────────────────────────────────────────────────────────────────┘ ${RESET}\n"'
+
+alias blue="tline && sudo systemctl status disable-bluetooth-before-sleep.service --no-pager || true && bline && echo "" && tline && sudo systemctl status enable-bluetooth-after-resume.service --no-pager || true && bline"
+alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ /wlp|wlo|wlx/ && $0 !~ /NO-CARRIER/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo systemctl restart apply-cake-qdisc-wake.service && tline && sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service --no-pager || true && sudo systemctl status apply-cake-qdisc-wake.service --no-pager || true && bline'
+alias check1="interface=\$(ip link show | awk -F: '\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'); tline && sudo tc qdisc show dev \"\$interface\" && bline"
+alias check2="tline && ~/check-interface.sh || true && bline"
 alias cl="clear"
-alias gitup="$HOME/gitup.sh"
 alias clear-temp="$HOME/clear-temp.sh"
 alias find="history | grep "
+alias gitup="$HOME/gitup.sh"
 alias rc='source ~/.bashrc && cl && echo "" && fortune | lolcat && echo "" && echo ""'
+alias tolga-cong="sysctl net.ipv4.tcp_congestion_control"
 alias tolga-io="cat /sys/block/sda/queue/scheduler"
+alias tolga-io="tline && cat /sys/block/sda/queue/scheduler && bline"
+alias tolga-sys="tline && echo && tolga-io && echo && tolga-cong && echo && echo 'ZSWAP status: ( Y = ON )' && cat /sys/module/zswap/parameters/enabled && bline"
 alias tolga-trim="sudo fstrim -av"
 
 # Alias for Btrfs Frequent Maintenance (daily/weekly)
@@ -226,7 +246,6 @@ alias btrfsMaintFrequent='
     # **Optional: Uncomment for periodic filesystem check (adjust frequency as needed)**
     # sudo btrfs check --progress /
 '
-
 alias btrfsMaintInfrequent='
     clear
     echo "### Btrfs Infrequent Maintenance ###"
@@ -245,7 +264,6 @@ alias btrfsMaintInfrequent='
         fi
     fi
 '
-
 alias btrfsMaint='
     echo "### Btrfs Maintenance: Trim, Scrub, Balance ###";
     
@@ -273,25 +291,4 @@ alias btrfsMaint='
         echo "--- Balance is already in progress, skipping... ---";
     fi
 '
-
-# -------------------------------------------------------
-# Custom alias
-# -------------------------------------------------------
-
-# Define color codes
-GREEN="\033[1;32m"
-RED="\033[1;31m"
-RESET="\033[0m"
-
-alias tline='echo -e "\n${GREEN}┌───────────────────────────────────────────────────────────────────────────────────────────────┐ ${RESET}\n"'
-alias bline='echo -e "\n${GREEN}└───────────────────────────────────────────────────────────────────────────────────────────────┘ ${RESET}\n"'
-
-alias blue="tline && sudo systemctl status disable-bluetooth-before-sleep.service --no-pager || true && bline && echo "" && tline && sudo systemctl status enable-bluetooth-after-resume.service --no-pager || true && bline"
-alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ /wlp|wlo|wlx/ && $0 !~ /NO-CARRIER/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo systemctl restart apply-cake-qdisc-wake.service && tline && sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service --no-pager || true && sudo systemctl status apply-cake-qdisc-wake.service --no-pager || true && bline'
-alias check1="interface=\$(ip link show | awk -F: '\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'); tline && sudo tc qdisc show dev \"\$interface\" && bline"
-alias check2="tline && ~/check-interface.sh || true && bline"
-alias tolga-cong="sysctl net.ipv4.tcp_congestion_control"
-alias tolga-io="tline && cat /sys/block/sda/queue/scheduler && bline"
-alias tolga-sys="tline && echo && tolga-io && echo && tolga-cong && echo && echo 'ZSWAP status: ( Y = ON )' && cat /sys/module/zswap/parameters/enabled && bline"
-
 cl && echo "" && fortune | lolcat && echo "" && echo ""
