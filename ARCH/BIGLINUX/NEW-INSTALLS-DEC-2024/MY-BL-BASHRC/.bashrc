@@ -283,30 +283,15 @@ GREEN="\033[1;32m"
 RED="\033[1;31m"
 RESET="\033[0m"
 
-alias bline='echo -e "\n${GREEN}└───────────────────────────────────────────────────────────────────────────────────────────────┘ ${RESET}\n"'
 alias tline='echo -e "\n${GREEN}┌───────────────────────────────────────────────────────────────────────────────────────────────┐ ${RESET}\n"'
+alias bline='echo -e "\n${GREEN}└───────────────────────────────────────────────────────────────────────────────────────────────┘ ${RESET}\n"'
 
-alias blue="tline && sudo systemctl status disable-bluetooth-before-sleep.service --no-pager || true && bline && echo "" && tline && sudo systemctl status enable-bluetooth-after-resume.service --no-pager || true && bline"
 alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ /wlp|wlo|wlx/ && $0 !~ /NO-CARRIER/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo systemctl restart apply-cake-qdisc-wake.service && tline && sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service --no-pager || true && sudo systemctl status apply-cake-qdisc-wake.service --no-pager || true && bline'
 alias check1="interface=\$(ip link show | awk -F: '\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'); tline && sudo tc qdisc show dev \"\$interface\" && bline"
 alias check2="tline && ~/check-interface.sh || true && bline"
 alias tolga-cong="sysctl net.ipv4.tcp_congestion_control"
 alias tolga-io="tline && cat /sys/block/sda/queue/scheduler && bline"
 alias tolga-sys="tline && echo && tolga-io && echo && tolga-cong && echo && echo 'ZSWAP status: ( Y = ON )' && cat /sys/module/zswap/parameters/enabled && bline"
-
-if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
-    export MOZ_ENABLE_WAYLAND=1
-    export OBS_USE_EGL=1
-    echo "Running on Wayland: Enabled Wayland-specific settings."
-    sleep 0.1
-elif [[ "$XDG_SESSION_TYPE" == "x11" ]]; then
-    export MOZ_ENABLE_WAYLAND=0
-    export OBS_USE_EGL=0
-    echo "Running on Xorg: Disabled Wayland-specific settings."
-    sleep 0.1
-else
-    echo "Unknown windowing system: ${XDG_SESSION_TYPE}. No changes made."
-    sleep 0.1
-fi
+alias blue="tline && sudo systemctl status disable-bluetooth-before-sleep.service --no-pager || true && bline && echo "" && tline && sudo systemctl status enable-bluetooth-after-resume.service --no-pager || true && bline"
 
 cl && echo "" && fortune | lolcat && echo "" && echo ""
