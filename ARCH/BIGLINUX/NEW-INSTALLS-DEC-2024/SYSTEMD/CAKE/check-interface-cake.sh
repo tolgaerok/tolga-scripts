@@ -31,7 +31,7 @@ if echo \"\$output\" | grep -q 'cake'; then
 else
     echo -e \"\\n\${RED}Interface \$interface did NOT work after suspend\${RESET}\\n\"
 fi
-sudo systemctl status apply-cake-qdisc-wake.service --no-pager
+sudo systemctl status apply-cake-qdisc-wake.service --no-pager || true 
 " >~/check-interface.sh
 
 # Make it executable
