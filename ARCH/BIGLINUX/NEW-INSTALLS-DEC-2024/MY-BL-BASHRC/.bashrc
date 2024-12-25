@@ -278,11 +278,27 @@ alias btrfsMaint='
 # Custom alias
 # -------------------------------------------------------
 
-alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ /wlp|wlo|wlx/ && $0 !~ /NO-CARRIER/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo systemctl restart apply-cake-qdisc-wake.service && sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service --no-pager && sudo systemctl status apply-cake-qdisc-wake.service --no-pager'
+alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ /wlp|wlo|wlx/ && $0 !~ /NO-CARRIER/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo systemctl restart apply-cake-qdisc-wake.service && sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service --no-pager || true && sudo systemctl status apply-cake-qdisc-wake.service --no-pager || true'
 alias check1="interface=\$(ip link show | awk -F: '\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'); sudo tc qdisc show dev \"\$interface\""
-alias check2="~/check-interface.sh"
+alias check2="~/check-interface.sh || true"
 alias tolga-cong="sysctl net.ipv4.tcp_congestion_control"
 alias tolga-io="cat /sys/block/sda/queue/scheduler"
 alias tolga-sys="echo && tolga-io && echo && tolga-cong && echo && echo 'ZSWAP status: ( Y = ON )' && cat /sys/module/zswap/parameters/enabled"
+alias blue="sudo systemctl status disable-bluetooth-before-sleep.service --no-pager || true && echo "" && sudo systemctl status enable-bluetooth-after-resume.service --no-pager || true"
+
+if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
+    export MOZ_ENABLE_WAYLAND=1
+    export OBS_USE_EGL=1
+    echo "Running on Wayland: Enabled Wayland-specific settings."
+    sleep 0.1
+elif [[ "$XDG_SESSION_TYPE" == "x11" ]]; then
+    export MOZ_ENABLE_WAYLAND=0
+    export OBS_USE_EGL=0
+    echo "Running on Xorg: Disabled Wayland-specific settings."
+    sleep 0.1
+else
+    echo "Unknown windowing system: ${XDG_SESSION_TYPE}. No changes made."
+    sleep 0.1
+fi
 
 cl && echo "" && fortune | lolcat && echo "" && echo ""

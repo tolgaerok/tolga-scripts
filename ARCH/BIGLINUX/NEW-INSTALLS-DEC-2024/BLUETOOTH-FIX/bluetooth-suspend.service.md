@@ -46,6 +46,7 @@ Run the following commands:
     sudo systemctl enable enable-bluetooth-after-resume.service
     sudo systemctl start disable-bluetooth-before-sleep.service
     sudo systemctl start enable-bluetooth-after-resume.service
+    echo 'alias blue="sudo systemctl status disable-bluetooth-before-sleep.service --no-pager || true && echo && sudo systemctl status enable-bluetooth-after-resume.service --no-pager || true"' >> ~/.bashrc
     sudo systemctl daemon-reload
 
 ## Test Suspend and Resume
