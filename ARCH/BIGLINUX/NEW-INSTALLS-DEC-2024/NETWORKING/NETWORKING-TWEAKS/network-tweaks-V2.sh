@@ -1,6 +1,6 @@
 #!/bin/bash
 # Tolga Erok
-# network tweaks v2
+# Network Tweaks v2
 # 22/12/2024
 
 # Configuration File Details
@@ -66,12 +66,14 @@ declare -A sysctl_settings=(
     ["kernel.unprivileged_bpf_disabled"]="1"
 )
 
-# Create the sysctl file
+# Create the sysctl file if it doesn't exist
 sudo touch "$SYSCTL_CONF"
 
-# Check and append settings
+# Loop through the sysctl settings and apply them
 for key in "${!sysctl_settings[@]}"; do
     value="${sysctl_settings[$key]}"
+
+    # Check if already exists
     if sudo grep -qE "^$key" "$SYSCTL_CONF"; then
         echo "Skipping $key, already set."
     else
@@ -81,5 +83,20 @@ for key in "${!sysctl_settings[@]}"; do
 done
 
 # Reload sysctl to apply the changes
-sudo sysctl --load=/etc/sysctl.d/99-sysctl.conf
-sudo sysctl --system
+echo "Applying sysctl changes..."
+if sudo sysctl --load="$SYSCTL_CONF" && sudo sysctl --system; then
+    echo "Sysctl settings applied successfully."
+else
+    echo "Failed to apply sysctl settings. Please check your system configuration."
+fi
+
+# Check BBR is enabled, and if not, load the module
+if lsmod | grep -q "tcp_bbr"; then
+    echo "BBR is enabled"
+else
+    echo "BBR is not enabled, enabling it now..."
+    # Optionally, load the BBR module and set it as defaultt
+    sudo modprobe tcp_bbr
+    echo "net.ipv4.tcp_congestion_control=bbr" | sudo tee -a "$SYSCTL_CONF" >/dev/null
+    echo "BBR enabled."
+fi
