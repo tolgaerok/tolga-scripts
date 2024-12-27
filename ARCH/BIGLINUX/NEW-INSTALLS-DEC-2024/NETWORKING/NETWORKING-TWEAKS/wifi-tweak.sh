@@ -10,6 +10,12 @@ YELLOW='\033[1;33m'
 BLUE='\033[1;34m'
 NC='\033[0m' # No Color
 
+# Check for root privileges
+if [ "$(id -u)" != "0" ]; then
+    echo -e "${YELLOW}This script must be run with root privileges.${NC}"
+    # exit 1
+fi
+
 # Detect any active network interface
 interface=$(ip link show | awk -F: '$0 ~ "^[2-9]:|^[1-9][0-9]: " && $0 ~ "UP" && $0 !~ "LOOPBACK|NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}')
 
