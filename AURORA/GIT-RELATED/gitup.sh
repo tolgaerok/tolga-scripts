@@ -8,7 +8,7 @@ DATE_CREATED="19/12/2024"
 
 # Configuration
 # ----------------------------------------------------------------------------
-REPO_DIR="var/home/tolga/MyGit/tolga-scripts"
+REPO_DIR="/home/tolga/MyGit/tolga-scripts/"
 COMMIT_MSG_TEMPLATE="(ツ)_/¯ Edit: %s"
 GIT_REMOTE_URL="git@github.com:tolgaerok/tolga-scripts.git"
 CREDENTIAL_CACHE_TIMEOUT=3600

@@ -8,7 +8,7 @@ REPO_NAME="tolga-scripts"
 GIT_USER_NAME="Tolga Erok"
 GIT_USER_EMAIL="kingtolga@gmail.com"
 GITHUB_USERNAME="tolgaerok"
-LOCAL_REPO_DIR="~/MyGit"
+LOCAL_REPO_DIR="/home/tolga/MyGit/tolga-scripts/"
 SSH_KEY_COMMENT="${GIT_USER_EMAIL}"
 
 ### **Create Directory and Clone Repository (if needed)**
