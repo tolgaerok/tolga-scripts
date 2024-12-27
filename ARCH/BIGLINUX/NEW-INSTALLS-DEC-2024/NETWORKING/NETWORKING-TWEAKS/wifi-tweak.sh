@@ -13,7 +13,7 @@ NC='\033[0m' # No Color
 # Check for root privileges
 if [ "$(id -u)" != "0" ]; then
     echo -e "${YELLOW}This script must be run with root privileges.${NC}"
-    # exit 1
+    exit 1
 fi
 
 # Detect any active network interface
@@ -62,16 +62,22 @@ sudo systemctl restart NetworkManager
 # Configure iwlwifi for aggregation TX (11n_disable=8)
 echo "Applying iwlwifi 11n_disable=8..."
 iwlwifi_conf="/etc/modprobe.d/iwlwifi.conf"  # Define the iwlwifi configuration file
-echo "options iwlwifi 11n_disable=8" | sudo tee $iwlwifi_conf >/dev/null
 
-# Reload the iwlwifi module
-echo "Reloading iwlwifi module..."
+# Ensure the configuration file exists and append the option if not present
+echo "options iwlwifi 11n_disable=8" | sudo tee -a $iwlwifi_conf >/dev/null
+
+# Reload the iwlwifi module by restarting the network interface
+echo "Disabling Wi-Fi interface to reload iwlwifi module..."
+sudo ip link set $interface down
+sleep 2
 sudo modprobe -r iwlwifi
 sleep 2
 sudo modprobe iwlwifi
+sudo ip link set $interface up
 
 # Apply NM Wi-Fi settings
 echo "Configuring NetworkManager Wi-Fi settings..."
+networkmanager_conf="/etc/NetworkManager/conf.d/wifi.conf"
 sudo mkdir -p /etc/NetworkManager/conf.d
 echo "[device]" | sudo tee $networkmanager_conf >/dev/null
 echo "wifi.scan-rand-mac-address=no" | sudo tee -a $networkmanager_conf >/dev/null
