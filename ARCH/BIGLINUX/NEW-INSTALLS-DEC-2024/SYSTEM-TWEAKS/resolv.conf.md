@@ -59,9 +59,14 @@ echo "Final resolv.conf:"
 cat /etc/resolv.conf
 nmcli dev show | grep 'IP4.DNS'
 dig @8.8.8.8 google.com
+dig @8.8.4.4 google.com
 nslookup google.com
 
 
 
 ```
+![alt text](image-1.png)
 
+#
+
+![alt text](image-2.png)
