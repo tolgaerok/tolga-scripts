@@ -59,8 +59,9 @@ sudo ip link set $interface mtu $mtu_value
 echo "Restarting NetworkManager to apply changes..."
 sudo systemctl restart NetworkManager
 
-# Configure iwlwifi for aggregation TX (11n_disable=8): WIKI
+# Configure iwlwifi for aggregation TX (11n_disable=8)
 echo "Applying iwlwifi 11n_disable=8..."
+iwlwifi_conf="/etc/modprobe.d/iwlwifi.conf"  # Define the iwlwifi configuration file
 echo "options iwlwifi 11n_disable=8" | sudo tee $iwlwifi_conf >/dev/null
 
 # Reload the iwlwifi module
