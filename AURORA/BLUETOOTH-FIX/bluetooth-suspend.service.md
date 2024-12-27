@@ -69,4 +69,6 @@ Inspect the logs for each service to ensure they are triggered appropriately:
     sudo systemctl status disable-bluetooth-before-sleep.service --no-pager
     sudo systemctl status enable-bluetooth-after-resume.service --no-pager
 
-![alt text](image-1.png)
+![alt text](image-2.png)
+
+![alt text](image-3.png)
