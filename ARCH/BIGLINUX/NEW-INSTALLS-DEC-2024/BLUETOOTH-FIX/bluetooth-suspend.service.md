@@ -26,13 +26,14 @@ WantedBy=sleep.target
 
 ```bash
 [Unit]
-Description=Enable Bluetooth after resume - TOLGA EROK
+Description=Enable Bluetooth and Wi-Fi after resume - TOLGA EROK
 After=suspend.target
 
 [Service]
 Type=oneshot
 ExecStartPre=/bin/sleep 5
 ExecStart=/usr/sbin/rfkill unblock bluetooth
+ExecStartPost=/usr/sbin/rfkill unblock wlan
 
 [Install]
 WantedBy=suspend.target
