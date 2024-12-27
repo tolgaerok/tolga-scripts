@@ -52,3 +52,5 @@ cat /sys/class/net/$interface/mtu
 cat /sys/module/iwlwifi/parameters/11n_disable
 
 echo "Wi-Fi setup completed successfully."
+echo ""
+echo "Please reboot system"
