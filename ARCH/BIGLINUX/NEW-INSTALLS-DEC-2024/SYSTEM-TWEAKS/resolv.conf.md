@@ -10,7 +10,7 @@
 DNS1="nameserver 8.8.8.8"
 DNS2="nameserver 8.8.4.4"
 
-# Temp file for deduplication
+# Temp file for de-duplication
 TEMP_FILE="/tmp/resolv.conf"
 
 # Backup original resolv.conf
@@ -25,7 +25,7 @@ sudo grep -q "$DNS2" /etc/resolv.conf || echo "$DNS2" | sudo tee -a /etc/resolv.
 # Remove duplicates
 sudo awk '!seen[$0]++' /etc/resolv.conf > "$TEMP_FILE"
 
-# Replace original resolv.conf with deduplicated content
+# Replace original resolv.conf with de-duplicated content
 sudo mv "$TEMP_FILE" /etc/resolv.conf
 
 # check NetworkManager is running
@@ -42,17 +42,29 @@ echo "Restarting NetworkManager..."
 sudo systemctl restart NetworkManager
 sleep 5  
 
-# Set DNS for the first active Wi-Fi connection
+# Ensure NetworkManager is active
+echo "Ensuring NetworkManager is active..."
+if ! systemctl is-active --quiet NetworkManager; then
+    echo "NetworkManager is not running. Starting NetworkManager..."
+    sudo systemctl start NetworkManager
+else
+    echo "NetworkManager is already running."
+fi
+
+# Get the active Wi-Fi connection name
 ACTIVE_CONNECTION=$(nmcli -t -f NAME,TYPE con show --active | grep -i 'wifi' | cut -d: -f1)
 
+echo "Active Wi-Fi connection detected: $ACTIVE_CONNECTION"
+
 if [ -n "$ACTIVE_CONNECTION" ]; then
-  echo "Setting DNS for active connection: $ACTIVE_CONNECTION"
-  sudo nmcli con mod "$ACTIVE_CONNECTION" ipv4.dns "8.8.8.8 8.8.4.4"
-  sudo nmcli con mod "$ACTIVE_CONNECTION" ipv4.ignore-auto-dns yes
-  echo "DNS updated for $ACTIVE_CONNECTION."
+    echo "Setting DNS for active connection: $ACTIVE_CONNECTION"
+    sudo nmcli con mod "$ACTIVE_CONNECTION" ipv4.dns "8.8.8.8 8.8.4.4"
+    sudo nmcli con mod "$ACTIVE_CONNECTION" ipv4.ignore-auto-dns yes
+    echo "DNS updated for $ACTIVE_CONNECTION."
 else
-  echo "No active Wi-Fi connection found to update DNS."
+    echo "No active Wi-Fi connection found to update DNS."
 fi
+
 
 # Final DNS settings check
 echo "Final resolv.conf:"
