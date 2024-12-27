@@ -221,6 +221,7 @@ alias tline='echo -e "\n${GREEN}┌───────────────
 alias bline='echo -e "\n${GREEN}└───────────────────────────────────────────────────────────────────────────────────────────────┘ ${RESET}\n"'
 
 alias blue="tline && sudo systemctl status disable-bluetooth-before-sleep.service --no-pager || true && bline && echo "" && tline && sudo systemctl status enable-bluetooth-after-resume.service --no-pager || true && bline"
+alias btrfs-manage="btrfs_manage"
 alias cake2='interface=$(ip link show | awk -F: '\''$0 ~ /wlp|wlo|wlx/ && $0 !~ /NO-CARRIER/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo systemctl restart apply-cake-qdisc-wake.service && tline && sudo tc -s qdisc show dev $interface && sudo systemctl status apply-cake-qdisc.service --no-pager || true && sudo systemctl status apply-cake-qdisc-wake.service --no-pager || true && bline'
 alias check1="interface=\$(ip link show | awk -F: '\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'); tline && sudo tc qdisc show dev \"\$interface\" && bline"
 alias check2="tline && ~/check-interface.sh || true && bline"
@@ -234,7 +235,6 @@ alias tolga-io="cat /sys/block/sda/queue/scheduler"
 alias tolga-io="tline && cat /sys/block/sda/queue/scheduler && bline"
 alias tolga-sys="tline && echo && tolga-io && echo && tolga-cong && echo && echo 'ZSWAP status: ( Y = ON )' && cat /sys/module/zswap/parameters/enabled && bline"
 alias tolga-trim="sudo fstrim -av"
-alias btrfs-manage="btrfs_manage"
 
 # Alias for Btrfs Frequent Maintenance (daily/weekly)
 alias btrfsMaintFrequent='
