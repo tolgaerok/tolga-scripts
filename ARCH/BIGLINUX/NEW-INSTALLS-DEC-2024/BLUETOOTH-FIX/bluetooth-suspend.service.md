@@ -14,7 +14,7 @@ Before=sleep.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/rfkill block bluetooth
+ExecStart=/usr/bin/rfkill block bluetooth ; nmcli radio wifi off
 
 [Install]
 WantedBy=sleep.target
@@ -32,8 +32,9 @@ After=suspend.target
 [Service]
 Type=oneshot
 ExecStartPre=/bin/sleep 5
-ExecStart=/usr/sbin/rfkill unblock bluetooth
-ExecStartPost=/usr/sbin/rfkill unblock wlan
+ExecStart=/usr/sbin/rfkill unblock bluetooth ; nmcli radio wifi on
+
+
 
 [Install]
 WantedBy=suspend.target
