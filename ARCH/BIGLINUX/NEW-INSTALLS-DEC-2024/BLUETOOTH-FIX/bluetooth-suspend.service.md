@@ -9,7 +9,7 @@
 
 ```bash
 [Unit]
-Description=Disable Bluetooth before suspend - TOLGA EROK
+Description=Disable Bluetooth and WiFi before suspend - TOLGA EROK
 Before=sleep.target
 
 [Service]
