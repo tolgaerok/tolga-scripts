@@ -61,7 +61,7 @@ sudo systemctl restart NetworkManager
 
 # Configure iwlwifi for aggregation TX (11n_disable=8)
 echo "Applying iwlwifi 11n_disable=8..."
-iwlwifi_conf="/etc/modprobe.d/iwlwifi.conf"  # Define the iwlwifi configuration file
+iwlwifi_conf="/etc/modprobe.d/iwlwifi.conf" # Define the iwlwifi configuration file
 
 # Ensure the configuration file exists and append the option if not present
 echo "options iwlwifi 11n_disable=8" | sudo tee -a $iwlwifi_conf >/dev/null
