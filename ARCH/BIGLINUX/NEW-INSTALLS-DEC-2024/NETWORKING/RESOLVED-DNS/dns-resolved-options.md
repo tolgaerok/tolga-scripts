@@ -50,11 +50,13 @@
 
     nmcli connection show
 
+```bash
 NAME                UUID                                  TYPE      DEVICE 
 OPTUS_DADS_5GHz     2a20a2cd-15c5-40c3-92e1-a18c6251bf32  wifi      wlp4s0 
 lo                  932397c3-d446-486b-83de-62602231abeb  loopback  lo     
 OPTUS_B27161        e1dbab0d-05ce-4966-9307-c5bbc97f9ed7  wifi      --     
 Wired connection 1  8d396ae6-a19a-36bc-bf83-b50f8a098c79  ethernet  --  
+```
 
 # ipv4
 
