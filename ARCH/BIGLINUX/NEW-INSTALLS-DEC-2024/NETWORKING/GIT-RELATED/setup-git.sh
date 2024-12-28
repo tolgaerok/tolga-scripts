@@ -23,7 +23,7 @@ else
   git clone https://github.com/${GITHUB_USERNAME}/${REPO_NAME}.git
 fi
 
-### **Set Global Git Configuration**
+### Set Global Git Configuration
 echo "Configuring global Git settings..."
 git init
 git config --global user.email "${GIT_USER_EMAIL}"
@@ -40,11 +40,11 @@ if [ ! -d ".git" ]; then
   git branch -m main
 fi
 
-### **Setup SSH Key for GitHub Authentication**
+### Setup SSH Key for GitHub Authentication
 echo "Generating SSH key for GitHub authentication..."
 ssh-keygen -t rsa -b 4096 -C "${SSH_KEY_COMMENT}" -f ~/.ssh/id_rsa -N ""
 
-### **Display and Configure SSH**
+### Display and Configure SSH
 echo "Displaying SSH public key (add to GitHub settings):"
 cat ~/.ssh/id_rsa.pub
 
