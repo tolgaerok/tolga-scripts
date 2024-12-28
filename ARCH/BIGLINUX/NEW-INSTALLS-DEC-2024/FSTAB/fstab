@@ -11,3 +11,18 @@ UUID=44a5ebd2-973b-4f66-91d5-940918c6d30e /var/log       btrfs   subvol=/@log,de
 UUID=80A2-EFCD                            /boot/efi      vfat    defaults,umask=0077 0 2
 
 tmpfs                                     /tmp           tmpfs   defaults,noatime,mode=1777 0 0
+
+
+
+
+
+# ---------- ORIGINAL ----------------
+
+# <file system>             <mount point>  <type>  <options>  <dump>  <pass>
+UUID=80A2-EFCD                            /boot/efi      vfat    defaults,umask=0077 0 2
+UUID=44a5ebd2-973b-4f66-91d5-940918c6d30e /              btrfs   subvol=/@,defaults,noatime,compress-force=zstd:5,discard=async 0 0
+UUID=44a5ebd2-973b-4f66-91d5-940918c6d30e /home          btrfs   subvol=/@home,defaults,noatime,compress-force=zstd,discard=async 0 0
+UUID=44a5ebd2-973b-4f66-91d5-940918c6d30e /var/cache     btrfs   subvol=/@cache,defaults,noatime,compress-force=zstd,discard=async 0 0
+UUID=44a5ebd2-973b-4f66-91d5-940918c6d30e /var/log       btrfs   subvol=/@log,defaults,noatime,compress-force=zstd,discard=async 0 0
+tmpfs                                     /tmp           tmpfs   defaults,noatime,mode=1777 0 0
+UUID=44a5ebd2-973b-4f66-91d5-940918c6d30e /swapfc        btrfs   subvol=/@swapfc,defaults 0 0
