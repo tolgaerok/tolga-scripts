@@ -25,9 +25,13 @@ fi
 
 ### **Set Global Git Configuration**
 echo "Configuring global Git settings..."
+git init
 git config --global user.email "${GIT_USER_EMAIL}"
 git config --global user.name "${GIT_USER_NAME}"
 git config --global init.defaultBranch main
+git config --global credential.helper cache
+git config --global credential.helper 'cache --timeout=25000'
+git config --global push.default simple
 
 ### **Initialize Repository (if new)**
 if [ ! -d ".git" ]; then
@@ -58,8 +62,24 @@ ssh -T git@github.com
 
 ### **Secure SSH Files**
 echo "Securing SSH file permissions..."
-chmod 700 ~/.ssh
-chmod 600 ~/.ssh/config
+
+# Check if ~/.ssh exists, if not, create it and set permissions
+if [ ! -d "$HOME/.ssh" ]; then
+  mkdir -p "$HOME/.ssh"
+  chmod 700 "$HOME/.ssh"
+  echo "Created ~/.ssh and set permissions to 700"
+else
+  echo "~/.ssh already exists, skipping creation and permission change."
+fi
+
+# Check if ~/.ssh/config exists, if so, set permissions to 600
+if [ -f "$HOME/.ssh/config" ]; then
+  chmod 600 "$HOME/.ssh/config"
+  echo "Set permissions of ~/.ssh/config to 600"
+else
+  echo "~/.ssh/config does not exist, skipping permission change."
+fi
+
 chmod 600 ~/.ssh/id_rsa
 chmod 644 ~/.ssh/id_rsa.pub
 
