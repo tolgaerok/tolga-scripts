@@ -60,7 +60,7 @@ Wired connection 1  8d396ae6-a19a-36bc-bf83-b50f8a098c79  ethernet  --
 
 # ipv4
 
-    sudo nmcli connection modify "OPTUS_DADS_5GHz" ipv4.dns "1.1.1.1 9.9.9.9 8.8.8.8"
+    sudo nmcli connection modify "OPTUS_DADS_5GHz" ipv4.dns "1.1.1.1 9.9.9.9 8.8.8.8 8.8.4.4"
     
 # ipv6
 
@@ -75,6 +75,10 @@ Wired connection 1  8d396ae6-a19a-36bc-bf83-b50f8a098c79  ethernet  --
 
     systemd-resolve --status
 
+![alt text](image.png)
+
 And check `/etc/resolv.conf`
 
     cat /etc/resolv.conf
+
+![alt text](image-2.png)
