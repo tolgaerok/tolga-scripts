@@ -3,8 +3,7 @@
     sudo systemctl restart systemd-resolved
     systemd-resolve --status
 
-    ![alt text](image-1.png)
-
+![alt text](image-1.png)
 
 ## Original biglinux
 ```bash
