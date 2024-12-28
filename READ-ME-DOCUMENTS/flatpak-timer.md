@@ -23,6 +23,8 @@ WantedBy=default.target
 
 ### Create flatpak-update.timer
 
+- `*:0/6` means it will run every 6 hours, starting from midnight.
+
 location:
 
 ```bash
