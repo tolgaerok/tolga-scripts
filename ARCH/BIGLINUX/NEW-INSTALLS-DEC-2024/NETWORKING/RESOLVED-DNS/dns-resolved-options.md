@@ -1,3 +1,7 @@
+- Tolga Erok
+- 28/12/2024
+
+
 # systemD resolve
     sudo nano /etc/systemd/resolved.conf
     sudo systemctl restart systemd-resolved
