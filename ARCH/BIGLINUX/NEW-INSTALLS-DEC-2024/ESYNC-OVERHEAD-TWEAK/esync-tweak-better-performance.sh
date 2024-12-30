@@ -62,6 +62,8 @@ env -i bash --norc --noprofile -c "
     echo -n 'Hard limit (clean env): '; ulimit -Hn
 "
 
+sudo systemctl daemon-reexec
+
 # Display final configuration
 echo "Final configuration:"
 grep DefaultLimitNOFILE /etc/systemd/system.conf /etc/systemd/user.conf
