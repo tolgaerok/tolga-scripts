@@ -1,4 +1,4 @@
-<table><tr><td> :wink: Turn bluetooth off when system suspends and turn back on after suspend</td></tr></table>
+#  :wink: Turn bluetooth off when system suspends and turn back on after suspend
 
 > *Tolga Erok* :wink:
 >
