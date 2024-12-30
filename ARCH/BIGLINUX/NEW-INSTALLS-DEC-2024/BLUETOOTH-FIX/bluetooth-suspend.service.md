@@ -6,7 +6,7 @@
 >
 > *(c)* Turn bluetooth off when system suspends and turn back on after suspend
 
-# ***Pre-Suspend Service***
+## ***Pre-Suspend Service***
 
 > - Create /etc/systemd/system/disable-bluetooth-before-sleep.service
 
@@ -23,7 +23,7 @@ ExecStart=/usr/bin/rfkill block bluetooth ; nmcli radio wifi off
 WantedBy=sleep.target
 ```
 
-# Post-Resume Service
+## *Post-Resume Service*
 
 > - Create /etc/systemd/system/enable-bluetooth-after-resume.service
 
@@ -43,7 +43,7 @@ ExecStart=/usr/sbin/rfkill unblock bluetooth ; nmcli radio wifi on
 WantedBy=suspend.target
 ```
 
-## Enable the Services
+## *Enable the Services*
 
 > - Run the following commands:
 
@@ -56,7 +56,7 @@ echo 'alias blue="sudo systemctl status disable-bluetooth-before-sleep.service -
 sudo systemctl daemon-reload
 ``` 
 
-## Test Suspend and Resume
+## *Test Suspend and Resume*
 
 > - After enabling the services, suspend your system and resume it. Verify the status of Bluetooth with:
 
@@ -64,7 +64,7 @@ sudo systemctl daemon-reload
 rfkill list bluetooth
 ```
 
-## Verify Logs
+## *Verify Logs*
 
 > - Inspect the logs for each service to ensure they are triggered appropriately:
 
@@ -75,7 +75,7 @@ journalctl -u enable-bluetooth-after-resume.service --no-pager
 
 ![screen-shot](image.png)
 
-## Verify status
+## *Verify status*
 
 ``` js
 sudo systemctl status disable-bluetooth-before-sleep.service --no-pager
