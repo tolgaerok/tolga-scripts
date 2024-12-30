@@ -4,16 +4,45 @@
 
 ![alt text](image-3.png)
 
+> - alias my-systemd="$HOME/my-systemd.sh"
+
 ``` js
 #!/bin/bash
 # tolga erok
 # 30/12/24
 
 # Script to show and restart my custom systemd services and cron jobs
+clear
 
 # Check systemd service status without pager and restart
 echo -e "Checking and restarting systemd services...\n"
 sudo systemctl daemon-reload
+
+# Service status for flatpak-update and restart
+echo -e "\nStatus of flatpak-update.service:"
+systemctl status flatpak-update.service --no-pager || true
+echo -e "Restarting flatpak-update.service..."
+sudo systemctl restart flatpak-update.service || true
+
+# Timer status for flatpak-update.timer and restart
+echo -e "\nStatus of flatpak-update.timer:"
+systemctl status flatpak-update.timer --no-pager || true
+echo -e "Restarting flatpak-update.timer..."
+sudo systemctl restart flatpak-update.timer || true
+
+# Restart systemd-resolved service and check its status
+echo -e "\nRestarting systemd-resolved service..."
+sudo systemctl restart systemd-resolved || true
+echo -e "\nStatus of systemd-resolved:"
+systemd-resolve --status || true
+
+# Restart Samba and related services
+echo -e "\nRestarting samba services..."
+sudo systemctl restart smb.service || true
+sudo systemctl restart nmb.service || true
+sudo systemctl restart wsdd.service || true
+
+sleep 5
 
 # Service status for clear_temp_slowdowns_after_sleep and restart
 echo -e "\nStatus of clear_temp_slowdowns_after_sleep.service:"
@@ -49,32 +78,7 @@ sudo systemctl status enable-bluetooth-after-resume.service --no-pager || true
 echo -e "Restarting enable-bluetooth-after-resume.service..."
 sudo systemctl restart enable-bluetooth-after-resume.service || true
 
-# Service status for flatpak-update and restart
-echo -e "\nStatus of flatpak-update.service:"
-systemctl status flatpak-update.service --no-pager || true
-echo -e "Restarting flatpak-update.service..."
-sudo systemctl restart flatpak-update.service || true
-
-# Timer status for flatpak-update.timer and restart
-echo -e "\nStatus of flatpak-update.timer:"
-systemctl status flatpak-update.timer --no-pager || true
-echo -e "Restarting flatpak-update.timer..."
-sudo systemctl restart flatpak-update.timer || true
-
-# Restart systemd-resolved service and check its status
-echo -e "\nRestarting systemd-resolved service..."
-sudo systemctl restart systemd-resolved || true
-echo -e "\nStatus of systemd-resolved:"
-systemd-resolve --status || true
-
-# Restart Samba and related services
-echo -e "\nRestarting samba services..."
-sudo systemctl restart smb.service || true
-sudo systemctl restart nmb.service || true
-sudo systemctl restart wsdd.service || true
-
 echo -e "\nSystem status checks and restarts completed."
-
 
 ```
 
