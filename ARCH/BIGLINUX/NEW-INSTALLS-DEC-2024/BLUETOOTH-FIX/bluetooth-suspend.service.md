@@ -63,7 +63,7 @@ sudo systemctl daemon-reload
 rfkill list bluetooth
 ```
 
-## *Verify Logs*
+##  :sunglasses: *Verify Logs*
 
 > - Inspect the logs for each service to ensure they are triggered appropriately:
 
