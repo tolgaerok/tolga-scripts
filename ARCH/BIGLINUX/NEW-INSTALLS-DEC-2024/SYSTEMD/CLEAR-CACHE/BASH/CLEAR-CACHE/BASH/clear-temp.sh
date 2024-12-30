@@ -17,8 +17,8 @@ RESET="\033[0m"
 
 # header with a border
 print_header() {
-  echo -e "\n${GREEN}┌───────────────────────────────────────────────────────────────────────────────────────────────┐ ${RESET}\n$1"
-  echo -e "${GREEN}└───────────────────────────────────────────────────────────────────────────────────────────────┘ ${RESET}\n"
+    echo -e "\n${GREEN}┌───────────────────────────────────────────────────────────────────────────────────────────────┐ ${RESET}\n$1"
+    echo -e "${GREEN}└───────────────────────────────────────────────────────────────────────────────────────────────┘ ${RESET}\n"
 }
 
 # Clear pacman cache (Manjaro's package manager) without prompting
@@ -33,13 +33,13 @@ sudo journalctl --vacuum-time=1s --vacuum-size=1
 # Drop Linux filesystem caches to free up memory
 print_header "      Dropping filesystem caches..."
 sudo sync
-echo 3 | sudo tee /proc/sys/vm/drop_caches > /dev/null
+echo 3 | sudo tee /proc/sys/vm/drop_caches >/dev/null
 
 # Clear thumbnail cache (if exists)
 print_header "      Clearing thumbnail cache..."
 sudo rm -rf ~/.thumbnails/*
 
-# Restart NetworkManager 
+# Restart NetworkManager
 print_header "      Restarting NetworkManager..."
 sudo systemctl restart NetworkManager
 
