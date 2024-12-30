@@ -29,3 +29,7 @@
 | **Strikethrough**  | `~~The world is flat.~~`             | ~~The world is flat.~~                |
 | **Task List**      | `- [x] Write the press release` <br> `- [ ] Update the website` <br> `- [ ] Contact the media` | - [x] Write the press release <br> - [ ] Update the website <br> - [ ] Contact the media |
 
+
+
+https://github.com/lifeparticle/Markdown-Cheatsheet
+
