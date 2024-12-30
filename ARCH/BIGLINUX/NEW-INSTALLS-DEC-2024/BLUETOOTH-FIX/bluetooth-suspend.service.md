@@ -3,8 +3,7 @@
 > *Tolga Erok* :wink:
 >
 > - 24/12/2024
-> - *(c)* From my experience, this works great on manjaro and solusOS and made a small difference
->> to battery improvement.
+> - *(c)* From my experience, this works great on manjaro and solusOS and made a small difference to laptop battery improvement.
 
 ## ***Pre-Suspend Service***
 
