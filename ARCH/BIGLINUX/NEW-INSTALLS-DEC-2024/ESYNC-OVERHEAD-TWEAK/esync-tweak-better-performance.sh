@@ -13,7 +13,16 @@ DATE_CREATED="22/12/2024"
 SOFT_LIMIT=1024
 HARD_LIMIT=1048576
 
-# update systemd configuration
+# Check and create files if they not exist
+ensure_file_exists() {
+    local file_path="$1"
+    if [[ ! -f "$file_path" ]]; then
+        echo "$file_path does not exist. Creating..."
+        sudo touch "$file_path"
+    fi
+}
+
+# Update systemd configuration
 update_systemd_config() {
     local config_file="$1"
     local pattern="DefaultLimitNOFILE=${SOFT_LIMIT}:${HARD_LIMIT}"
@@ -27,7 +36,12 @@ update_systemd_config() {
     fi
 }
 
-# system-wide
+# Ensure configuration files exist
+echo "Ensuring systemd configuration files exist..."
+ensure_file_exists /etc/systemd/system.conf
+ensure_file_exists /etc/systemd/user.conf
+
+# System-wide configuration
 echo "Updating system-wide limits..."
 update_systemd_config /etc/systemd/system.conf
 update_systemd_config /etc/systemd/user.conf
@@ -48,7 +62,7 @@ env -i bash --norc --noprofile -c "
     echo -n 'Hard limit (clean env): '; ulimit -Hn
 "
 
-# Display the final configuration
+# Display final configuration
 echo "Final configuration:"
 grep DefaultLimitNOFILE /etc/systemd/system.conf /etc/systemd/user.conf
 
