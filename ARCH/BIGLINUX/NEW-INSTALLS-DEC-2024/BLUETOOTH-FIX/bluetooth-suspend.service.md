@@ -9,7 +9,7 @@
 
 - Create /etc/systemd/system/disable-bluetooth-before-sleep.service
 
-```bash
+``` js
 [Unit]
 Description=Disable Bluetooth and WiFi before suspend - TOLGA EROK
 Before=sleep.target
@@ -26,7 +26,7 @@ WantedBy=sleep.target
 
     Create /etc/systemd/system/enable-bluetooth-after-resume.service
 
-```bash
+``` js
 [Unit]
 Description=Enable Bluetooth and Wi-Fi after resume - TOLGA EROK
 After=suspend.target
@@ -46,12 +46,14 @@ WantedBy=suspend.target
 
 Run the following commands:
 
+``` js
     sudo systemctl enable disable-bluetooth-before-sleep.service
     sudo systemctl enable enable-bluetooth-after-resume.service
     sudo systemctl start disable-bluetooth-before-sleep.service
     sudo systemctl start enable-bluetooth-after-resume.service
     echo 'alias blue="sudo systemctl status disable-bluetooth-before-sleep.service --no-pager || true && echo && sudo systemctl status enable-bluetooth-after-resume.service --no-pager || true"' >> ~/.bashrc
     sudo systemctl daemon-reload
+``` 
 
 ## Test Suspend and Resume
 
