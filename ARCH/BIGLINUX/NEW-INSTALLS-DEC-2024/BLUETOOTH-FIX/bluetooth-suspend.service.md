@@ -76,7 +76,7 @@ sudo systemctl status enable-bluetooth-after-resume.service --no-pager
 ```
 
 | Command | Output (Click to view) |
-| ------ | ----------- |
+| ------: | ----------- |
 | journalctl -u disable-bluetooth-before-sleep.service --no-pager &&  journalctl -u enable-bluetooth-after-resume.service --no-pager  | ![screen-shot](image.png) |
 | sudo systemctl status disable-bluetooth-before-sleep.service --no-pager && sudo systemctl status enable-bluetooth-after-resume.service --no-pager  | ![screen-shot](image-1.png) |
 
