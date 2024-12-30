@@ -7,7 +7,7 @@
 
 # ***Pre-Suspend Service***
 
-- Create /etc/systemd/system/disable-bluetooth-before-sleep.service
+> - Create /etc/systemd/system/disable-bluetooth-before-sleep.service
 
 ``` js
 [Unit]
@@ -24,7 +24,7 @@ WantedBy=sleep.target
 
 # Post-Resume Service
 
-    Create /etc/systemd/system/enable-bluetooth-after-resume.service
+> - Create /etc/systemd/system/enable-bluetooth-after-resume.service
 
 ``` js
 [Unit]
@@ -44,7 +44,7 @@ WantedBy=suspend.target
 
 ## Enable the Services
 
-Run the following commands:
+> - Run the following commands:
 
 ``` js
 sudo systemctl enable disable-bluetooth-before-sleep.service
@@ -57,7 +57,7 @@ sudo systemctl daemon-reload
 
 ## Test Suspend and Resume
 
-After enabling the services, suspend your system and resume it. Verify the status of Bluetooth with:
+> - After enabling the services, suspend your system and resume it. Verify the status of Bluetooth with:
 
 ``` js
 rfkill list bluetooth
@@ -65,14 +65,14 @@ rfkill list bluetooth
 
 ## Verify Logs
 
-Inspect the logs for each service to ensure they are triggered appropriately:
+> - Inspect the logs for each service to ensure they are triggered appropriately:
 
 ``` js
 journalctl -u disable-bluetooth-before-sleep.service --no-pager
 journalctl -u enable-bluetooth-after-resume.service --no-pager
 ```
 
-![alt text](image.png)
+![screen-shot](image.png)
 
 ## Verify status
 
@@ -81,4 +81,4 @@ sudo systemctl status disable-bluetooth-before-sleep.service --no-pager
 sudo systemctl status enable-bluetooth-after-resume.service --no-pager
 ```
 
-![alt text](image-1.png)
+![screen-shot](image-1.png)
