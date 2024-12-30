@@ -1,4 +1,4 @@
-# Turn bluetooth off when system suspends and turn back on after suspend
+# 8-) Turn bluetooth off when system suspends and turn back on after suspend
 
 > *Tolga Erok*
 >
