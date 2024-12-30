@@ -8,7 +8,7 @@
 
 ``` js
 #!/bin/bash
-# Create my systemd restart script and alias it in .bashrc
+# Create the systemd restart script and alias it in .bashrc
 
 # Define the script file path
 script_file="$HOME/my-systemd.sh"
@@ -44,11 +44,19 @@ sudo systemctl restart systemd-resolved || echo "Failed to restart systemd-resol
 echo -e "\nStatus of systemd-resolved:"
 systemd-resolve --status || echo "systemd-resolved status failed"
 
-# Restart Samba and related services
+# Restart Samba and related services, then check their status
 echo -e "\nRestarting samba services..."
 sudo systemctl restart smb.service || echo "Failed to restart smb.service"
+echo -e "Status of smb.service:"
+systemctl status smb.service --no-pager || echo "smb.service not found or failed"
+
 sudo systemctl restart nmb.service || echo "Failed to restart nmb.service"
+echo -e "Status of nmb.service:"
+systemctl status nmb.service --no-pager || echo "nmb.service not found or failed"
+
 sudo systemctl restart wsdd.service || echo "Failed to restart wsdd.service"
+echo -e "Status of wsdd.service:"
+systemctl status wsdd.service --no-pager || echo "wsdd.service not found or failed"
 
 sleep 5
 
@@ -89,10 +97,10 @@ sudo systemctl status enable-bluetooth-after-resume.service --no-pager || echo "
 echo -e "\nSystem status checks and restarts completed."
 EOF
 
-# Make script executable
+# Make the script executable
 chmod +x "$script_file"
 
-# Add alias to .bashrc 
+# Add alias to .bashrc if not already present
 echo -e "\nAdding alias to .bashrc..."
 if ! grep -q "my-systemd" "$HOME/.bashrc"; then
     echo "alias my-systemd='$HOME/my-systemd.sh'" >> "$HOME/.bashrc"
@@ -102,6 +110,7 @@ else
 fi
 
 echo -e "\nSetup complete. You can now use 'my-systemd' to run the script."
+
 
 ```
 
