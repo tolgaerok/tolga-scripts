@@ -2,8 +2,8 @@
 
 > *Tolga Erok*
 >
-> - 24/12/2024
-> - (C) Turn bluetooth off when system suspends and turn back on after suspend
+> 24/12/2024
+> *(c)* Turn bluetooth off when system suspends and turn back on after suspend
 
 # ***Pre-Suspend Service***
 
