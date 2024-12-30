@@ -3,7 +3,8 @@
 > *Tolga Erok* :wink:
 >
 > - 24/12/2024
-> - *(c)* Turn bluetooth off when system suspends and turn back on after suspend
+> - *(c)* From my experience, this works great on manjaro and solusOS and made a small difference
+>> to battery improvement.
 
 ## ***Pre-Suspend Service***
 
