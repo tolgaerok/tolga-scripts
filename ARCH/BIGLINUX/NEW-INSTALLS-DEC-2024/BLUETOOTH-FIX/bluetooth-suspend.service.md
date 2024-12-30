@@ -1,6 +1,6 @@
-# 8-) Turn bluetooth off when system suspends and turn back on after suspend
+#  :wink: Turn bluetooth off when system suspends and turn back on after suspend
 
-> *Tolga Erok*
+> *Tolga Erok* :wink:
 >
 > - 24/12/2024
 > - *(c)* Turn bluetooth off when system suspends and turn back on after suspend
