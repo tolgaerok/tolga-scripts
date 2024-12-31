@@ -61,10 +61,10 @@ systemctl status wsdd.service --no-pager || echo "wsdd.service not found or fail
 sleep 5
 
 # Restart clear_temp_slowdowns_after_sleep.service and check its status
-echo -e "\nRestarting clear_temp_slowdowns_after_sleep.service..."
-sudo systemctl restart clear_temp_slowdowns_after_sleep.service || echo "Failed to restart clear_temp_slowdowns_after_sleep.service"
-echo -e "Status of clear_temp_slowdowns_after_sleep.service:"
-sudo systemctl status clear_temp_slowdowns_after_sleep.service --no-pager || echo "clear_temp_slowdowns_after_sleep.service not found"
+# echo -e "\nRestarting clear_temp_slowdowns_after_sleep.service..."
+# sudo systemctl restart clear_temp_slowdowns_after_sleep.service || echo "Failed to restart clear_temp_slowdowns_after_sleep.service"
+# echo -e "Status of clear_temp_slowdowns_after_sleep.service:"
+# sudo systemctl status clear_temp_slowdowns_after_sleep.service --no-pager || echo "clear_temp_slowdowns_after_sleep.service not found"
 
 # Restart clear_temp_slowdowns_at_boot.service and check its status
 echo -e "\nRestarting clear_temp_slowdowns_at_boot.service..."
@@ -115,3 +115,38 @@ echo -e "\nSetup complete. You can now use 'my-systemd' to run the script."
 ```
 
 ![alt text](image.png)
+
+
+### Remove cron jobs
+
+```js
+#!/bin/bash
+# Tolga Erok
+# 31/12/24
+
+# set the default editor to nano
+export EDITOR=nano
+echo "Default editor set to nano."
+
+# clear the crontab for the current user
+echo "Clearing crontab for the current user..."
+crontab -r 2>/dev/null || echo "No existing crontab to clear."
+
+# see if the backup file exists and delete it
+BACKUP_FILE="/home/$(whoami)/.cache/crontab/crontab.bak"
+if [ -f "$BACKUP_FILE" ]; then
+    echo "Deleting backup file: $BACKUP_FILE"
+    rm "$BACKUP_FILE" && echo "Backup file removed." || echo "Failed to delete the backup file."
+else
+    echo "No backup file found at: $BACKUP_FILE"
+fi
+
+# confirm cleanup
+echo "Current crontab:"
+crontab -l 2>/dev/null || echo "No crontab set."
+
+# check if the editor is set to nano
+echo "Default editor for crontab is now set to:"
+echo $EDITOR
+
+```
