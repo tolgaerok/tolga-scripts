@@ -80,3 +80,18 @@ sudo systemctl status enable-bluetooth-after-resume.service --no-pager
 | journalctl -u disable-bluetooth-before-sleep.service --no-pager &&  journalctl -u enable-bluetooth-after-resume.service --no-pager  | ![screen-shot](image.png) |
 | sudo systemctl status disable-bluetooth-before-sleep.service --no-pager && sudo systemctl status enable-bluetooth-after-resume.service --no-pager  | ![screen-shot](image-1.png) |
 
+# To disable and delete my bluetooth and wifi block/unblock services
+
+```js
+sudo systemctl stop disable-bluetooth-before-sleep.service
+sudo systemctl stop enable-bluetooth-after-resume.service
+sudo systemctl disable disable-bluetooth-before-sleep.service
+sudo systemctl disable enable-bluetooth-after-resume.service
+sudo rm /etc/systemd/system/disable-bluetooth-before-sleep.service
+sudo rm /etc/systemd/system/enable-bluetooth-after-resume.service
+sudo systemctl daemon-reload
+
+systemctl list-unit-files | grep bluetooth
+
+
+```
