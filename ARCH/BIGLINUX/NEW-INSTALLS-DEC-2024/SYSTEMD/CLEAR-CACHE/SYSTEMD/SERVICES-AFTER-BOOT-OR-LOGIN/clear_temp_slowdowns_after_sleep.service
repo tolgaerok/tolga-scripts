@@ -24,6 +24,13 @@ RemainAfterExit=yes
 [Install]
 WantedBy=suspend.target
 
+# To stop and delete my service
+# ---------------------------------------------------------------
+# sudo systemctl stop clear_temp_slowdowns_after_sleep.service
+# sudo systemctl disable clear_temp_slowdowns_after_sleep.service
+# sudo rm /etc/systemd/system/clear_temp_slowdowns_after_sleep.service
+# sudo systemctl daemon-reload
+# sudo systemctl list-unit-files | grep clear_temp_slowdowns_after_sleep
 
 
 
