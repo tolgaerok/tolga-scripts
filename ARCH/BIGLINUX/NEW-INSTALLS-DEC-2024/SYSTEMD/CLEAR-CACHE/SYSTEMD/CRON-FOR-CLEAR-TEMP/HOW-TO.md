@@ -1,9 +1,9 @@
 # Cron Job to Run Periodically
-> ### Metadata
-> ### ----------------------------------------------------------------------------
-> ### AUTHOR="Tolga Erok"
-> ### VERSION="1"
-> ### DATE_CREATED="21/12/2024"
+>  Metadata
+>  ----------------------------------------------------------------------------
+>  AUTHOR="Tolga Erok"
+>  VERSION="1"
+>  DATE_CREATED="21/12/2024"
 
 ## Setup
 #
