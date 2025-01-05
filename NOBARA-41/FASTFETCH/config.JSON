@@ -1,0 +1,147 @@
+// Tolga Erok
+// Sep 22 2024 ...
+{
+    "$schema": "https://github.com/tolgaerok/tolga-scripts/blob/main/FEDORA-40/fastfetch/json_schema.json",
+    "logo": {
+        "type": "kitty",
+        "width": 36,
+        "height": 17,
+        "padding": {
+            "top": 3,
+            "left": 2,
+            "right": 7,
+        }
+    },
+    "display": {
+        "separator": "  ",
+        "color": {
+            "keys": "38;2;87;160;198"
+        }
+    },
+    "modules": [
+        "break",
+        {
+            "type": "title",
+            "key": "",
+            "color": {
+                "user": "38;2;87;160;198",
+                "at": "white",
+                "host": "bright_green"
+            }
+        },
+        "break",
+        {
+            "type": "custom", // SoftwareStart
+            "format": "┌─────────── \u001b[1mDistro Information\u001b[0m   ───────────┐"
+        },
+        {
+            "type": "command",
+            "key": "󱋩",
+            "text": "/usr/libexec/ublue-image-info.sh"
+        },
+        {
+            "type": "os",
+            "key": "󰣛"
+        },
+        {
+            "type": "kernel",
+            "key": "",
+            "format": "{1} {2}"
+        },
+        {
+            "type": "uptime",
+            "key": "󰅐"
+        },
+        {
+            "type": "command",
+            "key": "󰔠",
+            "text": "date -d$(ls -alct / --time-style=full-iso|tail -1|awk '{print $6}') +'Forged on %b %d %G'",
+            "shell": "/bin/bash"
+        },
+        {
+            "type": "command",
+            "key": "󰔠",
+            "text": "echo \"Installed for $((($(date +%s) - $(date --date=\"$(ls -ld --time-style=+%b\\ %d\\ %Y / | awk '{print $6, $7, $8}')\" +%s)) / 86400)) days, forged on $(ls -ld --time-style=+%b\\ %d\\ %Y / | awk '{print $6, $7, $8}')\"",
+            "shell": "/bin/bash"
+        },
+        {
+            "type": "custom", // InformationEnd
+            "format": "└────────────────────────────────────────────┘"
+        },
+        "break",
+        {
+            "type": "custom", // SoftwareStart
+            "format": "┌─────────── \u001b[1mHardware Information\u001b[0m ───────────┐"
+        },
+        {
+            "type": "host",
+            "key": "󰾰"
+        },
+        {
+            "type": "cpu",
+            "key": "󰻠"
+        },
+        {
+            "type": "gpu",
+            "key": "󰍛"
+        },
+        {
+            "type": "memory",
+            "key": "󰧑"
+        },
+        {
+            "type": "disk",
+            "key": ""
+        },
+        {
+            "type": "display",
+            "key": "󰍹"
+        },
+        {
+            "type": "battery",
+            "key": ""
+        },
+        {
+            "type": "gamepad",
+            "key": "󰖺"
+        },
+        {
+            "type": "custom", // InformationEnd
+            "format": "└────────────────────────────────────────────┘"
+        },
+        "break",
+        {
+            "type": "custom", // SoftwareStart
+            "format": "┌─────────── \u001b[1mSoftware Information\u001b[0m ───────────┐"
+        },
+        {
+            "type": "de",
+            "key": "󰕮"
+        },
+        {
+            "type": "wm",
+            "key": ""
+        },
+        {
+            "type": "shell",
+            "key": ""
+        },
+        {
+            "type": "terminal",
+            "key": ""
+        },
+        {
+            "type": "packages",
+            "key": "󰏖"
+        },
+        {
+            "type": "custom", // InformationEnd
+            "format": "└────────────────────────────────────────────┘"
+        },
+        "break",
+        {
+            "type": "colors",
+            "paddingLeft": 2
+        }
+    ]
+}
