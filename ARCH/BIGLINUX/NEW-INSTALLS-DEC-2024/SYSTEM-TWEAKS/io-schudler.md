@@ -31,6 +31,16 @@ Apply Changes Without Rebooting
 
 Replace sdX with your device name `(e.g., sda, nvme0n1)`.
 
+#### AIO command line
+
+```js
+
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+cat /sys/block/sda/queue/scheduler
+
+```
+
 ![alt text](image.png)
 
 If you would like to run something like `mq-deadline` on your NVMe Drives by default then on the second like at the end in quotations where it says “none” replace none with `mq-deadline` and keep the quotations around it then we can save this file by pressing Control + X then y and enter.
