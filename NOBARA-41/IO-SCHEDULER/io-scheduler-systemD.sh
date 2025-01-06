@@ -5,7 +5,7 @@
 
 # Create the systemd service file for setting the I/O scheduler
 echo "[Unit]
-Description=Set I/O Scheduler on boot for SSD / NVME
+Description=Set I/O Scheduler on boot for SSD / NVME - TOLGA EROK
 
 [Service]
 Type=simple
