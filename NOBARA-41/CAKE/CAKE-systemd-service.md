@@ -17,6 +17,25 @@
 ## Create service
     sudo nano /etc/systemd/system/apply-cake-qdisc.service
 
+## Check your interface name
+
+```js
+# Variables
+YELLOW="\033[1;33m"
+BLUE="\033[0;34m"
+RED="\033[0;31m"
+NC="\033[0m"
+
+# Detect any active network interface (uplink or wireless) and trim leading/trailing spaces
+interface=$(ip link show | awk -F: '$0 ~ "^[2-9]:|^[1-9][0-9]: " && $0 ~ "UP" && $0 !~ "LOOPBACK|NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}')
+
+if [ -z "$interface" ]; then
+    echo -e "${RED}No active network interface found. Exiting.${NC}"
+    exit 1
+fi
+
+echo -e "${BLUE}Detected active network interface: ${interface}${NC}"
+```
 
 # Configuration for DYNAMIC CAKE systemd service on BOOT!
 
@@ -28,7 +47,7 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash -c 'interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); if [ -n "$interface" ]; then sudo tc qdisc replace dev $interface root cake bandwidth 1Gbit; fi'
+ExecStart=/bin/bash -c 'interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); if [ -n "$interface" ]; then sudo tc qdisc replace dev "$interface" root cake bandwidth "$BANDWIDTH" diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18; fi'
 RemainAfterExit=yes
 
 [Install]
@@ -47,7 +66,7 @@ After=suspend.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash -c 'interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); if [ -n "$interface" ]; then sudo tc qdisc replace dev $interface root cake bandwidth 1Gbit; fi'
+ExecStart=/bin/bash -c 'interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); if [ -n "$interface" ]; then sudo tc qdisc replace dev "$interface" root cake bandwidth "$BANDWIDTH" diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18; fi'
 
 [Install]
 WantedBy=suspend.target
