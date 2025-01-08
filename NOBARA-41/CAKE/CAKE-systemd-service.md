@@ -13,10 +13,6 @@
 
 ![alt text](image-2.png)
 
-
-## Create service
-    sudo nano /etc/systemd/system/apply-cake-qdisc.service
-
 ## Check your interface name
 
 ```js
@@ -36,6 +32,10 @@ fi
 
 echo -e "${BLUE}Detected active network interface: ${interface}${NC}"
 ```
+
+## Create service
+    sudo nano /etc/systemd/system/apply-cake-qdisc.service
+
 
 # Configuration for DYNAMIC CAKE systemd service on BOOT!
 
