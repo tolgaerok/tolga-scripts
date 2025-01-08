@@ -1,4 +1,4 @@
-# Restart cake services
+# Restart cake services.
 
 ```bash
 alias restart-cake="sudo systemctl daemon-reload && \
