@@ -12,4 +12,3 @@ echo \"|------------------------------------------------------------------------
 echo \"\" && \
 sudo systemctl status apply-cake-qdisc-wake.service --no-pager"
 ```
-
