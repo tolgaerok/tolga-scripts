@@ -22,75 +22,76 @@ fi
 
 echo -e "${BLUE}Detected active network interface: ${interface}${NC}"
 
-# interface="wlp2s0"
+# Variables for CAKE Qdisc settings and service files
 BANDWIDTH="1Gbit"
 SERVICE_NAME="apply-cake-qdisc.service"
 SERVICE_NAME2="apply-cake-qdisc-wake.service"
 SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME"
 SERVICE_FILE2="/etc/systemd/system/$SERVICE_NAME2"
 
-# Apply CAKE Qdisc settings
+# Apply CAKE Qdisc settings to the active interface
 apply_cake_qdisc() {
+    echo "Applying CAKE Qdisc to $interface..."
     sudo tc qdisc replace dev "$interface" root cake bandwidth "$BANDWIDTH" diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18
     echo "CAKE Qdisc applied to $interface."
 }
 
-# Create service file to apply CAKE settingss
+# Create systemd service file to apply CAKE settings on boot
 create_service_file() {
     echo "Creating systemd service file at $SERVICE_FILE..."
-    sudo bash -c "cat <<EOF > $SERVICE_FILE
+    sudo tee "$SERVICE_FILE" > /dev/null <<EOF
 [Unit]
 Description=Apply CAKE Qdisc to $interface at boot - TOLGA EROK VERSION 6.2
 After=network.target
 
 [Service]
 Type=oneshot
-# ExecStart=/usr/sbin/tc qdisc replace dev $interface root cake bandwidth $BANDWIDTH diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18
-ExecStart=/bin/bash -c 'interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); if [ -n "$interface" ]; then sudo tc qdisc replace dev "$interface" root cake bandwidth 1Gbit diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18; fi'
+ExecStart=/bin/bash -c 'interface=\$(ip link show | awk -F: '\''\$0 ~ "wlp|wlo|wlx" && \$0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", \$2); print \$2; exit}'\''); if [ -n "\$interface" ]; then sudo tc qdisc replace dev "\$interface" root cake bandwidth 1Gbit diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18; fi'
 RemainAfterExit=true
 
 [Install]
 WantedBy=multi-user.target
-EOF"
+EOF
 }
 
-# Create wake service file to reapply CAKE settings after suspend/wake
+# Create systemd wake service file to reapply CAKE settings after suspend/wake
 create_wake_service_file() {
     echo "Creating systemd wake service file at $SERVICE_FILE2..."
-    sudo bash -c "cat <<EOF > $SERVICE_FILE2
+    sudo tee "$SERVICE_FILE2" > /dev/null <<EOF
 [Unit]
-Description=Reapply CAKE Qdisc when network interface is reinitialized (suspend/wake) - TOLGA EROK VERSION 6.2
+Description=Reapply CAKE Qdisc TO $interface when network interface is reinitialized (suspend/wake) - TOLGA EROK VERSION 6.2
 After=suspend.target
 
 [Service]
 Type=oneshot
-# ExecStart=/usr/sbin/tc qdisc replace dev $interface root cake bandwidth $BANDWIDTH diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18
-ExecStart=/bin/bash -c 'interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); if [ -n "$interface" ]; then sudo tc qdisc replace dev "$interface" root cake bandwidth 1Gbit diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18; fi'
+ExecStart=/bin/bash -c 'interface=\$(ip link show | awk -F: '\''\$0 ~ "wlp|wlo|wlx" && \$0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", \$2); print \$2; exit}'\''); if [ -n "\$interface" ]; then sudo tc qdisc replace dev "\$interface" root cake bandwidth 1Gbit diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18; fi'
 RemainAfterExit=true
 
 [Install]
 WantedBy=suspend.target
-EOF"
+EOF
 }
 
-# Reload systemd and start services
+# Reload systemd and start the services
 reload_and_start_services() {
     echo "Reloading systemd daemon..."
-    sudo systemctl daemon-reload
+    sudo systemctl daemon-reload || { echo -e "${RED}Failed to reload systemd daemon. Exiting.${NC}"; exit 1; }
+
     echo "Starting and enabling services..."
-    sudo systemctl start $SERVICE_NAME
-    sudo systemctl enable $SERVICE_NAME
-    sudo systemctl start $SERVICE_NAME2
-    sudo systemctl enable $SERVICE_NAME2
+    sudo systemctl start "$SERVICE_NAME" || { echo -e "${RED}Failed to start $SERVICE_NAME. Exiting.${NC}"; exit 1; }
+    sudo systemctl enable "$SERVICE_NAME" || { echo -e "${RED}Failed to enable $SERVICE_NAME. Exiting.${NC}"; exit 1; }
+
+    sudo systemctl start "$SERVICE_NAME2" || { echo -e "${RED}Failed to start $SERVICE_NAME2. Exiting.${NC}"; exit 1; }
+    sudo systemctl enable "$SERVICE_NAME2" || { echo -e "${RED}Failed to enable $SERVICE_NAME2. Exiting.${NC}"; exit 1; }
 }
 
-# Main function to apply settings
+# Main function
 main() {
     apply_cake_qdisc
     create_service_file
     create_wake_service_file
     reload_and_start_services
-    echo "Services created and started successfully."
+    echo -e "${BLUE}Services created and started successfully.${NC}"
 }
 
 # Run the main function
