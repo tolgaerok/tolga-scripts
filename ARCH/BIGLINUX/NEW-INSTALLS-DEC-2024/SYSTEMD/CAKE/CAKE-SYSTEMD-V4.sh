@@ -69,3 +69,20 @@ sudo systemctl status apply-cake-qdisc.service --no-pager
 echo "alias cake2='interface=\$(ip link show | awk -F: '\''\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \\t]+|[ \\t]+$/, \"\", \$2); print \$2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart apply-cake-qdisc.service && sudo tc -s qdisc show dev \$interface && sudo systemctl status apply-cake-qdisc.service --no-pager'" >>~/.bashrc
 
 echo -e "${YELLOW}Alias 'cake2' added to .bashrc. You can use it to quickly apply CAKE settings.${NC}"
+
+interface=$(ip link show | awk -F: '$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}')
+if [ -n "$interface" ]; then
+    echo "Detected wireless interface: $interface"
+    tc_command="sudo tc qdisc replace dev \"$interface\" root cake bandwidth 1Gbit diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18"
+    echo "Executing: $tc_command"
+    eval $tc_command
+    
+    echo
+    echo "Active configuration for $interface:"
+    echo "┌───────────────────────────────────────────────────────────────────────────────────────────────┐"
+    sudo tc qdisc show dev "$interface"
+    echo "└───────────────────────────────────────────────────────────────────────────────────────────────┘"
+else
+    echo "No active wireless interface found."
+fi
+

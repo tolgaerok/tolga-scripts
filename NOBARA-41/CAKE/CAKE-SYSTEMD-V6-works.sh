@@ -39,7 +39,7 @@ apply_cake_qdisc() {
 # Create systemd service file to apply CAKE settings on boot
 create_service_file() {
     echo "Creating systemd service file at $SERVICE_FILE..."
-    sudo tee "$SERVICE_FILE" > /dev/null <<EOF
+    sudo tee "$SERVICE_FILE" >/dev/null <<EOF
 [Unit]
 Description=Apply CAKE Qdisc to $interface at boot - TOLGA EROK VERSION 6.2
 After=network.target
@@ -57,7 +57,7 @@ EOF
 # Create systemd wake service file to reapply CAKE settings after suspend/wake
 create_wake_service_file() {
     echo "Creating systemd wake service file at $SERVICE_FILE2..."
-    sudo tee "$SERVICE_FILE2" > /dev/null <<EOF
+    sudo tee "$SERVICE_FILE2" >/dev/null <<EOF
 [Unit]
 Description=Reapply CAKE Qdisc TO $interface when network interface is reinitialized (suspend/wake) - TOLGA EROK VERSION 6.2
 After=suspend.target
@@ -75,14 +75,29 @@ EOF
 # Reload systemd and start the services
 reload_and_start_services() {
     echo "Reloading systemd daemon..."
-    sudo systemctl daemon-reload || { echo -e "${RED}Failed to reload systemd daemon. Exiting.${NC}"; exit 1; }
-    
+    sudo systemctl daemon-reload || {
+        echo -e "${RED}Failed to reload systemd daemon. Exiting.${NC}"
+        exit 1
+    }
+
     echo "Starting and enabling services..."
-    sudo systemctl start "$SERVICE_NAME" || { echo -e "${RED}Failed to start $SERVICE_NAME. Exiting.${NC}"; exit 1; }
-    sudo systemctl enable "$SERVICE_NAME" || { echo -e "${RED}Failed to enable $SERVICE_NAME. Exiting.${NC}"; exit 1; }
-    
-    sudo systemctl start "$SERVICE_NAME2" || { echo -e "${RED}Failed to start $SERVICE_NAME2. Exiting.${NC}"; exit 1; }
-    sudo systemctl enable "$SERVICE_NAME2" || { echo -e "${RED}Failed to enable $SERVICE_NAME2. Exiting.${NC}"; exit 1; }
+    sudo systemctl start "$SERVICE_NAME" || {
+        echo -e "${RED}Failed to start $SERVICE_NAME. Exiting.${NC}"
+        exit 1
+    }
+    sudo systemctl enable "$SERVICE_NAME" || {
+        echo -e "${RED}Failed to enable $SERVICE_NAME. Exiting.${NC}"
+        exit 1
+    }
+
+    sudo systemctl start "$SERVICE_NAME2" || {
+        echo -e "${RED}Failed to start $SERVICE_NAME2. Exiting.${NC}"
+        exit 1
+    }
+    sudo systemctl enable "$SERVICE_NAME2" || {
+        echo -e "${RED}Failed to enable $SERVICE_NAME2. Exiting.${NC}"
+        exit 1
+    }
 }
 
 # Main function
@@ -108,9 +123,24 @@ if ! grep -q "alias restart-cake=" "$HOME/.bashrc"; then
     echo \"\" && \
     echo \"|-----------------------------------------------------------------------------------------------------|\" && \
     echo \"\" && \
-    sudo systemctl status apply-cake-qdisc-wake.service --no-pager'" >> "$HOME/.bashrc"
+    sudo systemctl status apply-cake-qdisc-wake.service --no-pager'" >>"$HOME/.bashrc"
     echo -e "\n\033[1;33mAlias 'restart-cake' added to .bashrc.\033[0m"
 else
     echo -e "\n\033[1;33mAlias 'restart-cake' already exists in .bashrc. Skipping.\033[0m"
 fi
 
+interface=$(ip link show | awk -F: '$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}')
+if [ -n "$interface" ]; then
+    echo "Detected wireless interface: $interface"
+    tc_command="sudo tc qdisc replace dev \"$interface\" root cake bandwidth 1Gbit diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18"
+    echo "Executing: $tc_command"
+    eval $tc_command
+
+    echo
+    echo "Active configuration for $interface:"
+    echo "┌───────────────────────────────────────────────────────────────────────────────────────────────┐"
+    sudo tc qdisc show dev "$interface"
+    echo "└───────────────────────────────────────────────────────────────────────────────────────────────┘"
+else
+    echo "No active wireless interface found."
+fi

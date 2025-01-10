@@ -94,3 +94,19 @@ sudo systemctl enable apply-cake-qdisc-wake.service
 # Check the status of the systemd services
 sudo systemctl status apply-cake-qdisc.service --no-pager
 sudo systemctl status apply-cake-qdisc-wake.service --no-pager
+
+interface=$(ip link show | awk -F: '$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}')
+if [ -n "$interface" ]; then
+    echo "Detected wireless interface: $interface"
+    tc_command="sudo tc qdisc replace dev \"$interface\" root cake bandwidth 1Gbit diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18"
+    echo "Executing: $tc_command"
+    eval $tc_command
+    
+    echo
+    echo "Active configuration for $interface:"
+    echo "┌───────────────────────────────────────────────────────────────────────────────────────────────┐"
+    sudo tc qdisc show dev "$interface"
+    echo "└───────────────────────────────────────────────────────────────────────────────────────────────┘"
+else
+    echo "No active wireless interface found."
+fi
