@@ -2,8 +2,9 @@
 # Metadata
 # ----------------------------------------------------------------------------
 # AUTHOR="Tolga Erok"
-# VERSION="6"
+# VERSION="6.2"
 # DATE_CREATED="06/01/2025"
+# DATE_MODIFIED="10/01/2025"
 
 # Variables
 YELLOW="\033[1;33m"
@@ -39,12 +40,13 @@ create_service_file() {
     echo "Creating systemd service file at $SERVICE_FILE..."
     sudo bash -c "cat <<EOF > $SERVICE_FILE
 [Unit]
-Description=Apply CAKE Qdisc to $interface at boot - TOLGA EROK VERSION 6
+Description=Apply CAKE Qdisc to $interface at boot - TOLGA EROK VERSION 6.2
 After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/sbin/tc qdisc replace dev $interface root cake bandwidth $BANDWIDTH diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18
+# ExecStart=/usr/sbin/tc qdisc replace dev $interface root cake bandwidth $BANDWIDTH diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18
+ExecStart=/bin/bash -c 'interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); if [ -n "$interface" ]; then sudo tc qdisc replace dev "$interface" root cake bandwidth 1Gbit diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18; fi'
 RemainAfterExit=true
 
 [Install]
@@ -57,12 +59,13 @@ create_wake_service_file() {
     echo "Creating systemd wake service file at $SERVICE_FILE2..."
     sudo bash -c "cat <<EOF > $SERVICE_FILE2
 [Unit]
-Description=Reapply CAKE Qdisc when network interface is reinitialized (suspend/wake) - TOLGA EROK VERSION 6
+Description=Reapply CAKE Qdisc when network interface is reinitialized (suspend/wake) - TOLGA EROK VERSION 6.2
 After=suspend.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/sbin/tc qdisc replace dev $interface root cake bandwidth $BANDWIDTH diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18
+# ExecStart=/usr/sbin/tc qdisc replace dev $interface root cake bandwidth $BANDWIDTH diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18
+ExecStart=/bin/bash -c 'interface=$(ip link show | awk -F: '\''$0 ~ "wlp|wlo|wlx" && $0 !~ "NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}'\''); if [ -n "$interface" ]; then sudo tc qdisc replace dev "$interface" root cake bandwidth 1Gbit diffserv4 triple-isolate nonat nowash ack-filter split-gso rtt 10ms raw overhead 18; fi'
 RemainAfterExit=true
 
 [Install]
