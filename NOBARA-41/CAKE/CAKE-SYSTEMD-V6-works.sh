@@ -97,7 +97,8 @@ main() {
 # Run the main function
 main
 
-if ! grep -q "alias restart-cake=" ~$(whoami)/.bashrc; then
+if ! grep -q "alias restart-cake=" "$HOME/.bashrc"; then
+    echo -e "\n\033[1;33mAlias 'restart-cake' not found. Adding it to .bashrc...\033[0m"
     echo "alias restart-cake='sudo systemctl daemon-reload && \
     sudo systemctl start apply-cake-qdisc.service && \
     sudo systemctl start apply-cake-qdisc-wake.service && \
@@ -107,8 +108,9 @@ if ! grep -q "alias restart-cake=" ~$(whoami)/.bashrc; then
     echo \"\" && \
     echo \"|-----------------------------------------------------------------------------------------------------|\" && \
     echo \"\" && \
-    sudo systemctl status apply-cake-qdisc-wake.service --no-pager'" >> ~$(whoami)/.bashrc
-    echo "Alias 'restart-cake' added to .bashrc."
+    sudo systemctl status apply-cake-qdisc-wake.service --no-pager'" >> "$HOME/.bashrc"
+    echo -e "\n\033[1;33mAlias 'restart-cake' added to .bashrc.\033[0m"
 else
-    echo "Alias 'restart-cake' already exists in .bashrc. Skipping."
+    echo -e "\n\033[1;33mAlias 'restart-cake' already exists in .bashrc. Skipping.\033[0m"
 fi
+
