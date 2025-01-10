@@ -76,11 +76,11 @@ EOF
 reload_and_start_services() {
     echo "Reloading systemd daemon..."
     sudo systemctl daemon-reload || { echo -e "${RED}Failed to reload systemd daemon. Exiting.${NC}"; exit 1; }
-
+    
     echo "Starting and enabling services..."
     sudo systemctl start "$SERVICE_NAME" || { echo -e "${RED}Failed to start $SERVICE_NAME. Exiting.${NC}"; exit 1; }
     sudo systemctl enable "$SERVICE_NAME" || { echo -e "${RED}Failed to enable $SERVICE_NAME. Exiting.${NC}"; exit 1; }
-
+    
     sudo systemctl start "$SERVICE_NAME2" || { echo -e "${RED}Failed to start $SERVICE_NAME2. Exiting.${NC}"; exit 1; }
     sudo systemctl enable "$SERVICE_NAME2" || { echo -e "${RED}Failed to enable $SERVICE_NAME2. Exiting.${NC}"; exit 1; }
 }
@@ -96,3 +96,19 @@ main() {
 
 # Run the main function
 main
+
+if ! grep -q "alias restart-cake=" ~$(whoami)/.bashrc; then
+    echo "alias restart-cake='sudo systemctl daemon-reload && \
+    sudo systemctl start apply-cake-qdisc.service && \
+    sudo systemctl start apply-cake-qdisc-wake.service && \
+    sudo systemctl enable apply-cake-qdisc.service && \
+    sudo systemctl enable apply-cake-qdisc-wake.service && \
+    sudo systemctl status apply-cake-qdisc.service --no-pager && \
+    echo \"\" && \
+    echo \"|-----------------------------------------------------------------------------------------------------|\" && \
+    echo \"\" && \
+    sudo systemctl status apply-cake-qdisc-wake.service --no-pager'" >> ~$(whoami)/.bashrc
+    echo "Alias 'restart-cake' added to .bashrc."
+else
+    echo "Alias 'restart-cake' already exists in .bashrc. Skipping."
+fi
