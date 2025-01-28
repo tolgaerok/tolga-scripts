@@ -1,3 +1,5 @@
+# Tolga Erok
+
 mkdir -p ~/.local/share/fonts
 ln -s ~/.local/share/fonts/ ~/.fonts
 cd ~/.fonts
