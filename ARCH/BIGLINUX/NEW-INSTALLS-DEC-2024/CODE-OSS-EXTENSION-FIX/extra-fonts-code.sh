@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Tolga Erok
 
 mkdir -p ~/.local/share/fonts
