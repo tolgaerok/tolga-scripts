@@ -1,0 +1,136 @@
+#!/bin/bash
+# tolga erok
+
+sudo add-apt-repository ppa:apt-fast/stable
+sudo apt-get update
+sudo apt-get install apt-fast
+
+sudo apt-fast install preload
+systemctl status preload
+sudo systemctl enable --now preload
+
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo apt-fast install ./google-chrome-stable_current_amd64.deb
+
+sudo apt-fast install flatpak
+sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub com.visualstudio.code
+
+sudo apt-fast update && sudo apt-fast install -y \
+    ubuntu-restricted-extras \
+    kubuntu-restricted-extras \
+    synaptic \
+    gdebi \
+    unzip p7zip unrar \
+    transmission \
+    gparted \
+    audacity && \
+sudo apt-fast install libdvd-pkg -y && sudo dpkg-reconfigure libdvd-pkg
+
+sudo apt-fast install git make schedtool
+git clone https://github.com/Nefelim4ag/Ananicy.git
+cd Ananicy
+./package.sh debian
+sudo dpkg -i ./ananicy-*.deb
+
+timedatectl set-local-rtc 1
+
+# sudo apt-fast install kde-full
+
+# Create the systemd service file for setting the I/O scheduler
+echo "[Unit]
+Description=Set I/O Scheduler on boot for SSD / NVME - TOLGA EROK
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'echo none | sudo tee /sys/block/sda/queue/scheduler; printf \"I/O Scheduler set to: \"; cat /sys/block/sda/queue/scheduler'
+
+[Install]
+WantedBy=default.target" | sudo tee /etc/systemd/system/io-scheduler.service
+
+# Reload systemd, enable, and start the service
+sudo systemctl daemon-reload
+sudo systemctl enable io-scheduler.service
+sudo systemctl start io-scheduler.service
+sudo systemctl status io-scheduler.service
+
+CONFIG_FILE="/etc/systemd/resolved.conf"
+
+# DNS and FallbackDNS values
+DNS_VALUES="DNS=1.1.1.1 9.9.9.9 8.8.8.8"
+FALLBACK_DNS_VALUES="FallbackDNS=8.8.4.4"
+
+# Backup the original file before modification
+sudo cp "$CONFIG_FILE" "$CONFIG_FILE.bak"
+
+# Check if DNS= exists, update or add it!
+if grep -q "^DNS=" "$CONFIG_FILE"; then
+    sudo sed -i "s/^DNS=.*/$DNS_VALUES/" "$CONFIG_FILE"
+else
+    echo "$DNS_VALUES" | sudo tee -a "$CONFIG_FILE" > /dev/null
+fi
+
+# Check if FallbackDNS= exists, update or add it
+if grep -q "^FallbackDNS=" "$CONFIG_FILE"; then
+    sudo sed -i "s/^FallbackDNS=.*/$FALLBACK_DNS_VALUES/" "$CONFIG_FILE"
+else
+    echo "$FALLBACK_DNS_VALUES" | sudo tee -a "$CONFIG_FILE" > /dev/null
+fi
+
+sudo systemctl restart NetworkManager
+
+echo "Updating DNS settings..."
+sleep 5
+echo "Restarting systemd-resolved..."
+
+# Restart systemd-resolved to apply changes
+sudo systemctl restart systemd-resolved
+
+# Show new configuration
+resolvectl status
+
+# -----------------  NVIDIA RELATED --------------------------------- #
+
+sudo apt-fast install pkg-config libglvnd-dev dkms build-essential libegl-dev libegl1 libgl-dev libgl1 libgles-dev libgles1 libglvnd-core-dev libglx-dev libopengl-dev gcc make
+
+BLACKLIST_FILE="/etc/modprobe.d/blacklist-nouveau.conf"
+NVIDIA_CONF="/etc/modprobe.d/nvidia.conf"
+GRUB_FILE="/etc/default/grub"
+
+# Create options
+echo "options nvidia NVreg_EnableMSI=1
+options nvidia NVreg_EnablePCIeGen3=1
+options nvidia NVreg_UsePageAttributeTable=1
+options nvidia NVreg_RegistryDwords=\"RMUseSwI2c=0x01;RMI2cSpeed=100\"
+options nvidia NVreg_PreserveVideoMemoryAllocations=1
+options nvidia NVreg_TemporaryFilePath=\"/var/tmp\"
+options nvidia-drm modeset=1" | sudo tee "$NVIDIA_CONF" > /dev/null
+
+echo "NVIDIA configuration applied to $NVIDIA_CONF"
+
+# Define the options to append
+NEW_OPTIONS="quiet splash rw nvidia-drm.modeset=1 nvidia-drm.fbdev=1 rd.driver.blacklist=nouveau modprobe.blacklist=nouveau io_delay=none rootdelay=0 iomem=relaxed mitigations=off"
+
+# Check if the line already exists
+if grep -q "^GRUB_CMDLINE_LINUX_DEFAULT=" "$GRUB_FILE"; then
+    # append new ones (avoid duplicates)
+    sudo sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=/s/\"\(.*\)\"/\"\1 $NEW_OPTIONS\"/" "$GRUB_FILE"
+else
+    # Add the line if it does not exist
+    echo "GRUB_CMDLINE_LINUX_DEFAULT=\"$NEW_OPTIONS\"" | sudo tee -a "$GRUB_FILE"
+fi
+
+echo "GRUB configuration updated successfully!"
+
+# Create blacklist file
+echo -e "blacklist nouveau\noptions nouveau modeset=0" | sudo tee "$BLACKLIST_FILE" > /dev/null
+
+sudo add-apt-repository ppa:graphics-drivers/ppa
+sudo apt-fast update
+sudo apt-fast install nvidia-driver-570
+
+nvidia-smi -q | grep "GSP Firmware"
+
+sudo update-initramfs -u
+sudo update-grub
+sudo reboot
