@@ -156,7 +156,7 @@ ExecStart=/bin/bash -c 'echo none | tee /sys/block/sda/queue/scheduler'
 RemainAfterExit=true
 
 [Install]
-WantedBy=multi-user.target" | sudo tee "$IO_SCHEDULER_SERVICE" > /dev/null
+WantedBy=multi-user.target" | sudo tee "$IO_SCHEDULER_SERVICE" >/dev/null
 
 # Enable and start the service
 sudo systemctl daemon-reload
@@ -180,14 +180,14 @@ sudo sed -i "s/^#\?DNS=.*/$DNS_VALUES/" "$CONFIG_FILE"
 sudo sed -i "s/^#\?FallbackDNS=.*/$FALLBACK_DNS_VALUES/" "$CONFIG_FILE"
 
 # If DNS settings don't exist, add them
-grep -q "^DNS=" "$CONFIG_FILE" || echo "$DNS_VALUES" | sudo tee -a "$CONFIG_FILE" > /dev/null
-grep -q "^FallbackDNS=" "$CONFIG_FILE" || echo "$FALLBACK_DNS_VALUES" | sudo tee -a "$CONFIG_FILE" > /dev/null
+grep -q "^DNS=" "$CONFIG_FILE" || echo "$DNS_VALUES" | sudo tee -a "$CONFIG_FILE" >/dev/null
+grep -q "^FallbackDNS=" "$CONFIG_FILE" || echo "$FALLBACK_DNS_VALUES" | sudo tee -a "$CONFIG_FILE" >/dev/null
 
 # Ensure DNSStubListener=no is set
 if grep -q "^#\?DNSStubListener=" "$CONFIG_FILE"; then
     sudo sed -i "s/^#\?DNSStubListener=.*/DNSStubListener=no/" "$CONFIG_FILE"
 else
-    echo "DNSStubListener=no" | sudo tee -a "$CONFIG_FILE" > /dev/null
+    echo "DNSStubListener=no" | sudo tee -a "$CONFIG_FILE" >/dev/null
 fi
 
 # Apply changes to systemd-resolved
@@ -224,7 +224,7 @@ options nvidia NVreg_UsePageAttributeTable=1
 options nvidia NVreg_RegistryDwords=\"RMUseSwI2c=0x01;RMI2cSpeed=100\"
 options nvidia NVreg_PreserveVideoMemoryAllocations=1
 options nvidia NVreg_TemporaryFilePath=\"/var/tmp\"
-options nvidia-drm modeset=1" | sudo tee "$NVIDIA_CONF" > /dev/null
+options nvidia-drm modeset=1" | sudo tee "$NVIDIA_CONF" >/dev/null
 
 echo "NVIDIA configuration applied."
 
@@ -240,7 +240,7 @@ fi
 echo "GRUB configuration updated."
 
 # Blacklist Nouveau driver
-echo -e "blacklist nouveau\noptions nouveau modeset=0" | sudo tee "$BLACKLIST_FILE" > /dev/null
+echo -e "blacklist nouveau\noptions nouveau modeset=0" | sudo tee "$BLACKLIST_FILE" >/dev/null
 
 # Install NVIDIA driver
 sudo add-apt-repository -y ppa:graphics-drivers/ppa

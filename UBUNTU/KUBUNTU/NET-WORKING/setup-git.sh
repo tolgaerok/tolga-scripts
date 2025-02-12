@@ -12,7 +12,7 @@ REPO_NAME="tolga-scripts"
 SSH_KEY_COMMENT="$GIT_USER_EMAIL"
 SSH_KEY_PATH="$HOME/.ssh/id_rsa"
 
-### Create Directory and Clone Repository 
+### Create Directory and Clone Repository
 echo "Creating directory for Git repository..."
 mkdir -p "$LOCAL_REPO_DIR"
 cd "$LOCAL_REPO_DIR" || exit 1

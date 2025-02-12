@@ -3,7 +3,7 @@
 # My personal Kubuntu setup script
 # 11/2/2025
 
-set -e  # Exit immediately if a command exits with a non-zero status
+set -e # Exit immediately if a command exits with a non-zero status
 
 # Ensure script is run as root
 if [[ $EUID -ne 0 ]]; then
@@ -42,7 +42,7 @@ echo 'Package: firefox*\nPin: release o=LP-PPA-mozillateam\nPin-Priority: 1001' 
 # ----------------- INSTALL ADDITIONAL PACKAGES -----------------
 echo "Installing essential packages..."
 apt-fast install -y breeze-icon-theme breeze-gtk-theme fwupd preload flatpak ubuntu-restricted-extras kubuntu-restricted-extras synaptic gdebi unzip p7zip-full unrar transmission gparted audacity git make schedtool
-apt-fast install -y fortune cowsay lolcat 
+apt-fast install -y fortune cowsay lolcat
 fortune | cowsay | lolcat
 wget -O vscode.deb "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
 apt install ./vscode.deb -y

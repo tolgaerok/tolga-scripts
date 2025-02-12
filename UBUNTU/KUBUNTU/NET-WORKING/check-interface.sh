@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # Get the interface name
 #interface=$(ip link show | awk -F: '/wlp|wlo|wlx/ && !/NO-CARRIER/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2; exit}')
 # interface=\$(ip link show | awk -F: '\$0 ~ /wlp|wlo|wlx/ && \$0 !~ /NO-CARRIER/ {gsub(/^[ \\t]+|[ \\t]+$/, \"\", \$2); print \$2; exit}')
