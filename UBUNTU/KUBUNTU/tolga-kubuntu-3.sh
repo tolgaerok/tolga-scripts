@@ -19,12 +19,12 @@ function remove_snapd() {
 
     (
         log "INFO" "Stopping snapd services"
-        sudo systemctl stop snapd.service snapd.socket snapd.seeded.service > /dev/null 2>&1
+        sudo systemctl stop snapd.service snapd.socket snapd.seeded.service >/dev/null 2>&1
 
         log "INFO" "Removing snap packages"
         for snap in $(snap list 2>/dev/null | awk 'NR>1 {print $1}'); do
             log "INFO" "Removing snap package: $snap"
-            sudo snap remove --purge "$snap" > /dev/null 2>&1
+            sudo snap remove --purge "$snap" >/dev/null 2>&1
         done
 
         # Wait for snap processes
@@ -34,12 +34,12 @@ function remove_snapd() {
 
         log "INFO" "Unmounting snap volumes"
         for mnt in $(mount | grep snapd | cut -d' ' -f3 2>/dev/null); do
-            sudo umount -l "$mnt" > /dev/null 2>&1 || true
+            sudo umount -l "$mnt" >/dev/null 2>&1 || true
         done
 
         log "INFO" "Removing snapd package and configuration"
-        sudo apt -y remove --purge snapd > /dev/null 2>&1
-        sudo apt -y autoremove --purge > /dev/null 2>&1
+        sudo apt -y remove --purge snapd >/dev/null 2>&1
+        sudo apt -y autoremove --purge >/dev/null 2>&1
 
         log "INFO" "Removing snap directories and cache"
         sudo rm -rf \
@@ -47,17 +47,17 @@ function remove_snapd() {
             /var/lib/snapd/ \
             /var/snap/ \
             /snap/ \
-            ~/snap/ > /dev/null 2>&1
+            ~/snap/ >/dev/null 2>&1
 
         log "INFO" "Removing remaining configuration"
         sudo rm -rf \
             /etc/snap/ \
             /usr/lib/snapd/ \
             /usr/share/snapd/ \
-            /usr/share/keyrings/snapd.gpg > /dev/null 2>&1
+            /usr/share/keyrings/snapd.gpg >/dev/null 2>&1
 
         log "INFO" "Configuring system to prevent snapd reinstallation"
-        sudo tee /etc/apt/preferences.d/nosnap.pref > /dev/null <<'EOF'
+        sudo tee /etc/apt/preferences.d/nosnap.pref >/dev/null <<'EOF'
 Package: snapd
 Pin: release a=*
 Pin-Priority: -1
@@ -66,17 +66,18 @@ EOF
         # Handle Firefox replacement if needed
         if ! command -v firefox >/dev/null 2>&1 && prompt_user "yes_no" "Would you like to re-install Firefox from Mozilla PPA?"; then
             log "INFO" "Installing Firefox from Mozilla PPA"
-            sudo add-apt-repository -y ppa:mozillateam/ppa > /dev/null 2>&1
-            sudo tee /etc/apt/preferences.d/mozilla-firefox > /dev/null <<'EOF'
+            sudo add-apt-repository -y ppa:mozillateam/ppa >/dev/null 2>&1
+            sudo tee /etc/apt/preferences.d/mozilla-firefox >/dev/null <<'EOF'
 Package: *
 Pin: release o=LP-PPA-mozillateam
 Pin-Priority: 1001
 EOF
-            sudo apt update > /dev/null 2>&1
-            sudo apt install -y firefox > /dev/null 2>&1
+            sudo apt update >/dev/null 2>&1
+            sudo apt install -y firefox >/dev/null 2>&1
         fi
 
-    ) & show_progress $! "Removing snapd and related components"
+    ) &
+    show_progress $! "Removing snapd and related components"
 
     log "INFO" "Snapd removal completed successfully"
     printf "\n💡 System changes made:\n"

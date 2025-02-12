@@ -11,22 +11,23 @@ function set_swappiness() {
     local choice="$REPLY"
 
     case $choice in
-        1) # Use recommended
-            ;;
-        2) # Keep current
-            new_swappiness="$old_swappiness"
-            ;;
-        3) # Custom value
-            prompt_user "input" "Enter custom swappiness value" "$old_swappiness"
-            new_swappiness="$REPLY"
-            ;;
+    1) # Use recommended
+        ;;
+    2) # Keep current
+        new_swappiness="$old_swappiness"
+        ;;
+    3) # Custom value
+        prompt_user "input" "Enter custom swappiness value" "$old_swappiness"
+        new_swappiness="$REPLY"
+        ;;
     esac
 
     if [[ "$new_swappiness" != "$old_swappiness" ]]; then
         (
-            printf "vm.swappiness = %d" "$new_swappiness" | sudo tee /etc/sysctl.d/swapiness.conf > /dev/null
-            sudo sysctl -p --system > /dev/null 2>&1
-        ) & show_progress $! "Updating swappiness"
+            printf "vm.swappiness = %d" "$new_swappiness" | sudo tee /etc/sysctl.d/swapiness.conf >/dev/null
+            sudo sysctl -p --system >/dev/null 2>&1
+        ) &
+        show_progress $! "Updating swappiness"
         log "INFO" "Swappiness updated to $new_swappiness"
     else
         log "INFO" "Swappiness unchanged"
