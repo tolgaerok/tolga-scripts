@@ -42,7 +42,9 @@ echo 'Package: firefox*\nPin: release o=LP-PPA-mozillateam\nPin-Priority: 1001' 
 # ----------------- INSTALL ADDITIONAL PACKAGES -----------------
 echo "Installing essential packages..."
 apt-fast install -y breeze-icon-theme breeze-gtk-theme fwupd preload flatpak ubuntu-restricted-extras kubuntu-restricted-extras synaptic gdebi unzip p7zip-full unrar transmission gparted audacity git make schedtool
-apt-fast install -y fortune cowsay lolcat
+apt-fast install -y fortune cowsay lolcat kdepim-runtime korganizer kmail kontact kaddressbook kdepim
+akonadictl start
+akonadictl status
 fortune | cowsay | lolcat
 wget -O vscode.deb "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
 apt install ./vscode.deb -y
