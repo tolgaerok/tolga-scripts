@@ -1,0 +1,4 @@
+GRUB_CMDLINE_LINUX_DEFAULT="wayland nouveau.modeset=0 nvidia-drm.modeset=1 nvidia-drm.fbdev=1 rd.driver.blacklist=nouveau modprobe.blacklist=nouveau io_delay=none rootdelay=0 iomem=relaxed mitigations=off no_timer_check cryptomgr.notests no_timer_check rcupdate.rcu_expedited=1 rw nosoftlockup audit=0 nomce skew_tick=1 intremap=off split_lock_detect=off clearcpuid=514 loglevel=3 systemd.show_status=auto rd.udev.log_level=3 transparent_hugepage=never quiet splash apparmor=1 security=apparmor"
+
+
+# sudo update-grub
