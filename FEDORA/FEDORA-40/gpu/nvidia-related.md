@@ -8,7 +8,7 @@ sudo dnf config-manager --enable fedora-cisco-openh264
 sudo dnf update @core
 sudo dnf install akmod-nvidia # rhel/centos users can use kmod-nvidia instead
 sudo dnf install xorg-x11-drv-nvidia-cuda #optional for cuda/nvdec/nvenc support
-sudo dnf install xorg-x11-drv-nvidia-cuda
+# sudo dnf install xorg-x11-drv-nvidia-cuda
 
 sudo dnf install dnf5 -y
 sudo dnf5 install dnf5 dnf5-plugins
