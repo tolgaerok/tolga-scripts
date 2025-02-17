@@ -61,7 +61,7 @@ echo ""
 cat "$SSH_KEY_PATH.pub"
 echo ""
 echo "└─────────────────────────────────────────────┘"
-echo""
+echo ""
 
 ### Configure Local Repository for SSH
 if git remote | grep -q "origin"; then
