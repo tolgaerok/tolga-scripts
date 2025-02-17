@@ -7,7 +7,6 @@
 # Run from remote location:
 # sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/tolgaerok/tolga-scripts/main/CUSTOM-SCRIPTS/SETUP-SAMBA-WSDD/setup-samba-wsdd-users-folders-groups.sh)"
 
-
 #  ¯\_(ツ)_/¯
 #    █████▒▓█████ ▓█████▄  ▒█████   ██▀███   ▄▄▄
 #  ▓██   ▒ ▓█   ▀ ▒██▀ ██▌▒██▒  ██▒▓██ ▒ ██▒▒████▄

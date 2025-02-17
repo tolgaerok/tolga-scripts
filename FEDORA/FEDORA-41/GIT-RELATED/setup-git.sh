@@ -18,10 +18,10 @@ mkdir -p "$LOCAL_REPO_DIR"
 cd "$LOCAL_REPO_DIR" || exit 1
 
 if [ -d ".git" ]; then
-  echo "Repository already initialized. Skipping clone..."
+    echo "Repository already initialized. Skipping clone..."
 else
-  echo "Cloning repository..."
-  git clone "git@github.com:${GITHUB_USERNAME}/${REPO_NAME}.git" .
+    echo "Cloning repository..."
+    git clone "git@github.com:${GITHUB_USERNAME}/${REPO_NAME}.git" .
 fi
 
 ### Set Global Git Configuration
@@ -35,18 +35,18 @@ git config --global push.default simple
 
 ### Initialize Repository
 if [ ! -d ".git" ]; then
-  echo "Initializing new Git repository..."
-  git init
-  git branch -m main
+    echo "Initializing new Git repository..."
+    git init
+    git branch -m main
 fi
 
 ### Setup SSH Key for GitHub Authentication
 if [ ! -f "$SSH_KEY_PATH" ]; then
-  echo "Generating SSH key for GitHub authentication..."
-  ssh-keygen -t rsa -b 4096 -C "$SSH_KEY_COMMENT" -f "$SSH_KEY_PATH" -N ""
-  echo "New SSH key generated. Make sure to add it to your GitHub account."
+    echo "Generating SSH key for GitHub authentication..."
+    ssh-keygen -t rsa -b 4096 -C "$SSH_KEY_COMMENT" -f "$SSH_KEY_PATH" -N ""
+    echo "New SSH key generated. Make sure to add it to your GitHub account."
 else
-  echo "SSH key already exists. Skipping generation."
+    echo "SSH key already exists. Skipping generation."
 fi
 
 ### Ensure SSH Agent is Running and Add Key
@@ -59,11 +59,11 @@ cat "$SSH_KEY_PATH.pub"
 
 ### Configure Local Repository for SSH
 if git remote | grep -q "origin"; then
-  echo "Updating existing remote repository URL..."
-  git remote set-url origin "git@github.com:${GITHUB_USERNAME}/${REPO_NAME}.git"
+    echo "Updating existing remote repository URL..."
+    git remote set-url origin "git@github.com:${GITHUB_USERNAME}/${REPO_NAME}.git"
 else
-  echo "Adding new remote repository..."
-  git remote add origin "git@github.com:${GITHUB_USERNAME}/${REPO_NAME}.git"
+    echo "Adding new remote repository..."
+    git remote add origin "git@github.com:${GITHUB_USERNAME}/${REPO_NAME}.git"
 fi
 
 git remote -v
@@ -71,8 +71,8 @@ git remote -v
 ### Test SSH Connection
 echo "Testing SSH connection with GitHub..."
 ssh -T git@github.com || {
-  echo "SSH authentication failed. Ensure you added the key to GitHub."
-  exit 1
+    echo "SSH authentication failed. Ensure you added the key to GitHub."
+    exit 1
 }
 
 ### Secure SSH Files
@@ -81,9 +81,9 @@ mkdir -p "$HOME/.ssh"
 chmod 700 "$HOME/.ssh"
 
 if [ -f "$HOME/.ssh/config" ]; then
-  chmod 600 "$HOME/.ssh/config"
+    chmod 600 "$HOME/.ssh/config"
 else
-  echo "~/.ssh/config does not exist. Skipping."
+    echo "~/.ssh/config does not exist. Skipping."
 fi
 
 chmod 600 "$SSH_KEY_PATH"
@@ -94,7 +94,7 @@ echo "Ensuring correct ownership of SSH files..."
 chown $USER:$USER "$SSH_KEY_PATH" "$SSH_KEY_PATH.pub"
 
 if [ -f "$HOME/.ssh/config" ]; then
-  chown $USER:$USER "$HOME/.ssh/config"
+    chown $USER:$USER "$HOME/.ssh/config"
 fi
 
 ### Final Check
