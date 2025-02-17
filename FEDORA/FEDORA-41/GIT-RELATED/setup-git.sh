@@ -54,9 +54,13 @@ eval "$(ssh-agent -s)"
 ssh-add "$SSH_KEY_PATH"
 
 ### Display SSH Key for GitHub Addition
+echo ""
 echo "Copy the following SSH key and add it to GitHub (Settings > SSH Keys):"
+echo "┌───────────      IMPORTANT      ─────────────┐"
+echo ""
 cat "$SSH_KEY_PATH.pub"
-
+echo ""
+echo "└─────────────────────────────────────────────┘"
 ### Configure Local Repository for SSH
 if git remote | grep -q "origin"; then
     echo "Updating existing remote repository URL..."
