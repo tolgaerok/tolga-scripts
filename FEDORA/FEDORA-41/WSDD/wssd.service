@@ -12,7 +12,9 @@ BindsTo=smb.service
 
 [Service]
 Type=simple
-ExecStart=/bin/bash -c '/usr/bin/wsdd --interface $(iw dev | awk "/Interface/ {print \$2; exit}")'
+# ExecStart=/bin/bash -c '/usr/bin/wsdd --interface $(iw dev | awk "/Interface/ {print \$2; exit}")'
+ExecStart=/bin/bash -c 'iface=$(iw dev | awk "/Interface/ {print \$2; exit}"); [ -n "$iface" ] && exec /usr/bin/wsdd --interface "$iface" || exit 1'
+
 DynamicUser=yes
 User=wsdd
 Group=wsdd
