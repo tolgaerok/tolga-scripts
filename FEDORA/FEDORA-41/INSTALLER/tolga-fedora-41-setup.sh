@@ -308,7 +308,7 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl enable --now wsdd
 sudo systemctl restart wsdd
-systemctl status wsdd.service
+systemctl status wsdd.service --no-pager
 
 # Old NixOS TCP & UDP port settings
 allowedTCPPorts=(
