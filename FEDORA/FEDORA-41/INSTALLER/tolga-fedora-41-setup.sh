@@ -283,7 +283,7 @@ fi
 # Create new wsdd.service
 sudo tee "$WSDD_SERVICE_PATH" >/dev/null <<EOF
 [Unit]
-Description=Tolga's Custom (WSDD) - Web Services Dynamic Discovery host daemon
+Description=Tolgas Custom (WSDD) - Web Services Dynamic Discovery host daemon
 Documentation=man:wsdd(8)
 After=network-online.target
 Wants=network-online.target
