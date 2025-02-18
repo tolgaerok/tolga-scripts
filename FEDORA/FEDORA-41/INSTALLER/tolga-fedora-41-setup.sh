@@ -27,7 +27,7 @@ fi
 # Function to display messages
 display_message() {
     clear
-    echo -e "\n                  Tolga's SAMBA & WSDD setup script\n"
+    echo -e "\n                Tolga's Personal Fedora 41 setup script\n"
     echo -e "\e[34m|--------------------\e[33m Currently configuring:\e[34m-------------------|"
     echo -e "|${YELLOW}==>${NC}  $1"
     echo -e "\e[34m|--------------------------------------------------------------|\e[0m"
@@ -140,10 +140,6 @@ check_error() {
 # display_message "[${GREEN}✔${NC}]
 # display_message "[${RED}✘${NC}]
 
-## Networking packages
-sudo dnf -y install iptables iptables-services nftables
-sudo dnf -y install wsdd
-
 ## System utilities
 sudo dnf -y install bash-completion busybox crontabs ca-certificates curl dnf-plugins-core dnf-utils gnupg2 nano screen ufw unzip vim wget zip
 
@@ -254,75 +250,65 @@ display_message "[${GREEN}✔${NC}]  Setup Web Service Discovery host daemon"
 
 echo ""
 echo "wsdd implements a Web Service Discovery host daemon. This enables (Samba) hosts, like your local NAS device, to be found by Web Service Discovery Clients like Windows."
-echo "It also implements the client side of the discovery protocol which allows to search for Windows machines and other devices implementing WSD. This mode of operation is called discovery mode."
-echo""
+echo "It also implements the client side of the discovery protocol which allows searching for Windows machines and other devices implementing WSD. This mode of operation is called discovery mode."
+echo ""
 
-gum spin --spinner dot --title " Standby, traffic for the following ports, directions and addresses must be allowed" -- sleep 2
+## IPTABLE && WSDD packages
+sudo dnf -y install iptables iptables-services nftables
+sudo dnf -y install wsdd
 
-sudo firewall-cmd --add-rich-rule='rule family="ipv4" source address="239.255.255.250" port protocol="udp" port="3702" accept'
-sudo firewall-cmd --add-rich-rule='rule family="ipv6" source address="ff02::c" port protocol="udp" port="3702" accept'
-sudo firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="udp" port="3702" accept'
-sudo firewall-cmd --add-rich-rule='rule family="ipv6" port protocol="udp" port="3702" accept'
-sudo firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="tcp" port="5357" accept'
-sudo firewall-cmd --add-rich-rule='rule family="ipv6" port protocol="tcp" port="5357" accept'
+gum spin --spinner dot --title " Standby, traffic for the following ports, directions, and addresses must be allowed" -- sleep 2
 
-# Define the path to the wsdd service file
-SERVICE_FILE="/usr/lib/systemd/system/wsdd.service"
+# Configure firewall rules (make them persistent)
+sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="239.255.255.250" port protocol="udp" port="3702" accept'
+sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv6" source address="ff02::c" port protocol="udp" port="3702" accept'
+sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" port protocol="udp" port="3702" accept'
+sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv6" port protocol="udp" port="3702" accept'
+sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" port protocol="tcp" port="5357" accept'
+sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv6" port protocol="tcp" port="5357" accept'
 
-# Define the path to the old sysconfig file
-OLD_SYSCONFIG_FILE="/etc/default/wsdd"
+# Apply firewall changes
+sudo firewall-cmd --reload
 
-# Define the path to the new sysconfig file
-NEW_SYSCONFIG_FILE="/etc/sysconfig/wsdd"
+# Define the wsdd service file path
+WSDD_SERVICE_PATH="/usr/lib/systemd/system/wsdd.service"
+BACKUP_PATH="${WSDD_SERVICE_PATH}.bak"
 
-# Check if EnvironmentFile line with old path exists in the service file
-if grep -q "EnvironmentFile=$OLD_SYSCONFIG_FILE" "$SERVICE_FILE"; then
-    # Comment out the old EnvironmentFile line
-    sudo sed -i "s|EnvironmentFile=$OLD_SYSCONFIG_FILE|#&|" "$SERVICE_FILE"
-
-    # Add the new EnvironmentFile line directly under the commented old line
-    sudo sed -i "\|#EnvironmentFile=$OLD_SYSCONFIG_FILE|a EnvironmentFile=$NEW_SYSCONFIG_FILE" "$SERVICE_FILE"
-    gum spin --spinner dot --title " Standby, editind WSDD config" -- sleep 2
-
-    # Reload systemd to apply changes
-    sudo systemctl daemon-reload
-
-    # Restart the wsdd service
-    gum spin --spinner dot --title " Standby, restarting , reloading and getting wsdd status" -- sleep 2
-    sudo systemctl enable wsdd.service
-    sudo systemctl restart wsdd.service
-    display_message "[${GREEN}✔${NC}]  WSDD setup complete"
-    # systemctl status wsdd.service
-
-    sleep 1
-
-    echo "EnvironmentFile updated to $NEW_SYSCONFIG_FILE and service restarted."
-    sleep 2
-else
-    # Check if EnvironmentFile line with new path exists
-    if grep -q "EnvironmentFile=$NEW_SYSCONFIG_FILE" "$SERVICE_FILE"; then
-        echo "No changes needed. EnvironmentFile is already updated."
-    else
-        # Add the new EnvironmentFile line at the end of the [Service] section
-        echo -e "\nEnvironmentFile=$NEW_SYSCONFIG_FILE" | sudo tee -a "$SERVICE_FILE" >/dev/null
-        gum spin --spinner dot --title " Standby, editind WSDD config" -- sleep 2
-
-        # Reload systemd to apply changes
-        sudo systemctl daemon-reload
-
-        # Restart the wsdd service
-        gum spin --spinner dot --title " Standby, restarting , reloading and getting wsdd status" -- sleep 2
-        sudo systemctl enable wsdd.service
-        sudo systemctl restart wsdd.service
-        display_message "[${GREEN}✔${NC}]  WSDD setup complete"
-        # systemctl status wsdd.service
-
-        sleep 1
-
-        echo "EnvironmentFile added with path $NEW_SYSCONFIG_FILE and service restarted."
-        sleep 2
-    fi
+# Backup existing wsdd.service if it exists
+if [ -f "$WSDD_SERVICE_PATH" ]; then
+    sudo cp "$WSDD_SERVICE_PATH" "$BACKUP_PATH"
+    echo "Backup created: $BACKUP_PATH"
 fi
+
+# Create new wsdd.service
+sudo tee "$WSDD_SERVICE_PATH" >/dev/null <<EOF
+[Unit]
+Description=Tolga's Custom (WSDD) - Web Services Dynamic Discovery host daemon
+Documentation=man:wsdd(8)
+After=network-online.target
+Wants=network-online.target
+BindsTo=smb.service
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'iface=\$(iw dev | awk "/Interface/ {print \$2; exit}"); [ -n "\$iface" ] && exec /usr/bin/wsdd --interface "\$iface" || exit 1'
+DynamicUser=yes
+User=wsdd
+Group=wsdd
+RuntimeDirectory=wsdd
+AmbientCapabilities=CAP_SYS_CHROOT
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Reload and enable the service
+sudo systemctl daemon-reload
+sudo systemctl enable --now wsdd
+sudo systemctl restart wsdd
+systemctl status wsdd.service
 
 # Old NixOS TCP & UDP port settings
 allowedTCPPorts=(
