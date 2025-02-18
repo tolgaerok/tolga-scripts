@@ -1,18 +1,18 @@
 #!/bin/bash
 # Author: Tolga Erok
-# Date: 18/2/2025
+# Date:   18/2/2025
 
-# Define service and timer file paths
+# Conifgs
 SERVICE_FILE="/etc/systemd/system/flatpak-update.service"
 TIMER_FILE="/etc/systemd/system/flatpak-update.timer"
 
-# Ensure the script is run as root
+# Check if the script is run as root
 if [ "$EUID" -ne 0 ]; then
     echo "Please run as root: sudo $0"
     exit 1
 fi
 
-# Ensure flatpak is installed
+# Check if flatpak is installed
 if ! command -v flatpak &>/dev/null; then
     echo "Error: Flatpak is not installed."
     exit 1
@@ -46,7 +46,7 @@ Persistent=true
 [Install]
 WantedBy=timers.target" | tee "$TIMER_FILE" >/dev/null
 
-# Reload systemd to recognize the new service and timer
+# Reload systemd 
 systemctl daemon-reload
 
 # Enable and start the service
@@ -55,7 +55,7 @@ systemctl enable --now flatpak-update.service
 # Enable and start the timer
 systemctl enable --now flatpak-update.timer
 
-# Show the status of both with no pager
+# Show the status of both with no pager!
 echo -e "\nFlatpak update service status:"
 systemctl status flatpak-update.service --no-pager
 
