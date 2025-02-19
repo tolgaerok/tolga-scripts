@@ -1,5 +1,5 @@
 # tolga-scripts ####
-> My personal collection of various inhouse scripts tested and successful on the following:....2345
+> My personal collection of various inhouse scripts tested and successful on the following:
 
 ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "")
 
