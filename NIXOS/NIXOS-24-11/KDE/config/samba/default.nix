@@ -3,14 +3,13 @@
 let
   username = "tolga";
 in
-{
-  # Create Share1 and Share2 directories in each user's home directory using systemd tmpfiles
-#
-
+{  
   # ---------------------------------------------------------------------
   # Add a systemd tmpfiles rule that creates a directory /var/spool/samba
   # with permissions 1777 and ownership set to root:root.
   # ---------------------------------------------------------------------
+
+  # Create Share1 and Share2 directories in each user's home directory using systemd tmpfiles #
   systemd = {
     tmpfiles.rules = [
       "d /home/tolga/Share1 0775 tolga users -"
@@ -25,7 +24,6 @@ in
 
     # When a program crashes, systemd will create a core dump file, typically in the /var/lib/systemd/coredump/ directory.
     coredump.enable = true;
-
   };
 
   # Samba Service Configuration
