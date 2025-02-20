@@ -3,7 +3,21 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+
+with lib;
+
+let
+  country = "Australia/Perth";
+  hostname = "G4-Nixos";  
+  locale = "en_AU.UTF-8";
+  name = "tolga";
+in
 
 {
   imports = [
@@ -19,19 +33,23 @@
 
   # --------- NETWORKING ----------- #
 
-  networking.hostName = "nixos"; # Define your hostname.
+  # Enable networking
+  networking.networkmanager.enable = true;
+  networking.hostName = "${hostname}";  
+  networking.nftables.enable = true;
+  networking.networkmanager.connectionConfig = {
+    "ethernet.mtu" = 1462;
+    "wifi.mtu" = 1462;
+  };
+
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
-  networking.networkmanager.enable = true;
-
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-  networking.nftables.enable = true;
+  # networking.firewall.enable = false; 
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -39,33 +57,44 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  # ---------- LOCALE --------------- #
+  # -----------------------------------------------
+  # Locale settings
+  # -----------------------------------------------
+
   # Set your time zone.
-  time.timeZone = "Australia/Perth";
+  time.timeZone = "${country}";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_AU.UTF-8";
+  i18n.defaultLocale = "${locale}";
 
   i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_AU.UTF-8";
-    LC_IDENTIFICATION = "en_AU.UTF-8";
-    LC_MEASUREMENT = "en_AU.UTF-8";
-    LC_MONETARY = "en_AU.UTF-8";
-    LC_NAME = "en_AU.UTF-8";
-    LC_NUMERIC = "en_AU.UTF-8";
-    LC_PAPER = "en_AU.UTF-8";
-    LC_TELEPHONE = "en_AU.UTF-8";
-    LC_TIME = "en_AU.UTF-8";
+    LC_ADDRESS = "${locale}";
+    LC_IDENTIFICATION = "${locale}";
+    LC_MEASUREMENT = "${locale}";
+    LC_MONETARY = "${locale}";
+    LC_NAME = "${locale}";
+    LC_NUMERIC = "${locale}";
+    LC_PAPER = "${locale}";
+    LC_TELEPHONE = "${locale}";
+    LC_TIME = "${locale}";
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  #---------------------------------------------------------------------
+  # User account settings
+  #---------------------------------------------------------------------
+
+  # Add user into user groups
+  users.groups.${name} = { };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.tolga = {
+  users.users."${name}" = {
     isNormalUser = true;
-    description = "tolga";
+    description = "${name}";
     extraGroups = [
+      "${name}"
       "adbusers"
       "audio"
       "corectrl"
@@ -91,7 +120,9 @@
       "users"
       "video"
       "wheel" # Enable ‘sudo’ for the user.
+      "code"
     ];
+
     packages = with pkgs; [
       kdePackages.kate
       #  thunderbird
@@ -168,7 +199,6 @@
   ];
 
   # ---------- SERVICES ------------- #
-
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -208,27 +238,41 @@
   };
 
   services = {
+    dbus = {
+      enable = true;
+      packages = with pkgs; [
+
+        dconf
+        gcr
+        udisks2
+      ];
+    };
+  };
+
+  services = {
     envfs = {
       enable = true;
     };
   };
+
+  services.timesyncd.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
   services.gvfs.enable = true;
 
   services.avahi = {
-    enable = true; # Enable Avahi for network service discovery
-    nssmdns4 = true; # Enable mDNS for name resolution
-    openFirewall = true; # Open firewall ports for Avahi
+    enable = true;          # Enable Avahi for network service discovery
+    nssmdns4 = true;        # Enable mDNS for name resolution
+    openFirewall = true;    # Open firewall ports for Avahi
 
     publish = {
-      addresses = true; # Publish IP addresses
-      domain = true; # Publish domain name
-      enable = true; # Enable Avahi publishing
-      hinfo = true; # Publish host information
-      userServices = true; # Publish user services
-      workstation = true; # Publish workstation type
+      addresses = true;     # Publish IP addresses
+      domain = true;        # Publish domain name
+      enable = true;        # Enable Avahi publishing
+      hinfo = true;         # Publish host information
+      userServices = true;  # Publish user services
+      workstation = true;   # Publish workstation type
     };
 
     extraServiceFiles = {
@@ -252,27 +296,68 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "24.11";    # Did you read the comment?
   system.copySystemConfiguration = true;
-
   system.autoUpgrade = {
     enable = true;
     channel = "https://nixos.org/channels/nixos-unstable";
   };
 
+  #---------------------------------------------------------------------
+  # Allow unfree packages
+  #---------------------------------------------------------------------
+  environment.sessionVariables.NIXPKGS_ALLOW_UNFREE = "1";
+
+  #---------------------------------------------------------------------
+  # System optimisations
+  #---------------------------------------------------------------------
   nix = {
     settings = {
-      experimental-features = [
-        "nix-command"
-        "flakes"
+      allowed-users = [
+        "@wheel"
+        "${name}"
       ];
       auto-optimise-store = true;
+
+      experimental-features = [
+        "flakes"
+        "nix-command"
+        "repl-flake"
+      ];
+
+      cores = 0;
+      sandbox = "relaxed";
+
+      trusted-users = [
+        "${name}"
+        "@wheel"
+        "root"
+      ];
+
+      keep-derivations = true;
+      keep-outputs = true;
+      warn-dirty = false;
+      tarball-ttl = 300;
+
+      substituters = [
+        "https://cache.nixos.org"
+        "https://cache.nix.cachix.org"
+      ];
+
+      trusted-substituters = [
+        "https://cache.nixos.org"
+        "https://cache.nix.cachix.org"
+      ];
     };
+
+    daemonCPUSchedPolicy = "idle";
+    daemonIOSchedPriority = 7;
 
     gc = {
       automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 7d";
+      randomizedDelaySec = "14m";
+      options = "--delete-older-than 10d";
     };
   };
 
@@ -303,12 +388,10 @@
     # Turn Wayland off
     wlr = {
       enable = true;
-
     };
 
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
-
       xdg-desktop-portal-kde
       xdg-desktop-portal-wlr
     ];
