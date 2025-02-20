@@ -37,31 +37,31 @@ in
     settings = {
       global = {
         "workgroup" = "WORKGROUP";
-        "server string" = "pussy";
-        "netbios name" = "CUNT";
-        "wins support" = "yes";
-        "passdb backend" = "tdbsam";
-        "security" = "user";
-        "hosts allow" = "192.168.0. 127.0.0.1 localhost";
-        "hosts deny" = "0.0.0.0/0";
         "aio read size" = "16384";
         "aio write size" = "16384";
         "client max protocol" = "SMB3";
         "client min protocol" = "COREPLUS";
+        "cups options" = "raw";
+        "guest account" = "nobody";
+        "hosts allow" = "192.168.0. 127.0.0.1 localhost";
+        "hosts deny" = "0.0.0.0/0";
         "kernel oplocks" = "yes";
         "level2 oplocks" = "yes";
+        "load printers" = "yes";
+        "map to guest" = "bad user";
         "max xmit" = "65535";
         "min receivefile size" = "16384";
+        "netbios name" = "CUNT";
         "oplocks" = "yes";
-        "read raw" = "yes";
-        "socket options" = "TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=131072 SO_SNDBUF=131072";
-        "write raw" = "yes";
-        "guest account" = "nobody";
-        "map to guest" = "bad user";
-        "load printers" = "yes";
-        "printing" = "cups";
+        "passdb backend" = "tdbsam";
         "printcap name" = "cups";
-        "cups options" = "raw";
+        "printing" = "cups";
+        "read raw" = "yes";
+        "security" = "user";
+        "server string" = "pussy";
+        "socket options" = "TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=131072 SO_SNDBUF=131072";
+        "wins support" = "yes";        
+        "write raw" = "yes";
       };
 
       # Samba Shares Configuration
