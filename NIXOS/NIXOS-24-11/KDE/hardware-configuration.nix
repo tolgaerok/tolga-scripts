@@ -30,6 +30,12 @@ in
 
   ];
 
+  boot.supportedFilesystems = [
+    "btrfs"
+    "exfat"
+    "ntfs"
+  ];
+
   boot.blacklistedKernelModules = lib.mkDefault [ "nouveau" ];
   boot.initrd.kernelModules = [
     "nvidia"
@@ -193,4 +199,3 @@ in
 
   };
 }
-
