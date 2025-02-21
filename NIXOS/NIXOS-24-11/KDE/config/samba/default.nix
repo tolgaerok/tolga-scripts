@@ -36,6 +36,7 @@ in
     # Samba Global Settings
     settings = {
       global = {
+        "workgroup" = "WORKGROUP";
         "aio read size" = "16384";
         "aio write size" = "16384";
         "client max protocol" = "SMB3";
@@ -60,8 +61,7 @@ in
         "server string" = "Nixos-24-11-Server";
         "socket options" = "TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=131072 SO_SNDBUF=131072";
         "vfs objects" = "catia fruit streams_xattr";
-        "wins support" = "yes";        
-        "workgroup" = "WORKGROUP";
+        "wins support" = "yes";       
         "write raw" = "yes";
       };
 
