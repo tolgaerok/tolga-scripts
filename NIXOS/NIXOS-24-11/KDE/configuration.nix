@@ -31,7 +31,7 @@ in
     allowSimultaneousMultithreading = true;
     rtkit.enable = true;
   };
-
+  
   # --------- NETWORKING ----------- #
 
   # Enable networking
@@ -42,10 +42,51 @@ in
         "ethernet.mtu" = 1462;
         "wifi.mtu" = 1462;
       };
+      appendNameservers = [
+        "1.1.1.1"
+        "8.8.8.8"
+      ];
     };
 
-    hostName = "${hostname}";
+    hostName = "your-hostname"; # Replace with the actual hostname or a variable that stores the hostname
     nftables.enable = true;
+
+    # Set time servers
+    timeServers = [
+      "0.nixos.pool.ntp.org"
+      "1.nixos.pool.ntp.org"
+      "2.nixos.pool.ntp.org"
+      "3.nixos.pool.ntp.org"
+      "time.google.com"
+      "time2.google.com"
+      "time3.google.com"
+      "time4.google.com"
+    ];
+
+    # Configure extra hosts
+    extraHosts = ''
+      127.0.0.1	      localhost
+      127.0.0.1       HP-G1-800
+      192.168.0.1     router
+      192.168.0.2     DIGA            # Smart TV
+      192.168.0.5     folio-F39       # HP Folio
+      192.168.0.6     iPhone          # Dads mobile
+      192.168.0.7     Laser           # Laser Printer
+      192.168.0.8     min21THIN       # EMMC thinClient
+      192.168.0.10    TUNCAY-W11-ENT  # Dads PC
+      192.168.0.11    ubuntu-server   # CasaOS
+      192.168.0.32    HP-G4           # Main NixOS rig
+      192.168.0.15    KingTolga       # My mobile
+      192.168.0.17    QNAP-SERVER     # Main home server
+
+      # The following lines are desirable for IPv6 capable hosts
+      ::1             localhost ip6-localhost ip6-loopback
+      fe00::0         ip6-localnet
+      ff00::0         ip6-mcastprefix
+      ff02::1         ip6-allnodes
+      ff02::2         ip6-allrouters
+      ff02::3         ip6-allhosts
+    '';
   };
 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -157,6 +198,7 @@ in
   environment.systemPackages = with pkgs; [
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #  wget
+    gnome.rygel
     kchmviewer
     kdeApplications.kdenetwork-filesharing
     keepassxc
@@ -185,6 +227,7 @@ in
     libsForQt5.korganizer
     libsForQt5.krecorder
     libsForQt5.plasma-vault
+    ntp
     p7zip
     partition-manager
     pciutils
@@ -216,9 +259,20 @@ in
       pulse.enable = true;
       # If you want to use JACK applications, uncomment this
       # jack.enable = true;
-
       # use the example session manager (enabled by default, no need to redefine)
       # media-session.enable = true;
+    };
+
+    gnome.rygel.enable = true;
+
+    dbus = {
+      enable = true;
+      packages = with pkgs; [
+        miraclecast
+        dconf
+        gcr
+        udisks2
+      ];
     };
 
     # IO Scheduler based on device type
@@ -244,14 +298,6 @@ in
         layout = "au";
         variant = "";
       };
-    };
-    dbus = {
-      enable = true;
-      packages = with pkgs; [
-        dconf
-        gcr
-        udisks2
-      ];
     };
     envfs.enable = true;
     timesyncd.enable = true;
