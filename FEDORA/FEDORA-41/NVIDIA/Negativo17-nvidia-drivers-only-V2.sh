@@ -8,6 +8,7 @@ set -ouex pipefail
 
 # Set Fedora release version
 RELEASE="$(rpm -E %fedora)"
+DISTRO="$(cat /etc/os-release | grep -w NAME | cut -d '=' -f2 | tr -d '\"')"
 INSTALL="dnf install -y"
 
 # Disable RPM Fusion and Cisco OpenH264 for NVIDIA-related packages
@@ -47,4 +48,8 @@ sed -i 's@ nvidia @ i915 amdgpu nvidia @g' /usr/lib/dracut/dracut.conf.d/99-nvid
 sudo dracut --force
 
 # Reboot
-echo "NVIDIA drivers installed with Wayland support. A reboot is recommended."
+echo "# ----------------------------------------------------------------------- #"
+echo "  NVIDIA drivers installed with Wayland support. A reboot is recommended."
+echo "# ----------------------------------------------------------------------- #"
+echo "Distro: $DISTRO"
+echo "Release: $RELEASE"
