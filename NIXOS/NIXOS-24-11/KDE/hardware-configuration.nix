@@ -34,6 +34,13 @@ in
         "cifs"
       ]; # SMB protocol implementation.
     };
+    systemd = {
+        tpm2 = {
+          enable = false;
+        };
+      };
+      verbose = false;
+    };
     supportedFilesystems = [
       "btrfs"
       "exfat"
@@ -49,10 +56,12 @@ in
     ];
     extraModulePackages = with config.boot.kernelPackages; [ ];
     kernelParams = [
+      "quiet"
       "mitigations=off"
       "nvidia_drm.fbdev=1"
       "nvidia_drm.modeset=1"
-      "quiet"
+      "udev.log_level=3"
+      "usbcore.autosuspend=-1"
     ];
     kernel.sysctl = {
       # Kernel Settings
@@ -89,7 +98,7 @@ in
       "vm.dirty_writeback_centisecs" = 500;     # Default 500ms is fine for SSDs
       "vm.max_map_count" = 65530;               # Default is often fine unless using memory-heavy workloads
       "vm.min_free_kbytes" = 8192;              # Default is often sufficient for general use
-      "vm.swappiness" = 10;                     # Keep low to avoid excessive swapping
+      "vm.swappiness" = 1;                     # Keep low to avoid excessive swapping
       "vm.vfs_cache_pressure" = 100;            # Default value is fine, balancing file system cache
 
       # File System Settings

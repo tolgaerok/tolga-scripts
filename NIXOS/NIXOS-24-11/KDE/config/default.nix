@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ # Include the results of the hardware scan.
+  imports = [ 
     #./packages
     #./services
     #./tweaks
@@ -12,10 +12,10 @@
     ./kde
     ./mnt
     ./nvidia
+    ./printing
     ./samba
     ./scripts
-    ./tmpfs
-    
+    ./tmpfs    
   ];
 
 }

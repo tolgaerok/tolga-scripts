@@ -25,15 +25,40 @@ in
     ./hardware-configuration.nix
   ];
 
-  # Enables simultaneous use of processor threads.
+  # Various Security Mods
   # ---------------------------------------------
   security = {
     allowSimultaneousMultithreading = true;
     rtkit.enable = true;
+    sudo = {
+      enable = true;
+      wheelNeedsPassword = false;
+    };
+  };
+
+  # --------- ENVIRONMENT SESSION VARIBLES ----------- #
+  environment = {
+    sessionVariables = {
+      # Wayland
+      MOZ_ENABLE_WAYLAND = "1";
+      MOZ_USE_XINPUT2 = "1";
+      QT_QPA_PLATFORM="wayland";
+      QT_WAYLAND_DISABLE_WINDOWDECORATION="1";
+      SDL_VIDEODRIVER = "wayland";
+    };
+  };
+
+  # --------- SYSTEM DOCUMENTATION, DISABLE TO SPEED UP REBUILDS ----------- #
+  documentation = {
+    doc.enable = false;
+    info.enable = false;
+    nixos.enable = false;
+    man = {
+      generateCaches = true;
+    };
   };
   
   # --------- NETWORKING ----------- #
-
   # Enable networking
   networking = {
     networkmanager = {
@@ -47,11 +72,9 @@ in
         "8.8.8.8"
       ];
     };
-
     firewall.allowPing = true;
     hostName = "your-hostname"; # Replace with the actual hostname or a variable that stores the hostname
     nftables.enable = true;
-
     # Set time servers
     timeServers = [
       "0.nixos.pool.ntp.org"
@@ -63,7 +86,6 @@ in
       "time3.google.com"
       "time4.google.com"
     ];
-
     # Configure extra hosts
     extraHosts = ''
       127.0.0.1       localhost
@@ -134,14 +156,13 @@ in
   #---------------------------------------------------------------------
   # User account settings
   #---------------------------------------------------------------------
-
   # User and group configuration
   users = {
     groups.${name} = { };
-
     users."${name}" = {
       isNormalUser = true;
       description = "${name}";
+      uid = 1000;
       extraGroups = [
         "${name}"
         "adbusers"
@@ -171,7 +192,6 @@ in
         "wheel" # Enable ‘sudo’ for the user.
         "code"
       ];
-
       packages = with pkgs; [
         kdePackages.kate
         # thunderbird
@@ -183,10 +203,8 @@ in
   programs = {
     firefox.enable = true;
     direnv.enable = true;
-
     # Some programs need SUID wrappers, can be configured further or are started in user sessions.
     # mtr.enable = true;
-
     gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
@@ -265,7 +283,9 @@ in
     };
 
     gnome.rygel.enable = true;
-
+    fstrim = {
+      enable = true;
+    };
     dbus = {
       enable = true;
       packages = with pkgs; [
@@ -275,7 +295,6 @@ in
         udisks2
       ];
     };
-
     # IO Scheduler based on device type
     udev.extraRules = ''
       # HDD
@@ -285,7 +304,6 @@ in
       # NVMe SSD
       ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="none"
     '';
-
     # Enable system services
     openssh.enable = true;
     locate = {
@@ -301,10 +319,8 @@ in
       };
     };
     envfs.enable = true;
-    timesyncd.enable = true;
-    printing.enable = true;
+    timesyncd.enable = true;    
     gvfs.enable = true;
-
     # Enable Avahi for network service discovery
     avahi = {
       enable = true;
@@ -343,10 +359,10 @@ in
   system = {
     stateVersion = "24.11"; # Did you read the comment?
     copySystemConfiguration = true;
-
     autoUpgrade = {
       enable = true;
       channel = "https://nixos.org/channels/nixos-unstable";
+      allowReboot = false;
     };
   };
 
@@ -365,82 +381,72 @@ in
         "${name}"
       ];
       auto-optimise-store = true;
-
       experimental-features = [
         "flakes"
         "nix-command"
         "repl-flake"
       ];
-
       cores = 0;
       sandbox = "relaxed";
-
       trusted-users = [
         "${name}"
         "@wheel"
         "root"
       ];
-
       keep-derivations = true;
       keep-outputs = true;
       warn-dirty = false;
       tarball-ttl = 300;
-
       substituters = [
         "https://cache.nixos.org"
         "https://cache.nix.cachix.org"
       ];
-
       trusted-substituters = [
         "https://cache.nixos.org"
         "https://cache.nix.cachix.org"
       ];
     };
-
     daemonCPUSchedPolicy = "idle";
     daemonIOSchedPriority = 7;
-
     gc = {
       automatic = true;
       dates = "weekly";
       randomizedDelaySec = "14m";
       options = "--delete-older-than 10d";
     };
-  };
-
-  # nixpkgs.config.allowUnfree = true;
+  };  
   zramSwap = {
+    algorithm = "zstd";
     enable = true;
     memoryPercent = 50;
-    algorithm = "zstd";
   };
-
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
-
     lxqt = {
       enable = false;
       styles =
         with pkgs;
         with libsForQt5;
         [
-          qtstyleplugin-kvantum
-          catppuccin-kvantum
           breeze-qt5
+          catppuccin-kvantum
           qtcurve
+          qtstyleplugin-kvantum
         ];
     };
-
     # Turn Wayland off
-    wlr.enable = true;
-
+    wlr.enable = true;    
+    configPackages = [
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal-kde
+        xdg-desktop-portal-wlr
+      ];
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
       xdg-desktop-portal-kde
       xdg-desktop-portal-wlr
     ];
   };
-
 }
 
