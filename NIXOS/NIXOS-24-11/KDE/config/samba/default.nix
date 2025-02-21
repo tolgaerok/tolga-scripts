@@ -1,4 +1,11 @@
-{ config, pkgs, lib, ... }:
+{ 
+  config, 
+  hostname, 
+  lib, 
+  pkgs, 
+  username, 
+  ... 
+}:
 
 let
   username = "tolga";
@@ -12,9 +19,9 @@ in
   # Create Share1 and Share2 directories in each user's home directory using systemd tmpfiles #
   systemd = {
     tmpfiles.rules = [
+      "D! /tmp 1777 root root 0"
       "d /home/tolga/Share1 0775 tolga users -"
       "d /home/tolga/Share2 0775 tolga users -"
-      "D! /tmp 1777 root root 0"
       "d /var/spool/samba 1777 root root -"
       "r! /tmp/**/*"
     ];
@@ -32,37 +39,72 @@ in
     package = pkgs.sambaFull;  # Using full Samba package for printing support
     securityType = "user";
     openFirewall = true;
-
     # Samba Global Settings
     settings = {
       global = {
+        # COMMON MANDATORY VARIBLES
         "workgroup" = "WORKGROUP";
+        "netbios name" = config.networking.hostName;
+        "dns proxy" = "no";
+        "name resolve order" = "lmhosts wins bcast host";
+        "server role" = "standalone";
+        "server string" = "Samba server (version: %v, protocol: %R)";
+        "wins support" = "yes";
+
+        # Logging
+        "ea support" = "yes";
+        "log file" = "/var/log/samba/log.%m";
+        "log level" = "1 auth:3 smb:3 smb2:3";
+        "max log size" = "500";
+
+        # TWEAKS AND MODS
         "aio read size" = "16384";
         "aio write size" = "16384";
-        "client max protocol" = "SMB3";
-        "client min protocol" = "COREPLUS";
-        "cups options" = "raw";
+        "bind interfaces only" = "true";    
+        "deadtime" = "30";
         "guest account" = "nobody";
-        "hosts allow" = "192.168.0. 127.0.0.1 localhost";
-        "hosts deny" = "0.0.0.0/0";
+        "hosts allow" = "127.0.0.1 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 ::1 fd00::/8 fe80::/10";
+        "hosts deny" = "allow";
+        "inherit permissions" = "yes";
         "kernel oplocks" = "yes";
-        "level2 oplocks" = "yes";
-        "load printers" = "yes";
+        "large readwrite" = "yes";
+        "level2 oplocks" = "yes";               
         "map to guest" = "bad user";
         "max xmit" = "65535";
-        "min receivefile size" = "16384";
-        "netbios name" = "Nixos-24-11";
+        "min receivefile size" = "16384";        
         "oplocks" = "yes";
-        "passdb backend" = "tdbsam";
-        "printcap name" = "cups";
-        "printing" = "cups";
+        "pam password change" = "yes";
+        "passdb backend" = "tdbsam";       
         "read raw" = "yes";
         "security" = "user";
-        "server string" = "Nixos-24-11-Server";
-        "socket options" = "TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=131072 SO_SNDBUF=131072";
-        "vfs objects" = "catia fruit streams_xattr";
-        "wins support" = "yes";       
+        "socket options" = "SO_KEEPALIVE SO_REUSEADDR SO_BROADCAST TCP_NODELAY IPTOS_LOWDELAY IPTOS_THROUGHPUT SO_SNDBUF=262144 SO_RCVBUF=131072";
+        "use sendfile" = "yes";
         "write raw" = "yes";
+
+        # Protocol Settings
+        "client ipc max protocol" = "SMB3";
+        "client ipc min protocol" = "COREPLUS";
+        "client max protocol" = "SMB3";
+        "client min protocol" = "COREPLUS";
+        "server max protocol" = "SMB3";
+        "server min protocol" = "COREPLUS";
+
+        # PRINTER RELATED
+        "cups options" = "raw";
+        "disable spoolss" = "yes";
+        "load printers" = "yes";
+        "printcap name" = "cups";       
+        "printing" = "cups";
+
+        # IOS AND APPLE CONFIG
+        "fruit:delete_empty_adfiles" = "yes";
+        "fruit:metadata" = "stream";
+        "fruit:model" = "Macmini";
+        "fruit:posix_rename" = "yes";
+        "fruit:veto_appledouble" = "no";
+        "fruit:wipe_intentionally_left_blank_rfork" = "yes";
+        "fruit:zero_file_id" = "yes";
+        "vfs objects" = "catia fruit streams_xattr";
       };
 
       # Samba Shares Configuration
