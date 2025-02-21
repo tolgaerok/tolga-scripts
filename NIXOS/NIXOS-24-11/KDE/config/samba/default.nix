@@ -104,7 +104,4 @@ in
     openFirewall = true;
   };
 
-  # Enable the firewall
-  # networking.firewall.enable = true;
-  networking.firewall.allowPing = true;
 }

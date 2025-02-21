@@ -48,6 +48,7 @@ in
       ];
     };
 
+    firewall.allowPing = true;
     hostName = "your-hostname"; # Replace with the actual hostname or a variable that stores the hostname
     nftables.enable = true;
 
