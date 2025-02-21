@@ -36,7 +36,6 @@ in
     # Samba Global Settings
     settings = {
       global = {
-        "workgroup" = "WORKGROUP";
         "aio read size" = "16384";
         "aio write size" = "16384";
         "client max protocol" = "SMB3";
@@ -51,16 +50,18 @@ in
         "map to guest" = "bad user";
         "max xmit" = "65535";
         "min receivefile size" = "16384";
-        "netbios name" = "CUNT";
+        "netbios name" = "Nixos-24-11";
         "oplocks" = "yes";
         "passdb backend" = "tdbsam";
         "printcap name" = "cups";
         "printing" = "cups";
         "read raw" = "yes";
         "security" = "user";
-        "server string" = "pussy";
+        "server string" = "Nixos-24-11-Server";
         "socket options" = "TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=131072 SO_SNDBUF=131072";
+        "vfs objects" = "catia fruit streams_xattr";
         "wins support" = "yes";        
+        "workgroup" = "WORKGROUP";
         "write raw" = "yes";
       };
 
