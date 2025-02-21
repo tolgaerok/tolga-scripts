@@ -1,3 +1,85 @@
+
+let
+/*
+ * What you're seeing here is our nix formatter. It's quite opinionated:
+ */
+  sample-01 = { lib }:
+{
+  list = [
+    elem1
+    elem2
+    elem3
+  ] ++ lib.optionals stdenv.isDarwin [
+    elem4
+    elem5
+  ]; # and not quite finished
+}; # it will preserve your newlines
+
+  sample-02 = { stdenv, lib }:
+{
+  list =
+    [
+      elem1
+      elem2
+      elem3
+    ]
+    ++ lib.optionals stdenv.isDarwin [ elem4 elem5 ]
+    ++ lib.optionals stdenv.isLinux [ elem6 ]
+    ;
+};
+# but it can handle all nix syntax,
+# and, in fact, all of nixpkgs in <20s.
+# The javascript build is quite a bit slower.
+ sample-03 = { stdenv, system }:
+assert system == "i686-linux";
+stdenv.mkDerivation { };
+# these samples are all from https://github.com/nix-community/nix-fmt/tree/master/samples
+sample-simple = # Some basic formatting
+{
+  empty_list = [ ];
+  inline_list = [ 1 2 3 ];
+  multiline_list = [
+    1
+    2
+    3
+    4
+  ];
+  inline_attrset = { x = "y"; };
+  multiline_attrset = {
+    a = 3;
+    b = 5;
+  };
+  # some comment over here
+  fn = x: x + x;
+  relpath = ./hello;
+  abspath = /hello;
+  # URLs get converted from strings
+  url = "https://foobar.com";
+  atoms = [ true false null ];
+  # Combined
+  listOfAttrs = [
+    {
+      attr1 = 3;
+      attr2 = "fff";
+    }
+    {
+      attr1 = 5;
+      attr2 = "ggg";
+    }
+  ];
+
+  # long expression
+  attrs = {
+    attr1 = short_expr;
+    attr2 =
+      if true then big_expr else big_expr;
+  };
+}
+;
+in
+[ sample-01 sample-02 sample-03 ]
+  
+
 {
   config,
   lib,
@@ -21,14 +103,17 @@
     nvidiaPersistenced = true;
     powerManagement = {
       enable = true;
-      finegrained = false;
+      finegrained = true;
     };
     open = true;
     nvidiaSettings = true;
     # package = config.boot.kernelPackages.nvidiaPackages.stable;
     package = config.boot.kernelPackages.nvidiaPackages.latest;
   };
-
+  vaapi = {
+    enable = true;
+    firefox.enable = true;
+  };
   # Load NVIDIA driver for Xorg and Wayland
   services.xserver.videoDrivers = [ "nvidia" ];
 
@@ -44,13 +129,14 @@
     MOZ_ENABLE_WAYLAND = "1";               # Enables Wayland support in Mozilla applications (e.g., Firefox).
 
   };
-
   # Additional NVIDIA kernel module options
   boot.extraModprobeConfig = lib.concatStringsSep " " [
-    "options nvidia"
-    "NVreg_UsePageAttributeTable=1"                         # Assume CPU supports PAT (performance improvement)
-    "NVreg_EnablePCIeGen3=1"                                # Enables PCIe Gen3 (can improve bandwidth)
-    "NVreg_RegistryDwords=RMUseSwI2c=0x01;RMI2cSpeed=100"   # Enables DDC/CI support
+    "options nvidia NVreg_UsePageAttributeTable=1"                        # Assume CPU supports PAT (performance improvement)
+    "options nvidia NVreg_EnablePCIeGen3=1"                               # Enables PCIe Gen3 (can improve bandwidth)
+    "options nvidia NVreg_RegistryDwords=RMUseSwI2c=0x01;RMI2cSpeed=100"  # Enables DDC/CI support
+    "options nvidia NVreg_EnableMSI=1"                                    # Enable MSI interrupts
+    "options nvidia NVreg_PreserveVideoMemoryAllocations=1"               # Preserve video memory allocations
+    "options nvidia NVreg_TemporaryFilePath=/var/tmp"                     # Set temporary file path
   ];
 }
 

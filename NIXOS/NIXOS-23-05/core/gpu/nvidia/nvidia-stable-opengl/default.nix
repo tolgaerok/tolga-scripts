@@ -14,7 +14,7 @@
   # ++ (myLib.filesIn ./included);
 
   hardware = {
-    enableAllFirmware = true;
+    enableAllFirmware = true; 
     nvidia = {
       modesetting.enable = true;
       nvidiaPersistenced = true;
