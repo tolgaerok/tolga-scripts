@@ -1,6 +1,10 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
+<<<<<<< HEAD
 # and in the NixOS manual (accessible by running ‘nixos-help’).
+=======
+# and in the NixOS manual (accessible by running ‘nixos-help’)....
+>>>>>>> cb5f6b7 ((ツ)_/¯ Edit: 22-02-2025 10:45:26 AM)
 
 { config, pkgs, ... }:
 
