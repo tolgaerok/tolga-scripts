@@ -3,7 +3,7 @@
 # 19/12/2024
 # Setup Git Repository and GitHub SSH Authentication
 
-### **Configuration**
+### Configuration
 GITHUB_USERNAME="tolgaerok"
 GIT_USER_EMAIL="kingtolga@gmail.com"
 GIT_USER_NAME="Tolga Erok"
