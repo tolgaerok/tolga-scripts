@@ -4,6 +4,7 @@ with lib; {
   imports = [
     # USE NIX FMT ONLINE: https://nixfmt.serokell.io/
     ./gnome-packages.nix
+    ./impatience.nix
   ];
 
   # Enable the GNOME Desktop Environment.
