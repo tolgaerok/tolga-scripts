@@ -1,5 +1,5 @@
 # Tolga Erok
-# 23/020/2025
+# 23/02/2025
 # My personal NIXOS KDE configuration 
 # 
 #              ¯\_(ツ)_/¯
