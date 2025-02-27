@@ -34,7 +34,7 @@
 
 with lib; {
   imports = [
-    # USE NIX FMT ONLINE:           https://nixfmt.serokell.io/
+    # USE NIX FMT ONLINE: https://nixfmt.serokell.io/
     ./config
     ./hardware-configuration.nix
   ];
