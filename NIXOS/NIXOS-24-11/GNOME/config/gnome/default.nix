@@ -1,12 +1,6 @@
-{ 
-  lib,
-  config,
-  pkgs,
-  ...
-}:
+{ lib, config, pkgs, ... }:
 
-with lib;
-{
+with lib; {
   imports = [
     # USE NIX FMT ONLINE: https://nixfmt.serokell.io/
     ./gnome-packages.nix
@@ -19,5 +13,9 @@ with lib;
       desktopManager.gnome.enable = true;
     };
   };
+  xdg.portal = {
+    enable = true;
+    xdgOpenUsePortal = true;
+    extraPortals = with pkgs; [ xdg-desktop-portal-gnome ];
+  };
 }
-
