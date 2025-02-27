@@ -21,7 +21,7 @@ in
 
 {
   imports = [
-    # USE NIX FMT ONLINE:           https://nixfmt.serokell.io/
+    # USE NIX FMT ONLINE: https://nixfmt.serokell.io/
     ./config
     ./hardware-configuration.nix
   ];
@@ -36,20 +36,22 @@ in
     #  wget
     kdePackages.kate
     kdePackages.konsole
-    qt5.qtwayland
     qt5.qtbase
+    qt5.qtwayland
     
-    genSshKey
-    gimp-with-plugins
-    variety
-    lolcat
-    fortune
-    figlet
-    flatpak
     direnv
     duf
-    megasync
+    figlet
+    flatpak
+    fortune
+    genSshKey
+    gimp-with-plugins
     git
+    lolcat
+    megasync
+    pkgs.libnotify
+    variety
+
     # ---------------------------------------------------------------------
     # Archive Utilities
     # ---------------------------------------------------------------------
@@ -160,22 +162,15 @@ in
   #---------------------------------------------------------------------
   environment.sessionVariables.NIXPKGS_ALLOW_UNFREE = "1";
 
-  xdg.portal = {
-    enable = true;
-    xdgOpenUsePortal = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gnome
-    ];
-  };
   system = {
-    stateVersion = "24.11"; # Did you read the comment?
     copySystemConfiguration = true;
+    stateVersion = "24.11"; 
     autoUpgrade = {
+      allowReboot = false;
+      channel = "https://nixos.org/channels/nixos-unstable";
+      dates = "Mon 04:40";
       enable = true;
       operation = "boot";
-      dates = "Mon 04:40";
-      channel = "https://nixos.org/channels/nixos-unstable";
-      allowReboot = false;
     };
   };
 }
