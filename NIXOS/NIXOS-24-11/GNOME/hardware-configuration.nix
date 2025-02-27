@@ -14,9 +14,9 @@
     kernelModules = [
       "kvm-intel"
       #"nvidia"
+      #"nvidia_drm"
       #"nvidia_modeset"
       #"nvidia_uvm"
-      #"nvidia_drm"
     ];
 
     extraModulePackages = [
@@ -25,21 +25,27 @@
 
     kernelParams = [
       "fbcon=nodefer"
+      "io_delay=none"
+      "iomem=relaxed"
       "logo.nologo"
       "mitigations=off"
-      "io_delay=none"
-      "rootdelay=0"
-      "iomem=relaxed"
       "quiet"
-      "splash"
       "rd.systemd.show_status=auto"
       "rd.udev.log_level=3"
+      "rootdelay=0"
+      "splash"
       "udev.log_level=3"
     ];
 
     # Initialize the kernel modules during initrd
     initrd = {
-      availableKernelModules = [ "xhci_pci" "ahci" "uas" "usbhid" "sd_mod" ];
+      availableKernelModules = [ 
+        "ahci" 
+        "sd_mod" 
+        "uas" 
+        "usbhid" 
+        "xhci_pci" 
+      ];
       kernelModules = [
         # No need to load NVIDIA modules in initrd as they are handled later
       ];
@@ -50,13 +56,22 @@
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/270cc5a5-8ba5-40ae-b3b0-a32697a901ff";
     fsType = "ext4";
-    options = [ "defaults" "discard" "noatime" "nodiratime" "relatime" ];
+    options = [ 
+      "defaults" 
+      "discard" 
+      "noatime" 
+      "nodiratime" 
+      "relatime" 
+    ];
   };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/972B-7592";
     fsType = "vfat";
-    options = [ "fmask=0077" "dmask=0077" ];
+    options = [ 
+      "dmask=0077" 
+      "fmask=0077" 
+    ];
   };
 
   swapDevices = [ ];
