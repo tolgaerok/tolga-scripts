@@ -1,0 +1,27 @@
+# ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+# |                                         konsole related                                                                           | 
+# └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+PS1="\[\e[1;m\]┌(\[\e[1;32m\]\u\[\e[1;34m\]@\h\[\e[1;m\]) \[\e[1;m\]➤\[\e[1;36m\] \W \[\e[1;m\] \n\[\e[1;m\]└\[\e[1;33m\]➤\[\e[0;m\]  "
+
+# ┌───────────────────────────────────────────────────────────────────────────────────────────────┐
+# |                                          Nvidia session                                       |
+# └───────────────────────────────────────────────────────────────────────────────────────────────┘
+export LIBVA_DRIVER_NAME=nvidia
+export WLR_NO_HARDWARE_CURSORS=1
+export __GLX_VENDOR_LIBRARY_NAME=nvidia
+export __GL_SHADER_CACHE=1
+export __GL_THREADED_OPTIMIZATION=1
+
+# ┌───────────────────────────────────────────────────────────────────────────────────────────────┐
+# |                                          ALIAS                                                |
+# └───────────────────────────────────────────────────────────────────────────────────────────────┘
+alias cl="clear"
+alias rb='cl && echo -e "\e[33mUpdating Channels\e[0m" && sudo nix-channel --update && echo -e "\e[33mRebuilding System\e[0m" && sudo nixos-rebuild switch --upgrade && echo -e "\e[33mOptimising NixStore\e[0m" && nix-store --optimise'
+# && sysctl -p
+alias io="cat /sys/block/sda/queue/scheduler"
+alias tmpC="sudo chmod 1777 /var/tmp"
+alias n="sudo chown -R $(whoami):$(id -gn) /etc/nixos && sudo chmod -R 777 /etc/nixos && sudo chmod +x /etc/nixos/* && export NIXPKGS_ALLOW_INSECURE=1"
+alias gitup="~/gitup.sh"
+
+
+cl && echo "" && fortune | lolcat && echo "" && echo ""
