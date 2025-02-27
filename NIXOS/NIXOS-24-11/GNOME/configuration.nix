@@ -163,24 +163,8 @@ in
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
-    lxqt = {
-      enable = false;
-      styles =
-        with pkgs;
-        with libsForQt5;
-        [
-          breeze-qt5
-          catppuccin-kvantum
-          qtcurve
-          qtstyleplugin-kvantum
-        ];
-    };
-    # Turn Wayland off
-    wlr.enable = true;
     extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal-kde
-      xdg-desktop-portal-wlr
+      xdg-desktop-portal-gnome
     ];
   };
   system = {
