@@ -39,13 +39,7 @@
 
     # Initialize the kernel modules during initrd
     initrd = {
-      availableKernelModules = [
-        "xhci_pci"
-        "ahci"
-        "uas"
-        "usbhid"
-        "sd_mod"
-      ];
+      availableKernelModules = [ "xhci_pci" "ahci" "uas" "usbhid" "sd_mod" ];
       kernelModules = [
         # No need to load NVIDIA modules in initrd as they are handled later
       ];
@@ -56,24 +50,15 @@
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/270cc5a5-8ba5-40ae-b3b0-a32697a901ff";
     fsType = "ext4";
-    options = [
-      "defaults"
-      "discard"
-      "noatime"
-      "nodiratime"
-      "relatime"
-    ];
+    options = [ "defaults" "discard" "noatime" "nodiratime" "relatime" ];
   };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/972B-7592";
     fsType = "vfat";
-    options = [
-      "fmask=0077"
-      "dmask=0077"
-    ];
+    options = [ "fmask=0077" "dmask=0077" ];
   };
-  
+
   swapDevices = [ ];
 
   # Network settings
@@ -83,6 +68,7 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   # Enable microcode updates for Intel CPUs
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode =
+    lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
 

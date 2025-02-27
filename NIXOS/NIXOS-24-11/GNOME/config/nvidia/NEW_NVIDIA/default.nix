@@ -1,10 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-{
+{ config, lib, pkgs, ... }: {
   imports = [
     ./opengl.nix
     # Add other necessary imports if needed
@@ -66,7 +60,8 @@
     NIXOS_OZONE_WL = "1"; # Enables Ozone on Wayland
     __GL_THREADED_OPTIMIZATION = "1"; # Enables threaded optimizations
     __GL_SHADER_CACHE = "1"; # Enables shader caching
-    MOZ_ENABLE_WAYLAND = "1"; # Enables Wayland support in Mozilla applications (e.g., Firefox).
+    MOZ_ENABLE_WAYLAND =
+      "1"; # Enables Wayland support in Mozilla applications (e.g., Firefox).
   };
 
   # Additional NVIDIA kernel module options
@@ -79,5 +74,4 @@
     #"options nvidia NVreg_TemporaryFilePath=/var/tmp"                     # Set temporary file path
   ];
 }
-
 
