@@ -1,6 +1,6 @@
 Compatibility Note:
 
-The Nix snippet (Eilite-Folio-9470M-HD-Intel-4000.nix) located in:
+The Nix snippet (Eilite-Folio-9470M-HD-Intel-4000.nix) located in::
 
     core/gpu/intel/intel-laptop/HP-Folio-9470M/Eilite-Folio-9470M-HD-Intel-4000.nix
 
