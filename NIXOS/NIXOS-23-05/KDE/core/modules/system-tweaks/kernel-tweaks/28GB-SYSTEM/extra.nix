@@ -2,7 +2,7 @@
 
 # Control how and when data is written from memory to disk, which can have an impact on system performance and responsiveness.  
 # useful for optimizing memory usage, disk writeback behavior, network settings, and other low-level kernel behaviors.
-
+#
 {
 
 boot.kernel.sysctl."90-override" = {

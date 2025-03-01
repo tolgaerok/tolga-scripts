@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, ... }: #
 
 let
   nixosArchive = pkgs.writeScriptBin "nixos-archive" ''

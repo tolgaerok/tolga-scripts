@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------
 # Summary of my configuration
-# -----------------------------------------------------------------
+# ------------------------------------------------------------------
 
 The provided configuration in this snippet is specific to various kernel settings using sysctl parameters, particularly focusing on network and memory-related optimizations. 
 

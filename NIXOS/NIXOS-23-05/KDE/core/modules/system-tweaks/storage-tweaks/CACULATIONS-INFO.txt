@@ -1,6 +1,6 @@
 #---------------------------------------------------------------------
 # How these paramaters are calculated:
-#---------------------------------------------------------------------
+#----------------------------------------------------------------------
 
 The following settings, nestled within the 'sysctl Configuration,' are like instructions for the computer's memory management. 
 They tell the computer how to handle its tasks, particularly when it needs to save information to the hard drive (a.k.a. 'work'). 

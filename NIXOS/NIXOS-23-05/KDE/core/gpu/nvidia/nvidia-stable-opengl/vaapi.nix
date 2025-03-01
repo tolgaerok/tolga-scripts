@@ -8,7 +8,7 @@ in {
       type = nullOr int;
       default = null;
       description = ''
-        The maximum number of concurrent instances of the driver.
+        The maximum number of concurrent instances of the driver..
 
         Sometimes useful for graphics cards with little VRAM.
       '';

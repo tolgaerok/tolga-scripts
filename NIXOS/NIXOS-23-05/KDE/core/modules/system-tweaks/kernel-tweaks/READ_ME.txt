@@ -1,4 +1,4 @@
-The provided configuration in this snippet is specific to various kernel settings using sysctl parameters, particularly focusing on network and memory-related optimizations. 
+The provided, configuration in this snippet is specific to various kernel settings using sysctl parameters, particularly focusing on network and memory-related optimizations. 
 
 1. `kernel.sysrq`: Enables the SysRQ key for rebooting the machine properly if it freezes. 
 

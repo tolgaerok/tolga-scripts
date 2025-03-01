@@ -1,6 +1,6 @@
 ## List broken VSCode Extension
 
-### Optional for python
+### Optional for python .
 
 * ms-pyright.pyright
 * ms-python.python
