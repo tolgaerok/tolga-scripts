@@ -32,3 +32,4 @@ is compatible with the following laptops equipped with HD Mesa GPU:
    - Intel HD Graphics: Intel HD Graphics (Arrandale integrated GPU)
 
 These specifications provide details about the specific processor models, the number of cores, threads, and the associated Intel HD Graphics for each laptop. My HD-INTEL-GPU ensures that the respective hardware configurations match the requirements specified in the Nix snippet for seamless compatibility and optimal performance.
+.
