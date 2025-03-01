@@ -1,4 +1,4 @@
-## Open the Override File for Editing
+## Open the Override File for Editing.
 
 Use the correct command to edit the override configuration:
 

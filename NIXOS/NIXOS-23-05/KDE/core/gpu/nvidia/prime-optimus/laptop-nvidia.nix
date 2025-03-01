@@ -11,7 +11,7 @@
     exec "$@"
   '';
 in {
-  hardware = {
+  hardware = { #
     nvidia = {
       # forceFullCompositionPipeline = true;
       modesetting.enable = true;

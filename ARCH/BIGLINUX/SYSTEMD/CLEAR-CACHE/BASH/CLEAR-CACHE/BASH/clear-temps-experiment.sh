@@ -11,7 +11,7 @@ UPDATE_REASON="Implemented more aggressive systemd journal management and automa
 # Configuration
 # ----------------------------------------------------------------------------
 
-# Clear pacman cache (Manjaro's package manager) without prompting
+# Clear pacman cache (Manjaro's package manager) without prompting.
 sudo pacman -Scc --noconfirm
 
 # Clear systemd journal to free up disk space without prompting
