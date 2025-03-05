@@ -139,11 +139,31 @@ net.ipv4.tcp_window_scaling = 1
 net.ipv4.tcp_ecn = 1
 net.ipv4.tcp_fastopen = 3
 
+# MTU Probing - Enable automatic MTU discovery to prevent fragmentation
+net.ipv4.tcp_mtu_probing = 1
+
 # IPv4 Security & Optimization
 net.ipv4.conf.all.accept_redirects = 0
 net.ipv4.conf.all.send_redirects = 0
 net.ipv4.conf.default.accept_redirects = 0
 net.ipv4.conf.default.send_redirects = 0
+
+# Virtual Memory Settings
+vm.swappiness = 5                       # Lower swappiness for less aggressive swapping
+
+# System Performance Tweaks (for latest kernel)
+# Increase virtual memory performance and adjust dirty cache settings
+vm.dirty_background_ratio = 10          # Percentage of system memory used for dirty pages
+vm.dirty_ratio = 20                     # Percentage of system memory before flushing dirty pages
+vm.dirty_writeback_centisecs = 150      # Writeback time in centiseconds (for smoother I/O)
+vm.dirty_expire_centisecs = 600         # Expiry time of dirty pages before writeback
+vm.overcommit_memory = 1                # Allow the kernel to allocate memory beyond the limit
+vm.overcommit_ratio = 80                # Percentage of total RAM available for allocation
+vm.min_free_kbytes = 8192               # Minimum free memory buffer (helps with performance on heavy loads)
+vm.page-cluster = 3                     # Adjust page clustering for better read/write performance
+
+# Enable performance-oriented CPU scheduler for the latest kernel (supports multiple CPU cores)
+kernel.sched_child_runs_first = 0       # Optimizes performance of multi-threaded workloads
 "
 
 # ✅ Apply Sysctl Network Configurations
