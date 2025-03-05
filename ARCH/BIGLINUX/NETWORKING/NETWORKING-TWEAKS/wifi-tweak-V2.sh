@@ -18,8 +18,8 @@ fi
 echo "Debug: Showing interfaces..."
 ip -o link show
 
-# Try to detect active interface (without state filtering)
-interface=$(ip -o link show | awk '{print $2; exit}')
+# Try to detect active interface
+interface=$(ip -o link show | awk '!/lo/ {print $2; exit}' | sed 's/://')  # Skip loopback interface
 echo "Debug: Detected interface - $interface"
 
 if [ -z "$interface" ]; then
@@ -56,13 +56,18 @@ sudo systemctl restart NetworkManager
 
 # Configure iwlwifi (11n_disable=8)
 iwlwifi_conf="/etc/modprobe.d/iwlwifi.conf"
+if [ ! -f "$iwlwifi_conf" ]; then
+    sudo touch "$iwlwifi_conf"
+fi
 sudo tee -a "$iwlwifi_conf" >/dev/null <<<"options iwlwifi 11n_disable=8"
 
-# Reload iwlwifi Module
-sudo ip link set "$interface" down
-sudo modprobe -r iwlwifi
-sudo modprobe iwlwifi
-sudo ip link set "$interface" up
+# Reload iwlwifi Module if the interface is not active
+if ! ip link show "$interface" | grep -q "UP"; then
+    echo "Interface $interface is not up, skipping iwlwifi module reload."
+else
+    echo "Interface $interface is up, skipping iwlwifi module reload to avoid disconnection."
+    # Reloading iwlwifi module could cause disconnection; skipping it
+fi
 
 # NM Wi-Fi Configuration
 networkmanager_conf="/etc/NetworkManager/conf.d/wifi.conf"
