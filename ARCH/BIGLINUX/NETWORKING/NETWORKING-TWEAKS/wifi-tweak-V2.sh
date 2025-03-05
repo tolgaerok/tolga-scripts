@@ -1,13 +1,7 @@
 #!/bin/bash
 # Tolga Erok
 # 27/12/24
-# Wifi tweaker to suit my AX3000 ARCHER TX50E (SUPERFAST EDITION)
-
-# Speed Enhancements from V1 original script
-# 1. Reduced unnecessary `echo` statements
-# 2. Combined `echo` and `sudo tee` for file writes
-# 3. Removed `sleep` commands (replaced with more efficient restarts)
-# 4. Improved variable naming and formatting for readability
+# Wifi tweaker to suit my AX3000 ARCHER TX50E (SUPERFAST EDITION)!
 
 # Color Codes
 YELLOW='\033[1;33m'
@@ -21,7 +15,13 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 # Detect Active Network Interface
-interface=$(ip -o link show | awk '$6 == "UP" && $0 !~ "lo|vir|^[^0-9]"{print $2; exit}')
+echo "Debug: Showing interfaces..."
+ip -o link show
+
+# Try to detect active interface (without state filtering)
+interface=$(ip -o link show | awk '{print $2; exit}')
+echo "Debug: Detected interface - $interface"
+
 if [ -z "$interface" ]; then
     echo "No active network interface found."
     exit 1
