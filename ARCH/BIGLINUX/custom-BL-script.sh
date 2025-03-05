@@ -1,5 +1,6 @@
 #!/bin/bash
 # Tolga Erok - 5/3/25
+# My Personal BigLinux KDE script to configure NVIDIA woes and system tweaks
 
 # run as root
 if [ "$(id -u)" -ne 0 ]; then
@@ -86,11 +87,11 @@ cat <<EOF | tee /etc/systemd/user.conf
 # This file is part of systemd.
 
 [Manager]
-DefaultTimeoutStartSec=15s
-DefaultTimeoutStopSec=10s
+DefaultLimitNOFILE=1024:1048576
 DefaultRestartSec=1000ms
 DefaultStartLimitBurst=10
-DefaultLimitNOFILE=1024:1048576
+DefaultTimeoutStartSec=15s
+DefaultTimeoutStopSec=10s
 EOF
 
 # 🌐 Restart SMB services
@@ -125,12 +126,12 @@ net.ipv4.tcp_congestion_control = bbr
 net.core.default_qdisc = cake
 net.core.rmem_max = 1073741824
 net.core.wmem_max = 1073741824
-net.ipv4.tcp_rmem = 4096 87380 1073741824
-net.ipv4.tcp_wmem = 4096 87380 1073741824
-net.ipv4.tcp_low_latency = 1
-net.ipv4.tcp_window_scaling = 1
 net.ipv4.tcp_ecn = 1
 net.ipv4.tcp_fastopen = 3
+net.ipv4.tcp_low_latency = 1
+net.ipv4.tcp_rmem = 4096 87380 1073741824
+net.ipv4.tcp_window_scaling = 1
+net.ipv4.tcp_wmem = 4096 87380 1073741824
 
 # MTU Probing - Enable automatic MTU discovery to prevent fragmentation
 net.ipv4.tcp_mtu_probing = 1
@@ -147,12 +148,12 @@ vm.swappiness = 5                       # Lower swappiness for less aggressive s
 # System Performance Tweaks (for latest kernel)
 # Increase virtual memory performance and adjust dirty cache settings
 vm.dirty_background_ratio = 10          # Percentage of system memory used for dirty pages
+vm.dirty_expire_centisecs = 600         # Expiry time of dirty pages before writeback
 vm.dirty_ratio = 20                     # Percentage of system memory before flushing dirty pages
 vm.dirty_writeback_centisecs = 150      # Writeback time in centiseconds (for smoother I/O)
-vm.dirty_expire_centisecs = 600         # Expiry time of dirty pages before writeback
+vm.min_free_kbytes = 8192               # Minimum free memory buffer (helps with performance on heavy loads)
 vm.overcommit_memory = 1                # Allow the kernel to allocate memory beyond the limit
 vm.overcommit_ratio = 80                # Percentage of total RAM available for allocation
-vm.min_free_kbytes = 8192               # Minimum free memory buffer (helps with performance on heavy loads)
 vm.page-cluster = 3                     # Adjust page clustering for better read/write performance
 
 # Enable performance-oriented CPU scheduler for the latest kernel (supports multiple CPU cores)
