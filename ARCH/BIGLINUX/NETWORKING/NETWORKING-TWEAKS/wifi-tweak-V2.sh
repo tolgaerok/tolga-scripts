@@ -18,7 +18,7 @@ fi
 echo "Debug: Showing interfaces..."
 ip -o link show
 
-# Try to detect active interface
+# detect active interface
 interface=$(ip -o link show | awk '!/lo/ {print $2; exit}' | sed 's/://')  # Skip loopback interface
 echo "Debug: Detected interface - $interface"
 
@@ -61,12 +61,12 @@ if [ ! -f "$iwlwifi_conf" ]; then
 fi
 sudo tee -a "$iwlwifi_conf" >/dev/null <<<"options iwlwifi 11n_disable=8"
 
-# Reload iwlwifi Module if the interface is not active
+# Reload iwlwifi if the interface is not active
 if ! ip link show "$interface" | grep -q "UP"; then
     echo "Interface $interface is not up, skipping iwlwifi module reload."
 else
     echo "Interface $interface is up, skipping iwlwifi module reload to avoid disconnection."
-    # Reloading iwlwifi module could cause disconnection; skipping it
+    # avoid disconnection; skipping it
 fi
 
 # NM Wi-Fi Configuration
