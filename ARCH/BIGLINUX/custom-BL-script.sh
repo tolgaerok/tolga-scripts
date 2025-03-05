@@ -93,13 +93,6 @@ DefaultStartLimitBurst=10
 DefaultLimitNOFILE=1024:1048576
 EOF
 
-# Apply arch/manjaro system changes
-echo "Applying system changes..."
-if ! mkinitcpio -P; then
-    echo "Error: mkinitcpio update failed!" >&2
-    exit 1
-fi
-
 # 🌐 Restart SMB services
 echo "Restarting SMB services..."
 systemctl restart smb nmb && echo "SMB restarted successfully." || echo "Warning: Failed to restart SMB!" >&2
@@ -232,5 +225,12 @@ echo "🛠 Restarting NetworkManager to apply all changes..."
 sudo systemctl restart NetworkManager
 
 echo "✅ All network and browsing tweaks applied successfully!"
+
+# Apply arch/manjaro system changes
+echo "Applying system changes..."
+if ! mkinitcpio -P; then
+    echo "Error: mkinitcpio update failed!" >&2
+    exit 1
+fi
 
 echo "All configurations applied successfully. Please reboot your system."
