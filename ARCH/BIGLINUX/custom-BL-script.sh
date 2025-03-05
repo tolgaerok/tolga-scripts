@@ -195,8 +195,14 @@ ACTIVE_WIFI=$(nmcli -t -f NAME,TYPE con show --active | grep -i 'wifi' | cut -d:
 if [ -n "$ACTIVE_WIFI" ]; then
     echo "🌐 Optimizing Wi-Fi settings for: $ACTIVE_WIFI"
 
-    # Ensure Wi-Fi power saving is set to off
-    sudo nmcli con mod "$ACTIVE_WIFI" wifi.powersave 2 # Disable power saving for stable connection
+    # turn Wi-Fi power saving off on desktops (disabled on laptops)
+    if grep -q "Laptop" /sys/class/dmi/id/product_name; then
+        echo "Laptop detected, keeping Wi-Fi power saving enabled."
+    else
+        # Disable Wi-Fi power saving for desktops
+        sudo nmcli con mod "$ACTIVE_WIFI" wifi.powersave 2
+        echo "Desktop detected, Wi-Fi power saving disabled."
+    fi
 
     # Force 5GHz band (if supported, check this numb nuts)
     sudo nmcli con mod "$ACTIVE_WIFI" 802-11-wireless.band a
