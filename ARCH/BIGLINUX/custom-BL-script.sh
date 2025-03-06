@@ -17,6 +17,7 @@ cat <<EOF | tee /etc/environment
 
 LIBVA_DRIVER_NAME=nvidia                # Ensures NVIDIA VA-API is used
 MOZ_ENABLE_WAYLAND=1                    # Enables Wayland support for Firefox
+NIXOS_OZONE_WL=1
 OBS_USE_EGL=1                           # Helps OBS on Wayland
 QT_LOGGING_RULES='*=false'              # Reduces KDE debug spam in logs
 WLR_NO_HARDWARE_CURSORS=1               # Fixes missing cursor issues with NVIDIA on Wayland
@@ -31,6 +32,7 @@ EOF
 # Apply environment changes immediately
 export LIBVA_DRIVER_NAME=nvidia
 export MOZ_ENABLE_WAYLAND=1
+export NIXOS_OZONE_WL=1
 export OBS_USE_EGL=1
 export QT_LOGGING_RULES='*=false'
 export WLR_NO_HARDWARE_CURSORS=1
