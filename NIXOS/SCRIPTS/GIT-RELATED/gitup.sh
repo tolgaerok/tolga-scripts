@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x  # Enable command tracing
 
 # Metadata
 # ----------------------------------------------------------------------------
@@ -59,23 +60,30 @@ upload_files() {
 
   echo "Checking for changes..."
   git add .
-  
+
   if git status --porcelain | grep -qE '^\s*[MARCDU]'; then
     commit_msg=$(printf "$COMMIT_MSG_TEMPLATE" "$(date '+%d-%m-%Y %I:%M:%S %p')")
     echo "Changes detected, committing: $commit_msg"
     git commit -am "$commit_msg"
 
     echo "Pulling latest from main..."
-    git pull --rebase origin main
+    if ! git pull --rebase origin main; then
+      echo "Error: Pull failed. Please check the repository."
+      exit 1
+    fi
 
     echo "Pushing to main..."
-    git push origin main
+    if ! git push origin main; then
+      echo "Error: Push failed. Please check the repository."
+      exit 1
+    fi
     figlet "Files Uploaded" | lolcat
   else
     echo "No changes to commit."
     figlet "Nothing Uploaded" | lolcat
   fi
 }
+
 
 send_notification() {
   if command -v notify-send &> /dev/null; then
