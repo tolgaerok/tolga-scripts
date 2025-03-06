@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -x  # Enable command tracing
 
 # Metadata
 # ----------------------------------------------------------------------------
@@ -14,9 +13,18 @@ COMMIT_MSG_TEMPLATE="(ツ)_/¯ Edit: %s"
 GIT_REMOTE_URL="git@github.com:tolgaerok/tolga-scripts.git"
 CREDENTIAL_CACHE_TIMEOUT=3600
 
+# Color Codes for output prettification
+# ----------------------------------------------------------------------------
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+RESET='\033[0m'
+
 # Functions
 # ----------------------------------------------------------------------------
 setup_git_config() {
+  echo -e "🛠  ${YELLOW}Configuring git settings...${RESET}"
   git config --global core.compression 9
   git config --global core.deltaBaseCacheLimit 2g
   git config --global diff.algorithm histogram
@@ -25,7 +33,7 @@ setup_git_config() {
 
 ensure_git_initialized() {
   if [ ! -d "$REPO_DIR/.git" ]; then
-    echo "Initializing Git repository in $REPO_DIR..."
+    echo -e "🌐  ${YELLOW}Initializing Git repository in $REPO_DIR...${RESET}"
     git init "$REPO_DIR"
     git -C "$REPO_DIR" remote add origin "$GIT_REMOTE_URL"
   fi
@@ -36,7 +44,7 @@ fix_branch() {
   current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
 
   if [ "$current_branch" = "master" ]; then
-    echo "Renaming master to main..."
+    echo -e "🛠  ${YELLOW}Renaming master to main...${RESET}"
     git branch -m master main
     git fetch origin
     git branch --set-upstream-to=origin/main main
@@ -47,40 +55,48 @@ fix_branch() {
 check_remote_url() {
   remote_url=$(git -C "$REPO_DIR" remote get-url origin)
   if [[ $remote_url != *"git@github.com"* ]]; then
-    echo "Error: Remote URL is not set to SSH. Please configure SSH key-based authentication."
+    echo -e "${RED}Error: Remote URL is not set to SSH. Please configure SSH key-based authentication.${RESET}"
     exit 1
   fi
 }
 
 upload_files() {
   if [ -d "$REPO_DIR/.git/rebase-merge" ]; then
-    echo "Error: Rebase in progress. Resolve with 'git rebase --continue' or 'git rebase --abort'."
+    echo -e "${RED}Error: Rebase in progress. Resolve with 'git rebase --continue' or 'git rebase --abort'.${RESET}"
     exit 1
   fi
 
-  echo "Checking for changes..."
+  echo -e "🌐  ${YELLOW}Checking for changes...${RESET}"
   git add .
 
-  if git status --porcelain | grep -qE '^\s*[MARCDU]'; then
+  if git status -s | grep -qE '^\s*[MARCDU]'; then
     commit_msg=$(printf "$COMMIT_MSG_TEMPLATE" "$(date '+%d-%m-%Y %I:%M:%S %p')")
-    echo "Changes detected, committing: $commit_msg"
+    echo -e "🛠  ${BLUE}Changes detected, committing: $commit_msg${RESET}"
     git commit -am "$commit_msg"
 
-    echo "Pulling latest from main..."
+    echo -e "🛠  ${YELLOW}Files being committed:${RESET}"
+    # List all files that are staged for commit in green
+    git status -s | while read -r line; do
+      if [[ $line =~ ^[MADC]\s+(.*) ]]; then
+        echo -e "${GREEN}${BASH_REMATCH[1]}${RESET}"
+      fi
+    done
+
+    echo -e "🌐  ${YELLOW}Pulling latest from main...${RESET}"
     if ! git pull --rebase origin main; then
-      echo "Error: Pull failed. Please check the repository."
+      echo -e "${RED}Error: Pull failed. Please check the repository.${RESET}"
       exit 1
     fi
 
-    echo "Pushing to main..."
+    echo -e "🌐  ${YELLOW}Pushing to main...${RESET}"
     if ! git push origin main; then
-      echo "Error: Push failed. Please check the repository."
+      echo -e "${RED}Error: Push failed. Please check the repository.${RESET}"
       exit 1
     fi
-    figlet "Files Uploaded" | lolcat
+    figlet Files Uploaded | lolcat
   else
-    echo "No changes to commit."
-    figlet "Nothing Uploaded" | lolcat
+    echo -e "🌐  ${YELLOW}No changes to commit.${RESET}"
+    figlet Nothing Uploaded | lolcat
   fi
 }
 
@@ -89,7 +105,7 @@ send_notification() {
   if command -v notify-send &> /dev/null; then
     notify-send --icon=dialog-information --app-name="Git Sync" "Upload Complete" "Time taken: $1 seconds"
   else
-    echo "notify-send not found, skipping notification."
+    echo -e "🌐  ${YELLOW}notify-send not found, skipping notification.${RESET}"
   fi
 }
 
@@ -109,4 +125,3 @@ end_time=$(date +%s)
 time_taken=$((end_time - start_time))
 
 send_notification "$time_taken"
-
