@@ -1,6 +1,6 @@
 #!/bin/bash
 # Tolga Erok - 5/3/25
-# My Personal BigLinux KDE script to configure NVIDIA woes and system tweaks
+# My Personal BigLinux KDE script to configure NVIDIA woes and system tweaks !
 
 # run as root
 if [ "$(id -u)" -ne 0 ]; then
