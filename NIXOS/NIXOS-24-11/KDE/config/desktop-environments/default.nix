@@ -2,21 +2,10 @@
 
 {
   imports = [
-    ./boot
-    ./modules
-    ./modules
-    ./system
-
     # ---- Desktop Environment ---- #
-    ./desktop-environments
-
-    # ---- OUT OF SERVICE ---- # 
-    #./enviroment-sessions   
-    #./packages
-    #./tweaks
-    # ./tmpfs
-    # ./user
-    # ./zram
+    # ./cinnamon
+    ./kde
+    # ./gnome
   ];
 }
 

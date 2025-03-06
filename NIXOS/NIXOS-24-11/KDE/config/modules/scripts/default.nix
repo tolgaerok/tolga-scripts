@@ -1,0 +1,30 @@
+{ ... }: {
+
+  imports = [
+
+    #---------------------------------------------------------------------
+    # Import custom in-house environment packages::
+    #---------------------------------------------------------------------
+
+    #./auto-home-manager.nix
+    #./check-updates.nix
+    #./copy-back-up.nix
+    #./create-smb-user.nix
+    #./make-executable.nix
+    #./mounter.nix
+    #./my-nix-commands.nix
+    #./my-pkgs.nix
+    #./nixos-archive.nix
+    #./nixos-post-setup.nix
+    #./nixos-tweak.nix
+    #./rsync-back-up.nix
+    #./rsync-home-to-server.nix
+    #./trimmgenerations.nix
+    #./unmounter.nix
+    #./update.nix
+    ./clean-gen.nix
+    ./create-smb-user.nix
+    ./gitup.nix
+  ];
+
+}
