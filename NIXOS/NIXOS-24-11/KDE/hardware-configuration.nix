@@ -1,5 +1,7 @@
 { config, lib, pkgs, modulesPath, ... }:
-# tolga
+# Tolga Erok
+# 6/3/2025
+
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
