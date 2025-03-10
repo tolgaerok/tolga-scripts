@@ -64,8 +64,8 @@ options nvidia NVreg_TemporaryFilePath="/var/tmp"           # Changes the tempor
 options nvidia NVreg_RegistryDwords="OverrideMaxPerf=0x1; PowerMizerEnable=0x1; RmPpmPolicy=0x1; GLVRRAllowed=0x0; GLShowGraphicsOSD=0x0"
 
 # Optional Tweaks (Uncomment if needed)
-options nvidia NVreg_InitializeSystemMemoryAllocations=0    # Prevents clearing system memory allocations, reducing stutters.
 # options nvidia NVreg_DynamicPowerManagement=0x02          # Enables aggressive power savings (good for laptops, may reduce idle power).
+options nvidia NVreg_InitializeSystemMemoryAllocations=0    # Prevents clearing system memory allocations, reducing stutters.
 
 # Location:                             /etc/modprobe.d/nvidia-modeset.conf
 # Rebuild initramfs after changes:      sudo mkinitcpio -P
