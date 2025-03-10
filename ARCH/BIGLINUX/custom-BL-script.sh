@@ -53,7 +53,7 @@ options nvidia NVreg_UsePageAttributeTable=1                # Improves memory ma
 options nvidia NVreg_TemporaryFilePath="/var/tmp"           # Changes the temporary file location for NVIDIA driver to /var/tmp.
 
 
-# Additional NVIDIA tuning (based on application profile settings)
+# Additional NVIDIA tuning (based on application profile settings, thanks Solus)
 # options nvidia NVreg_RegistryDwords="OverrideMaxPerf=0x1"   # Enforces maximum performance mode (equivalent to 'Prefer Maximum Performance' in NVIDIA settings).
 # options nvidia NVreg_RegistryDwords="PowerMizerEnable=0x1"  # Ensures PowerMizer is enabled for better power state transitions.
 # options nvidia NVreg_RegistryDwords="RmPpmPolicy=0x1"       # Adjusts power management policy for improved stability.
