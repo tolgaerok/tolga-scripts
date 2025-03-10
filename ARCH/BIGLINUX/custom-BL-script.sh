@@ -53,12 +53,15 @@ options nvidia NVreg_UsePageAttributeTable=1                # Improves memory ma
 options nvidia NVreg_TemporaryFilePath="/var/tmp"           # Changes the temporary file location for NVIDIA driver to /var/tmp.
 
 
-# Additional NVIDIA tuning (based on application profile settings, from solus)
-options nvidia NVreg_RegistryDwords="OverrideMaxPerf=0x1"   # Enforces maximum performance mode (equivalent to 'Prefer Maximum Performance' in NVIDIA settings).
-options nvidia NVreg_RegistryDwords="PowerMizerEnable=0x1"  # Ensures PowerMizer is enabled for better power state transitions.
-options nvidia NVreg_RegistryDwords="RmPpmPolicy=0x1"       # Adjusts power management policy for improved stability.
-options nvidia NVreg_RegistryDwords="GLVRRAllowed=0x0"      # Disables Variable Refresh Rate (VRR), equivalent to GLVRRAllowed=0.
-options nvidia NVreg_RegistryDwords="GLShowGraphicsOSD=0x0" # Disables the NVIDIA performance overlay/OSD.
+# Additional NVIDIA tuning (based on application profile settings)
+# options nvidia NVreg_RegistryDwords="OverrideMaxPerf=0x1"   # Enforces maximum performance mode (equivalent to 'Prefer Maximum Performance' in NVIDIA settings).
+# options nvidia NVreg_RegistryDwords="PowerMizerEnable=0x1"  # Ensures PowerMizer is enabled for better power state transitions.
+# options nvidia NVreg_RegistryDwords="RmPpmPolicy=0x1"       # Adjusts power management policy for improved stability.
+# options nvidia NVreg_RegistryDwords="GLVRRAllowed=0x0"      # Disables Variable Refresh Rate (VRR), equivalent to GLVRRAllowed=0.
+# options nvidia NVreg_RegistryDwords="GLShowGraphicsOSD=0x0" # Disables the NVIDIA performance overlay/OSD.
+
+# Placed into one command line as it will ony overide each DWORD, this is the proper way apparently
+options nvidia NVreg_RegistryDwords="OverrideMaxPerf=0x1; PowerMizerEnable=0x1; RmPpmPolicy=0x1; GLVRRAllowed=0x0; GLShowGraphicsOSD=0x0"
 
 # Optional Tweaks (Uncomment if needed)
 options nvidia NVreg_InitializeSystemMemoryAllocations=0    # Prevents clearing system memory allocations, reducing stutters.
