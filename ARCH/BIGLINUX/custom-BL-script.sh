@@ -43,17 +43,29 @@ echo "Configuring /etc/modprobe.d/nvidia-modeset.conf..."
 mkdir -p /etc/modprobe.d
 cat <<EOF | tee /etc/modprobe.d/nvidia-modeset.conf
 # NVIDIA DRM settings (Required for Wayland & Suspend stability)
-options nvidia-drm modeset=1                            # Enables kernel modesetting (KMS)
+options nvidia-drm modeset=1                                # Enables kernel modesetting (KMS), required for proper Wayland support and smoother suspend/resume.
 
-options nvidia NVreg_EnableMSI=1                        # Enables Message Signaled Interrupts (MSI)
-options nvidia NVreg_EnablePCIeGen3=1                   # Forces PCIe Gen3 mode
-options nvidia NVreg_PreserveVideoMemoryAllocations=1   # Retains VRAM allocations across suspend
-options nvidia NVreg_TemporaryFilePath="/var/tmp"       # Changes temp file location
-options nvidia NVreg_UsePageAttributeTable=1            # Improves memory management
+# NVIDIA driver options
+options nvidia NVreg_EnableMSI=1                            # Enables Message Signaled Interrupts (MSI), improving performance and reducing interrupt conflicts.
+options nvidia NVreg_EnablePCIeGen3=1                       # Forces PCIe Gen3 mode for potentially better performance (remove if experiencing crashes).
+options nvidia NVreg_PreserveVideoMemoryAllocations=1       # Helps retain VRAM allocations across suspend/resume, preventing glitches.
+options nvidia NVreg_UsePageAttributeTable=1                # Improves memory management, reducing latency and preventing stability issues.
+options nvidia NVreg_TemporaryFilePath="/var/tmp"           # Changes the temporary file location for NVIDIA driver to /var/tmp.
+
+
+# Additional NVIDIA tuning (based on application profile settings, from solus)
+options nvidia NVreg_RegistryDwords="OverrideMaxPerf=0x1"   # Enforces maximum performance mode (equivalent to 'Prefer Maximum Performance' in NVIDIA settings).
+options nvidia NVreg_RegistryDwords="PowerMizerEnable=0x1"  # Ensures PowerMizer is enabled for better power state transitions.
+options nvidia NVreg_RegistryDwords="RmPpmPolicy=0x1"       # Adjusts power management policy for improved stability.
+options nvidia NVreg_RegistryDwords="GLVRRAllowed=0x0"      # Disables Variable Refresh Rate (VRR), equivalent to GLVRRAllowed=0.
+options nvidia NVreg_RegistryDwords="GLShowGraphicsOSD=0x0" # Disables the NVIDIA performance overlay/OSD.
 
 # Optional Tweaks (Uncomment if needed)
-options nvidia NVreg_InitializeSystemMemoryAllocations=0 # Prevents clearing system memory allocations
-# options nvidia NVreg_DynamicPowerManagement=0x02      # Enables aggressive power savings (good for laptops, may reduce idle power)
+options nvidia NVreg_InitializeSystemMemoryAllocations=0    # Prevents clearing system memory allocations, reducing stutters.
+# options nvidia NVreg_DynamicPowerManagement=0x02          # Enables aggressive power savings (good for laptops, may reduce idle power).
+
+# Location:                             /etc/modprobe.d/nvidia-modeset.conf
+# Rebuild initramfs after changes:      sudo mkinitcpio -P
 
 # MUST REBOOT for changes to take effect!
 EOF
