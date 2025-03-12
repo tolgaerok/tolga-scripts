@@ -16,7 +16,7 @@ Edit: `/etc/NetworkManager/NetworkManager.conf`
 
 ```bash
 [main]
-dns=default     # Use the default DNS resolver
+dns=none        # Use the /etc/systemd/resolved.config settings
 
 [logging]
 level=INFO      # Log informational messages for troubleshooting
