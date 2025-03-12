@@ -14,10 +14,10 @@ Edit: `/etc/NetworkManager/NetworkManager.conf`
 
 ```bash
 [main]
-dns=default
+dns=default     # Use the default DNS resolver
 
 [logging]
-level=INFO
+level=INFO      # Log informational messages for troubleshooting
 ```
 
 *Then*
