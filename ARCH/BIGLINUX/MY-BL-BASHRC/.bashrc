@@ -202,11 +202,11 @@ fi
 # ┌───────────────────────────────────────────────────────────────────────────────────────────────┐
 # |                                          Nvidia session                                       |
 # └───────────────────────────────────────────────────────────────────────────────────────────────┘
-export LIBVA_DRIVER_NAME=nvidia
-export WLR_NO_HARDWARE_CURSORS=1
-export __GLX_VENDOR_LIBRARY_NAME=nvidia
-export __GL_SHADER_CACHE=1
-export __GL_THREADED_OPTIMIZATION=1
+# export LIBVA_DRIVER_NAME=nvidia
+# export WLR_NO_HARDWARE_CURSORS=1
+# export __GLX_VENDOR_LIBRARY_NAME=nvidia
+# export __GL_SHADER_CACHE=1
+# export __GL_THREADED_OPTIMIZATION=1
 
 # ┌───────────────────────────────────────────────────────────────────────────────────────────────┐
 # |                                          Custom alias                                         |
