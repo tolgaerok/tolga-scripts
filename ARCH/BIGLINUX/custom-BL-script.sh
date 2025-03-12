@@ -61,7 +61,8 @@ options nvidia NVreg_TemporaryFilePath="/var/tmp"           # Changes the tempor
 # options nvidia NVreg_RegistryDwords="GLShowGraphicsOSD=0x0" # Disables the NVIDIA performance overlay/OSD.
 
 # Placed into one command line as it will ony overide each DWORD, this is the proper way apparently
-options nvidia NVreg_RegistryDwords="OverrideMaxPerf=0x1; PowerMizerEnable=0x1; RmPpmPolicy=0x1; GLVRRAllowed=0x0; GLShowGraphicsOSD=0x0"
+options nvidia NVreg_RegistryDwords="OverrideMaxPerf=0x1; PowerMizerEnable=0x1; RmPpmPolicy=0x1;" 
+# GLVRRAllowed=0x0; GLShowGraphicsOSD=0x0"
 
 # Optional Tweaks (Uncomment if needed)
 # options nvidia NVreg_DynamicPowerManagement=0x02          # Enables aggressive power savings (good for laptops, may reduce idle power).
