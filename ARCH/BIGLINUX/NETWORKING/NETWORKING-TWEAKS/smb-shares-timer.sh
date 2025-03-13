@@ -1,7 +1,7 @@
 #!/bin/bash
 # Tolga Erok
 # 13/3/25
-# Beta
+# Beta version: 3.0.1
 
 # set -e  # Exit on error
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket
