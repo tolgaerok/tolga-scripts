@@ -1,7 +1,7 @@
 #!/bin/bash
-# tolga erok
+# Tolga Erok
 # 13/3/25
-# beta
+# Beta
 
 # set -e  # Exit on error
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket
@@ -15,28 +15,59 @@ echo "Creating Samba Auto-Ping Script by Tolga Erok..."
 # ------------------------------------- #
 cat <<'EOF' | sudo tee /usr/local/bin/tolga-auto-ping-samba.sh >/dev/null
 #!/bin/bash
+# Tolga Erok
+# 13/3/25
 
 LOG_FILE="/var/log/tolga-auto-ping-samba.log"
-
-echo "Scanning shares..." >> "$LOG_FILE"
+echo "Scanning shares started at $(date)" >> "$LOG_FILE"
 
 # Start the timer
 START_TIME=$(date +%s)
 
-# discover and ping Samba shares using Avahi && find all devices advertising Samba services
-SHARES=$(avahi-browse -rt _smb._tcp | awk -F';' '/^=/ {print $8}' | sort -u)
+# List of my SMB shares on my QNAP
+shares=(
+    "//jack-sparrow.local/Public"
+    "//jack-sparrow.local/MY-QNAP"
+)
 
-# Ping each host
-for share in $SHARES; do
-    ping -c 1 -W 1 "$share" > /dev/null 2>&1
-    echo "Pinged: $share" >> "$LOG_FILE"  # Log each ping
+# Mount each QNAP share
+for share in "${shares[@]}"; do
+    share_name=$(basename "$share")
+    mount_point="/mnt/$share_name" 
+
+    # Log 
+    MOUNT_START=$(date +%s)
+    echo "Attempting to mount $share to $mount_point" >> "$LOG_FILE"
+
+    # Check if share is already mounted
+    if mount | grep "$mount_point" > /dev/null; then
+        echo "$share is already mounted at $mount_point" >> "$LOG_FILE"
+    else
+        # Create a mount point if not present
+        sudo mkdir -p "$mount_point"
+        
+        # mount the share
+        sudo mount -t cifs "$share" "$mount_point" -o credentials=/etc/samba/credentials,vers=3.0
+        
+        if [ $? -eq 0 ]; then
+            echo "Successfully mounted $share to $mount_point" >> "$LOG_FILE"
+        else
+            echo "Failed to mount $share to $mount_point" >> "$LOG_FILE"
+        fi
+    fi
+
+    # Log end of mounting
+    MOUNT_END=$(date +%s)
+    MOUNT_TIME=$((MOUNT_END - MOUNT_START))
+    echo "Mounting $share took $MOUNT_TIME seconds" >> "$LOG_FILE"
 done
 
 END_TIME=$(date +%s)
 TIME_TAKEN=$((END_TIME - START_TIME))
+TIME_FORMATTED=$(date -u -d @${TIME_TAKEN} +"%H:%M:%S")
 
-# scan is complete and show the time taken
-echo "Scan Complete: Shares scanned in $TIME_TAKEN seconds at $(date)." >> "$LOG_FILE"
+# Log time taken for the entire scan/mnt
+echo "Scan Complete: Shares scanned in $TIME_FORMATTED at $(date)." >> "$LOG_FILE"
 EOF
 
 # Make the script executable
