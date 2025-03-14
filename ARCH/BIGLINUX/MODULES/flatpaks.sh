@@ -21,9 +21,9 @@ sudo flatpak install --assumeyes --noninteractive flathub com.github.tchx84.Flat
 }
 
 # Detect the Desktop Environment (DE)
-DE=$(echo $XDG_CURRENT_DESKTOP | tr '[:upper:]' '[:lower:]') # Converts to lowercase for consistency
+DE=$(echo $XDG_CURRENT_DESKTOP | tr '[:upper:]' '[:lower:]')
 
-# Check if GNOME or other
+# Check if GNOME or other BS DE
 if [[ "$DE" == "gnome" ]]; then
     echo "Detected GNOME. Installing GNOME-specific packages..."
     sudo flatpak install --assumeyes --noninteractive flathub org.gtk.Gtk3theme.adw-gtk3 \
