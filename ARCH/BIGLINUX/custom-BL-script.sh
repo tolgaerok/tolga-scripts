@@ -34,12 +34,6 @@ if [[ ! ${distro_id} == "arch" && ! ${distro_id} == "manjaro" ]]; then
     chmod 440 "/etc/sudoers.d/root"
 fi
 
-# Geany
-if [ -f /bin/geany ]; then
-    cd /tmp/ && rm -rf geany-themes && git clone https://github.com/geany/geany-themes
-    cd geany-themes && ./install.sh 1>/dev/null
-fi
-
 # 🛠 Set environment variables
 echo "Configuring /etc/environment..."
 cat <<EOF | tee /etc/environment
