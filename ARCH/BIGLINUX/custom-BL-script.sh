@@ -8,8 +8,13 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-user=$(logname 2>/dev/null || echo "$SUDO_USER")
+# Set to performance
+[ -f /usr/bin/powerprofilesctl ] && powerprofilesctl list | grep -q performance && powerprofilesctl set performance
 
+# Update Time (Enable Network Time)
+sudo timedatectl set-ntp true
+
+user=$(logname 2>/dev/null || echo "$SUDO_USER")
 if [[ -z "$user" || "$user" == "root" ]]; then
     echo "Error: Could not determine the original user cock whacker."
     exit 1
@@ -17,7 +22,6 @@ fi
 
 # check distro_id
 distro_id=${distro_id:-$(source /etc/os-release && echo "$ID")}
-
 [[ ${distro_id} == "arch" || ${distro_id} == "manjaro" ]] && export root_mnt="/mnt" || export root_mnt=""
 
 if [[ ! ${distro_id} == "arch" && ! ${distro_id} == "manjaro" ]]; then
@@ -28,6 +32,12 @@ if [[ ! ${distro_id} == "arch" && ! ${distro_id} == "manjaro" ]]; then
     # Allow root to use sudo without a password
     echo -e "root ALL=(ALL) NOPASSWD: ALL" | tee "/etc/sudoers.d/root" >/dev/null
     chmod 440 "/etc/sudoers.d/root"
+fi
+
+# Geany
+if [ -f /bin/geany ]; then
+    cd /tmp/ && rm -rf geany-themes && git clone https://github.com/geany/geany-themes
+    cd geany-themes && ./install.sh 1>/dev/null
 fi
 
 # 🛠 Set environment variables
