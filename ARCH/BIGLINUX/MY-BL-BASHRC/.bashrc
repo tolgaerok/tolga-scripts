@@ -332,4 +332,8 @@ btrfs_manage() {
     esac
 }
 
+# Add Flatpak directories to XDG_DATA_HOME and XDG_DATA_DIRS
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_DATA_DIRS=$XDG_DATA_DIRS:/home/tolga/.local/share/flatpak/exports/share
+
 cl && echo "" && fortune | lolcat && echo "" && echo ""

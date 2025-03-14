@@ -37,6 +37,8 @@ else
     echo "Detected $DE. Skipping GNOME-specific installation."
     if [[ "$DE" == "kde" ]]; then
         echo "Detected KDE. Installing KDE-packages..."
+        sudo flatpak install --assumeyes --noninteractive flathub org.virt_manager.virt-manager \
+        
         # etc etc etc
     fi
 fi
