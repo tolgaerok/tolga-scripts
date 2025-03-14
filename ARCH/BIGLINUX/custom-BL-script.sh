@@ -1,11 +1,33 @@
 #!/bin/bash
 # Tolga Erok - 5/3/25
-# My Personal BigLinux KDE script to configure NVIDIA woes and system tweaks !
+# My Personal BigLinux KDE script to configure NVIDIA woes and system tweaks!
 
-# run as root
+# Ensure script is run as root
 if [ "$(id -u)" -ne 0 ]; then
     echo "Please run this script as root!"
     exit 1
+fi
+
+user=$(logname 2>/dev/null || echo "$SUDO_USER")
+
+if [[ -z "$user" || "$user" == "root" ]]; then
+    echo "Error: Could not determine the original user cock whacker."
+    exit 1
+fi
+
+# check distro_id
+distro_id=${distro_id:-$(source /etc/os-release && echo "$ID")}
+
+[[ ${distro_id} == "arch" || ${distro_id} == "manjaro" ]] && export root_mnt="/mnt" || export root_mnt=""
+
+if [[ ! ${distro_id} == "arch" && ! ${distro_id} == "manjaro" ]]; then
+    # Allow the captured user to use sudo without a password
+    echo -e "${user} ALL=(ALL) NOPASSWD: ALL" | tee "/etc/sudoers.d/${user}" >/dev/null
+    chmod 440 "/etc/sudoers.d/${user}"
+
+    # Allow root to use sudo without a password
+    echo -e "root ALL=(ALL) NOPASSWD: ALL" | tee "/etc/sudoers.d/root" >/dev/null
+    chmod 440 "/etc/sudoers.d/root"
 fi
 
 # 🛠 Set environment variables
@@ -43,34 +65,38 @@ echo "Configuring /etc/modprobe.d/nvidia-modeset.conf..."
 mkdir -p /etc/modprobe.d
 cat <<EOF | tee /etc/modprobe.d/nvidia-modeset.conf
 # NVIDIA DRM settings (Required for Wayland & Suspend stability)
+# ---------------------------------------------------------------- #
 options nvidia-drm modeset=1                                # Enables kernel modesetting (KMS), required for proper Wayland support and smoother suspend/resume.
 
 # NVIDIA driver options
+# ---------------------------------------------------------------- #
 options nvidia NVreg_EnableMSI=1                            # Enables Message Signaled Interrupts (MSI), improving performance and reducing interrupt conflicts.
 options nvidia NVreg_EnablePCIeGen3=1                       # Forces PCIe Gen3 mode for potentially better performance (remove if experiencing crashes).
 options nvidia NVreg_PreserveVideoMemoryAllocations=1       # Helps retain VRAM allocations across suspend/resume, preventing glitches.
 options nvidia NVreg_UsePageAttributeTable=1                # Improves memory management, reducing latency and preventing stability issues.
 options nvidia NVreg_TemporaryFilePath="/var/tmp"           # Changes the temporary file location for NVIDIA driver to /var/tmp.
 
-
-# Additional NVIDIA tuning (based on application profile settings, thanks Solus)
-# options nvidia NVreg_RegistryDwords="OverrideMaxPerf=0x1"   # Enforces maximum performance mode (equivalent to 'Prefer Maximum Performance' in NVIDIA settings).
-# options nvidia NVreg_RegistryDwords="PowerMizerEnable=0x1"  # Ensures PowerMizer is enabled for better power state transitions.
-# options nvidia NVreg_RegistryDwords="RmPpmPolicy=0x1"       # Adjusts power management policy for improved stability.
-# options nvidia NVreg_RegistryDwords="GLVRRAllowed=0x0"      # Disables Variable Refresh Rate (VRR), equivalent to GLVRRAllowed=0.
-# options nvidia NVreg_RegistryDwords="GLShowGraphicsOSD=0x0" # Disables the NVIDIA performance overlay/OSD.
-
-# Placed into one command line as it will ony overide each DWORD, this is the proper way apparently
-options nvidia NVreg_RegistryDwords="OverrideMaxPerf=0x1; PowerMizerEnable=0x1; RmPpmPolicy=0x1;" 
-# GLVRRAllowed=0x0; GLShowGraphicsOSD=0x0"
-
 # Optional Tweaks (Uncomment if needed)
-# options nvidia NVreg_DynamicPowerManagement=0x02          # Enables aggressive power savings (good for laptops, may reduce idle power).
+# ---------------------------------------------------------------- #
 options nvidia NVreg_InitializeSystemMemoryAllocations=0    # Prevents clearing system memory allocations, reducing stutters.
+options nvidia NVreg_EnableStreamMemOPs=1                   # Enables stream memory operations for better memory handling in GPU-intensive tasks.
+options nvidia NVreg_RegistryDwords=RMIntrLockingMode=1     # Improves interrupt handling between GPU and CPU, reducing lag and instability.
+# options nvidia NVreg_DynamicPowerManagement=0x02          # Enables aggressive power savings (good for laptops, may reduce idle power).
 
+# Additional NVIDIA tuning (based on application profile settings)
+# ---------------------------------------------------------------- #
+# OverrideMaxPerf=0x1       # Enforces maximum performance mode (equivalent to 'Prefer Maximum Performance' in NVIDIA settings).
+# PowerMizerEnable=0x1      # Ensures PowerMizer is enabled for better power state transitions.
+# RmPpmPolicy=0x1           # Adjusts power management policy for improved stability.
+# GLVRRAllowed=0x0          # Disables Variable Refresh Rate (VRR), equivalent to GLVRRAllowed=0.
+# GLShowGraphicsOSD=0x0     # Disables the NVIDIA performance overlay/OSD.
+options nvidia NVreg_RegistryDwords="OverrideMaxPerf=0x1; PowerMizerEnable=0x1; RmPpmPolicy=0x1;"
+
+# ---------------------------------------------------------------- #
 # Location:                             /etc/modprobe.d/nvidia-modeset.conf
+# Make tmp 1777:                        sudo chmod 1777 /var/tmp
 # Rebuild initramfs after changes:      sudo mkinitcpio -P
-
+# ---------------------------------------------------------------- #
 # MUST REBOOT for changes to take effect!
 EOF
 
