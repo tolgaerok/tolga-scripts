@@ -1,4 +1,14 @@
 #!/bin/bash
+# tolga erok
+# 14/3/25
+
+#  ERRORS - CANT GET TO WORK !
+
+USER=$(logname 2>/dev/null || echo "$SUDO_USER")
+if [[ -z "$user" || "$user" == "root" ]]; then
+    echo "Error: Could not determine the original user cock whacker."
+    exit 1
+fi
 
 # Packages
 if [ -f /usr/bin/nala ]; then
