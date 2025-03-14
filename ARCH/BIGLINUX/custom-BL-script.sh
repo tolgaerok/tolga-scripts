@@ -288,4 +288,10 @@ if ! mkinitcpio -P; then
     exit 1
 fi
 
+# Install Virtmanager
+sudo pacman -S libvirt qemu virt-manager
+sudo systemctl enable --now libvirtd
+sudo systemctl enable --now virtqemud
+sudo systemctl start virtqemud
+
 echo "All configurations applied successfully. Please reboot your system."

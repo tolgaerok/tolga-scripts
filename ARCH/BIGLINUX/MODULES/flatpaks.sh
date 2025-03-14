@@ -38,7 +38,11 @@ else
     if [[ "$DE" == "kde" ]]; then
         echo "Detected KDE. Installing KDE-packages..."
         sudo flatpak install --assumeyes --noninteractive flathub org.virt_manager.virt-manager \
-        
+        app/io.github.aandrew_me.ytdn/x86_64/stable \
+        app/io.github.flattool.Warehouse/x86_64/stable \
+        app/org.gnome.NautilusPreviewer/x86_64/stable \
+        app/io.missioncenter.MissionCenter/x86_64/stable 
+
         # etc etc etc
     fi
 fi
