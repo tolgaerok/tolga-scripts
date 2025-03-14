@@ -2,6 +2,8 @@
 # tolga erok
 # 14/3/25
 
+# VERY BETA
+
 # Install Repo
 echo "Adding Flathub repository..."
 sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || {
@@ -20,7 +22,7 @@ sudo flatpak install --assumeyes --noninteractive flathub com.github.tchx84.Flat
     exit 1
 }
 
-# Detect the Desktop Environment (DE)
+# Detect the Fucked Desktop Environment (DE)
 DE=$(echo $XDG_CURRENT_DESKTOP | tr '[:upper:]' '[:lower:]')
 
 # Check if GNOME or other BS DE
