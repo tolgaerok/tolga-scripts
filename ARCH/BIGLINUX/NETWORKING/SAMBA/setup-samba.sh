@@ -1,7 +1,7 @@
 #!/bin/bash
 # Tolga Erok
 
-# Colors
+# Colours
 GREEN="\e[32m"
 YELLOW="\e[33m"
 BLUE="\e[34m"
@@ -55,7 +55,6 @@ sudo systemctl restart smb
 
 echo -e "${INFO} ${BLUE}Confirming access to the shared folder for $SAMBAUSER...${RESET}"
 
-# Access test with smbclient
 if smbclient //localhost/shared -U "$SAMBAUSER" -N; then
     echo -e "${CHECK} ${GREEN}Access test successful${RESET}"
 else
