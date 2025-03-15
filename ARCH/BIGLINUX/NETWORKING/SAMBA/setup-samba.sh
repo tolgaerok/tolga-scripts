@@ -1,7 +1,7 @@
 #!/bin/bash
 # Tolga Erok
-# 15-3-25
 
+# Colors
 GREEN="\e[32m"
 YELLOW="\e[33m"
 BLUE="\e[34m"
@@ -28,6 +28,10 @@ fi
 echo -e "${INFO} ${BLUE}Setting ownership and permissions for the shared folder...${RESET}"
 sudo chown -R root:"$SAMBAGROUP" "$SHARED_FOLDER"
 sudo chmod -R 0775 "$SHARED_FOLDER"
+sudo firewall-cmd --permanent --zone=public --add-service=samba
+sudo firewall-cmd --reload
+sudo setsebool -P samba_enable_home_dirs on
+sudo restorecon -Rv /srv/samba/shared
 
 echo -e "${INFO} ${BLUE}Checking if user $SAMBAUSER exists in Samba...${RESET}"
 if ! sudo pdbedit -L | grep -q "^$SAMBAUSER:"; then
@@ -50,8 +54,13 @@ echo -e "${INFO} ${BLUE}Restarting Samba service...${RESET}"
 sudo systemctl restart smb
 
 echo -e "${INFO} ${BLUE}Confirming access to the shared folder for $SAMBAUSER...${RESET}"
-smbclient //localhost/shared -U "$SAMBAUSER" -N && \
-    echo -e "${CHECK} ${GREEN}Access test successful!${RESET}" || \
+
+# Access test with smbclient
+if smbclient //localhost/shared -U "$SAMBAUSER" -N; then
+    echo -e "${CHECK} ${GREEN}Access test successful${RESET}"
+else
     echo -e "${ERROR} ${RED}Access test failed. Check logs.${RESET}"
+fi
+
 
 echo -e "${CHECK} ${GREEN}Samba share setup for $SAMBAUSER is complete! 🎉${RESET}"
