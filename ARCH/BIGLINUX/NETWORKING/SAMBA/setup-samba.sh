@@ -1,42 +1,57 @@
 #!/bin/bash
 # Tolga Erok
+# 15-3-25
 
-# variables
+GREEN="\e[32m"
+YELLOW="\e[33m"
+BLUE="\e[34m"
+RED="\e[31m"
+RESET="\e[0m"
+
+# Icons
+CHECK="✅"
+WARN="⚠️"
+INFO="ℹ️"
+ERROR="❌"
+
+# Variables
 SHARED_FOLDER="/srv/samba/shared"
 SAMBAGROUP="users"
 SAMBAUSER="tolga"
 
-echo "Checking if the shared folder exists..."
+echo -e "${INFO} ${BLUE}Checking if the shared folder exists...${RESET}"
 if [ ! -d "$SHARED_FOLDER" ]; then
-    echo "Creating shared folder at $SHARED_FOLDER..."
+    echo -e "${WARN} ${YELLOW}Creating shared folder at $SHARED_FOLDER...${RESET}"
     sudo mkdir -p "$SHARED_FOLDER"
 fi
 
-echo "Setting ownership and permissions for the shared folder..."
+echo -e "${INFO} ${BLUE}Setting ownership and permissions for the shared folder...${RESET}"
 sudo chown -R root:"$SAMBAGROUP" "$SHARED_FOLDER"
 sudo chmod -R 0775 "$SHARED_FOLDER"
 
-echo "Checking if user $SAMBAUSER exists in Samba..."
-if ! sudo pdbedit -L | grep -q "$SAMBAUSER"; then
-    echo "Adding $SAMBAUSER to Samba..."
+echo -e "${INFO} ${BLUE}Checking if user $SAMBAUSER exists in Samba...${RESET}"
+if ! sudo pdbedit -L | grep -q "^$SAMBAUSER:"; then
+    echo -e "${WARN} ${YELLOW}Adding $SAMBAUSER to Samba...${RESET}"
     sudo smbpasswd -a "$SAMBAUSER"
     sudo smbpasswd -e "$SAMBAUSER" # Enable the user
 else
-    echo "User $SAMBAUSER already exists in Samba."
+    echo -e "${CHECK} ${GREEN}User $SAMBAUSER already exists in Samba.${RESET}"
 fi
 
-echo "Ensuring $SAMBAUSER is a member of the $SAMBAGROUP group..."
-if ! groups "$SAMBAUSER" | grep -q "$SAMBAGROUP"; then
-    echo "Adding $SAMBAUSER to the $SAMBAGROUP group..."
+echo -e "${INFO} ${BLUE}Ensuring $SAMBAUSER is a member of the $SAMBAGROUP group...${RESET}"
+if ! id -nG "$SAMBAUSER" | grep -wq "$SAMBAGROUP"; then
+    echo -e "${WARN} ${YELLOW}Adding $SAMBAUSER to the $SAMBAGROUP group...${RESET}"
     sudo usermod -aG "$SAMBAGROUP" "$SAMBAUSER"
 else
-    echo "$SAMBAUSER is already a member of the $SAMBAGROUP group."
+    echo -e "${CHECK} ${GREEN}$SAMBAUSER is already a member of the $SAMBAGROUP group.${RESET}"
 fi
 
-echo "Restarting Samba service..."
+echo -e "${INFO} ${BLUE}Restarting Samba service...${RESET}"
 sudo systemctl restart smb
 
-echo "Confirming access to the shared folder for $SAMBAUSER..."
-smbclient //localhost/shared -U "$SAMBAUSER"
+echo -e "${INFO} ${BLUE}Confirming access to the shared folder for $SAMBAUSER...${RESET}"
+smbclient //localhost/shared -U "$SAMBAUSER" -N && \
+    echo -e "${CHECK} ${GREEN}Access test successful!${RESET}" || \
+    echo -e "${ERROR} ${RED}Access test failed. Check logs.${RESET}"
 
-echo "Samba share setup for $SAMBAUSER is complete!"
+echo -e "${CHECK} ${GREEN}Samba share setup for $SAMBAUSER is complete! 🎉${RESET}"
