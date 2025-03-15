@@ -28,10 +28,16 @@ fi
 echo -e "${INFO} ${BLUE}Setting ownership and permissions for the shared folder...${RESET}"
 sudo chown -R root:"$SAMBAGROUP" "$SHARED_FOLDER"
 sudo chmod -R 0775 "$SHARED_FOLDER"
+
+echo -e "${INFO} ${BLUE}Configuring firewall for Samba...${RESET}"
 sudo firewall-cmd --permanent --zone=public --add-service=samba
 sudo firewall-cmd --reload
+
+echo -e "${INFO} ${BLUE}Configuring SELinux for Samba...${RESET}"
 sudo setsebool -P samba_enable_home_dirs on
-sudo restorecon -Rv /srv/samba/shared
+
+echo -e "${INFO} ${BLUE}Restoring SELinux contexts for shared folder...${RESET}"
+sudo chcon -t samba_share_t "$SHARED_FOLDER" -R  # Fixing the SELinux context
 
 echo -e "${INFO} ${BLUE}Checking if user $SAMBAUSER exists in Samba...${RESET}"
 if ! sudo pdbedit -L | grep -q "^$SAMBAUSER:"; then
@@ -60,6 +66,5 @@ if smbclient //localhost/shared -U "$SAMBAUSER" -N; then
 else
     echo -e "${ERROR} ${RED}Access test failed. Check logs.${RESET}"
 fi
-
 
 echo -e "${CHECK} ${GREEN}Samba share setup for $SAMBAUSER is complete! 🎉${RESET}"
