@@ -16,7 +16,7 @@ NC="\033[0m"
 if command -v dnf &>/dev/null; then
     PM="dnf"
     INSTALL_CMD="sudo dnf install -y"
-    elif command -v pacman &>/dev/null; then
+elif command -v pacman &>/dev/null; then
     PM="pacman"
     INSTALL_CMD="sudo pacman -Sy --needed"
 else
@@ -32,7 +32,10 @@ if ! command -v tc &>/dev/null; then
 fi
 
 # Detect active network interface (wired or wireless, non-loopback - BETA)
-interface=$(ip -o link show | awk -F': ' '$2 !~ "lo|NO-CARRIER|DOWN" {print $2; exit}')
+interface=$(ip -o link show | awk -F": " '
+    $2 ~ /^wlp/ && $0 ~ "UP" && $0 !~ "NO-CARRIER" {print $2; exit}  # Prefer wireless if UP and not NO-CARRIER
+    $2 !~ "lo" && $0 ~ "UP" && $0 !~ "NO-CARRIER" {print $2; exit}   # Otherwise, pick first available UP interface
+')
 
 if [ -z "$interface" ]; then
     echo -e "${RED}No active network interface found. Exiting.${NC}"
@@ -57,7 +60,7 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash -c 'interface=\$(ip -o link show | awk -F\": \" '\''\$2 !~ \"lo|NO-CARRIER|DOWN\" {print \$2; exit}'\''); if [ -n \"\$interface\" ]; then sudo tc qdisc replace dev \$interface root cake bandwidth 1Gbit; fi'
+ExecStart=/bin/bash -c 'interface=\$(ip link show | awk -F": " '\''\$0 ~ "^[2-9]:|^[1-9][0-9]: " && \$0 ~ "UP" && \$0 !~ "LOOPBACK|NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", \$2); print \$2; getline}'\''); if [ -n "\$interface" ]; then sudo tc qdisc replace dev \$interface root cake bandwidth 1Gbit; fi'
 RemainAfterExit=yes
 
 [Install]
@@ -73,7 +76,7 @@ After=suspend.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash -c 'interface=\$(ip -o link show | awk -F\": \" '\''\$2 !~ \"lo|NO-CARRIER|DOWN\" {print \$2; exit}'\''); if [ -n \"\$interface\" ]; then sudo tc qdisc replace dev \$interface root cake bandwidth 1Gbit; fi'
+ExecStart=/bin/bash -c 'interface=\$(ip link show | awk -F": " '\''\$0 ~ "^[2-9]:|^[1-9][0-9]: " && \$0 ~ "UP" && \$0 !~ "LOOPBACK|NO-CARRIER" {gsub(/^[ \t]+|[ \t]+$/, "", \$2); print \$2; getline}'\''); if [ -n "\$interface" ]; then sudo tc qdisc replace dev \$interface root cake bandwidth 1Gbit; fi'
 
 [Install]
 WantedBy=suspend.target
@@ -84,33 +87,14 @@ echo -e "${BLUE}Reloading systemd daemon and enabling services...${NC}"
 sudo systemctl daemon-reload
 sudo systemctl enable --now tolga-apply-cake-qdisc.service
 sudo systemctl enable --now tolga-apply-cake-qdisc-wake.service
-
-# check my qdisc configuration
 echo -e "${BLUE}Verifying qdisc configuration for ${interface}:${NC}"
 sudo tc qdisc show dev "$interface"
-
 echo -e "${YELLOW}CAKE qdisc should be applied to ${interface} now.${NC}"
-
-# Display qdisc status
 sudo tc -s qdisc show dev "$interface"
-
-# Check both systemd service status
 sudo systemctl status tolga-apply-cake-qdisc.service --no-pager
 sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager
 
 # Add new custom alias to .bashrc
-echo "alias cake3='interface=\$(ip -o link show | awk -F\": \" '\''\$2 !~ \"lo|NO-CARRIER|DOWN\" {print \$2; exit}'\''); \
-if [ -n \"\$interface\" ]; then \
-echo -e \"Applying CAKE to \$interface...\"; \
-sudo systemctl daemon-reload && sudo systemctl restart tolga-apply-cake-qdisc.service; \
-sudo tc -s qdisc show dev \"\$interface\"; \
-sudo systemctl status tolga-apply-cake-qdisc.service --no-pager; \
-sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager; \
-journalctl -u tolga-apply-cake-qdisc.service --no-pager | tail -n 10; \
-else \
-echo \"No valid interface detected\"; \
-fi'" >>~/.bashrc
-
+set +H
+echo "alias cake3='interface=\$(ip link show | awk -F: '\''\$0 ~ \"wlp|wlo|wlx\" && \$0 !~ \"NO-CARRIER\" {gsub(/^[ \t]+|[ \t]+$/, \"\", \$2); print \$2; exit}'\''); sudo systemctl daemon-reload && sudo systemctl restart tolga-apply-cake-qdisc.service && sudo tc -s qdisc show dev \$interface && sudo systemctl status tolga-apply-cake-qdisc.service --no-pager && sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager'" >>$HOME/.bashrc
 echo -e "${YELLOW}Alias 'cake3' added to .bashrc. You can use it to quickly apply CAKE settings.${NC}"
-
-sudo systemctl daemon-reload
