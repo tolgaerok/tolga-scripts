@@ -4,8 +4,8 @@
 # Version: 2.0
 
 # Configs
-SERVICE_FILE="/etc/systemd/system/flatpak-update.service"
-TIMER_FILE="/etc/systemd/system/flatpak-update.timer"
+SERVICE_FILE="/etc/systemd/system/tolga-flatpak-update.service"
+TIMER_FILE="/etc/systemd/system/tolga-flatpak-update.timer"
 
 # Check if the script is run as root
 if [ "$EUID" -ne 0 ]; then
@@ -48,14 +48,14 @@ WantedBy=timers.target" | tee "$TIMER_FILE" >/dev/null
 
 # Reload systemd
 systemctl daemon-reload
-systemctl enable --now flatpak-update.timer
+systemctl enable --now tolga-flatpak-update.timer
 
 # status of both with no pager!
 echo -e "\nFlatpak update service status:"
-systemctl status flatpak-update.service --no-pager
+systemctl status tolga-flatpak-update.service --no-pager
 
 echo -e "\nFlatpak update timer status:"
-systemctl status flatpak-update.timer --no-pager
+systemctl status tolga-flatpak-update.timer --no-pager
 
 echo -e "\nNext scheduled Flatpak update:"
-systemctl list-timers --no-pager | grep flatpak-update
+systemctl list-timers --no-pager | grep tolga-flatpak-update
