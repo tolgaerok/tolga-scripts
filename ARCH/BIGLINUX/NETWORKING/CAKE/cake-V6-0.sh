@@ -16,7 +16,7 @@ NC="\033[0m"
 if command -v dnf &>/dev/null; then
     PM="dnf"
     INSTALL_CMD="sudo dnf install -y"
-elif command -v pacman &>/dev/null; then
+    elif command -v pacman &>/dev/null; then
     PM="pacman"
     INSTALL_CMD="sudo pacman -Sy --needed"
 else
@@ -24,11 +24,11 @@ else
     exit 1
 fi
 
-# Check and install `tc` 
+# Check and install `tc`
 if ! command -v tc &>/dev/null; then
     echo -e "${YELLOW}tc command not found, installing iproute2...${NC}"
     $INSTALL_CMD iproute2
-    hash -r  
+    hash -r
 fi
 
 # Detect active network interface (wired or wireless, non-loopback - BETA)
@@ -101,14 +101,14 @@ sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager
 # Add new custom alias to .bashrc
 echo "alias cake3='interface=\$(ip -o link show | awk -F\": \" '\''\$2 !~ \"lo|NO-CARRIER|DOWN\" {print \$2; exit}'\''); \
 if [ -n \"\$interface\" ]; then \
-  echo -e \"Applying CAKE to \$interface...\"; \
-  sudo systemctl daemon-reload && sudo systemctl restart tolga-apply-cake-qdisc.service; \
-  sudo tc -s qdisc show dev \"\$interface\"; \
-  sudo systemctl status tolga-apply-cake-qdisc.service --no-pager; \
-  sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager; \
-  journalctl -u tolga-apply-cake-qdisc.service --no-pager | tail -n 10; \
+echo -e \"Applying CAKE to \$interface...\"; \
+sudo systemctl daemon-reload && sudo systemctl restart tolga-apply-cake-qdisc.service; \
+sudo tc -s qdisc show dev \"\$interface\"; \
+sudo systemctl status tolga-apply-cake-qdisc.service --no-pager; \
+sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager; \
+journalctl -u tolga-apply-cake-qdisc.service --no-pager | tail -n 10; \
 else \
-  echo \"No valid interface detected\"; \
+echo \"No valid interface detected\"; \
 fi'" >>~/.bashrc
 
 echo -e "${YELLOW}Alias 'cake3' added to .bashrc. You can use it to quickly apply CAKE settings.${NC}"
