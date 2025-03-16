@@ -1,8 +1,9 @@
 #!/bin/bash
 # Author: Tolga Erok
-# Date:   18/2/2025
+# Date:   16/3/2025
+# Version: 2.0
 
-# Conifgs
+# Configs
 SERVICE_FILE="/etc/systemd/system/flatpak-update.service"
 TIMER_FILE="/etc/systemd/system/flatpak-update.timer"
 
@@ -18,9 +19,9 @@ if ! command -v flatpak &>/dev/null; then
     exit 1
 fi
 
-# Create the systemd service file
+# systemd service file
 echo "[Unit]
-Description=Tolgas Flatpak Automatic Update
+Description=Tolga's Flatpak Automatic Update V2.0
 Documentation=man:flatpak(1)
 Wants=network-online.target
 After=network-online.target
@@ -32,30 +33,24 @@ ExecStart=/usr/bin/flatpak update -y
 [Install]
 WantedBy=multi-user.target" | tee "$SERVICE_FILE" >/dev/null
 
-# Create the systemd timer file
+# systemd timer file
 echo "[Unit]
-Description=Tolgas Flatpak Automatic Update Trigger
+Description=Tolga's Flatpak Automatic Update Trigger V2.0
 Documentation=man:flatpak(1)
 
 [Timer]
-# Check every 6HRS
-OnBootSec=5m
-OnCalendar=0/6:00:00
+OnBootSec=15s
+OnCalendar=*-*-* 00/6:00:00
 Persistent=true
 
 [Install]
 WantedBy=timers.target" | tee "$TIMER_FILE" >/dev/null
 
-# Reload systemd 
+# Reload systemd
 systemctl daemon-reload
-
-# Enable and start the service
-systemctl enable --now flatpak-update.service
-
-# Enable and start the timer
 systemctl enable --now flatpak-update.timer
 
-# Show the status of both with no pager!
+# status of both with no pager!
 echo -e "\nFlatpak update service status:"
 systemctl status flatpak-update.service --no-pager
 
