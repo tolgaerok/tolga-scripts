@@ -87,10 +87,13 @@ echo -e "${BLUE}Reloading systemd daemon and enabling services...${NC}"
 sudo systemctl daemon-reload
 sudo systemctl enable --now tolga-apply-cake-qdisc.service
 sudo systemctl enable --now tolga-apply-cake-qdisc-wake.service
+
 echo -e "${BLUE}Verifying qdisc configuration for ${interface}:${NC}"
+
 sudo tc qdisc show dev "$interface"
 echo -e "${YELLOW}CAKE qdisc should be applied to ${interface} now.${NC}"
 sudo tc -s qdisc show dev "$interface"
+
 sudo systemctl status tolga-apply-cake-qdisc.service --no-pager
 sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager
 
