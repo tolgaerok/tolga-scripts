@@ -101,17 +101,18 @@ sudo tc -s qdisc show dev "$interface"
 sudo systemctl status tolga-apply-cake-qdisc.service --no-pager
 sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager
 
-# Add to .bashrc for quick CAKE 
+# Add to .bashrc for quick CAKE
 set +H
-echo -e "\n# Apply CAKE qdisc easily\nfunction cake3() {" >> $HOME/.bashrc
-echo "  interface=\$(ip link show | awk -F': ' '/wlp|wlo|wlx|eth|eno/ && /UP/ && !/NO-CARRIER/ {print \$2; exit}')" >> $HOME/.bashrc
-echo "  sudo systemctl daemon-reload" >> $HOME/.bashrc
-echo "  sudo systemctl restart tolga-apply-cake-qdisc.service" >> $HOME/.bashrc
-echo "  sudo tc -s qdisc show dev \$interface" >> $HOME/.bashrc
-echo "  sudo systemctl status tolga-apply-cake-qdisc.service --no-pager" >> $HOME/.bashrc
-echo "  sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager" >> $HOME/.bashrc
-echo "}" >> $HOME/.bashrc
-echo -e "${YELLOW}Function 'cake3' added to .bashrc. Restart your shell or run 'source ~/.bashrc' to use it.${NC}"
+echo -e "\n# Apply CAKE qdisc easily - Tolga Erok\nfunction cake3() {" >>$HOME/.bashrc
+echo "  interface=\$(ip link show | awk -F': ' '/wlp|wlo|wlx|eth|eno/ && /UP/ && !/NO-CARRIER/ {print \$2; exit}')" >>$HOME/.bashrc
+echo "  sudo systemctl daemon-reload" >>$HOME/.bashrc
+echo "  sudo systemctl restart tolga-apply-cake-qdisc.service" >>$HOME/.bashrc
+echo "  sudo tc -s qdisc show dev \$interface" >>$HOME/.bashrc
+echo "  sudo systemctl status tolga-apply-cake-qdisc.service --no-pager" >>$HOME/.bashrc
+echo "  sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager" >>$HOME/.bashrc
+echo "}" >>$HOME/.bashrc
 
-echo 'alias cake-status="sudo systemctl status tolga-apply-cake-qdisc.service --no-pager && sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager"' >> ~/.bashrc
+echo 'alias cake-status="sudo systemctl status tolga-apply-cake-qdisc.service --no-pager && sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager"' >>~/.bashrc
+
+echo -e "${YELLOW}Function 'cake3' and 'cake-status' added to .bashrc. Restart your shell or run 'source ~/.bashrc' to use it.${NC}"
 source ~/.bashrc
