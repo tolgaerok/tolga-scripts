@@ -6,7 +6,7 @@
 ![alt text](cake-v6a.png)
 
 
-    This script is all about  forcing the CAKE (Common Applications Kept Enhanced) queuing discipline (qdisc) onto your active network interface .  
+*This script is all about  forcing the CAKE (Common Applications Kept Enhanced) queuing discipline (qdisc) onto your active network interface*  
 
 ###  Why? 
 From my experience, CAKE can significantly improve network performance by reducing latency and managing traffic more efficiently. If you care about  lower ping times, smoother streaming, and better network responsiveness , this is a good tweak. I’ve found noticeable speed improvements in certain cases, especially on congested networks.   🚀
