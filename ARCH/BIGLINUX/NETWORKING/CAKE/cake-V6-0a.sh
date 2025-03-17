@@ -114,5 +114,5 @@ echo "}" >>$HOME/.bashrc
 
 echo 'alias cake-status="sudo systemctl status tolga-apply-cake-qdisc.service --no-pager && sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager"' >>~/.bashrc
 
-echo -e "${YELLOW}Function 'cake3' and 'cake-status' added to .bashrc. Restart your shell or run 'source ~/.bashrc' to use it.${NC}"
+echo -e "${YELLOW}Function 'cake' and 'cake-status' added to .bashrc. Restart your shell or run 'source ~/.bashrc' to use it.${NC}"
 source ~/.bashrc
