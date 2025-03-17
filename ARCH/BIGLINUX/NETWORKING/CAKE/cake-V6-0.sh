@@ -3,7 +3,7 @@
 # Metadata
 # ----------------------------------------------------------------------------
 # AUTHOR="Tolga Erok"
-# VERSION="V6.0"
+# VERSION="V6.0a"
 # DATE_CREATED="16/3/2025"
 # Description: Systemd script to force CAKE onto any active network interface.
 
