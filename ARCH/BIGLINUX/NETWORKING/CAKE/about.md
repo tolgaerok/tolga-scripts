@@ -3,6 +3,9 @@
 - *Tolga Erok*
 - *17/3/2025*
 
+![alt text](cake-v6a.png)
+
+
 This script is all about  forcing the CAKE (Common Applications Kept Enhanced) queuing discipline (qdisc) onto your active network interface .  
 
 ###  Why? 
@@ -63,3 +66,6 @@ From my experience, CAKE can significantly improve network performance by reduci
 
 I believe this script is a  solid way to automate CAKE QoS settingsfor your network without needing to manually set it each time. It dynamically detects your interface, applies the best traffic shaping settings, and ensures it stays persistent across reboots and wake-ups. From what I’ve seen, these tweaks can  help with gaming, video calls, and general network performance , especially if your connection suffers from high latency or congestion.  
 
+![alt text](cake1.png) 
+
+![alt text](cake2.png)
