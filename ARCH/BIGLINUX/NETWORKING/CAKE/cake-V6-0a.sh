@@ -103,7 +103,7 @@ sudo systemctl status tolga-apply-cake-qdisc-wake.service --no-pager
 
 # Add to .bashrc for quick CAKE
 set +H
-echo -e "\n# Apply CAKE qdisc easily - Tolga Erok\nfunction cake3() {" >>$HOME/.bashrc
+echo -e "\n# Apply CAKE qdisc easily - Tolga Erok\nfunction cake() {" >>$HOME/.bashrc
 echo "  interface=\$(ip link show | awk -F': ' '/wlp|wlo|wlx|eth|eno/ && /UP/ && !/NO-CARRIER/ {print \$2; exit}')" >>$HOME/.bashrc
 echo "  sudo systemctl daemon-reload" >>$HOME/.bashrc
 echo "  sudo systemctl restart tolga-apply-cake-qdisc.service" >>$HOME/.bashrc
