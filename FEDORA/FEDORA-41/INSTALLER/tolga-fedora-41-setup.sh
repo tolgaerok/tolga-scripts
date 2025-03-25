@@ -51,6 +51,8 @@ RPMFUSION_URLS=(
 )
 sudo dnf install -y "${RPMFUSION_URLS[@]}"
 
+sudo dnf install gstreamer1-plugins-bad-freeworld gstreamer1-libav
+
 # Install DNF5 and its plugins
 sudo dnf install -y dnf5
 sudo dnf5 install -y dnf5 dnf5-plugins
